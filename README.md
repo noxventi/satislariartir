@@ -100,8 +100,9 @@ Adres `/<kimlik>/` (ör. `/ankara-web-tasarim/`, `/cankaya-web-tasarim/`); dizin
 2. Kapak sahnesini `src/assets/blog/<ad>.jpg` olarak koyun ve ön bilgide `kapak: <ad>`, `kapakAlt: "..."` yazın.
    `aramalar` alanına yazının yanıtladığı iki ile dört aramayı girin.
 3. Yazı düz metin olmasın: `src/components/blog/` altındaki görsel parçalardan en az dördünü kullanın (her dosyanın başında kullanımı yazar).
-4. `durum: inceleme` ile başlayın. Uzman incelemesinden sonra `inceleyen` alanını doldurup `durum: yayinda` yapın.
-   Yalnız yayındaki yazılar indekslenir ve site haritasına girer.
+4. `durum: inceleme` ile başlayın (sayfa açılır ama aramaya kapalıdır). Hazır olunca `durum: yayinda` yapın; yazıyı
+   gerçekten inceleyen biri varsa `inceleyen` alanına adını yazın. Yalnız yayındaki yazılar indekslenir ve site haritasına girer.
+   Yeni yazıyı yayına aldıktan sonra adresini IndexNow'a gönderin (anahtar dosyası `public/50221483555b4425b2e4c329a5b9cb09.txt`).
 5. `node araclar/yazi-denetle.mjs <dosya adı>` ile ön bilgiyi, yazım kurallarını ve görsel yoğunluğunu;
    `node araclar/denetim.mjs` ile yetim yazı ve bozuk bağlantıyı kontrol edin.
 

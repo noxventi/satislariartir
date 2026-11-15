@@ -5,7 +5,8 @@
  * - taslak:    üretim derlemesine girmez.
  * - inceleme:  sayfa açılır ama aramaya kapalıdır (noindex) ve site haritasında yoktur.
  *              Uzman incelemesi bekleyen içerik bu durumda kalır.
- * - yayinda:   indekslenir. "inceleyen" alanı dolu olmalıdır.
+ * - yayinda:   indekslenir ve site haritasına girer. "inceleyen" alanı yalnız yazıyı gerçekten
+ *              inceleyen biri varsa yazılır (15 Kasım 2026'da 43 yazı işletme sahibinin kararıyla yayına alındı).
  */
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';

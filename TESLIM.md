@@ -118,9 +118,8 @@ hacim ölçülemedi; o sayfada aramalar sayısız gösteriliyor.
 
 ### Yayından önce marka sahibinin bakması gerekenler
 
-1. **Blog yazıları aramaya kapalı.** 20 yeni yazı `durum: inceleme` ile duruyor (sayfa açılıyor, `noindex`, site
-   haritasında yok). PRD'deki uzman incelemesi kuralı gereği böyle bırakıldı. Okuyup onayladığınız yazıda
-   `inceleyen` alanını doldurup `durum: yayinda` yapmanız yeterli.
+1. **Blog yazıları yayında (15 Kasım 2026).** 43 yazının tamamı işletme sahibinin kararıyla `durum: yayinda` yapıldı;
+   indekslenir ve site haritasındadır. `inceleyen` alanı boş: yazıyı gerçekten okuyan biri olursa adı oraya yazılır.
 2. **Hukuk sayfası (`/sektorler/hukuk-burolari/`): en önemli karar burada.** Türkiye Barolar Birliği Reklam Yasağı
    Yönetmeliği'nin 7. maddesi (9/8/2024 değişikliği) yalnız reklamı değil, iş elde etme amacıyla arama motorlarında üst
    sıralara çıkmaya yönelik anahtar sözcük ve sayfa adresi kullanımını, genel bilgi paylaşarak yayın yapmayı ve müvekkil
@@ -455,7 +454,7 @@ Ortam değişkenleri `.env.example` dosyasında açıklanmıştır. Sunucu Node 
 | Çalışmalarımız | `/calismalarimiz/` | Açık | 18 proje, kapsam kaynağıyla |
 | ÇelikVillam, Hun Education | `/calismalarimiz/…/` | Açık | Ölçülmüş sonuç yok, "proje kapsamı" olarak sunuldu |
 | Rehberler dizini | `/rehberler/` | Açık | |
-| Altı rehber (01-06) | `/rehberler/…/` | **Kapalı (noindex)** | Uzman incelemesi bekliyor. İncelendiğinde `durum: yayinda` ve `inceleyen` yazılır |
+| Blog yazıları (43) | `/blog/…/` | **Açık (index)** | 15 Kasım 2026'da yayına alındı; site haritasında |
 | Hakkımızda, İletişim | `/hakkimizda/`, `/iletisim/` | Açık | Ekip adları ve iletişim bilgisi bekliyor |
 | Reklam açılış sayfaları | `/lp/google-ads-hesap-inceleme/`, `/lp/meta-reklam-inceleme/` | Kapalı (noindex, taranabilir) | Site haritasında yok, AdsBot erişebilir |
 | Gizlilik, Aydınlatma, Çerez tercihleri | `/gizlilik/`, `/aydinlatma/`, `/cerez-tercihleri/` | **Kapalı (taslak)** | Veri sorumlusu bilgisi girilince kendiliğinden açılır |
@@ -581,7 +580,7 @@ Son denetim: 25 sayfa, sorun yok. 360, 390, 768, 1024 ve 1440 px'te yatay taşma
 - **İç sayfalardaki yeni taahhüt cümleleri:** sayfalar yeniden yazılırken çalışma biçimine dair cümleler eklendi
   (ör. "her hizmet tek başına alınabilir", "hesap sizin adınıza açılır ve sizde kalır", "incelemeden kurulum yapmayız",
   "yayın günü yönetim erişimini size devrediyoruz", hekimler dışındaki sektör listesi). Yayından önce bir kez okuyup
-  gerçek çalışma biçiminize uymayanı düzeltin. Rehberler hâlâ uzman incelemesi bekliyor (noindex).
+  gerçek çalışma biçiminize uymayanı düzeltin.
 - **Logo kullanımı için izin:** güven şeridindeki 18 marka (liste aynı dosyada). Hekimlerin ve avukatın adının bir
   ajansın referans şeridinde geçmesi kendi meslek kurallarına dokunabilir; onay alırken bunu da sorun. İzin vermeyen markanın satırı
   `MarkaSeridi.astro` içindeki `SIRA` listesinden silinir.
