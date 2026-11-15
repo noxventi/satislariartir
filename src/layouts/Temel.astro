@@ -1,0 +1,341 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/source-sans-3/wght.css';
+import '../styles/global.css';
+import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import archivoLatinExt from '@fontsource-variable/archivo/files/archivo-latin-ext-wdth-normal.woff2?url';
+import sourceLatin from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
+import sourceLatinExt from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-ext-wght-normal.woff2?url';
+
+import Ustbilgi from '../components/Ustbilgi.astro';
+import Altbilgi from '../components/Altbilgi.astro';
+import Ikon from '../components/Ikon.astro';
+import logo from '../data/logo.json';
+import { GENEL_CAGRI, SITE, type HizmetKimligi } from '../site.config';
+import { TELEFON_BAGLANTISI, whatsappBaglantisi } from '../lib/iletisim';
+
+export interface Kirinti {
+  ad: string;
+  url: string;
+}
+
+interface Props {
+  /** Arama sonuçlarında görünecek tam başlık. */
+  baslik: string;
+  aciklama: string;
+  sayfaTuru: 'ana' | 'hizmet' | 'hizmetler' | 'proje' | 'projeler' | 'rehber' | 'rehberler' | 'lp' | 'kurumsal' | 'yasal' | 'sistem';
+  hizmet?: HizmetKimligi;
+  proje?: string;
+  /** false ise sayfa noindex,follow olur ve site haritasına girmez. */
+  indeksle?: boolean;
+  kirintilar?: Kirinti[];
+  yapisalVeri?: Record<string, unknown>[];
+  /** Mobil görüşme çubuğundaki çağrı. Sayfanın ana çağrısıyla aynı etiketi taşır. */
+  cagri?: { etiket: string; url: string } | false;
+  /** Reklam açılış sayfası: sade üst ve alt bilgi. */
+  sade?: boolean;
+  sadeBaglantilar?: { etiket: string; url: string }[];
+  ogGorsel?: string;
+  onYukle?: { href: string; imagesrcset?: string; imagesizes?: string; media?: string; type?: string }[];
+}
+
+const {
+  baslik,
+  aciklama,
+  sayfaTuru,
+  hizmet,
+  proje,
+  indeksle = true,
+  kirintilar = [],
+  yapisalVeri = [],
+  cagri = GENEL_CAGRI,
+  sade = false,
+  sadeBaglantilar,
+  ogGorsel = '/og.jpg',
+  onYukle = [],
+} = Astro.props;
+
+const kanonik = new URL(Astro.url.pathname, SITE.url).href;
+const ogUrl = new URL(ogGorsel, SITE.url).href;
+
+const kirintiVerisi =
+  kirintilar.length > 0
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [{ ad: 'Ana sayfa', url: '/' }, ...kirintilar].map((k, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: k.ad,
+            item: new URL(k.url, SITE.url).href,
+          })),
+        },
+      ]
+    : [];
+const tumVeri = [...yapisalVeri, ...kirintiVerisi];
+
+// WhatsApp sohbeti sayfanın hizmetine göre hazır bir ilk cümleyle açılır.
+const whatsappAdresi = whatsappBaglantisi(hizmet);
+const cerezBandiGoster = import.meta.env.PUBLIC_CEREZ_BANDI === '1';
+// Ön izleme ortamı aramaya açılmaz.
+const taslakOrtam = import.meta.env.PUBLIC_SITE_ORTAMI === 'taslak';
+---
+
+<!doctype html>
+<html lang="tr" data-gtm={SITE.olcum.gtmKimligi || undefined} data-meta-piksel={SITE.olcum.metaPikselKimligi || undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{baslik}</title>
+    <meta name="description" content={aciklama} />
+    <link rel="canonical" href={kanonik} />
+    <meta name="robots" content={indeksle && !taslakOrtam ? 'index,follow,max-image-preview:large' : 'noindex,follow'} />
+    <meta name="theme-color" content="#f8f7f3" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta property="og:type" content={sayfaTuru === 'rehber' ? 'article' : 'website'} />
+    <meta property="og:site_name" content={SITE.ad} />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:title" content={baslik} />
+    <meta property="og:description" content={aciklama} />
+    <meta property="og:url" content={kanonik} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preload" as="font" type="font/woff2" href={archivoLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={archivoLatinExt} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={sourceLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={sourceLatinExt} crossorigin />
+    {onYukle.map((o) => <link rel="preload" as="image" fetchpriority="high" {...o} />)}
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      window.dataLayer = window.dataLayer || [];
+      // Logo açılışı oturumda bir kez tam oynar, sonraki sayfalarda kısa kalır. Kişisel veri tutulmaz.
+      try {
+        document.documentElement.dataset.logo = sessionStorage.getItem('sa_logo') ? 'kisa' : 'acilis';
+        sessionStorage.setItem('sa_logo', '1');
+      } catch (e) {
+        document.documentElement.dataset.logo = 'kisa';
+      }
+    </script>
+
+    {tumVeri.map((v) => <script type="application/ld+json" is:inline set:html={JSON.stringify(v)} />)}
+  </head>
+
+  <body data-sayfa-turu={sayfaTuru} data-hizmet={hizmet} data-proje={proje}>
+    <a class="atla" href="#icerik">İçeriğe geç</a>
+    <Ustbilgi sade={sade} sadeBaglantilar={sadeBaglantilar} />
+
+    <main id="icerik">
+      <slot />
+    </main>
+
+    <Altbilgi sade={sade} />
+
+    {
+      cagri && (
+        <div class="mobil-cagri" data-mobil-cagri inert>
+          <a class="dugme dugme--tam" href={cagri.url} data-olay="cta_click" data-yer="mobil-cubuk" data-kanal={hizmet}>
+            {cagri.etiket}
+          </a>
+          {TELEFON_BAGLANTISI && (
+            <a class="mobil-cagri__ikon" href={TELEFON_BAGLANTISI} aria-label="Telefonla arayın" data-yer="mobil-cubuk">
+              <Ikon ad="phone" boyut={22} />
+            </a>
+          )}
+          {whatsappAdresi && (
+            <a class="mobil-cagri__ikon" href={whatsappAdresi} aria-label="WhatsApp’tan yazın" data-yer="mobil-cubuk" rel="noopener">
+              <Ikon ad="whatsapp-logo" boyut={22} />
+            </a>
+          )}
+        </div>
+      )
+    }
+
+    {/* Geniş ekran: ilk ekran geçildikten sonra sağ altta beliren WhatsApp düğmesi. Form ve alt bilgi görünürken gizlenir. */}
+    {
+      cagri && whatsappAdresi && (
+        <a class="yuzen-wa" href={whatsappAdresi} target="_blank" rel="noopener" data-yuzen-cagri data-yer="yuzen-dugme" inert>
+          <Ikon ad="whatsapp-logo" boyut={22} />
+          <span>WhatsApp’tan yazın</span>
+        </a>
+      )
+    }
+
+    <section class="cerez" data-cerez-bandi data-her-zaman={cerezBandiGoster ? '' : undefined} aria-label="Çerez tercihleri" hidden>
+      <p class="kucuk">
+        Ziyaretleri ve reklam sonuçlarını ölçmek için çerez kullanmak istiyoruz. Reddetseniz de siteyi ve formu kullanabilirsiniz.
+        <a href="/cerez-tercihleri/">Tercihleri düzenleyin</a>
+      </p>
+      <div class="cerez__dugmeler">
+        <button type="button" class="dugme dugme--kucuk dugme--cizgi" data-cerez-ret>Reddet</button>
+        <button type="button" class="dugme dugme--kucuk dugme--cizgi" data-cerez-kabul>Kabul et</button>
+      </div>
+    </section>
+
+    {/* Kırmızı kalemin hafif dokusu ve logo çizimi. Tek tanım; işaretler ve Logo bileşeni buradan kullanır. */}
+    <svg width="0" height="0" class="gorunmez" aria-hidden="true" focusable="false">
+      <symbol id="sa-logo-yazi" viewBox={`0 0 ${logo.kutu[0]} ${logo.kutu[1]}`}>
+        <path fill="var(--logo-yazi, #101c39)" fill-rule="evenodd" d={logo.yazi}></path>
+      </symbol>
+      <filter id="kalem-dokusu" x="-4%" y="-30%" width="108%" height="160%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="g"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="g" scale="1.6" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+      </filter>
+    </svg>
+
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .mobil-cagri {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30;
+    display: none;
+    gap: 0.5rem;
+    padding: 0.6rem var(--kenar) calc(0.6rem + env(safe-area-inset-bottom));
+    background: rgb(248 247 243 / 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 -1px 0 var(--cizgi);
+    transform: translateY(110%);
+    transition: transform 320ms var(--yumusak);
+  }
+  .mobil-cagri[data-goster] {
+    transform: none;
+  }
+  .mobil-cagri .dugme {
+    --kalk: 3px;
+    min-width: 0;
+    min-height: 3.125rem;
+  }
+  /* Arama ve WhatsApp düğmeleri yanında durduğunda uzun çağrı iki satıra iner; düğme yüksekliği değişmesin. */
+  .mobil-cagri .dugme:not(:only-child) {
+    height: 3.125rem;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.9375rem;
+    font-stretch: 90%;
+    line-height: 1.1;
+    text-align: center;
+    text-wrap: balance;
+  }
+  /* Sabit çubukta kıvılcım çubuğun dışına taşardı. */
+  .mobil-cagri .dugme::after {
+    content: none;
+  }
+  .mobil-cagri__ikon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3.125rem;
+    height: 3.125rem;
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    background: var(--beyaz);
+  }
+  @media (max-width: 47.99rem) {
+    .js .mobil-cagri {
+      display: flex;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobil-cagri {
+      transition: none;
+    }
+  }
+
+  /* Yüzen WhatsApp düğmesi: kâğıt etiket, lacivert sert gölge. Yalnız geniş ekranda. */
+  .yuzen-wa {
+    position: fixed;
+    right: clamp(1rem, 2vw, 1.75rem);
+    bottom: clamp(1rem, 2vw, 1.75rem);
+    z-index: 30;
+    display: none;
+    align-items: center;
+    gap: 0.55rem;
+    height: 3rem;
+    padding-inline: 0.95rem 1.1rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 4px 4px 0 var(--murekkep);
+    font-family: var(--yazi-baslik);
+    font-size: 0.9375rem;
+    font-weight: 640;
+    font-stretch: 94%;
+    line-height: 1;
+    color: var(--murekkep);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(0.75rem);
+    transition:
+      opacity 240ms,
+      transform 320ms var(--yumusak),
+      box-shadow 160ms;
+  }
+  .yuzen-wa svg {
+    color: var(--mavi);
+  }
+  .yuzen-wa[data-goster] {
+    opacity: 1;
+    transform: none;
+  }
+  .yuzen-wa[data-goster]:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--kirmizi);
+  }
+  @media (min-width: 48rem) {
+    .js .yuzen-wa {
+      display: inline-flex;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .yuzen-wa {
+      transition: none;
+    }
+  }
+
+  .cerez {
+    position: fixed;
+    z-index: 35;
+    inset-inline-start: var(--kenar);
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    width: min(26rem, 100% - 2 * var(--kenar));
+    padding: 1rem 1.1rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow:
+      0 0 0 1px var(--cizgi),
+      0 18px 40px -16px rgb(16 28 57 / 0.3);
+  }
+  .cerez p {
+    color: var(--murekkep-2);
+  }
+  .cerez__dugmeler {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-block-start: 0.8rem;
+  }
+  @media (max-width: 47.99rem) {
+    .cerez {
+      inset-inline: 0;
+      bottom: 0;
+      width: auto;
+      border-radius: 0;
+      padding: 0.85rem var(--kenar) calc(0.85rem + env(safe-area-inset-bottom));
+    }
+  }
+</style>

@@ -1,0 +1,116 @@
+---
+/**
+ * Sayfa içi gezinme: uzun sayfalarda ziyaretçi kaybolmasın diye üst alanın hemen altında durur.
+ * Her öğe sayfadaki bir bölümün id'sine gider. Dar ekranda yatay kayar. En fazla altı öğe, kısa etiketler.
+ */
+import Ikon from './Ikon.astro';
+
+interface Props {
+  bolumler: { etiket: string; hedef: string }[];
+}
+const { bolumler } = Astro.props;
+---
+
+<nav class="bs" aria-label="Bu sayfada">
+  <div class="sarici bs__ic">
+    <p class="bs__ad">Bu sayfada</p>
+    <ul class="bs__liste">
+      {
+        bolumler.map((b) => (
+          <li>
+            <a href={`#${b.hedef}`}>
+              {b.etiket}
+              <Ikon ad="arrow-down" boyut={14} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .bs {
+    padding-block-end: clamp(1.75rem, 3.5vw, 3rem);
+  }
+  .bs__ic {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem 1.25rem;
+  }
+  .bs__ad {
+    flex: none;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--ikincil);
+  }
+  .bs__liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .bs__liste a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.3rem 0.85rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: 999px;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 600;
+    font-stretch: 96%;
+    line-height: 1.1;
+    color: var(--murekkep);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 180ms,
+      color 180ms,
+      border-color 180ms;
+  }
+  .bs__liste a :global(svg) {
+    color: var(--kirmizi);
+    transition: transform 240ms var(--yumusak);
+  }
+  @media (hover: hover) {
+    .bs__liste a:hover {
+      background: var(--murekkep);
+      border-color: var(--murekkep);
+      color: var(--beyaz);
+    }
+    .bs__liste a:hover :global(svg) {
+      color: currentColor;
+      transform: translateY(2px);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .bs__ic {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    /* Yatay kayar; son öğenin kesik görünmesi devamı olduğunu söyler. */
+    .bs__liste {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-inline: calc(var(--kenar) * -1);
+      padding-inline: var(--kenar);
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+    .bs__liste::-webkit-scrollbar {
+      display: none;
+    }
+    .bs__liste li {
+      flex: none;
+      scroll-snap-align: start;
+    }
+    .bs__liste a {
+      min-height: 2.75rem;
+    }
+  }
+</style>

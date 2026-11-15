@@ -1,0 +1,240 @@
+---
+no: 22
+kapak: domain-hosting
+kapakAlt: "Boş parsellerin sıralandığı kâğıttan bir sokak; her parselin önünde boş bir tabela var, son parsele bir vinç küçük bir dükkân indiriyor, parselin çevresi kırmızı kalemle çizilmiş, önünde boş bir sokak tabelası ve posta kutusu duruyor"
+soru: Domain ve hosting nedir?
+baslik: Domain ve Hosting Nedir, Nasıl Alınır?
+aciklama: >-
+  Domain (alan adı) sitenizin adresi, hosting (barındırma) sitenin durduğu yerdir. Uzantı seçimi, alan adı
+  sorgulama, SSL sertifikası ve kaydın kimin adına yapılacağı.
+aramalar:
+  - domain nedir
+  - hosting nedir
+  - alan adı sorgulama
+  - ssl sertifikası nedir
+kisaCevap: >-
+  Domain (alan adı), bir web sitesinin internetteki adresidir; hosting (barındırma) ise sitenin dosyalarının durduğu
+  ve ziyaretçiye sunulduğu hizmettir. Alan adı bir kayıt firması aracılığıyla belirli bir süre için kaydettirilir ve
+  süre dolmadan yenilenmesi gerekir. İkisini aynı firmadan almak zorunda değilsiniz. İşletme açısından en çok
+  dikkat edilecek nokta, alan adının kimin adına ve kimin hesabında kayıtlı olduğudur.
+elinizeGecen: Adres ve dükkân benzetmesi, uzantı seçimi ve alan adı alma adımları
+hizmetler: [web]
+hizmetBaglantisi:
+  etiket: Kurumsal web tasarım
+  url: /hizmetler/web-tasarim/
+sonraki: web-sitesi-nasil-kurulur
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: ICANN, About Domain Names
+    url: https://www.icann.org/resources/pages/about-domain-names-2018-08-30-en
+    tur: resmi
+  - ad: "ICANN, FAQs for Registrants: Domain Name Renewals and Expiration"
+    url: https://www.icann.org/resources/pages/domain-name-renewal-expiration-faqs-2018-12-07-en
+    tur: resmi
+  - ad: ICANN Blog, Do You Have a Domain Name? Here’s What You Need to Know
+    url: https://www.icann.org/en/blogs/details/do-you-have-a-domain-name-heres-what-you-need-to-know-26-3-2018-en
+    tur: resmi
+  - ad: TRABİS, Sıkça Sorulan Sorular
+    url: https://www.trabis.gov.tr/FAQ/1
+    tur: resmi
+  - ad: Google Chrome Yardım, Site bağlantılarının güvenli olup olmadığını kontrol etme
+    url: https://support.google.com/chrome/answer/95617?hl=tr
+    tur: resmi
+---
+
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Akis from '../../components/blog/Akis.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import AramaKutulari from '../../components/blog/AramaKutulari.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Not from '../../components/blog/Not.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Kadıköy’de bir çiçekçi açtınız ve web sitesi için teklif aldınız. Teklifte iki satır dikkatinizi çekti: “domain” ve “hosting”. İkisinin karşısında da yıllık bir bedel yazıyor, ne olduklarını ise kimse açıklamamış.
+
+Karşılığı kısadır. Domain, Türkçesiyle alan adı, sitenizin adresidir. Hosting, yani barındırma, sitenin durduğu yerdir. Biri olmadan diğeri işe yaramaz.
+
+<Karsilastirma
+  sol={{
+    ust: 'Adres',
+    baslik: 'Alan adı (domain)',
+    maddeler: [
+      'Tarayıcıya yazılan addır: “ornek.com”.',
+      'Bir kayıt firması aracılığıyla, belirli bir süre için kaydedilir.',
+      'Süre dolmadan yenilenmezse başkası kaydettirebilir.',
+    ],
+    uygun: 'Dükkânın kapı numarası ve tabelası',
+  }}
+  sag={{
+    ust: 'Yer',
+    baslik: 'Barındırma (hosting)',
+    maddeler: [
+      'Sitenin dosyaları burada durur.',
+      'Adresi yazan kişiye sayfaları bu hizmet gösterir.',
+      'Firma değiştirirseniz site taşınır, adres aynı kalır.',
+    ],
+    uygun: 'Dükkânın kendisi: raflar, vitrin, depo',
+  }}
+  ara="ve"
+  uygunEtiketi="Benzetme"
+/>
+
+## Domain nedir?
+
+Domain, yani alan adı, sitenizin internetteki adıdır. İnternete bağlı her bilgisayarın sayılardan oluşan bir adresi vardır. Alan adı, bu sayıların yerine akılda kalan bir ad yazmanızı sağlar; adı sayıya çeviren düzene alan adı sistemi (DNS) denir.
+
+Alan adlarını dünya çapında koordine eden kuruluş ICANN (Internet Corporation for Assigned Names and Numbers) bu ilişkiyi posta adresine benzetir: adres tek başına yetmez, mektubun teslim edileceği bir bina da gerekir.
+
+Bir ayrıntı çoğu zaman gözden kaçar: alan adı satın alınmaz, belirli bir süre için kaydettirilir. ICANN’e göre “.com” gibi genel uzantılarda bu süre çoğunlukla bir ile on yıl arasındadır. Adı kullanmaya devam etmek için kaydı süre dolmadan yenilemeniz gerekir.
+
+<Akis
+  asamalar={[
+    { ad: 'Adres', aciklama: 'Müşteriniz tarayıcıya alan adınızı yazar.' },
+    { ad: 'DNS', aciklama: 'Ad, sunucunun sayısal adresine çevrilir.', olcu: 'Alan adı sistemi' },
+    { ad: 'Sunucu', aciklama: 'Sitenin dosyaları buradan gönderilir.', olcu: 'Barındırma' },
+    { ad: 'Sayfa', aciklama: 'Site müşterinizin ekranında açılır.' },
+  ]}
+/>
+
+## Hosting nedir?
+
+Hosting, yani barındırma, sitenizin dosyalarının durduğu ve adresinizi yazan kişiye sunulduğu hizmettir. ICANN’in anlatımıyla alan adı kaydettirmek kendiliğinden bir site vermez; sitenin açılması için barındırma, alan adınızla biten e-posta adresleri için de bir e-posta hizmeti gerekir.
+
+Alan adını ve barındırmayı aynı firmadan almak zorunda değilsiniz. İkisi ayrı firmalardaysa aradaki bağı DNS kayıtları kurar: alan adı, “bu adın sitesi şu sunucuda duruyor” bilgisini taşır. Hazır site kurucularda barındırma çoğunlukla aboneliğin içindedir, ayrıca alınmaz.
+
+Barındırma için üç şeyi bilmeniz yeter: site kimin hesabında duruyor, yedeği düzenli alınıyor mu, gerektiğinde başka bir firmaya taşınabilir mi?
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Uzantı',
+      tanim: 'Alan adının noktadan sonraki bölümü.',
+      ornek: '“ornek.com.tr” adresinde uzantı “.com.tr” bölümüdür.',
+    },
+    {
+      ad: 'DNS',
+      acilim: 'Alan adı sistemi',
+      tanim: 'Alan adını, sitenin durduğu sunucunun sayısal adresine çeviren sistem.',
+      ornek: 'Barındırma firması değişince DNS kayıtları yeni sunucuyu gösterecek biçimde güncellenir.',
+    },
+    {
+      ad: 'SSL sertifikası',
+      tanim: 'Site ile ziyaretçinin tarayıcısı arasındaki bağlantıyı şifreleyen sertifika.',
+      ornek: 'Sertifikalı sitenin adresi “https” ile başlar.',
+    },
+    {
+      ad: 'E-posta barındırma',
+      tanim: 'Alan adınızla biten e-posta adreslerinin kutularını tutan hizmet.',
+      ornek: '“bilgi@ornek.com” adresi için gerekir; site barındırmasından ayrı alınabilir.',
+    },
+  ]}
+/>
+
+## Hangi uzantı seçilmeli: .com mu, .com.tr mi?
+
+“.com” gibi genel uzantılar, ICANN’in yetkilendirdiği kayıt firmaları ya da onların bayileri aracılığıyla kaydedilir. “.tr” gibi ülke uzantılarının kurallarını o uzantının kendi işleticisi koyar.
+
+Türkiye’de “.tr” uzantılı alan adlarının kaydı TRABİS’te (“.tr” ağ bilgi sistemi) tutulur; başvuru, yenileme ve devir işlemleri kayıt kuruluşları aracılığıyla yapılır. TRABİS’in açıklamasına göre tahsis iki yolla olur: belge istenen uzantılar ve “ilk gelen ilk alır” kuralıyla belgesiz verilenler. “com.tr”, “org.tr” ve “net.tr” belgesiz tahsis edilen uzantılardandır. Araya başka bir ek girmeden doğrudan “.tr” ile biten adlar da (“ornek.tr” gibi) tahsise açılmıştır.
+
+- **.com.** Ülke belirtmeyen genel bir uzantıdır.
+- **.com.tr.** Türkiye’de çalıştığınızı adresin kendisi söyler.
+- **.tr.** En kısa biçimdir; işletme adınız boştaysa “.com.tr” ile birlikte kaydettirebilirsiniz.
+
+Hangisini seçerseniz seçin, işletme adınızın öteki yaygın uzantılardaki durumuna da bakın. Aynı ad başka bir uzantıda başka bir işletmenin sitesini açıyorsa müşteriniz yanlış kapıyı çalabilir.
+
+## Alan adı sorgulama nasıl yapılır?
+
+Alan adı sorgulama, istediğiniz adın boşta olup olmadığına bakmaktır. Kayıt firmalarının sitelerindeki arama kutusu bu işi görür. Kayıtlı bir adın hangi kayıt firmasında durduğunu öğrenmek için ICANN’in sorgu aracı (lookup.icann.org), “.tr” uzantılı adlar için TRABİS’in alan adı sorgu sayfası kullanılır.
+
+Aynı çiçekçi için dört aday üzerinden bakalım:
+
+<AramaKutulari
+  aramalar={[
+    { ifade: 'ornekcicek.com', not: 'Kısa, telefonda söylenir', ton: 'evet' },
+    { ifade: 'ornekcicek.com.tr', not: 'Türkiye’deki müşteriye tanıdık', ton: 'evet' },
+    { ifade: 'ornek-cicek-evi-kadikoy.com', not: 'Uzun ve tireli, yazarken karışır', ton: 'hayir' },
+    { ifade: 'ornekcicekk.net', not: 'Çift harf yanlış yazılır', ton: 'hayir' },
+  ]}
+/>
+
+Adı seçerken üç şeye bakın: telefonda söylendiğinde doğru yazılıyor mu, tabeladaki adınızla aynı mı, başka bir işletmenin adıyla karışıyor mu? Adınızda ç, ş, ğ gibi harfler varsa adresteki yazımını (“çiçek” yerine “cicek”) kartvizitte ve tabelada da gösterin.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Adı ve uzantıyı belirleyin',
+      aciklama: 'İşletme adınızla aynı, kısa ve tiresiz bir ad seçin. İki ya da üç uzantıda boşta olup olmadığına bakın.',
+    },
+    {
+      ad: 'Kayıt firmasını seçin',
+      aciklama:
+        'Genel uzantılarda ICANN’in yetkilendirdiği bir kayıt firmasıyla ya da onun bayisiyle, “.tr” uzantılarında bir kayıt kuruluşuyla çalışılır.',
+    },
+    {
+      ad: 'Hesabı işletmenin e-postasıyla açın',
+      aciklama: 'Kayıt sahibi alanına sizin ya da işletmenizin adı yazılsın. Hesabın şifresi sizde dursun.',
+    },
+    {
+      ad: 'İletişim bilgilerini doğru girin',
+      aciklama: 'Yenileme hatırlatmaları bu e-postaya gelir. Kullanmadığınız bir adres yazarsanız uyarıyı görmezsiniz.',
+      not: 'ICANN, genel uzantılarda kayıt firmalarının süre dolmadan yaklaşık bir ay ve bir hafta önce hatırlatma göndermesini şart koşar.',
+    },
+    {
+      ad: 'Yenilemeyi takvime bağlayın',
+      aciklama: 'Otomatik yenilemeyi açın, ödeme bilgisini güncel tutun ve bitiş gününü takviminize yazın.',
+    },
+    {
+      ad: 'Alan adını siteye bağlayın',
+      aciklama: 'Site hazır olduğunda DNS kayıtları, barındırma firmasının verdiği bilgilerle güncellenir.',
+    },
+  ]}
+/>
+
+“.tr” uzantılarında süre kuralı biraz farklıdır. TRABİS bir alan adını bir seferde en az bir, en çok beş yıl için tahsis eder; kayıt kuruluşu da süre bitmeden en az üç ay önce e-postayla bilgi verir.
+
+## SSL sertifikası nedir, ne işe yarar?
+
+SSL (güncel adıyla TLS) sertifikası, site ile ziyaretçinin tarayıcısı arasındaki bağlantıyı şifreler. Sertifikası kurulu sitenin adresi “https” ile başlar. Google Chrome’un yardım sayfasına göre https kullanmayan bir sitede tarayıcı “Güvenli değil” uyarısı gösterir ve nedenini de yazar: site üzerinden gönderilen bilgiyi başka biri görebilir ya da değiştirebilir.
+
+<AraGorsel cizim="kilit" alt="Kâğıttan bir asma kilit ve yanında duran anahtar">
+  Adres çubuğundaki “https”, ziyaretçinin forma yazdığı adın ve telefonun yolda başkası tarafından okunamadığını
+  gösterir.
+</AraGorsel>
+
+Siteniz yıllardır yayındaysa adresin başına bakın. Sayfa “http” ile açılıyorsa barındırma firmanıza sertifikanın kurulu olup olmadığını ve eski adreslerin “https” ile başlayan karşılıklarına yönlendirilip yönlendirilmediğini sorun.
+
+Birçok barındırma paketi ve site kurucu sertifikayı kendisi kurar. Teklif alırken sertifikanın pakete dahil olup olmadığını ve yenilemesini kimin izleyeceğini sorun. Alan adı ve barındırma gibi her yıl yinelenen giderlerin bir teklifte nerede durduğunu [web sitesi fiyatları](/blog/web-sitesi-fiyatlari/) yazısında gösterdik.
+
+## Alan adı kimin adına kayıtlı olmalı?
+
+Sık görülen bir durum şudur: siteyi yıllar önce bir tanıdık kurmuş, alan adını da kendi hesabından almıştır. Ajans değiştirmek ya da siteyi yenilemek istediğinizde adresin sizin hesabınızda durmadığını öğrenirsiniz. Kayıt kimin hesabındaysa yenileme, taşıma ve DNS ayarı onun elindedir.
+
+<Not baslik="Kayıt sahibi siz olun" tur="dikkat">
+  ICANN, web tasarımcısının, barındırma firmasının ya da başka bir üçüncü tarafın alan adının kayıt sahibi olarak
+  yazılmasını önermez; hesabın giriş bilgilerini kimseyle paylaşmamanızı da söyler. Bir ajansla çalışıyorsanız alan
+  adını kendi hesabınızda tutun. DNS ayarı gerekiyorsa değişikliği ajansın verdiği bilgilerle siz yapın ya da kayıt
+  firmasının sunduğu yetkilendirme yolunu kullanın.
+</Not>
+
+İkinci risk yenilemedir. ICANN’in anlattığı sürece göre süresi dolan ve yenilenmeyen bir alan adı, bekleme dönemlerinin ardından yeniden kayda açılır ve ilk başvuran alır. Kartvizitinizde, tabelanızda ve [Google İşletme Profili’nde](/blog/google-isletme-profili-nasil-acilir/) yazan adres başkasına geçebilir.
+
+Alan adınız zaten varsa şu beş maddeyi bugün kontrol edebilirsiniz:
+
+<KontrolListesi
+  kimlik="alan-adi-sahiplik"
+  baslik="Alan adı sahipliği kontrolü"
+  adimlar={[
+    'Alan adımın hangi kayıt firmasında durduğunu biliyorum.',
+    'Kayıt sahibi olarak benim ya da işletmemin adı yazıyor.',
+    'Hesaba işletmenin e-postasıyla giriliyor ve şifre bende.',
+    'Bitiş tarihini biliyorum; otomatik yenileme açık, ödeme bilgisi güncel.',
+    'Barındırmanın ve e-posta kutularının hangi firmada durduğunu biliyorum.',
+  ]}
+  not="İşaretleyemediğiniz madde varsa sitenize dokunmadan önce onu çözün. Adresi olmayan site açılmaz."
+/>
+
+Alan adınız yoksa ilk iş adı belirleyip kendi hesabınızda kaydettirmektir. Ardından sıra sitenin kendisine gelir; [web sitesi nasıl kurulur](/blog/web-sitesi-nasil-kurulur/) yazısı kurulum sırasını adım adım anlatır. Siteyi bizimle kuracaksanız alan adının ve barındırmanın kimin hesabında duracağı [kurumsal web tasarım](/hizmetler/web-tasarim/) teklifimizde açıkça yazar.

@@ -1,0 +1,254 @@
+---
+no: 35
+kapak: rent-a-car-sitesi-nasil-kurulur
+kapakAlt: "Ekranında boş takvim kareleri olan kâğıt bir dizüstü, takvimdeki iki gün kırmızı kalemle çerçevelenip birbirine bağlanmış; yanda çizgili tenteli kiralama büfesinde bir görevli ve gölgelikte biri mavi biri beyaz iki araç, önde kırmızı kalem çizgisi üzerinde valizini çeken bir yolcu"
+soru: "Rent a car sitesi nasıl kurulur: hazır script mi, özel tasarım mı?"
+baslik: "Rent a Car Sitesi: Hazır Script mi, Özel mi?"
+aciklama: >-
+  Rent a car sitesi hazır scriptle de özel tasarımla da kurulur. Seçimi araç ve teslim noktası sayfaları, telefonda
+  rezervasyon akışı ve ikinci dil belirler.
+aramalar:
+  - rent a car scripti
+  - rent a car yazılımı
+  - rent a car sitesi
+  - rent a car sitesi kurmak
+kisaCevap: >-
+  Rent a car sitesi iki katmandan kurulur: müşterinin gezdiği sayfalar ve arkada çalışan rezervasyon ve filo
+  yazılımı. Hazır rent a car scripti ikisini tek pakette getirir; kurulumu kısadır, ama sayfa düzeni ve adres yapısı
+  script’in izin verdiği kadar değişir. Özel tasarımda sayfalar işinize göre çizilir, rezervasyon ise ayrı bir kiralama
+  yazılımından siteye bağlanır. Hangi yolu seçerseniz seçin, sitede her araç sınıfı ve her teslim noktası için ayrı
+  sayfa, telefonda birkaç adımda biten bir rezervasyon akışı ve rezervasyondan önce görünen kiralama koşulları
+  bulunmalıdır.
+elinizeGecen: Script ile özel tasarım karşılaştırması, sayfa planı ve yayın öncesi rezervasyon testi
+hizmetler: [web]
+hizmetBaglantisi:
+  etiket: Kurumsal web tasarım
+  url: /hizmetler/web-tasarim/
+sonraki: landing-page-nedir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Arama Merkezi, Google Web Arama için spam politikaları
+    url: https://developers.google.com/search/docs/essentials/spam-policies?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Çok bölgeli ve çok dilli siteleri yönetme
+    url: https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Mobil site ve mobil öncelikli dizine ekleme en iyi uygulamaları
+    url: https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing?hl=tr
+    tur: resmi
+---
+
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AramaKutulari from '../../components/blog/AramaKutulari.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Antalya’da havalimanına yakın, on beş aracı olan bir kiralama firması düşünün. Sezonun ilk haftasında bir aile WhatsApp’tan yazıyor: sabah uçağıyla inecekler ve havalimanında teslim alabilecekleri otomatik vitesli bir araç arıyorlar. Firmanın sitesinde araç fotoğrafları var, ama tarih seçimi, teslim yeri ve kiralama koşulları yok. Yanıt yazıldığında aile aracı başka bir siteden kiralamış oluyor.
+
+Firmanın sahibi yeni site için iki teklif alıyor: biri hazır bir rent a car scripti, öteki özel tasarım. İkisini tartmadan önce kiralama yapan kişinin sitede hangi adımlardan geçtiğine bakmak gerekir, çünkü iki teklif de bu adımları kendi yoluyla karşılar.
+
+<AraGorsel cizim="takvim" alt="Bazı günleri kırmızı kalemle tiklenmiş kâğıttan bir masa takvimi; yanına bir somun anahtarı yaslanmış">
+  Müşteri iki tarih ve bir teslim yeri seçer. Site o anda boş aracı, toplam tutarı ve koşulları göstermelidir.
+</AraGorsel>
+
+## Rent a car sitesi hangi parçalardan oluşur?
+
+Bir kiralama sitesinin iki katmanı vardır. Önde müşterinin gezdiği sayfalar durur: araçlar, teslim noktaları, koşullar, iletişim. Arkada ise hangi aracın hangi günler boş olduğunu bilen, rezervasyonu kaydeden ve filoyu izleyen yazılım çalışır. “Rent a car yazılımı” diye arayan işletme sahibi çoğunlukla bu arka katmanı arar.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Rent a car scripti',
+      tanim: 'Vitrin sayfalarını, rezervasyon bölümünü ve yönetim panelini tek pakette getiren hazır yazılım.',
+      ornek: 'Araçları panelden girersiniz; sayfaların düzeni paketle birlikte gelir.',
+    },
+    {
+      ad: 'Rezervasyon motoru',
+      acilim: 'Booking engine',
+      tanim: 'Boş araçları gösteren, seçilen tarihlere ve teslim yerine göre tutarı hesaplayan ve rezervasyonu kaydeden bölüm.',
+      ornek: 'Müşteri iki tarih seçer, o günler için boş araç sınıflarını toplam tutarla görür.',
+    },
+    {
+      ad: 'Filo yönetimi',
+      tanim: 'Araçların bakımını, kilometresini ve hangi gün kimde olduğunu izleyen arka ofis bölümü.',
+      ornek: 'Bakıma giren araç o tarihlerde rezervasyona kapanır.',
+    },
+    {
+      ad: 'Teslim noktası',
+      tanim: 'Aracın müşteriye verildiği ve geri alındığı yer: ofis, havalimanı, otel ya da adres.',
+      ornek: 'Havalimanı teslimi ofis teslimiyle aynı saatlerde ve aynı koşullarla çalışmayabilir.',
+    },
+  ]}
+/>
+
+Bu ayrım kararı kolaylaştırır. Hazır script iki katmanı birlikte getirir. Özel tasarımda ön katman işinize göre çizilir; rezervasyon ve filo tarafı bu iş için yazılmış bir kiralama yazılımından gelir ve siteye bağlanır. Bu ikinci yolda biz sayfaları kuruyoruz. Rezervasyon ve filo yazılımını geliştirmiyoruz: onu seçtiğiniz sağlayıcı yürütür, biz sayfaları ve reklamı o rezervasyon adımına bağlarız.
+
+## Hazır rent a car scripti mi, özel tasarım mı?
+
+<Karsilastirma
+  uygunEtiketi="Ne zaman"
+  sol={{
+    ust: 'Tek paket',
+    baslik: 'Hazır rent a car scripti',
+    maddeler: [
+      'Rezervasyon, araç listesi ve panel birlikte gelir; kurulum kısadır.',
+      'Sayfa düzeni ve adres yapısı script’in izin verdiği kadar değişir.',
+      'Aynı script’i kullanan firmaların siteleri birbirine benzer.',
+      'Güncelleme ve güvenlik düzeltmeleri satıcının takvimine bağlıdır.',
+    ],
+    uygun: 'Tek ofisten, az araçla başlayan ve önce rezervasyonu çalıştırmak isteyen firma',
+  }}
+  sag={{
+    ust: 'İki parça',
+    baslik: 'Özel tasarım ve kiralama yazılımı',
+    maddeler: [
+      'Araç, teslim noktası ve dil sayfaları işinize göre planlanır.',
+      'Rezervasyon ayrı bir yazılımdan gelir; iki sağlayıcıyla çalışırsınız.',
+      'Reklamın açacağı sayfalar baştan bu iş için kurulur.',
+      'Tasarım ve kurulum emeği daha fazladır.',
+    ],
+    uygun: 'Birden çok şehirde ya da havalimanında teslim yapan, reklamla büyümek isteyen firma',
+  }}
+/>
+
+Hazır script kötü bir seçim sayılmaz. Tek ofisi ve az aracı olan bir firmada rezervasyonu en kısa yoldan çalıştırır. Zorluk firma büyüdüğünde başlar: yeni bir havalimanı için ayrı sayfa açılamıyorsa, ikinci dil yalnız menüyü çeviriyorsa ya da reklamın açacağı sayfa script’in tek şablonuna sığmıyorsa site işin gerisinde kalır.
+
+Script alırken dört soruyu yazılı sorun. Lisans kimin adına? Güncellemeleri ve güvenlik düzeltmelerini kim yapıyor? Sayfa adreslerini ve başlıklarını değiştirebiliyor musunuz? Başka bir sisteme geçerseniz araç ve rezervasyon kayıtlarınızı dışa aktarabiliyor musunuz? Özel tasarımda ise asıl soru bağlantıdır: kiralama yazılımı siteye nasıl bağlanıyor ve rezervasyon adımı telefonda nasıl görünüyor? Kurulumun genel sırasını [web sitesi nasıl kurulur](/blog/web-sitesi-nasil-kurulur/), teklifteki kalemleri [web sitesi fiyatları](/blog/web-sitesi-fiyatlari/) yazısında bulabilirsiniz.
+
+## Rent a car sitesinde hangi sayfalar olmalı?
+
+Araç kiralayacak kişi çoğu zaman işletmenin adını bilmez. Şehri, havalimanını, tarihi, bazen vitesi ya da araç tipini yazar ve her biri ayrı bir sayfayla karşılanır.
+
+<AramaKutulari
+  aramalar={[
+    { ifade: 'antalya havalimanı araç kiralama', not: 'Havalimanı teslim sayfası açılmalı', ton: 'evet' },
+    { ifade: 'izmir otomatik vites kiralık araç', not: 'Şehir ve araç sınıfı birlikte aranıyor', ton: 'evet' },
+    { ifade: 'aylık araç kiralama', not: 'Uzun dönem koşulları ayrı anlatılmalı', ton: 'notr' },
+    { ifade: 'rent a car iş ilanları', not: 'Müşteri değil, iş arayan', ton: 'hayir' },
+  ]}
+/>
+
+<Ornek
+  baslik="Bir rent a car sitesinin sayfa planı"
+  not="Plan temsilidir. Sayfa sayısını teslim noktalarınız, araç sınıflarınız ve hizmet verdiğiniz diller belirler."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Sayfa</th>
+        <th scope="col">Kimi karşılar?</th>
+        <th scope="col">Sayfada ne olmalı?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Araç sınıfı</strong></td>
+        <td data-baslik="Kimi karşılar?">Belirli tipte araç arayanı</td>
+        <td data-baslik="Sayfada ne olmalı?">Fotoğraf, vites, yakıt, kişi ve bagaj kapasitesi, o sınıfın koşulları</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Havalimanı teslimi</strong></td>
+        <td data-baslik="Kimi karşılar?">Uçaktan inip aracı alacak kişiyi</td>
+        <td data-baslik="Sayfada ne olmalı?">Buluşma noktası, uçuş gecikirse ne olacağı, gece teslim saatleri</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Otele teslim</strong></td>
+        <td data-baslik="Kimi karşılar?">Tatildeyken araç isteyeni</td>
+        <td data-baslik="Sayfada ne olmalı?">Hangi bölgelere getirildiği, teslim saatleri, ek ücretin nasıl hesaplandığı</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Şehir</strong></td>
+        <td data-baslik="Kimi karşılar?">Şehir adıyla arayanı</td>
+        <td data-baslik="Sayfada ne olmalı?">Ofis adresi ve haritası, o şehirdeki teslim noktaları</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Kiralama koşulları</strong></td>
+        <td data-baslik="Kimi karşılar?">Kuralları önceden okumak isteyeni</td>
+        <td data-baslik="Sayfada ne olmalı?">Depozito, kilometre sınırı, ehliyet ve yaş şartı, iptal kuralı</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Araç sayfasını rezervasyon listesinden ayrı düşünün. Listede araç bir satırdır; sayfada ise müşterinin karar vermek için baktığı her şey durur. Koşulları da rezervasyonun son adımına bırakmayın. Depozitoyu ya da kilometre sınırını ödeme ekranında öğrenen müşterinin sorusu, rezervasyon yerine telefona ya da başka bir siteye gider.
+
+Aylık ya da kurumsal kiralama yapıyorsanız bunu da ayrı bir sayfada anlatın. Bir haftalığına araç kiralayan turist ile şirketi için üç araç kiralayan muhasebeci aynı soruları sormaz: biri teslim saatini ve depozitoyu, öteki faturayı, bakımı ve araç değişimini merak eder.
+
+<Not baslik="Şehir adını değiştirip aynı sayfayı çoğaltmayın" tur="dikkat">
+  Google’ın spam politikaları, belirli şehir ya da bölgeleri hedefleyip ziyaretçiyi tek bir sayfaya yönlendiren çok
+  sayıda sayfa açmayı ve birbirine çok benzeyen sayfalar üretmeyi “köprülerin kötüye kullanımı” örnekleri arasında
+  sayar. Her teslim noktası sayfası o noktaya özgü bilgi taşımalı: buluşma yeri, saatler, o noktada teslim edilen
+  araçlar.
+</Not>
+
+## Telefonda rezervasyon akışı nasıl olmalı?
+
+Havalimanında, otelde ya da yolda araç arayan kişinin elinde çoğunlukla telefon vardır. Google da bir siteyi dizine eklerken ve sıralarken sayfaların telefon için hazırlanan sürümünü kullanır. Telefonda dağılan bir rezervasyon formu, hem müşterinin hem Google’ın gördüğü sürümdür.
+
+İyi bir akış beş adımda biter:
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'İlk ekranda tarih ve yer',
+      aciklama: 'Sayfa açılınca alış yeri, alış tarihi ve dönüş tarihi kaydırmadan seçilebilsin.',
+    },
+    {
+      ad: 'Toplam tutarla liste',
+      aciklama: 'Her araç sınıfının yanında seçilen günlerin toplam tutarı ve depozito görünsün.',
+      not: 'Günlük fiyatla toplam arasında fark varsa müşteri bunu rezervasyondan önce görmeli.',
+    },
+    {
+      ad: 'Koşullar araç seçilirken',
+      aciklama: 'Kilometre sınırı, ehliyet şartı ve iptal kuralı araç kartından tek dokunuşla açılsın.',
+    },
+    {
+      ad: 'Kısa form',
+      aciklama: 'Ad, telefon, e-posta ve havalimanı teslimiyse uçuş bilgisi gibi gerçekten gereken alanlar sorulsun.',
+    },
+    {
+      ad: 'Her adımda telefon ve WhatsApp',
+      aciklama: 'Takılan müşteri formu bırakmadan arayabilsin ya da yazabilsin.',
+      not: 'Gelen mesaja hangi saatlerde kimin döneceği yayından önce belli olsun.',
+    },
+  ]}
+/>
+
+Akışı bir kez de kendiniz deneyin: telefonunuzdan, mobil veriyle, siteyi ilk kez gören biri gibi rezervasyonu sonuna kadar götürün. Sayfaların telefonda ne kadar sürede açıldığını Google’ın ücretsiz aracı PageSpeed Insights ile ölçebilirsiniz. Takıldığınız adımları not edip script satıcısına ya da tasarımcıya yazılı iletin.
+
+## Rent a car sitesinde ikinci dil gerekir mi?
+
+Müşterilerinizin bir kısmı yurt dışından geliyorsa ya da turistik bir bölgede teslim yapıyorsanız gerekir. Sık yapılan hata, yalnız menüyü ve ana sayfayı çevirmektir; yabancı müşteri en çok koşullarda ve rezervasyon adımında takılır. Google’ın çok dilli siteler için önerileri kısadır:
+
+- **Her dil için ayrı adres.** Google, dili çerez ya da tarayıcı ayarıyla değiştirmek yerine her dil sürümü için ayrı bir adres (URL) kullanılmasını önerir. Dil sürümleri Google’a hreflang adlı açıklamayla bildirilir.
+- **Otomatik yönlendirme yok.** Ziyaretçinin dilini tahmin edip onu başka bir dil sürümüne yönlendirmeyin; her sayfaya öteki dile geçiş bağlantısı koyun.
+- **Bir sayfada tek dil.** Google sayfanın dilini görünür içerikten anlar. Asıl metinle çevirisini aynı sayfada yan yana sunmaktan kaçının.
+
+Çeviriyi araç sayfaları, teslim noktası sayfaları, kiralama koşulları ve rezervasyon onay mesajıyla birlikte planlayın. Hazır script seçiyorsanız bu dört yerin ikinci dilde de düzenlenebildiğini satıcıya sorun. Reklam verecekseniz dil ayrımı reklamda da sürer: İngilizce arama yapan kişiye açılan sayfa da İngilizce olmalıdır.
+
+## Rent a car sitesi yayına girmeden önce neler kontrol edilir?
+
+Reklam verecekseniz sayfa planı bütçenin nereye gideceğini de belirler. Genel “araç kiralama” aramasında ilk sıralarda büyük kiralama markaları ve karşılaştırma siteleri çıkar. [Otomotiv firmaları için](/sektorler/otomotiv/) kurduğumuz düzende bütçeyi şehir, havalimanı ve kiralama süresi yazan aramalara topluyor, reklamı o aramadaki teslim noktasının sayfasına indiriyoruz.
+
+<KontrolListesi
+  kimlik="rent-a-car-sitesi-yayin-oncesi"
+  baslik="Yayından önce telefonda deneyin"
+  adimlar={[
+    'Kendi telefonumdan havalimanı teslimli bir deneme rezervasyonu yaptım; onay mesajı geldi.',
+    'Seçtiğim günlerin toplam tutarı, depozito ve kilometre sınırı ödeme ekranından önce göründü.',
+    'Her teslim noktası sayfasında o noktaya özgü buluşma yeri ve saat bilgisi var.',
+    'İkinci dildeki sayfalarda koşullar ve rezervasyon adımları da o dilde.',
+    'Alan adı, site ve rezervasyon kayıtları işletmemin hesabında; yazılım lisansı benim adıma.',
+    'Reklamın açacağı her sayfa, aramada yazılan şehrin ya da havalimanının sayfası.',
+  ]}
+  not="Deneme rezervasyonunu yazılım sağlayıcınızla konuşarak, sonradan iptal edilebilecek bir kayıtla yapın."
+/>
+
+Elinizde bir teklif varsa yukarıdaki sayfa planını teklifin yanına koyun ve karşılığı olmayan sayfaları işaretleyin. Reklamın açacağı sayfanın nasıl kurulduğunu [landing page nedir](/blog/landing-page-nedir/) yazısı anlatıyor. Vitrini kiralama yazılımınıza bağlayan bir site istiyorsanız nasıl çalıştığımızı [kurumsal web tasarım](/hizmetler/web-tasarim/) sayfasında bulabilirsiniz.

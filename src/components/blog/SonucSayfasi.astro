@@ -1,0 +1,356 @@
+---
+/**
+ * Arama sonuç sayfasının şeması: reklamlar, harita sonuçları, organik sonuçlar ve yapay zekâ özeti nerede durur?
+ * Gerçek bir ekran görüntüsü değildir; yerleşimi anlatan temsili bir çizimdir ve öyle etiketlenir.
+ *
+ * Kullanım (MDX):
+ * <SonucSayfasi sorgu="kadıköy çilingir" vurgu="harita">İsteğe bağlı açıklama cümlesi.</SonucSayfasi>
+ * - vurgu: anlatılan bölge kırmızı kalemle çerçevelenir, diğerlerinin çizimi soluklaşır.
+ * - bolgeler: gösterilecek bölgeler ve sırası. Varsayılan: reklam, harita, organik.
+ * - aciklamalar: bir bölgenin hazır açıklamasını o yazıya göre değiştirmek için, ör. {{ organik: '...' }}.
+ */
+import Ikon from '../Ikon.astro';
+
+type Bolge = 'reklam' | 'yapay-zeka' | 'harita' | 'organik';
+interface Props {
+  sorgu: string;
+  vurgu?: Bolge;
+  bolgeler?: Bolge[];
+  aciklamalar?: Partial<Record<Bolge, string>>;
+}
+const { sorgu, vurgu, bolgeler = ['reklam', 'harita', 'organik'], aciklamalar = {} } = Astro.props;
+
+const BILGI: Record<Bolge, { ad: string; kanal: string; aciklama: string }> = {
+  reklam: {
+    ad: 'Reklamlar',
+    kanal: 'Google Ads',
+    aciklama: '“Sponsorlu” etiketiyle görünür. Reklam veren tıklama başına öder; reklam durduğunda bu görünürlük de biter.',
+  },
+  'yapay-zeka': {
+    ad: 'Yapay zekâ özeti',
+    kanal: 'GEO',
+    aciklama: 'Google bazı aramalarda yanıtı kendi yazar ve yararlandığı sayfaları kaynak olarak gösterir.',
+  },
+  harita: {
+    ad: 'Harita sonuçları',
+    kanal: 'Google İşletme Profili',
+    aciklama: 'Yakındaki işletmeleri listeler. Sırada, aramayla ne kadar ilgili olduğunuz, arayana uzaklığınız ve işletmenizin ne kadar bilindiği etkilidir.',
+  },
+  organik: {
+    ad: 'Organik sonuçlar',
+    kanal: 'SEO',
+    aciklama: 'Reklam olmayan sonuçlardır. Tıklama için ödeme yapılmaz; sıra, sayfanın aramayı ne kadar iyi karşıladığına bağlıdır.',
+  },
+};
+---
+
+<figure class="sonuc" data-gir>
+  <div class="sonuc__sayfa">
+    <div class="sonuc__ust">
+      <p class="sonuc__cubuk">
+        <Ikon ad="magnifying-glass" boyut={18} />
+        <span>{sorgu}</span>
+      </p>
+      <span class="temsili">Temsili çizim</span>
+    </div>
+
+    {
+      bolgeler.map((b) => (
+        <div class:list={['sonuc__bolge', vurgu === b && 'sonuc__bolge--vurgu', vurgu && vurgu !== b && 'sonuc__bolge--soluk']}>
+          <div class="sonuc__cizim" aria-hidden="true">
+            {b === 'reklam' &&
+              [0, 1].map(() => (
+                <div class="sonuc__oge">
+                  <span class="sonuc__etiket">Sponsorlu</span>
+                  <i class="cubuk cubuk--baslik" style="--g:64%" />
+                  <i class="cubuk" style="--g:92%" />
+                  <i class="cubuk" style="--g:58%" />
+                </div>
+              ))}
+            {b === 'yapay-zeka' && (
+              <div class="sonuc__ozet">
+                <span class="sonuc__etiket sonuc__etiket--mavi">
+                  <Ikon ad="robot" boyut={14} /> Yapay zekâ özeti
+                </span>
+                <i class="cubuk" style="--g:96%" />
+                <i class="cubuk" style="--g:88%" />
+                <i class="cubuk" style="--g:52%" />
+                <div class="sonuc__kaynaklar">
+                  <i class="kaynak" />
+                  <i class="kaynak" />
+                  <i class="kaynak" />
+                </div>
+              </div>
+            )}
+            {b === 'harita' && (
+              <div class="sonuc__harita">
+                <div class="sonuc__pafta">
+                  <i class="igne" style="--x:28%;--y:34%" />
+                  <i class="igne" style="--x:62%;--y:52%" />
+                  <i class="igne" style="--x:44%;--y:74%" />
+                </div>
+                <div class="sonuc__isletmeler">
+                  {[72, 58, 66].map((g) => (
+                    <div class="sonuc__oge">
+                      <i class="cubuk cubuk--koyu" style={`--g:${g}%`} />
+                      <span class="sonuc__yildiz">★★★★★</span>
+                      <i class="cubuk" style="--g:44%" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {b === 'organik' &&
+              [70, 56, 62].map((g) => (
+                <div class="sonuc__oge">
+                  <i class="cubuk cubuk--ince" style="--g:34%" />
+                  <i class="cubuk cubuk--baslik" style={`--g:${g}%`} />
+                  <i class="cubuk" style="--g:94%" />
+                </div>
+              ))}
+          </div>
+          <div class="sonuc__bilgi">
+            <p class="sonuc__ad">
+              <span>{BILGI[b].ad}</span>
+              <span class="sonuc__kanal">{BILGI[b].kanal}</span>
+            </p>
+            <p class="sonuc__aciklama">{aciklamalar[b] ?? BILGI[b].aciklama}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  {Astro.slots.has('default') && <figcaption><slot /></figcaption>}
+</figure>
+
+<style>
+  .sonuc {
+    display: grid;
+    gap: 0.85rem;
+  }
+  .sonuc__sayfa {
+    display: grid;
+    gap: clamp(0.9rem, 1.8vw, 1.35rem);
+    padding: clamp(1rem, 2.2vw, 1.75rem);
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.4rem 0.4rem 0 var(--mavi-acik);
+  }
+  .sonuc__ust {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem 1.25rem;
+  }
+  .sonuc__cubuk {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1 1 14rem;
+    max-width: 30rem;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0.4rem 1.1rem;
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: 999px;
+    font-family: var(--yazi-baslik);
+    font-size: 1.0625rem;
+    font-weight: 560;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+  .sonuc__cubuk :global(svg) {
+    flex: none;
+    color: var(--mavi);
+  }
+
+  .sonuc__bolge {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(1rem, 2.4vw, 2rem);
+    align-items: center;
+    padding: clamp(0.8rem, 1.6vw, 1.15rem);
+    background: var(--kagit);
+    border-radius: var(--kose);
+  }
+  /* Anlatılan bölge kırmızı kalemle çerçevelenir. */
+  .sonuc__bolge--vurgu {
+    background: var(--beyaz);
+  }
+  .sonuc__bolge--vurgu::after {
+    content: '';
+    position: absolute;
+    inset: -0.15rem;
+    border: 3px solid var(--kirmizi);
+    border-radius: 9px 14px 8px 16px / 14px 8px 15px 9px;
+    filter: url(#kalem-dokusu);
+    pointer-events: none;
+  }
+  .sonuc__bolge--soluk .sonuc__cizim {
+    opacity: 0.42;
+  }
+
+  .sonuc__cizim {
+    display: grid;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+  .sonuc__oge {
+    display: grid;
+    gap: 0.36rem;
+    justify-items: start;
+  }
+  .cubuk {
+    display: block;
+    width: var(--g, 80%);
+    height: 0.5rem;
+    border-radius: 999px;
+    background: rgb(16 28 57 / 0.14);
+  }
+  .cubuk--baslik {
+    height: 0.72rem;
+    background: var(--mavi);
+  }
+  .cubuk--koyu {
+    height: 0.66rem;
+    background: var(--murekkep);
+  }
+  .cubuk--ince {
+    height: 0.38rem;
+  }
+  .sonuc__etiket {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--yazi-baslik);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--murekkep);
+  }
+  .sonuc__etiket--mavi {
+    color: var(--mavi);
+  }
+  .sonuc__ozet {
+    display: grid;
+    gap: 0.42rem;
+    justify-items: start;
+    padding: 0.8rem;
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  .sonuc__kaynaklar {
+    display: flex;
+    gap: 0.4rem;
+    margin-block-start: 0.2rem;
+  }
+  .kaynak {
+    display: block;
+    width: 2.6rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    background: var(--beyaz);
+    box-shadow: inset 0 0 0 1.5px var(--mavi);
+  }
+  .sonuc__harita {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+  /* Pafta: soluk mavi zemin, beyaz sokak çizgileri, üç kırmızı iğne. */
+  .sonuc__pafta {
+    position: relative;
+    min-height: 6.5rem;
+    border-radius: var(--kose);
+    background:
+      linear-gradient(90deg, transparent 31%, var(--beyaz) 31% 35%, transparent 35% 68%, var(--beyaz) 68% 72%, transparent 72%),
+      linear-gradient(0deg, transparent 24%, var(--beyaz) 24% 29%, transparent 29% 61%, var(--beyaz) 61% 66%, transparent 66%),
+      #cfdaf1;
+  }
+  .igne {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50% 50% 50% 0;
+    background: var(--kirmizi);
+    transform: translate(-50%, -100%) rotate(-45deg);
+    box-shadow: inset 0 0 0 0.22rem var(--kirmizi), inset 0 0 0 0.5rem var(--beyaz);
+  }
+  .sonuc__isletmeler {
+    display: grid;
+    gap: 0.6rem;
+    align-content: center;
+  }
+  .sonuc__yildiz {
+    font-size: 0.7rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    color: var(--mavi);
+  }
+
+  .sonuc__bilgi {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+  .sonuc__bilgi p {
+    margin: 0;
+  }
+  .sonuc__ad {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 0.6rem;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.3rem);
+    font-weight: 680;
+    font-stretch: 92%;
+    letter-spacing: -0.012em;
+    line-height: 1.15;
+    color: var(--murekkep);
+  }
+  .sonuc__kanal {
+    padding: 0.28em 0.6em 0.32em;
+    border-radius: 2px;
+    background: var(--mavi-acik);
+    font-size: var(--b-mikro);
+    font-weight: 650;
+    font-stretch: 100%;
+    letter-spacing: 0;
+    line-height: 1;
+    color: var(--mavi-koyu);
+  }
+  .sonuc__bolge--vurgu .sonuc__kanal {
+    background: var(--kirmizi);
+    color: var(--beyaz);
+  }
+  .sonuc__aciklama {
+    font-size: var(--b-kucuk);
+    line-height: 1.48;
+    color: var(--murekkep-2);
+  }
+  .sonuc figcaption {
+    margin: 0;
+    max-width: 43rem;
+    padding-inline-start: 0.9rem;
+    border-inline-start: 3px solid var(--kirmizi);
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 39.99rem) {
+    .sonuc__bolge {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.85rem;
+    }
+    .sonuc__bilgi {
+      order: -1;
+    }
+  }
+</style>

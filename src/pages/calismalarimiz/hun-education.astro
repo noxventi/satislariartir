@@ -1,0 +1,616 @@
+---
+/**
+ * Proje sayfası: Hun Education.
+ *
+ * Bu bir reklam projesidir. Web sitesi ekibin tasarımı değildir; reklamların yönlendirildiği sitedir. Bu yüzden
+ * sayfada site ekran görüntüsü kullanılmaz (gorsel-kaynak/KAYIT.md); görseller kâğıt işi sahne ve nesnelerdir.
+ *
+ * Düzen (15 Kasım 2026): üst alan > bu sayfada > proje künyesi > işletmenin sorusu > ne yaptık (adımlar + iki karar) >
+ * adayın yolu (beş durak) > müşteri sözü > bu projedeki hizmetler > diğer proje > görüşme.
+ * Anlatım sırası: inceleme, bilinçli kurulum, düzenli optimizasyon, hedef.
+ *
+ * - Ölçülmüş sonuç yok: sayfa "ne yapıldı ve neden" sorusunu yanıtlar. Arama ve reklam durakları temsilidir.
+ * - İşletmeye dair olgular 14 Kasım 2026'da huneducation.com'dan, proje özeti ekip kayıtlarından alındı.
+ * - Müşteri sözü doğrulanmış gerçek sözdür (src/data/projeler.ts); metni değiştirilmez.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import MusteriSozu from '../../components/MusteriSozu.astro';
+import ProjeKunyesi from '../../components/proje/ProjeKunyesi.astro';
+import ProjeKarti from '../../components/ProjeKarti.astro';
+import Cizim from '../../components/Cizim.astro';
+import Ikon from '../../components/Ikon.astro';
+import Isaret from '../../components/Isaret.astro';
+import { KAYNAK_KONTROL_TARIHI, MUSTERI_SOZLERI, projeBul } from '../../data/projeler';
+
+import sahne from '../../assets/gorseller/yol-akis.jpg';
+import kitaplik from '../../assets/cizimler/kitaplik.png';
+import hedef from '../../assets/cizimler/hedef.png';
+import soruCizim from '../../assets/cizimler/soru.png';
+import kitle from '../../assets/cizimler/kitle.png';
+import liste from '../../assets/cizimler/liste.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import kreatif from '../../assets/cizimler/kreatif.png';
+import dukkan from '../../assets/cizimler/dukkan.png';
+import zarf from '../../assets/cizimler/zarf.png';
+import telefon from '../../assets/cizimler/telefon.png';
+import balon from '../../assets/cizimler/balon.png';
+import mesaj from '../../assets/cizimler/mesaj.png';
+import megafon from '../../assets/cizimler/megafon.png';
+
+const CAGRI = 'Benzer bir projeyi görüşelim';
+const p = projeBul('hun-education');
+const soz = MUSTERI_SOZLERI['hun-education'];
+const canli = `https://${p.alanAdi}/`;
+const kirintilar = [
+  { ad: 'Çalışmalarımız', url: '/calismalarimiz/' },
+  { ad: 'Hun Education', url: p.dosya! },
+];
+
+// İşletmenin sorusu: "başvuru adımına" kırmızı kalemle çembere alınır.
+const VURGU = 'başvuru adımına';
+const [soruBasi, soruSonu = ''] = p.karar.split(VURGU);
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'Programlar ve kitleler', aciklama: 'Kimin hangi programı aradığını çıkardık: tıp isteyen adayla hazırlık programı arayan aday aynı soruyu sormuyor.' },
+  { ad: 'Strateji', ozet: 'Hedef: danışmanla görüşme', aciklama: 'Reklamın işini netleştirdik: doğru programı arayan adayı danışmanın karşısına çıkarmak.' },
+  { ad: 'Kurulum', ozet: 'Programa ve kitleye göre kampanya', aciklama: 'Hesap yapısını farklı programlar ve farklı hedef kitleler için yeniden düzenledik.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Bütçeye ve başvurulara kampanya kampanya bakıyor, düzenlemeyi buna göre yapıyoruz.' },
+  { ad: 'Hedef', ozet: 'Öğrenci başvurusu', aciklama: 'Projeyi tıklamayla değil, danışmanla görüşmeye gelen adayla değerlendiriyoruz.' },
+];
+
+// İki karar: önce nedeni (incelemede gördüğümüz), sonra yaptığımız iş.
+const kararlar = [
+  {
+    soru: 'Kampanyalar neye göre kuruldu?',
+    ornek: 'Tıp okumak isteyen adayla dil hazırlığı arayan aday aynı soruyu sormaz. Öğrenciyle ailesi de aynı reklamdan aynı şeyi okumaz.',
+    care: 'Hesap yapısını farklı programlar ve farklı hedef kitleler için yeniden düzenledik. Yapı ayrıldığında hangi programın başvuru getirdiği tek bakışta okunuyor.',
+    bag: { etiket: 'Instagram ve Facebook reklam yönetimi', url: '/hizmetler/meta-reklam-yonetimi/' },
+    cizim: kitle,
+    genis: true,
+  },
+  {
+    soru: 'Bütçe ve başvurular nasıl izleniyor?',
+    ornek: 'Hangi kampanyanın hangi başvuruyu getirdiği görünmüyorsa bütçeye nereden bakılacağı da bilinmez.',
+    care: 'Bütçenin nereye gittiğini, dönüşüm takibinin neyi saydığını ve iletişimin nasıl yürüdüğünü işletmenin de izleyebileceği biçimde düzenledik.',
+    bag: { etiket: 'Google Ads yönetimi', url: '/hizmetler/google-ads-yonetimi/' },
+    cizim: liste,
+    genis: false,
+  },
+];
+
+// Adayın yolu. Arama ve reklam durakları temsilidir; başvuru durağı sitede görüldüğü gibidir.
+const duraklar = [
+  {
+    ad: 'Arama',
+    ornek: '“macaristan’da tıp okumak”',
+    sorgu: true,
+    aciklama: 'Aday bir ülke değil, bir program arıyor. Yazdığı söz hangi programı istediğini söylüyor.',
+    bakilan: 'Hangi aramalar başvuruya kadar gidiyor, hangileri yalnızca bilgi topluyor?',
+    cizim: buyutec,
+  },
+  {
+    ad: 'Reklam',
+    ornek: 'O programı anlatan reklam',
+    sorgu: false,
+    aciklama: 'Reklamın sözü aramayla aynı programı söylüyor. Tıp arayan aday karşısında tıp eğitimini görüyor.',
+    bakilan: 'Tıp arayan adayla hazırlık programı arayan aday aynı reklamı mı görüyor?',
+    cizim: kreatif,
+  },
+  {
+    ad: 'Sayfa',
+    ornek: 'Sitedeki program sayfası',
+    sorgu: false,
+    aciklama: 'Tıklayan aday genel bir karşılama yerine aradığı programın bilgisine ulaşıyor.',
+    bakilan: 'Aday aradığı programı ilk ekranda görüyor mu?',
+    cizim: dukkan,
+  },
+  {
+    ad: 'Başvuru',
+    ornek: 'Danışmanlık çağrısı ve iletişim formu',
+    sorgu: false,
+    aciklama:
+      'Sitedeki “Free Consultation” çağrısı adayı iletişim sayfasına götürüyor. Form ad, e-posta, telefon ve mesaj soruyor. Telefon, WhatsApp ve e-posta da açık.',
+    bakilan: 'Form telefonda sorunsuz gönderiliyor mu? Form, arama ve WhatsApp ayrı ayrı sayılıyor mu?',
+    cizim: zarf,
+  },
+  {
+    ad: 'Görüşme',
+    ornek: 'Danışmanın adayla ilk görüşmesi',
+    sorgu: false,
+    aciklama: 'Reklamın değeri burada ortaya çıkıyor. Aday gerçekten o programa başvurmak istiyor mu?',
+    bakilan: 'Görüşmeye gelen aday hangi kampanyadan geldi?',
+    cizim: telefon,
+  },
+];
+---
+
+<Temel
+  baslik="Hun Education Projesi: Reklam Yönetimi | Satışları Artır"
+  aciklama="Hun Education reklam projesinde ne yaptık ve neden? Kampanyaları programlara ve hedef kitlelere göre kurduk; adayın reklamdan başvuruya giden yolunu inceledik."
+  sayfaTuru="proje"
+  proje="hun-education"
+  hizmet="meta"
+  kirintilar={kirintilar}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <div class="proje-ust">
+    <SayfaBasi
+      kirintilar={kirintilar}
+      ust={p.sektor}
+      baslik="Hun Education"
+      gorsel={sahne}
+      gorselBicimi="dikey"
+      mobilOdak="50% 42%"
+      gorselAlt="Kâğıttan dev bir telefonun ekranındaki fotoğraf kareleri; karelerden biri kırmızı kalemle çembere alınmış, önünde ekrana bakan küçük kâğıt insanlar"
+      cagri={{ etiket: CAGRI, url: '#gorusme', kanal: 'meta' }}
+      ikincil={{ etiket: 'Canlı siteyi açın', url: canli }}
+    >
+      <p>
+        Macaristan’da üniversite okumak isteyen öğrencilere danışmanlık veren Hun Education için yürüttüğümüz reklam
+        projesinde kampanyaları programlara ve hedef kitlelere göre kurduk.
+      </p>
+    </SayfaBasi>
+  </div>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Künye', hedef: 'kunye' },
+      { etiket: 'İşletmenin sorusu', hedef: 'soru' },
+      { etiket: 'Ne yaptık?', hedef: 'ne-yaptik' },
+      { etiket: 'Adayın yolu', hedef: 'yol' },
+      { etiket: 'Müşteri sözü', hedef: 'musteri-sozu' },
+      { etiket: 'Hizmetler', hedef: 'hizmetler' },
+    ]}
+  />
+
+  <ProjeKunyesi
+    kimlik="hun-education"
+    isletme="Hun Education, Budapeşte"
+    not="Web sitesi ekibimizin tasarımı değildir. Reklam kampanyalarının yönlendirildiği sitedir. Bu sayfada sitenin tasarımına dair hiçbir iş ekibimize atfedilmez."
+    sektorCizim={kitaplik}
+    isCizim={hedef}
+  />
+
+  <!-- İşletmenin sorusu -->
+  <section class="bolum soru" id="soru">
+    <div class="sarici">
+      <div class="soru__ust">
+        <div class="soru__baslik">
+          <p class="soru__ad">İşletmenin sorusu</p>
+          <h2 class="dev soru__soz">
+            {soruBasi}{p.karar.includes(VURGU) && <Isaret class="isaret--satir-ici">{VURGU}</Isaret>}{soruSonu}
+          </h2>
+        </div>
+        <div class="soru__cizim" aria-hidden="true">
+          <Cizim src={soruCizim} sizes="(max-width: 55.99rem) 40vw, 20vw" genislikler={[240, 360, 520, 720]} />
+        </div>
+      </div>
+      <div class="soru__alt">
+        <h3 class="baslik-3">Hun Education nasıl çalışıyor?</h3>
+        <div class="soru__sutunlar">
+          <p>
+            Budapeşte merkezli Hun Education; lisans, yüksek lisans, tıp, pilotaj ve hazırlık programları için
+            Macaristan’daki üniversitelere başvuracak öğrencilere danışmanlık veriyor.
+          </p>
+          <p>
+            <strong>Burada satılan şey bir görüşmedir.</strong> Hedef kitle yalnız öğrenci değil, ailesidir de. İlk temas
+            bir danışmanla konuşmaktır. Kayıt, o konuşmadan sonra başlayan bir süreçtir.
+          </p>
+          <p>
+            Bu yüzden reklamın işi tıklama getirmek değil, doğru programı arayan adayı danışmanın karşısına
+            çıkarmaktır.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ne yaptık: adımlar ve iki karar -->
+  <section class="bolum bolum--beyaz" id="ne-yaptik">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Hun Education reklam projesinde ne yaptık?</h2>
+        <p class="giris">
+          Görev, Macaristan’da üniversite eğitimi arayan öğrencilere ve ailelerine ulaşacak reklam kampanyalarını
+          planlamak ve yönetmekti. Önce kimin hangi programı aradığına baktık, hesabı buna göre kurduk.
+        </p>
+      </div>
+      <Adimlar adimlar={adimlar} />
+
+      <div class="kararlar">
+        <h3 class="baslik-3 kararlar__baslik">İki karar ve nedenleri</h3>
+        <SoruKartlari kartlar={kararlar} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Adayın yolu: beş durak -->
+  <section class="bolum bolum--acik" id="yol">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Adayın yolu: aramadan görüşmeye</h2>
+        <p class="giris">
+          Reklamı tıklamada bırakmıyoruz. Adayın geçtiği beş durağın her birinde tek bir soru soruyor, kampanyaları
+          cevaba göre düzenliyoruz.
+        </p>
+        <p class="kucuk ikincil yol__not">
+          <span class="temsili">Temsili örnek</span>
+          Arama ve reklam durakları temsilidir. Başvuru adımı {KAYNAK_KONTROL_TARIHI} tarihinde huneducation.com’da görüldüğü
+          gibidir.
+        </p>
+      </div>
+
+      <ol class="duraklar">
+        {
+          duraklar.map((d, i) => (
+            <li class="durak" data-gir style={`--gecikme:${(i % 3) * 110}ms`}>
+              <div class="durak__ust">
+                <span class="durak__no" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <div class="durak__cizim" aria-hidden="true">
+                  <Cizim src={d.cizim} sizes="(max-width: 47.99rem) 30vw, 10vw" genislikler={[200, 320, 480]} />
+                </div>
+              </div>
+              <h3 class="durak__ad">{d.ad}</h3>
+              <p class:list={['durak__ornek', d.sorgu && 'sorgu']}>{d.ornek}</p>
+              <p class="durak__aciklama">{d.aciklama}</p>
+              <div class="durak__bakilan">
+                <p class="durak__etiket">Bu durakta baktığımız</p>
+                <p class="durak__soru">{d.bakilan}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="kucuk ikincil yol__kaynak">
+        İşletmeye dair bilgiler {KAYNAK_KONTROL_TARIHI} tarihinde <a href={canli} rel="noopener">{p.alanAdi}</a> üzerinden
+        kontrol edildi. Bu sayfada sonuç rakamı yok: müşterinin onayladığı bir ölçüm geldiğinde tarih aralığı, veri kaynağı
+        ve dönüşüm tanımıyla birlikte eklenecek.
+      </p>
+    </div>
+  </section>
+
+  <!-- Müşterinin sözü -->
+  <section class="bolum bolum--beyaz" id="musteri-sozu">
+    <div class="sarici soz-yeri">
+      <div class="soz-yeri__baslik">
+        <div class="soz-yeri__cizim" aria-hidden="true">
+          <Cizim src={balon} sizes="(max-width: 55.99rem) 36vw, 16vw" genislikler={[240, 360, 520]} />
+        </div>
+        <h2 class="baslik-2">Hun Education ne dedi?</h2>
+      </div>
+      <div class="soz-yeri__soz" data-gir>
+        <MusteriSozu {...soz} zemin="acik" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Bu projedeki hizmetler -->
+  <div id="hizmetler">
+    <IlgiliSayfalar
+      baslik="Bu projedeki hizmetler ve ilgili rehber"
+      giris="Hun Education’da yürüttüğümüz reklam yönetimini ayrı bir hizmet olarak da veriyoruz."
+      zemin="kagit"
+      sayfalar={[
+        {
+          tur: 'Hizmet',
+          baslik: 'Instagram ve Facebook reklam yönetimi',
+          metin: 'Reklamın sözü, hedef kitlesi ve başvurudan görüşmeye giden adımlar.',
+          url: '/hizmetler/meta-reklam-yonetimi/',
+          cizim: mesaj,
+        },
+        {
+          tur: 'Hizmet',
+          baslik: 'Google Ads yönetimi',
+          metin: 'Bütçenin, başvuru getiren aramalara yönlendirilmesi.',
+          url: '/hizmetler/google-ads-yonetimi/',
+          cizim: megafon,
+        },
+        {
+          tur: 'Blog',
+          baslik: 'Instagram reklamından mesaj geliyor ama neden satış olmuyor?',
+          url: '/blog/instagram-reklam-mesajlari-satisa-donusmuyor/',
+          cizim: kitle,
+        },
+      ]}
+    />
+  </div>
+
+  <!-- Diğer proje ve bütün çalışmalar -->
+  <section class="bolum bolum--beyaz bolum--siki">
+    <div class="sarici">
+      <div class="diger__ust">
+        <h2 class="baslik-3">Bir başka proje</h2>
+        <a class="ok-bag" href="/calismalarimiz/">
+          Bütün çalışmalarımız
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </div>
+      <ProjeKarti
+        kimlik="celikvillam"
+        metin="Çelik villa yaptırmak isteyenler model, maliyet ve teklif sorularıyla geliyor. Siteyi, arama görünürlüğünü ve reklamları bu sorulara göre kurduk."
+      />
+    </div>
+  </section>
+
+  <GorusmeBandi
+    baslik="Başvurularınızın yolunu birlikte çıkaralım."
+    metin="Müşterinizin size hangi soruyla geldiğini ve başvurunun kime ulaştığını anlatın. Görüşmeye buradan başlayalım."
+    kanal="meta"
+    cagri={CAGRI}
+    konum="proje-hun-education"
+    kanit={false}
+  />
+</Temel>
+
+<style>
+  /* ---- Üst alan: proje adı kısa olduğu için başlık bir kademe büyür. ------------ */
+  .proje-ust :global(.sb__baslik) {
+    font-size: clamp(3rem, 1.6rem + 5.4vw, 6.25rem);
+    line-height: 0.94;
+  }
+
+  /* ---- İşletmenin sorusu ----------------------------------------------------
+     Soru büyük başlıktır; yanında kâğıt işi nesne, altında işletmenin satış biçimi üç sütunda durur. */
+  .soru__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 9fr) minmax(0, 3fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+    row-gap: 1rem;
+    align-items: end;
+  }
+  .soru__baslik {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  .soru__ad {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem);
+    font-weight: 640;
+    font-stretch: 94%;
+    line-height: 1.2;
+    color: var(--mavi);
+  }
+  .soru__ad::before {
+    content: '';
+    flex: none;
+    width: 2.25rem;
+    height: 2px;
+    background: var(--kirmizi);
+  }
+  .soru__soz {
+    font-size: clamp(2.05rem, 0.85rem + 4.1vw, 4.6rem);
+    line-height: 1;
+    max-width: 15em;
+  }
+  /* Halka üst ve alt satırdaki harflere değmesin diye çembere alınan söz satırını biraz açar. */
+  .soru__soz :global(.isaret) {
+    margin-block: 0.3em 0.32em;
+  }
+  .soru__cizim {
+    margin: 0 -0.5rem -1rem 0;
+  }
+  .soru__alt {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-block-start: clamp(2.25rem, 5vw, 4.25rem);
+  }
+  .soru__sutunlar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1em clamp(1.5rem, 3.4vw, 3.5rem);
+    color: var(--murekkep-2);
+  }
+  .soru__sutunlar strong {
+    color: var(--murekkep);
+  }
+  @media (max-width: 55.99rem) {
+    .soru__ust,
+    .soru__sutunlar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .soru__cizim {
+      width: min(40%, 10rem);
+      margin: -0.25rem 0 -0.5rem -0.5rem;
+    }
+  }
+
+  /* ---- İki karar ---------------------------------------------------------------- */
+  .kararlar {
+    margin-block-start: clamp(3rem, 6vw, 5rem);
+  }
+  .kararlar__baslik {
+    margin-block-end: clamp(1.1rem, 2vw, 1.6rem);
+  }
+
+  /* ---- Adayın yolu: beş durak kartı ------------------------------------------------
+     Üst sırada üç, alt sırada iki kart. Numara kırmızı kalem halkasıdır; son durak dolu. */
+  .yol__not {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+  }
+  .duraklar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .durak {
+    grid-column: span 4;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 0.6rem;
+    padding: clamp(1.25rem, 2.2vw, 2rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+    min-width: 0;
+  }
+  .durak:nth-child(n + 4) {
+    grid-column: span 6;
+  }
+  .durak__ust {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: clamp(5.5rem, 8vw, 7rem);
+  }
+  .durak__no {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid var(--kirmizi);
+    border-radius: 50%;
+    font-family: var(--yazi-baslik);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--kirmizi);
+    font-variant-numeric: lining-nums;
+  }
+  .durak:last-child .durak__no {
+    background: var(--kirmizi);
+    color: var(--beyaz);
+    box-shadow: 0 0 0 4px rgb(185 35 56 / 0.16);
+  }
+  .durak__cizim {
+    width: clamp(5.5rem, 9vw, 8rem);
+    margin: -0.75rem -0.5rem -0.5rem 0;
+  }
+  .durak__ad {
+    font-size: clamp(1.7rem, 1.25rem + 1.6vw, 2.5rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    line-height: 1;
+    letter-spacing: -0.026em;
+  }
+  .durak__ornek {
+    font-size: clamp(1.1rem, 1.02rem + 0.35vw, 1.3rem);
+    line-height: 1.25;
+    color: var(--murekkep);
+  }
+  .durak__ornek:not(.sorgu) {
+    font-family: var(--yazi-baslik);
+    font-weight: 620;
+    font-stretch: 94%;
+    letter-spacing: -0.008em;
+  }
+  .durak__aciklama {
+    color: var(--murekkep-2);
+    max-width: 34em;
+  }
+  .durak__bakilan {
+    display: grid;
+    gap: 0.25rem;
+    margin-block-start: 0.6rem;
+    padding: 0.9rem 1rem 1rem;
+    background: var(--zemin);
+    border-radius: var(--kose);
+  }
+  .durak__etiket {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .durak__soru {
+    font-family: var(--yazi-baslik);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    font-stretch: 94%;
+    line-height: 1.3;
+    letter-spacing: -0.006em;
+  }
+  .yol__kaynak {
+    max-width: 52rem;
+    margin-block-start: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+  @media (max-width: 61.99rem) {
+    .durak,
+    .durak:nth-child(n + 4) {
+      grid-column: span 6;
+    }
+    .durak:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .durak,
+    .durak:nth-child(n + 4) {
+      grid-column: 1 / -1;
+    }
+    .durak__ust {
+      min-height: 0;
+    }
+  }
+
+  /* ---- Müşteri sözü ------------------------------------------------------------------ */
+  .soz-yeri {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 5vw, 5.5rem);
+    align-items: center;
+  }
+  .soz-yeri__baslik {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .soz-yeri__cizim {
+    width: min(70%, 13rem);
+    margin-inline-start: -0.75rem;
+  }
+  /* Söz bu sayfanın kanıtıdır: bileşenin yazısı burada büyür.
+     (Bileşenin kendi kapsamlı seçicisini geçmek için iki sınıfla yazıldı.) */
+  .soz-yeri .soz-yeri__soz :global(.soz) {
+    padding-inline-start: clamp(1.25rem, 2.4vw, 2.25rem);
+    border-inline-start-width: 3px;
+  }
+  .soz-yeri .soz-yeri__soz :global(.soz blockquote p) {
+    font-size: clamp(1.5rem, 1.05rem + 2vw, 2.85rem);
+    font-weight: 620;
+    font-stretch: 88%;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .soz-yeri .soz-yeri__soz :global(.soz figcaption) {
+    margin-block-start: 1.25rem;
+    font-size: var(--b-govde);
+  }
+  @media (max-width: 55.99rem) {
+    .soz-yeri {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .soz-yeri__cizim {
+      width: min(40%, 10rem);
+    }
+  }
+
+  /* ---- Diğer proje ------------------------------------------------------------------ */
+  .diger__ust {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-block-end: clamp(1.1rem, 2vw, 1.6rem);
+  }
+  .diger__ust .ok-bag {
+    min-height: 2.75rem;
+    align-items: center;
+  }
+</style>

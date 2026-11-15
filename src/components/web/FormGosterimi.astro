@@ -1,0 +1,255 @@
+---
+/**
+ * Form hata durumu gösterimi (web tasarım hizmet sayfası).
+ *
+ * Ziyaretçi teslim ettiğimiz formun nasıl davrandığını deneyebilsin diye yazıldı.
+ * - Kayıt AÇMAZ: sunucuya istek gitmez, girilen değer saklanmaz, ölçüm olayı gönderilmez.
+ * - Doğrulama kuralları ve hata metinleri sitenin gerçek formuyla aynıdır (src/lib/dogrulama.ts).
+ * - method="dialog": betik çalışmazsa form hiçbir yere gönderilmez, yazılan bilgi adres çubuğuna düşmez.
+ */
+import Ikon from '../Ikon.astro';
+---
+
+<div class="ornek fg" id="form-gosterimi-kutusu">
+  <div class="ornek__ust">
+    <h3 class="baslik-4">Form hata durumunu deneyin</h3>
+    <span class="temsili">Gösterim, bilgi kaydedilmez</span>
+  </div>
+
+  <p class="fg__ipucu kucuk">Önce boş gönderin. Sonra eksik bir numara yazıp yeniden deneyin.</p>
+
+  <form class="fg__form" method="dialog" novalidate data-form-gosterimi data-cagri-engeli>
+    <fieldset class="fg__yontem">
+      <legend>Size nasıl dönelim?</legend>
+      <div class="fg__secim">
+        <label>
+          <input type="radio" name="gosterim-yontem" value="telefon" checked />
+          <span><Ikon ad="phone" boyut={18} />Telefonla</span>
+        </label>
+        <label>
+          <input type="radio" name="gosterim-yontem" value="eposta" />
+          <span><Ikon ad="envelope-simple" boyut={18} />E-postayla</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="alan" data-yontem="telefon">
+      <label for="fg-telefon">Telefon numaranız</label>
+      <input class="girdi" id="fg-telefon" type="tel" inputmode="tel" autocomplete="off" maxlength="24" placeholder="05xx xxx xx xx" aria-describedby="fg-telefon-hata" />
+      <p class="alan__hata" id="fg-telefon-hata" data-hata="telefon" hidden></p>
+    </div>
+    <div class="alan" data-yontem="eposta">
+      <label for="fg-eposta">E-posta adresiniz</label>
+      <input class="girdi" id="fg-eposta" type="email" inputmode="email" autocomplete="off" maxlength="160" placeholder="ad@isletme.com" aria-describedby="fg-eposta-hata" />
+      <p class="alan__hata" id="fg-eposta-hata" data-hata="eposta" hidden></p>
+    </div>
+
+    <button class="dugme dugme--murekkep dugme--tam" type="submit">
+      Gösterimi gönder
+      <Ikon ad="arrow-right" boyut={18} />
+    </button>
+  </form>
+
+  <div class="fg__sonuc" role="status" aria-live="polite" tabindex="-1" data-gosterim-sonucu hidden>
+    <Ikon ad="check-circle" boyut={22} />
+    <div>
+      <p><strong>Bu bir gösterimdir, bilgi kaydedilmedi.</strong></p>
+      <p class="kucuk">
+        Gerçek formda bu noktada talep sunucuya yazılır. “Talebiniz bize ulaştı” yazısı ancak kayıt alındıktan sonra
+        görünür.
+      </p>
+      <button type="button" class="fg__yeniden kucuk" data-gosterim-yeniden>
+        <Ikon ad="arrow-counter-clockwise" boyut={16} />Baştan deneyin
+      </button>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="ornek__not">Gösterim, tarayıcınızda betikler açıkken çalışır. Sitenin gerçek formu betik olmadan da gönderilir.</p>
+  </noscript>
+</div>
+
+<script>
+  import { dogrula, temizle } from '../../lib/dogrulama';
+
+  document.querySelectorAll<HTMLFormElement>('form[data-form-gosterimi]').forEach((form) => {
+    const kutu = form.closest('.fg')!;
+    const sonuc = kutu.querySelector<HTMLElement>('[data-gosterim-sonucu]')!;
+    const ipucu = kutu.querySelector<HTMLElement>('.fg__ipucu');
+    const telefon = form.querySelector<HTMLInputElement>('#fg-telefon')!;
+    const eposta = form.querySelector<HTMLInputElement>('#fg-eposta')!;
+    const hataAlani = (ad: 'telefon' | 'eposta') => form.querySelector<HTMLElement>(`[data-hata="${ad}"]`)!;
+    const yontem = () => (form.querySelector<HTMLInputElement>('input[name="gosterim-yontem"]:checked')?.value === 'eposta' ? 'eposta' : 'telefon');
+
+    const temizleHata = (ad: 'telefon' | 'eposta') => {
+      (ad === 'telefon' ? telefon : eposta).removeAttribute('aria-invalid');
+      const h = hataAlani(ad);
+      h.hidden = true;
+      h.textContent = '';
+    };
+
+    form.addEventListener('input', (e) => {
+      const hedef = e.target as HTMLInputElement;
+      if (hedef === telefon) temizleHata('telefon');
+      if (hedef === eposta) temizleHata('eposta');
+      if (hedef.name === 'gosterim-yontem') {
+        temizleHata('telefon');
+        temizleHata('eposta');
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const y = yontem();
+      // Gerçek formun doğrulaması. Ad ve işletme bu gösterimde sorulmadığı için sabit geçilir.
+      const hatalar = dogrula(
+        temizle({ ad: 'gösterim', isletme: 'gösterim', yontem: y, telefon: telefon.value, eposta: eposta.value }),
+      );
+      const hata = hatalar[y];
+      if (hata) {
+        const girdi = y === 'telefon' ? telefon : eposta;
+        const h = hataAlani(y);
+        girdi.setAttribute('aria-invalid', 'true');
+        h.textContent = hata.mesaj;
+        h.hidden = false;
+        girdi.focus();
+        return;
+      }
+      // Başarı: hiçbir yere istek gitmez, değer hemen silinir.
+      telefon.value = '';
+      eposta.value = '';
+      form.hidden = true;
+      if (ipucu) ipucu.hidden = true;
+      sonuc.hidden = false;
+      sonuc.focus();
+    });
+
+    kutu.querySelector('[data-gosterim-yeniden]')?.addEventListener('click', () => {
+      sonuc.hidden = true;
+      form.hidden = false;
+      if (ipucu) ipucu.hidden = false;
+      temizleHata('telefon');
+      temizleHata('eposta');
+      (yontem() === 'telefon' ? telefon : eposta).focus();
+    });
+  });
+</script>
+
+<style>
+  .fg__ipucu {
+    color: var(--ikincil);
+    margin-block: 0.5rem 1.1rem;
+  }
+  .fg__form {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .fg__yontem {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .fg__yontem legend {
+    padding: 0;
+    margin-block-end: 0.45rem;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 620;
+    font-stretch: 98%;
+  }
+  .fg__secim {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .fg__secim label {
+    position: relative;
+    cursor: pointer;
+  }
+  .fg__secim input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .fg__secim span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.125rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    background: var(--beyaz);
+    color: var(--murekkep-2);
+    font-family: var(--yazi-baslik);
+    font-size: 1rem;
+    font-weight: 600;
+    font-stretch: 96%;
+    transition:
+      border-color var(--hizli),
+      background-color var(--hizli),
+      color var(--hizli);
+  }
+  .fg__secim label:hover span {
+    border-color: var(--murekkep);
+  }
+  .fg__secim input:checked + span {
+    border-color: var(--murekkep);
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .fg__secim input:focus-visible + span {
+    outline: 2px solid var(--mavi);
+    outline-offset: 3px;
+  }
+  /* Seçilen yöntemin tek alanı görünür. */
+  .fg__form:has(input[value='telefon']:checked) [data-yontem='eposta'],
+  .fg__form:has(input[value='eposta']:checked) [data-yontem='telefon'] {
+    display: none;
+  }
+  .fg__sonuc {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1.1rem 1.2rem;
+    margin-block-start: 0.75rem;
+    border-radius: var(--kose);
+    background: var(--mavi-acik);
+    color: var(--murekkep);
+  }
+  .fg__sonuc:focus {
+    outline: none;
+  }
+  .fg__sonuc :global(svg) {
+    flex: none;
+    margin-block-start: 0.1em;
+    color: var(--mavi);
+  }
+  .fg__sonuc .kucuk {
+    margin-block-start: 0.3rem;
+    color: var(--murekkep-2);
+  }
+  .fg__yeniden {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    margin-block-start: 0.4rem;
+    font-family: var(--yazi-baslik);
+    font-weight: 620;
+    color: var(--murekkep);
+    text-decoration: underline;
+    text-decoration-color: var(--cizgi-koyu);
+    text-underline-offset: 0.28em;
+  }
+  .fg__yeniden :global(svg) {
+    color: var(--murekkep);
+    margin: 0;
+  }
+  .fg__yeniden:hover {
+    text-decoration-color: var(--kirmizi);
+  }
+</style>

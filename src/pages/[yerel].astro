@@ -1,0 +1,782 @@
+---
+/**
+ * Şehir ve ilçe sayfası şablonu. Veri: src/data/yerel/sayfalar/<kimlik>.ts (model: src/data/yerel/tip.ts).
+ * Adres: /<kimlik>/ (ör. /ankara-web-tasarim/, /cankaya-web-tasarim/). Dizin: /sehirler/.
+ *
+ * Bölümler: SayfaBasi (şehrin kâğıt işi sahnesi) > BuSayfada > arama panosu (#aramalar) > yerel durum kartları (#yerel) >
+ * yapılan işler (#isler) > çalışma adımları ve uzaktan çalışma düzeni (#yontem) > çalıştığımız markalar (#referanslar) >
+ * aynı şehrin diğer sayfaları (#bolge) > sık sorulan sorular (#sss) > ilgili sayfalar > görüşme.
+ *
+ * Çalışma adımları ve "birlikte nasıl çalışıyoruz" maddeleri hizmete göre sabittir (yöntemimiz şehre göre değişmez);
+ * geri kalan her şey sayfanın kendi verisidir. Sayfalarda o şehirde ofis olduğu yazılmaz.
+ */
+import type { ImageMetadata } from 'astro';
+import Temel from '../layouts/Temel.astro';
+import SayfaBasi from '../components/SayfaBasi.astro';
+import BuSayfada from '../components/BuSayfada.astro';
+import AramaPanosu from '../components/AramaPanosu.astro';
+import SoruKartlari from '../components/SoruKartlari.astro';
+import Adimlar from '../components/Adimlar.astro';
+import Sss from '../components/Sss.astro';
+import IlgiliSayfalar, { type IlgiliSayfa } from '../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../components/GorusmeBandi.astro';
+import ProjeEkrani from '../components/ProjeEkrani.astro';
+import Ikon from '../components/Ikon.astro';
+import { SITE, type HizmetKimligi, type KanalDegeri } from '../site.config';
+import { PROJELER } from '../data/projeler';
+import { HIZMET_ADI, YEREL_SAYFALAR, sehirBul, sehirGorseli, sehirSayfalari, yerelUrl, type YerelHizmet, type YerelSayfa } from '../data/yerel';
+import { FIYAT_KALEMLERI, SECIM_OLCUTLERI } from '../data/yerel/rehber';
+
+export function getStaticPaths() {
+  return YEREL_SAYFALAR.map((sayfa) => ({ params: { yerel: sayfa.kimlik }, props: { sayfa } }));
+}
+
+interface Props {
+  sayfa: YerelSayfa;
+}
+const { sayfa: s } = Astro.props;
+const sehir = sehirBul(s.sehir);
+const url = yerelUrl(s);
+const yerAdi = s.ilce ?? sehir.ad;
+const yerDeki = `${s.yerDe}ki`;
+const kirintilar = [
+  { ad: 'Şehirler', url: '/sehirler/' },
+  { ad: s.baslik, url },
+];
+
+const cizimler = import.meta.glob<{ default: ImageMetadata }>('../assets/cizimler/*.png', { eager: true });
+const cizimBul = (ad: string) => {
+  const kayit = cizimler[`../assets/cizimler/${ad}.png`];
+  if (!kayit) throw new Error(`Yerel sayfa (${s.kimlik}): src/assets/cizimler/${ad}.png bulunamadı.`);
+  return kayit.default;
+};
+
+/* ---- Hizmete göre sabitler ---- */
+const HIZMET: Record<
+  YerelHizmet,
+  {
+    kanal: KanalDegeri;
+    temelHizmet?: HizmetKimligi;
+    tur: string;
+    adimlar: { ad: string; ozet: string; aciklama: string }[];
+    referanslar: string[];
+    ilgili: IlgiliSayfa[];
+  }
+> = {
+  web: {
+    kanal: 'web',
+    temelHizmet: 'web',
+    tur: 'Web tasarım',
+    adimlar: [
+      { ad: 'İnceleme', ozet: 'İşletme, rakip ve arama analizi', aciklama: 'İşinizi, rakip siteleri ve müşterinizin Google’a yazdığı aramaları inceliyoruz.' },
+      { ad: 'Strateji', ozet: 'Sayfa ve içerik planı', aciklama: 'Hangi hizmete ayrı sayfa açılacağını ve ilk ekranda ne yazacağını yazıya döküyoruz.' },
+      { ad: 'Kurulum', ozet: 'Tasarım ve yayın', aciklama: 'Sayfaları önce telefon ekranı için tasarlıyor, formu deneyerek yayına alıyoruz.' },
+      { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Yayından sonra hangi sayfanın talep getirdiğine bakıyor, getirmeyeni düzeltiyoruz.' },
+      { ad: 'Hedef', ozet: 'Siteden gelen talep', aciklama: 'Siteyi ziyaret sayısına göre değil, size getirdiği talep ve satışa göre değerlendiriyoruz.' },
+    ],
+    referanslar: ['tarum-havuz', 'bodrum-olive-house', 'esvia'],
+    ilgili: [
+      { tur: 'Hizmet', baslik: 'Kurumsal web tasarım', metin: 'Hizmet sayfaları, ilk ekran ve teslim: işin tamamı nasıl ilerliyor?', url: '/hizmetler/web-tasarim/', cizim: cizimBul('taslak') },
+      { tur: 'Blog', baslik: 'Web sitesi nasıl kurulur?', metin: 'Alan adından yayına, bir sitenin kurulum adımları.', url: '/blog/web-sitesi-nasil-kurulur/', cizim: cizimBul('alet') },
+      { tur: 'Sektörler', baslik: 'Sektörünüze göre dijital pazarlama', metin: 'İnşaattan otomotive, sektöre göre neyin değiştiği.', url: '/sektorler/', cizim: cizimBul('yapboz') },
+    ],
+  },
+  reklam: {
+    kanal: 'belirsiz',
+    tur: 'Dijital reklam yönetimi',
+    adimlar: [
+      { ad: 'İnceleme', ozet: 'Hesap, rakip ve arama analizi', aciklama: 'Reklam veriyorsanız hesabınızı, vermiyorsanız müşterinizin aramalarını ve rakip reklamları inceliyoruz.' },
+      { ad: 'Strateji', ozet: 'Kanal, mesaj ve bölge kararı', aciklama: 'Google mı, Instagram mı; hangi ilçelere, hangi teklifle çıkılacağını birlikte seçiyoruz.' },
+      { ad: 'Kurulum', ozet: 'Kampanya ve açılış sayfası', aciklama: 'Kampanyaları ve reklamın indiği sayfayı incelemede çıkan bulguya göre kuruyoruz.' },
+      { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Satış getirmeyen aramayı ve reklamı kapatıyor, getireni güçlendiriyoruz.' },
+      { ad: 'Hedef', ozet: 'Satış ve müşteri', aciklama: 'Reklamı tıklama sayısına göre değil, işletmenize gelen talep ve satışa göre değerlendiriyoruz.' },
+    ],
+    referanslar: ['celikvillam', 'burger-engineer', 'estika'],
+    ilgili: [
+      { tur: 'Hizmet', baslik: 'Google Ads yönetimi', metin: 'Arama reklamları: inceleme, kurulum ve düzenli optimizasyon.', url: '/hizmetler/google-ads-yonetimi/', cizim: cizimBul('buyutec') },
+      { tur: 'Hizmet', baslik: 'Instagram ve Facebook reklam yönetimi', metin: 'Mesaj ve form başvurularının satışa dönmesi için adımlar.', url: '/hizmetler/meta-reklam-yonetimi/', cizim: cizimBul('mesaj') },
+      { tur: 'Blog', baslik: 'Google Ads mi, Instagram reklamı mı?', metin: 'İlk kanalınızı seçmek için iki senaryo.', url: '/blog/google-ads-mi-instagram-reklami-mi/', cizim: cizimBul('terazi') },
+    ],
+  },
+  seo: {
+    kanal: 'seo',
+    temelHizmet: 'seo',
+    tur: 'SEO',
+    adimlar: [
+      { ad: 'İnceleme', ozet: 'Site, rakip ve arama analizi', aciklama: 'Sitenizin teknik durumunu, üst sırada çıkan rakipleri ve müşterinizin aramalarını inceliyoruz.' },
+      { ad: 'Strateji', ozet: 'Sayfa ve içerik önceliği', aciklama: 'Hangi aramaya hangi sayfanın cevap vereceğini ve nereden başlanacağını sıraya koyuyoruz.' },
+      { ad: 'Kurulum', ozet: 'Teknik düzeltme ve sayfalar', aciklama: 'Engelleri kaldırıyor, hizmet sayfalarını ve Google İşletme Profili’ni aramalara göre düzenliyoruz.' },
+      { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Hangi sayfanın hangi aramada göründüğüne bakıyor, geride kalanı güncelliyoruz.' },
+      { ad: 'Hedef', ozet: 'Aramadan gelen talep', aciklama: 'Çalışmayı sıralamaya göre değil, aramadan gelen talep ve satışa göre değerlendiriyoruz.' },
+    ],
+    referanslar: ['celikvillam', 'white-earth-atelier', 'yurt-disi-egitim-rehberim'],
+    ilgili: [
+      { tur: 'Hizmet', baslik: 'SEO danışmanlığı', metin: 'Teknik inceleme, sayfa planı ve düzenli iyileştirme.', url: '/hizmetler/seo-danismanligi/', cizim: cizimBul('buyutec') },
+      { tur: 'Hizmet', baslik: 'GEO ve AEO danışmanlığı', metin: 'ChatGPT ve Google’ın yapay zekâ yanıtlarında markanızın yeri.', url: '/hizmetler/yapay-zeka-gorunurlugu/', cizim: cizimBul('robot') },
+      { tur: 'Blog', baslik: 'Google İşletme Profili nasıl açılır?', metin: 'Harita sonuçlarında görünmenin ilk adımı.', url: '/blog/google-isletme-profili-nasil-acilir/', cizim: cizimBul('harita') },
+    ],
+  },
+};
+const h = HIZMET[s.hizmet];
+
+/* ---- Birlikte nasıl çalışıyoruz: uzaktan çalışma düzeni (her sayfada aynı, çünkü çalışma biçimimiz aynı) ---- */
+const duzen = [
+  { ikon: 'phone', ad: 'Görüşmeler telefonla ya da görüntülü', aciklama: 'İlk görüşmeyi ve sonraki toplantıları telefonla ya da görüntülü yapıyoruz. Çalışmak için aynı şehirde olmamız gerekmiyor.' },
+  { ikon: 'check', ad: 'Hesaplar ve site sizin adınıza', aciklama: 'Reklam hesabı, alan adı ve site sizin adınıza açılır; bize yönetici erişimi verirsiniz.' },
+  { ikon: 'arrow-right', ad: 'Kararlar gerekçesiyle', aciklama: 'Neyi neden yaptığımızı her görüşmede sade bir dille anlatıyoruz.' },
+] as const;
+
+/* ---- Referanslar: sayfa vermediyse hizmete göre üç proje ---- */
+const ekranlar = import.meta.glob<{ default: ImageMetadata }>('../assets/projeler/*-masaustu.jpg', { eager: true });
+const IS_ADLARI: Record<string, string> = {
+  'Web sitesi tasarımı': 'Web tasarım',
+  'SEO ve GEO': 'SEO ve GEO',
+  SEO: 'SEO',
+  'Dijital reklam yönetimi': 'Reklam yönetimi',
+  'Sosyal medya yönetimi': 'Sosyal medya',
+  'CRM yapısı': 'CRM',
+};
+const referansListesi = s.referanslar?.liste ?? h.referanslar.map((kimlik) => ({ kimlik, not: '' }));
+const referanslar = referansListesi.flatMap((r) => {
+  const p = PROJELER.find((x) => x.kimlik === r.kimlik);
+  if (!p) throw new Error(`Yerel sayfa (${s.kimlik}): "${r.kimlik}" projeler.ts içinde yok.`);
+  const ekran = ekranlar[`../assets/projeler/${p.alanAdi.split('.')[0]}-masaustu.jpg`]?.default;
+  if (!ekran || p.tasarimNotu) return [];
+  const isler = p.obrandyKapsami
+    .filter((k) => p.reklamYonetimi === 'beyan' || k !== 'Dijital reklam yönetimi')
+    .map((k) => IS_ADLARI[k] ?? k)
+    .map((k, i) => (i === 0 || /^(SEO|CRM|GEO)/.test(k) ? k : k.charAt(0).toLocaleLowerCase('tr') + k.slice(1)));
+  return [{ ad: p.siteAdi ?? p.marka, alanAdi: p.alanAdi, sektor: p.sektor, isler: isler.join(', '), ekran, not: r.not, url: p.dosya }];
+});
+
+/* ---- Aynı şehrin diğer sayfaları ---- */
+const kardesler = sehirSayfalari(s.sehir).filter((x) => x.kimlik !== s.kimlik);
+const sehirSayfasi = kardesler.filter((x) => !x.ilce);
+const ilceSayfasi = kardesler.filter((x) => x.ilce);
+// Hizmet adı küçük harfle yazılır; SEO gibi kısaltmalar olduğu gibi kalır.
+const kucukHizmet = (h: YerelHizmet) => (/^[A-ZÇĞİÖŞÜ]{2}/.test(HIZMET_ADI[h]) ? HIZMET_ADI[h] : HIZMET_ADI[h].toLocaleLowerCase('tr'));
+const bolgeEtiketi = (x: YerelSayfa) => `${x.ilce ?? sehir.ad}: ${kucukHizmet(x.hizmet)}`;
+
+/* ---- Seçim ve fiyat bölümleri (sayfa verisinde varsa) ---- */
+const SECIM_TURU: Record<YerelHizmet, string> = { web: 'web tasarım firması', reklam: 'reklam ajansı', seo: 'SEO ajansı' };
+const olcutler = s.secim ? (SECIM_OLCUTLERI[s.hizmet] ?? []) : [];
+const secim = s.secim && olcutler.length ? { baslik: s.secim.baslik ?? `${s.yerDe} ${SECIM_TURU[s.hizmet]} nasıl seçilir?`, giris: s.secim.giris } : undefined;
+const kalemler = s.fiyat ? (FIYAT_KALEMLERI[s.hizmet] ?? []) : [];
+const fiyat = s.fiyat && kalemler.length ? { baslik: s.fiyat.baslik ?? `${s.yerDe} web tasarım fiyatları neye göre değişir?`, giris: s.fiyat.giris } : undefined;
+
+/* ---- Bölüm zeminleri: beyaz ve kâğıt sırayla; isteğe bağlı bölüm eklenince sonrakiler kendiliğinden kayar. ---- */
+const sira = ['aramalar', 'yerel', 'isler', fiyat && 'fiyat', secim && 'secim', 'yontem', referanslar.length && 'referanslar', kardesler.length && 'bolge', 'sss', 'ilgili'].filter(Boolean);
+const beyaz = (k: string) => sira.indexOf(k) % 2 === 0;
+
+const bolumler = [
+  { etiket: 'Ne aranıyor?', hedef: 'aramalar' },
+  { etiket: 'Sık görülen durumlar', hedef: 'yerel' },
+  { etiket: 'Neler yapıyoruz?', hedef: 'isler' },
+  ...(fiyat ? [{ etiket: 'Fiyatı ne belirler?', hedef: 'fiyat' }] : []),
+  ...(secim ? [{ etiket: 'Nasıl seçilir?', hedef: 'secim' }] : []),
+  { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+  ...(referanslar.length && !(fiyat && secim) ? [{ etiket: 'Çalıştığımız markalar', hedef: 'referanslar' }] : []),
+  { etiket: 'Sık sorulanlar', hedef: 'sss' },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.baslik,
+    serviceType: h.tur,
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: s.ilce
+      ? { '@type': 'AdministrativeArea', name: s.ilce, containedInPlace: { '@type': 'City', name: sehir.ad } }
+      : { '@type': 'City', name: sehir.ad },
+    url: `${SITE.url}${url}`,
+    description: s.metaAciklama,
+  },
+];
+---
+
+<Temel
+  baslik={`${s.metaBaslik} | Satışları Artır`}
+  aciklama={s.metaAciklama}
+  sayfaTuru="hizmet"
+  hizmet={h.temelHizmet}
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: s.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik={s.baslik}
+    gorsel={sehirGorseli(s.sehir)}
+    gorselAlt={sehir.gorselAlt}
+    cagri={{ etiket: s.cagri, url: '#gorusme', kanal: h.kanal, yer: `yerel-${s.kimlik}-ust` }}
+    ikincil={{ etiket: 'Neler yapıyoruz?', url: '#isler' }}
+  >
+    {s.tanim.map((p) => <p>{p}</p>)}
+  </SayfaBasi>
+
+  <BuSayfada bolumler={bolumler} />
+
+  <!-- Ne aranıyor: arama panosu -->
+  <section class:list={['bolum', beyaz('aramalar') && 'bolum--beyaz']} id="aramalar">
+    <AramaPanosu baslik={s.aramalar.baslik} giris={s.aramalar.giris} yorum={s.aramalar.yorum} liste={s.aramalar.liste} />
+  </section>
+
+  <!-- Yerel durumlar -->
+  <section class:list={['bolum', beyaz('yerel') && 'bolum--beyaz']} id="yerel">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">{s.yerel.baslik}</h2>
+        <p class="giris">{s.yerel.giris}</p>
+      </div>
+      <SoruKartlari kartlar={s.yerel.kartlar.map((k) => ({ ...k, cizim: cizimBul(k.cizim) }))} />
+    </div>
+  </section>
+
+  <!-- Yapılan işler -->
+  <section class:list={['bolum', beyaz('isler') && 'bolum--beyaz']} id="isler">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">{s.isler.baslik}</h2>
+        <p class="giris">{s.isler.giris}</p>
+      </div>
+      <ul class:list={['tikli tikli--ikili', s.isler.liste.length % 3 !== 0 && 'isler--ikili']}>
+        {
+          s.isler.liste.map((i) => (
+            <li>
+              <strong>{i.ad}</strong>
+              <span>{i.aciklama}</span>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        s.isler.bag && (
+          <a class="ok-bag isler__bag" href={s.isler.bag.url}>
+            {s.isler.bag.etiket}
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Fiyatı ne belirler: rakam yok, kalemler -->
+  {
+    fiyat && (
+      <section class:list={['bolum', beyaz('fiyat') && 'bolum--beyaz']} id="fiyat">
+        <div class="sarici fy">
+          <div class="fy__ust">
+            <h2 class="baslik-2">{fiyat.baslik}</h2>
+            <p class="giris">{fiyat.giris}</p>
+          </div>
+          <ol class="fy__liste">
+            {kalemler.map((k, i) => (
+              <li data-gir style={`--gecikme:${(i % 4) * 60}ms`}>
+                <span class="fy__no" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <strong>{k.ad}</strong>
+                <span>{k.aciklama}</span>
+              </li>
+            ))}
+          </ol>
+          <aside class="fy__not">
+            <p>
+              <strong>Sitemizde fiyat listesi yok.</strong> İki işletmenin ihtiyacı aynı olmadığı için görüşmeden sonra yapılacak
+              işleri kalem kalem yazıyor, teklifi bu listeye göre veriyoruz.
+            </p>
+            <a class="ok-bag" href="/blog/web-sitesi-fiyatlari/">
+              Web sitesi fiyatları nasıl belirlenir?
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </aside>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Nasıl seçilir: ortak ölçütler, bize de uygulanır -->
+  {
+    secim && (
+      <section class:list={['bolum', beyaz('secim') && 'bolum--beyaz']} id="secim">
+        <div class="sarici sc">
+          <div class="sc__metin">
+            <h2 class="baslik-2">{secim.baslik}</h2>
+            <p class="giris">{secim.giris}</p>
+            <p class="sc__bize">Bu soruları bize de sorun.</p>
+            <a class="ok-bag" href="#gorusme" data-olay="cta_click" data-yer={`yerel-${s.kimlik}-secim`} data-kanal={h.kanal}>
+              {s.cagri}
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </div>
+          <ol class="sc__liste">
+            {olcutler.map((o, i) => (
+              <li data-gir style={`--gecikme:${i * 50}ms`}>
+                <span class="sc__no" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <strong>{o.ad}</strong>
+                <span>{o.aciklama}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Yöntem ve çalışma düzeni -->
+  <section class:list={['bolum', beyaz('yontem') && 'bolum--beyaz']} id="yontem">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Nasıl çalışıyoruz?</h2>
+        <p class="giris">Yöntemimiz şehre göre değişmez: önce inceliyor, bulguya göre kuruyor, düzenli olarak iyileştiriyoruz.</p>
+      </div>
+      <Adimlar adimlar={h.adimlar} />
+      <ul class="duzen">
+        {
+          duzen.map((d, i) => (
+            <li data-gir style={`--gecikme:${i * 90}ms`}>
+              <span class="duzen__ikon" aria-hidden="true">
+                <Ikon ad={d.ikon} boyut={20} />
+              </span>
+              <strong>{d.ad}</strong>
+              <span>{d.aciklama}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Çalıştığımız markalar -->
+  {
+    referanslar.length > 0 && (
+      <section class:list={['bolum', beyaz('referanslar') && 'bolum--beyaz']} id="referanslar">
+        <div class="sarici">
+          <div class="yr__ust">
+            <div class="bolum-ust">
+              <h2 class="baslik-2">{s.referanslar?.baslik ?? 'Çalıştığımız markalardan üçü'}</h2>
+              <p class="giris">
+                {s.referanslar?.giris ?? 'Görüntüler yayındaki sitelerin kendisi; açıp inceleyebilirsiniz. Markalar farklı şehirlerden; hangi işi yaptığımız altında yazıyor.'}
+              </p>
+            </div>
+            <a class="ok-bag" href="/calismalarimiz/">
+              Bütün çalışmalar
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </div>
+          <ul class="yr">
+            {
+              referanslar.map((r, i) => (
+                <li class="yr__kart" data-gir style={`--gecikme:${i * 90}ms`}>
+                  <ProjeEkrani gorsel={r.ekran} marka={r.ad} alanAdi={r.alanAdi} tur="masaustu" url={r.url} sizes="(max-width: 47.99rem) 92vw, 30vw" />
+                  <h3 class="yr__ad">{r.ad}</h3>
+                  <p class="yr__sektor">{r.sektor}</p>
+                  <p class="yr__is">{r.isler}</p>
+                  {r.not && <p class="yr__not">{r.not}</p>}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Aynı şehrin diğer sayfaları -->
+  {
+    kardesler.length > 0 && (
+      <section class:list={['bolum bolum--siki', beyaz('bolge') && 'bolum--beyaz']} id="bolge">
+        <div class="sarici bolge">
+          <div class="bolge__metin">
+            <h2 class="baslik-3">{sehir.ad} için diğer sayfalar</h2>
+            <p>{s.ilce ? `${s.ilce} dışında ${sehir.ad} geneli için hazırladığımız sayfalar ve diğer ilçeler.` : `${sehir.ad} için diğer hizmetler ve ilçelere göre hazırladığımız sayfalar.`}</p>
+            <a class="ok-bag" href="/sehirler/">
+              Bütün şehirler
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </div>
+          <ul class="bolge__liste">
+            {[...sehirSayfasi, ...ilceSayfasi].map((x) => (
+              <li>
+                <a href={yerelUrl(x)}>
+                  <strong>{x.baslik}</strong>
+                  <span>{bolgeEtiketi(x)}</span>
+                  <Ikon ad="arrow-right" boyut={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <Sss baslik={s.sss.baslik} giris={s.sss.giris} sorular={s.sss.sorular} zemin={beyaz('sss') ? 'beyaz' : 'kagit'} />
+
+  <IlgiliSayfalar zemin={beyaz('ilgili') ? 'beyaz' : 'kagit'} sayfalar={h.ilgili} />
+
+  <GorusmeBandi
+    baslik={`${yerDeki} işletmeniz için birlikte bakalım.`}
+    metin={`İşletmenizi, ${yerAdi} ve çevresinde ulaşmak istediğiniz müşteriyi anlatın. Görüşmeye buradan başlayalım.`}
+    kanal={h.kanal}
+    cagri={s.cagri}
+    konum={`yerel-${s.kimlik}`}
+  />
+</Temel>
+
+<style>
+  /* ---- Yapılan işler ---- */
+  @media (min-width: 48rem) {
+    .isler--ikili {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .isler__bag {
+    margin-block-start: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  /* ---- Fiyatı ne belirler: dört sütunlu numaralı kalemler, altında not ---- */
+  .fy__ust {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 46rem;
+    margin-block-end: clamp(2rem, 4vw, 3rem);
+  }
+  .fy__liste {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  }
+  .fy__liste li {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    padding: clamp(1.1rem, 1.8vw, 1.5rem);
+    background: var(--yuzey, var(--beyaz));
+    border-radius: var(--kose);
+    border-block-start: 3px solid var(--murekkep);
+  }
+  .fy__no {
+    font-family: var(--yazi-baslik);
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--kirmizi);
+  }
+  .fy__liste strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.012em;
+    line-height: 1.18;
+  }
+  .fy__liste li > span:last-child {
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  .fy__not {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem 2rem;
+    align-items: center;
+    margin-block-start: clamp(1.25rem, 2.5vw, 2rem);
+    padding: clamp(1.1rem, 2vw, 1.5rem) clamp(1.25rem, 2.4vw, 2rem);
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  .fy__not p {
+    max-width: 44rem;
+    color: var(--murekkep-2);
+  }
+  .fy__not strong {
+    color: var(--murekkep);
+  }
+  @media (max-width: 74.99rem) {
+    .fy__liste {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* Telefon: kartlar yerine çizgiyle ayrılmış sıkı liste; numara solda. */
+  @media (max-width: 47.99rem) {
+    .fy__liste {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      border-block-start: 1.5px solid var(--murekkep);
+    }
+    .fy__liste li {
+      grid-template-columns: 2rem minmax(0, 1fr);
+      column-gap: 0.75rem;
+      row-gap: 0.25rem;
+      padding: 0.9rem 0;
+      background: none;
+      border-radius: 0;
+      border-block-start: 0;
+      border-block-end: 1px solid var(--cizgi);
+    }
+    .fy__no {
+      grid-row: 1 / span 2;
+      padding-block-start: 0.15rem;
+    }
+    .fy__liste li > :not(.fy__no) {
+      grid-column: 2;
+    }
+    .fy__not {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Nasıl seçilir: solda başlık (yapışkan), sağda numaralı ölçütler ---- */
+  .sc {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .sc__metin {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+  }
+  .sc__bize {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    color: var(--mavi);
+  }
+  .sc__liste {
+    display: grid;
+    border-block-start: 1.5px solid var(--murekkep);
+  }
+  .sc__liste li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    row-gap: 0.3rem;
+    padding-block: clamp(1rem, 1.8vw, 1.35rem);
+    border-block-end: 1px solid var(--cizgi);
+  }
+  .sc__no {
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1.5px solid var(--murekkep);
+    border-radius: 50%;
+    font-family: var(--yazi-baslik);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  .sc__liste strong {
+    align-self: center;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.3rem);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.18;
+  }
+  .sc__liste li > span:last-child {
+    grid-column: 2;
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 61.99rem) {
+    .sc {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sc__metin {
+      position: static;
+    }
+  }
+
+  /* ---- Çalışma düzeni: adımların altında üç kısa madde ---- */
+  .duzen {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+    margin-block-start: clamp(2.5rem, 5vw, 4rem);
+  }
+  .duzen li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 0.9rem;
+    row-gap: 0.3rem;
+    align-content: start;
+    padding: clamp(1.1rem, 1.8vw, 1.5rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+  }
+  .duzen__ikon {
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1.5px solid var(--murekkep);
+    border-radius: 50%;
+    color: var(--mavi);
+  }
+  .duzen strong {
+    align-self: center;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.012em;
+    line-height: 1.18;
+  }
+  .duzen li > span:last-child {
+    grid-column: 2;
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 61.99rem) {
+    .duzen {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Çalıştığımız markalar: üç eş kart ---- */
+  .yr__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1rem 2rem;
+  }
+  .yr {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.6vw, 2.25rem);
+  }
+  .yr__kart {
+    display: grid;
+    align-content: start;
+    gap: 0.2rem;
+  }
+  .yr__ad {
+    margin-block-start: 0.9rem;
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+    font-weight: 690;
+    font-stretch: 88%;
+    letter-spacing: -0.016em;
+    line-height: 1.15;
+  }
+  .yr__sektor {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .yr__is,
+  .yr__not {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  .yr__not {
+    margin-block-start: 0.35rem;
+  }
+  @media (max-width: 47.99rem) {
+    .yr__ust {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .yr {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  /* ---- Aynı şehrin diğer sayfaları ---- */
+  .bolge {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .bolge__metin {
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+    color: var(--murekkep-2);
+  }
+  .bolge__metin h2 {
+    color: var(--murekkep);
+  }
+  .bolge__liste {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .bolge__liste a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+    align-items: center;
+    height: 100%;
+    min-height: 4rem;
+    padding: 0.7rem 1rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      transform 220ms var(--yumusak),
+      box-shadow 220ms var(--yumusak);
+  }
+  .bolge__liste strong {
+    grid-column: 1;
+    font-family: var(--yazi-baslik);
+    font-size: 1.0625rem;
+    font-weight: 670;
+    font-stretch: 91%;
+    letter-spacing: -0.012em;
+    line-height: 1.15;
+  }
+  .bolge__liste span {
+    grid-column: 1;
+    font-size: var(--b-mikro);
+    color: var(--ikincil);
+  }
+  .bolge__liste a :global(svg) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--kirmizi);
+  }
+  @media (hover: hover) {
+    .bolge__liste a:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.3rem 0.3rem 0 rgb(23 61 166 / 0.2);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bolge__liste a {
+      transition: none;
+    }
+    .bolge__liste a:hover {
+      transform: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .bolge {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 35.99rem) {
+    .bolge__liste {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

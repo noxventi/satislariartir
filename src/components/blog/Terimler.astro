@@ -1,0 +1,115 @@
+---
+/**
+ * Terim kartları: kısa tanımlar için. Her kartta terim, varsa açılımı, tanımı ve gündelik bir örnek durur.
+ * Kullanım (MDX):
+ * <Terimler terimler={[{ ad: 'TBM', acilim: 'Tıklama başına maliyet', tanim: '...', ornek: '...' }]} />
+ */
+interface Terim {
+  ad: string;
+  acilim?: string;
+  tanim: string;
+  ornek?: string;
+}
+interface Props {
+  terimler: Terim[];
+  /** Kartlar yan yana kaç sütun olsun (geniş ekranda). */
+  sutun?: 2 | 3;
+}
+const { terimler, sutun = 2 } = Astro.props;
+---
+
+<dl class="terim" style={`--sutun:${sutun}`}>
+  {
+    terimler.map((t, i) => (
+      <div class="terim__kart" data-gir style={`--gecikme:${(i % sutun) * 80}ms`}>
+        <dt>
+          <span class="terim__ad">{t.ad}</span>
+          {t.acilim && <span class="terim__acilim">{t.acilim}</span>}
+        </dt>
+        <dd>
+          <p>{t.tanim}</p>
+          {t.ornek && (
+            <p class="terim__ornek">
+              <strong>Örnek:</strong> {t.ornek}
+            </p>
+          )}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .terim {
+    display: grid;
+    grid-template-columns: repeat(var(--sutun), minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1.15rem);
+    margin-inline: 0;
+  }
+  .terim__kart {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 0.7rem;
+    padding: clamp(1.1rem, 2vw, 1.6rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+  }
+  .terim__kart:nth-child(4n + 2),
+  .terim__kart:nth-child(4n + 3) {
+    background: var(--mavi-acik);
+  }
+  .terim dt {
+    display: grid;
+    gap: 0.2rem;
+    justify-items: start;
+  }
+  .terim__ad {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2.1rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    letter-spacing: -0.024em;
+    line-height: 1;
+    color: var(--murekkep);
+    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 100% / 100% 3px;
+    padding-block-end: 0.28rem;
+  }
+  .terim__acilim {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 620;
+    color: var(--mavi);
+  }
+  .terim dd {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+    margin: 0;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  .terim dd p {
+    margin: 0;
+  }
+  .terim__ornek {
+    align-self: end;
+    padding-block-start: 0.7rem;
+    border-block-start: 1px solid var(--cizgi-koyu);
+    font-size: var(--b-kucuk);
+    color: var(--murekkep-2);
+  }
+  .terim__ornek strong {
+    color: var(--murekkep);
+  }
+  @media (max-width: 43.99rem) {
+    .terim {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .terim__kart:nth-child(n) {
+      background: var(--beyaz);
+    }
+    .terim__kart:nth-child(even) {
+      background: var(--mavi-acik);
+    }
+  }
+</style>

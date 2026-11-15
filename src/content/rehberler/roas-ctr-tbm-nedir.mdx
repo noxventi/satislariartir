@@ -1,0 +1,221 @@
+---
+no: 19
+kapak: reklam-terimleri
+kapakAlt: "Madeni paraları alışveriş torbalarıyla tartan kâğıttan bir terazi; torbaların kefesi kırmızı kalemle çemberlenmiş, yanında içinden insanların geçtiği bir huni, abaküs ve cetvel, önünde not panosu tutan önlüklü esnaf"
+soru: "ROAS, CTR ve TBM nedir? Reklam raporu nasıl okunur?"
+baslik: "ROAS, CTR ve TBM Nedir? Reklam Raporu Okuma"
+aciklama: >-
+  ROAS, CTR (tıklama oranı) ve TBM nedir, nasıl hesaplanır? Gösterimden satışa reklam raporundaki terimler,
+  formülleri ve rakamların birlikte nasıl okunacağı.
+aramalar:
+  - roas nedir
+  - ctr nedir
+  - tbm nedir
+kisaCevap: >-
+  CTR (tıklama oranı, TO), reklamı görenlerin ne kadarının tıkladığını gösterir; tıklama sayısı gösterim sayısına
+  bölünür. TBM (tıklama başına maliyet), bir tıklamanın ortalama maliyetidir; toplam harcama tıklama sayısına bölünür.
+  ROAS (reklam harcamasının getirisi), reklama harcanan her birimin kaç birim satış değeri getirdiğini söyler; dönüşüm
+  değeri harcamaya bölünür. Üçü de tek başına karar verdirmez. Rapor, gösterimden satışa uzanan zincirin hangi halkada
+  zayıfladığını bulmak için birlikte okunur.
+elinizeGecen: Altı terimin formülü, temsili rapor tablosu ve rapor okuma soruları
+hizmetler: [google-ads, meta]
+hizmetBaglantisi:
+  etiket: Google Ads yönetimi
+  url: /hizmetler/google-ads-yonetimi/
+sonraki: google-ads-tiklama-var-telefon-yok
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: "Google Ads Yardım, Tıklama oranı (TO): Tanım"
+    url: https://support.google.com/google-ads/answer/2615875?hl=tr
+    tur: resmi
+  - ad: "Google Ads Yardım, Ortalama tıklama başına maliyet (Ort. TBM): Tanım"
+    url: https://support.google.com/google-ads/answer/14074?hl=tr
+    tur: resmi
+  - ad: "Google Ads Yardım, Ortalama EBM: Tanım"
+    url: https://support.google.com/google-ads/answer/6396841?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Hedef ROAS teklifi hakkında
+    url: https://support.google.com/google-ads/answer/6268637?hl=tr
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, “Tıklamalar (tümü)” ile “Bağlantı tıklamaları” arasındaki farkın anlaşılması
+    url: https://www.facebook.com/business/help/674769555983979
+    tur: resmi
+---
+
+import Akis from '../../components/blog/Akis.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Ay sonunda bir mobilya atölyesinin sahibine reklam raporu gelir: 12.400 gösterim, 310 tıklama, %2,5 TO, 14 dönüşüm. Satırı baştan sona okur ve tek bir şey sorar: bu ay bu reklam bana iş getirdi mi?
+
+Rapordaki terimler o soruya giden yolun duraklarıdır. Her biri müşterinin reklamı gördüğü andan satışa kadar geçen yolun bir adımını ölçer. Sırayı bilen kişi, satırın neresinde durup soru soracağını da bilir.
+
+<Akis
+  asamalar={[
+    { ad: 'Gösterim', aciklama: 'Reklam bir aramada ya da akışta görünür.' },
+    { ad: 'Tıklama', aciklama: 'Kişi reklama dokunur, sayfanız açılır.', olcu: 'TO (CTR) ve TBM' },
+    { ad: 'Talep', aciklama: 'Arar, yazar ya da form doldurur.', olcu: 'Dönüşüm oranı' },
+    { ad: 'Satış', aciklama: 'İş bağlanır, ödeme alınır.', olcu: 'ROAS' },
+  ]}
+/>
+
+## CTR (tıklama oranı) nedir?
+
+CTR, İngilizce “click-through rate” sözünün kısaltmasıdır. Google Ads’in Türkçe arayüzünde tıklama oranı (TO) adıyla geçer ve reklamı görenlerin ne kadarının tıkladığını gösterir. Hesabı basittir: tıklama sayısı gösterim sayısına bölünür. 100 gösterimde 5 tıklama alan reklamın tıklama oranı %5’tir.
+
+Gösterim, reklamın bir sonuç sayfasında ya da akışta her görünüşüdür. Tıklama oranının yüksek olması, reklamı görenlerin onu aradıkları şeyle ilgili bulduğuna işaret eder. Google, iyi bir oranın ürüne ve reklamın yayınlandığı ağa göre değiştiğini belirtir. Bu yüzden başka bir sektörün rakamıyla kıyaslamak yanıltır; kendi kampanyanızın önceki ayıyla kıyaslayın. Oran yükselirken talep artmıyorsa reklam ilgi çekiyor ama yanlış kişiyi çekiyor olabilir.
+
+<Not baslik="Instagram reklamında iki ayrı tıklama sayısı vardır" tur="ipucu">
+  Meta Reklam Yöneticisi’nde “Bağlantı tıklamaları”, kişiyi sitenize, formunuza ya da başka bir hedefe götüren
+  tıklamalardır. “Tıklamalar (tümü)” bunlara beğenileri, yorumları, profil adına dokunmayı ve fotoğrafı büyütmeyi de
+  ekler. Oranı okurken hangi sütuna baktığınızı kontrol edin; Meta’nın bağlantı tıklama oranı yalnız bağlantı
+  tıklamalarını sayar.
+</Not>
+
+## TBM (tıklama başına maliyet) nedir?
+
+TBM, tıklama başına maliyetin kısaltmasıdır; İngilizcesi CPC’dir (cost per click). Raporda gördüğünüz değer çoğunlukla ortalama TBM’dir: tıklamalara harcanan toplam tutar tıklama sayısına bölünür. 200 birim harcayıp 40 tıklama aldıysanız ortalama TBM 5 birimdir.
+
+Google Ads’te bir de maksimum TBM vardır; bir tıklama için ödemeyi kabul ettiğiniz üst sınırdır. Ödenen tutar çoğu zaman bu sınırın altında kalır, çünkü fiyat her aramada yeniden yapılan açık artırmayla belirlenir. Açık artırmanın işleyişini [Google Ads nedir](/blog/google-ads-nedir/) yazısında anlattık.
+
+TBM’yi tek başınıza belirlemezsiniz. Aynı aramaya teklif veren işletmelerin sayısı, anahtar kelimenin kendisi ve reklamınızın kalitesi birlikte belirler. Aynı işi iki ayrı şehirde yapan iki işletmenin TBM’si bu yüzden farklı çıkar; başkasının rakamı sizin için ölçü olmaz.
+
+<AraGorsel cizim="megafon" alt="Ağzından madeni paralar saçılan kâğıttan bir megafon">
+  Düşük TBM tek başına iyi haber sayılmaz; tıklamanın hangi aramadan geldiğine ve talebe dönüp dönmediğine bakılır.
+</AraGorsel>
+
+## ROAS nedir, nasıl hesaplanır?
+
+ROAS’a gelmeden önce zincirin üçüncü halkası vardır. Dönüşüm, tıklamadan sonra gerçekleşmesini istediğiniz işlemdir: telefon araması, form, WhatsApp mesajı ya da satın alma. Dönüşüm oranı, tıklayanların ne kadarının bu işlemi yaptığını gösterir. Dönüşüm başına maliyet ise toplam harcamanın dönüşüm sayısına bölümüdür; Google Ads’in yardım sayfalarında bu değer edinme başına maliyet (EBM) adıyla geçer.
+
+ROAS, İngilizce “return on ad spend” sözünün kısaltmasıdır ve reklam harcamasının getirisi anlamına gelir. Reklamdan gelen satışların değeri reklam harcamasına bölünür. 200 birim harcayıp 1.000 birimlik satış aldıysanız ROAS 5’tir; Google Ads bunu yüzdeyle, %500 olarak yazar. Meta Reklam Yöneticisi aynı hesabı site alışverişleri için yapar: alışverişlerin dönüşüm değeri harcanan tutara bölünür.
+
+İyi bir ROAS’ın kaç olduğu sorusunun tek cevabı yoktur. Kâr payı yüksek bir üründe düşük bir oran kazandırır, kâr payı dar bir üründe aynı oran zarar ettirir. Başa baş noktanızı ürünün maliyetinden kendiniz hesaplarsınız; panel bunu bilmez.
+
+<Terimler
+  sutun={3}
+  terimler={[
+    {
+      ad: 'Gösterim',
+      tanim: 'Reklamın bir sonuç sayfasında ya da akışta her görünüşü.',
+      ornek: 'Reklam 1.000 kez göründü.',
+    },
+    {
+      ad: 'TO (CTR)',
+      acilim: 'Tıklama oranı',
+      tanim: 'Tıklama sayısının gösterim sayısına bölümü.',
+      ornek: '1.000 gösterim, 40 tıklama: %4',
+    },
+    {
+      ad: 'TBM (CPC)',
+      acilim: 'Tıklama başına maliyet',
+      tanim: 'Toplam harcamanın tıklama sayısına bölümü.',
+      ornek: '200 birim harcama, 40 tıklama: 5 birim',
+    },
+    {
+      ad: 'Dönüşüm oranı',
+      tanim: 'Dönüşüm sayısının tıklama (etkileşim) sayısına bölümü.',
+      ornek: '40 tıklama, 4 talep: %10',
+    },
+    {
+      ad: 'Dönüşüm başına maliyet',
+      acilim: 'Google Ads’te EBM',
+      tanim: 'Toplam harcamanın dönüşüm sayısına bölümü.',
+      ornek: '200 birim harcama, 4 talep: 50 birim',
+    },
+    {
+      ad: 'ROAS',
+      acilim: 'Reklam harcamasının getirisi',
+      tanim: 'Dönüşüm değerinin reklam harcamasına bölümü.',
+      ornek: '200 birim harcama, 1.000 birim satış: %500',
+    },
+  ]}
+/>
+
+ROAS’ın hesaplanabilmesi için her dönüşümün bir değeri olmalıdır. İnternetten satış yapan bir mağazada bu değer sepet tutarıdır ve kurulum doğruysa panele düşer. Keşfe gidip teklif veren bir işletmede satış panelin dışında, telefonda ya da atölyede kapanır. Böyle işletmelerde rapor dönüşüm başına maliyetle okunur; satış tarafını işletmenin kendi kaydı tamamlar. ROAS ayrıca ciroya bakar: ürünün maliyeti düşülmeden kazancı göstermez.
+
+## Reklam raporu nasıl okunur?
+
+Okumaya başlamadan önce dönemi seçin. Talep sayısı küçükken iki üç talep bütün oranları değiştirir; tek bir günün ya da haftanın rakamı bu yüzden yanıltır. Karşılaştırmayı aynı uzunlukta iki dönem arasında yapın: bu ay ile geçen ay, bu çeyrek ile önceki çeyrek.
+
+Rapor, zincirin sırasıyla okunur: önce gösterim ve tıklama, sonra talep, en sonda talebin maliyeti. Aşağıdaki tabloda aynı ay içinde aynı tutarı, 1.000 birimi harcamış üç kampanya var.
+
+<Ornek
+  baslik="Aynı harcama, üç ayrı sonuç"
+  not="Sayılar temsilidir ve birimsizdir. Yalnız oranların nasıl okunacağını göstermek için seçilmiştir; bir sektörün ortalaması değildir."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Kampanya</th>
+        <th scope="col">Gösterim ve tıklama</th>
+        <th scope="col">Ort. TBM</th>
+        <th scope="col">Talep</th>
+        <th scope="col">Talep başına maliyet</th>
+        <th scope="col">Ne söylüyor?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Kampanya"><strong>A</strong></td>
+        <td data-baslik="Gösterim ve tıklama">10.000 gösterim, 500 tıklama (TO %5)</td>
+        <td data-baslik="Ort. TBM">2 birim</td>
+        <td data-baslik="Talep">5 talep (dönüşüm oranı %1)</td>
+        <td data-baslik="Talep başına maliyet"><span class="hukum hukum--hayir">200 birim</span></td>
+        <td data-baslik="Ne söylüyor?">Reklam ilgi çekiyor, tıklama ucuz, tıklayanlar talep bırakmıyor. Arama terimlerine ve açılan sayfaya bakılır.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kampanya"><strong>B</strong></td>
+        <td data-baslik="Gösterim ve tıklama">5.000 gösterim, 100 tıklama (TO %2)</td>
+        <td data-baslik="Ort. TBM">10 birim</td>
+        <td data-baslik="Talep">20 talep (dönüşüm oranı %20)</td>
+        <td data-baslik="Talep başına maliyet"><span class="hukum hukum--evet">50 birim</span></td>
+        <td data-baslik="Ne söylüyor?">Tıklama pahalı görünüyor, fakat her beş tıklamadan biri talebe dönüyor. Üçünün içinde talebi en ucuza getiren kampanya bu.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kampanya"><strong>C</strong></td>
+        <td data-baslik="Gösterim ve tıklama">20.000 gösterim, 200 tıklama (TO %1)</td>
+        <td data-baslik="Ort. TBM">5 birim</td>
+        <td data-baslik="Talep">10 talep (dönüşüm oranı %5)</td>
+        <td data-baslik="Talep başına maliyet">100 birim</td>
+        <td data-baslik="Ne söylüyor?">Reklam çok görünüp az tıklanıyor. Reklam metni ile anahtar kelimelerin birbirine uyup uymadığı gözden geçirilir.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Yalnız TBM’ye ya da yalnız tıklama oranına bakan biri A kampanyasını seçerdi. Talep başına maliyete inildiğinde sıra tersine döner. Raporun ilk sütunları reklamın ne kadar ilgi çektiğini, son sütunları işletmeye ne getirdiğini söyler. Karar son sütunlarla verilir, ilk sütunlar nedenini açıklar.
+
+Tersi de olur: hizmet bölgesini ya da işin kapsamını açıkça yazan bir reklam daha az tıklanır, çünkü ilgisiz kişiyi tıklamadan önce eler. Tıklama oranı düşer, dönüşüm oranı yükselir.
+
+## Tıklama çok ama talep yoksa rapor ne söyler?
+
+A kampanyasındaki tablo en sık karşılaşılan durumdur: tıklama oranı yüksek, TBM düşük, talep yok. Zincir ikinci halkadan sonra kopmuştur ve nedeni üç yerden birinde aranır.
+
+- **Arama terimleri.** Tıklamayı getiren aramalar hizmetinizi arayanlardan mı, iş ilanı ya da bilgi arayanlardan mı geliyor?
+- **Açılış sayfası.** Tıklayan kişi numarayı, formu ya da WhatsApp düğmesini telefonda ilk ekranda görüyor mu? Ayrıntısı [açılış sayfası (landing page) nedir](/blog/landing-page-nedir/) yazısında.
+- **Dönüşüm sayımı.** Panel talebi sayıyor mu? Hiç sayılmayan bir telefon araması raporda “talep yok” diye görünür.
+
+Bu üç kontrolün adımları [Google Ads’te tıklama var ama telefon gelmiyor](/blog/google-ads-tiklama-var-telefon-yok/) yazısındadır. Instagram tarafında aynı tablo, gelen mesajların satışa dönmemesi olarak görünür; onu [Instagram reklam mesajları neden satışa dönüşmüyor](/blog/instagram-reklam-mesajlari-satisa-donusmuyor/) yazısı ele alır.
+
+<KontrolListesi
+  kimlik="reklam-raporu-okuma"
+  baslik="Raporu okurken sorulacak sorular"
+  adimlar={[
+    'Rapordaki “dönüşüm” neyi sayıyor: gerçek aramayı ve formu mu, düğmeye dokunulmasını mı?',
+    'Panelde görünen talep sayısı ile telefonuma ve e-postama düşen talep sayısı birbirini tutuyor mu?',
+    'Talep başına maliyet geçen aya göre hangi yönde değişti; nedeni hangi sütunda görünüyor?',
+    'Harcamanın en büyük payını alan arama terimleri işimle ilgili mi?',
+    'Instagram raporunda okuduğum tıklama sayısı bağlantı tıklaması mı, bütün tıklamalar mı?',
+    'Gelen taleplerin kaçı satışa döndü? Bu sayıyı ben tutuyorum; panel bilmiyor.',
+  ]}
+  not="Cevabı raporda bulamadığınız soruyu raporu hazırlayana sorun. Altısı da hesabın içinde ya da kendi kaydınızda duran bilgidir."
+/>
+
+Elinizde bir rapor varsa bu listeyle baştan okuyun ve cevabını bulamadığınız soruyu işaretleyin. Hesabın hangi halkada zayıfladığına birlikte bakmak isterseniz [Google Ads yönetimi](/hizmetler/google-ads-yonetimi/) sayfasında bir hesabı devralmadan önce neyi incelediğimizi yazdık.

@@ -1,0 +1,207 @@
+---
+/**
+ * İç sayfa üst alanı: kırıntı, H1, açılış metni, tek çağrı ve isteğe bağlı görsel.
+ * Görsel yoksa metin tam genişlikte, sola yaslı durur.
+ */
+import type { ImageMetadata } from 'astro';
+import Gorsel from './Gorsel.astro';
+import Ikon from './Ikon.astro';
+import type { Kirinti } from '../layouts/Temel.astro';
+
+interface Props {
+  kirintilar?: Kirinti[];
+  baslik: string;
+  /** H1 üstünde küçük bağlam satırı (ör. rehber no, proje sektörü). İsteğe bağlı, seyrek kullanılır. */
+  ust?: string;
+  gorsel?: ImageMetadata;
+  gorselAlt?: string;
+  /** dikey: 4:5 görseller için daha dar sütun. kare: 1:1 sahneler (kırpılmadan). */
+  gorselBicimi?: 'yatay' | 'dikey' | 'kare';
+  /** Geniş ekrandaki kırpımın odağı (object-position). Ör. '80% 50%'. */
+  odak?: string;
+  /** Dar ekrandaki kırpımın odağı (object-position). Ör. '50% 70%'. */
+  mobilOdak?: string;
+  /** Uzun H1'ler için bir kademe küçük başlık. */
+  uzunBaslik?: boolean;
+  cagri?: { etiket: string; url: string; yer?: string; kanal?: string };
+  ikincil?: { etiket: string; url: string };
+}
+const { kirintilar = [], baslik, ust, gorsel, gorselAlt = '', gorselBicimi = 'yatay', odak, mobilOdak, uzunBaslik = false, cagri, ikincil } = Astro.props;
+---
+
+<section class:list={['sb', gorsel && 'sb--gorselli', gorsel && `sb--${gorselBicimi}`]}>
+  <div class="sarici sb__ic">
+    <div class="sb__metin">
+      {
+        kirintilar.length > 0 && (
+          <nav aria-label="Sayfa konumu">
+            <ol class="kirinti">
+              <li>
+                <a href="/">Ana sayfa</a>
+              </li>
+              {kirintilar.map((k, i) => (
+                <li>{i === kirintilar.length - 1 ? <span aria-current="page">{k.ad}</span> : <a href={k.url}>{k.ad}</a>}</li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      {ust && <p class="sb__ust etiket">{ust}</p>}
+      <h1 class:list={['baslik-1 sb__baslik', uzunBaslik && 'sb__baslik--uzun']}>{baslik}</h1>
+      <div class="sb__giris giris akis">
+        <slot />
+      </div>
+      {
+        (cagri || ikincil) && (
+          <div class="sb__eylem">
+            {cagri && (
+              <a class="dugme" href={cagri.url} data-ana-cagri data-olay="cta_click" data-yer={cagri.yer ?? 'sayfa-basi'} data-kanal={cagri.kanal}>
+                {cagri.etiket}
+                <Ikon ad="arrow-right" boyut={18} />
+              </a>
+            )}
+            {ikincil && (
+              <a class="ok-bag" href={ikincil.url}>
+                {ikincil.etiket}
+                <Ikon ad="arrow-right" boyut={16} />
+              </a>
+            )}
+          </div>
+        )
+      }
+    </div>
+    {
+      gorsel && (
+        <div class="sb__gorsel" style={[odak && `--odak:${odak}`, mobilOdak && `--mobil-odak:${mobilOdak}`].filter(Boolean).join(';') || undefined}>
+          <Gorsel
+            src={gorsel}
+            alt={gorselAlt}
+            sizes={gorselBicimi === 'yatay' ? '(max-width: 55.99rem) 100vw, 46vw' : '(max-width: 55.99rem) 100vw, 38vw'}
+            genislikler={[640, 960, 1280, 1700, 2048]}
+            oncelik
+          />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .sb {
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(3rem, 6vw, 5.5rem);
+  }
+  .sb__ic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 2rem;
+    align-items: end;
+  }
+  .sb__metin {
+    grid-column: 1 / span 9;
+    display: grid;
+    justify-items: start;
+  }
+  .sb--gorselli .sb__metin {
+    grid-column: 1 / span 6;
+    padding-block-end: clamp(0rem, 2vw, 2rem);
+  }
+  .sb--dikey .sb__metin,
+  .sb--kare .sb__metin {
+    grid-column: 1 / span 7;
+  }
+  .sb__ust {
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--mavi);
+  }
+  .sb__baslik {
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+    max-width: 13em;
+  }
+  .sb__baslik--uzun {
+    font-size: clamp(2.05rem, 1.35rem + 2.5vw, 3.5rem);
+    line-height: 1.02;
+    max-width: 15em;
+  }
+  .sb__ust + .sb__baslik {
+    margin-block-start: 0.75rem;
+  }
+  .sb__giris {
+    margin-block-start: clamp(1.1rem, 2vw, 1.6rem);
+    --ara: 0.9em;
+  }
+  .sb__eylem {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.1rem 2rem;
+    margin-block-start: clamp(1.6rem, 2.6vw, 2.25rem);
+  }
+  .sb__gorsel {
+    grid-column: 7 / -1;
+    margin-inline-end: calc(var(--kenar) * -1);
+    overflow: hidden;
+    border-radius: var(--kose) 0 0 var(--kose);
+  }
+  .sb--dikey .sb__gorsel {
+    grid-column: 9 / -1;
+    margin-inline-end: 0;
+    border-radius: var(--kose);
+  }
+  .sb--kare .sb__gorsel {
+    grid-column: 8 / -1;
+    margin-inline-end: 0;
+    border-radius: var(--kose);
+  }
+  .sb--kare .sb__gorsel :global(img) {
+    aspect-ratio: 1 / 1;
+  }
+  .sb__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2.15;
+    object-fit: cover;
+    object-position: var(--odak, 50% 50%);
+  }
+  .sb--dikey .sb__gorsel :global(img) {
+    aspect-ratio: 4 / 5;
+  }
+  @media (max-width: 55.99rem) {
+    .sb__metin,
+    .sb--gorselli .sb__metin,
+    .sb--dikey .sb__metin,
+    .sb--kare .sb__metin {
+      grid-column: 1 / -1;
+      padding-block-end: 0;
+    }
+    .sb__gorsel,
+    .sb--dikey .sb__gorsel,
+    .sb--kare .sb__gorsel {
+      grid-column: 1 / -1;
+      margin-inline: calc(var(--kenar) * -1);
+      border-radius: 0;
+    }
+    .sb--kare .sb__gorsel :global(img) {
+      aspect-ratio: 4 / 3;
+      object-position: var(--mobil-odak, 50% 40%);
+    }
+    .sb__gorsel :global(img) {
+      object-position: var(--mobil-odak, 50% 50%);
+    }
+    .sb--dikey .sb__gorsel :global(img) {
+      aspect-ratio: 1 / 1;
+      object-position: var(--mobil-odak, 50% 30%);
+    }
+    .sb__eylem {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.4rem;
+    }
+    .sb__eylem .ok-bag {
+      align-self: flex-start;
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+</style>

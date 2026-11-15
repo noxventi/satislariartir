@@ -1,0 +1,32 @@
+---
+/**
+ * Kırmızı kalem işareti: markanın tek imzası.
+ * "halka" bir sözü çember içine alır, "alt" altını çizer.
+ * Betik çalışmazsa işaret sabit olarak görünür; hareket azaltma tercihinde çizim animasyonu olmaz.
+ */
+interface Props {
+  tip?: 'halka' | 'alt';
+  /** Görünüme girince çizilsin mi? Logo gibi sabit kullanımlarda false. */
+  ciz?: boolean;
+  gecikme?: number;
+  class?: string;
+}
+const { tip = 'halka', ciz = true, gecikme = 0, class: sinif } = Astro.props;
+
+// 0-100 birimlik kutuda elle çizilmiş yollar. site.ts bunları gerçek kutu ölçüsüne ölçekler.
+const yollar = {
+  halka:
+    'M 5 56 C 2 18 9 7 53 7 C 82 6.5 97.5 22 96.5 49 C 95.5 78 76 93 49 92.5 C 20 92 2 80 4 49 C 4.5 24 11 9.5 32 6.5',
+  alt: 'M 1.5 60 C 18 36 37 72 56 50 C 70 34 86 56 98.5 42',
+};
+---
+
+<span
+  class:list={['isaret', tip === 'alt' && 'isaret--alt', sinif]}
+  data-isaret={tip}
+  data-ciz={ciz ? '' : undefined}
+  style={gecikme ? `--gecikme:${gecikme}ms` : undefined}
+  ><slot /><svg class="isaret__cizim" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"
+    ><path d={yollar[tip]} data-yol={yollar[tip]} pathLength="1" vector-effect="non-scaling-stroke"></path></svg
+  ></span
+>

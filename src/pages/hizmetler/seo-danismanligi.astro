@@ -1,0 +1,814 @@
+---
+/**
+ * SEO danışmanlığı hizmet sayfası.
+ * Ana niyet: "seo danışmanlığı" (H1). "seo ajansı", "seo hizmeti", "seo nedir", "seo çalışması" ve "yerel seo"
+ * başlık etiketinde, kapsam kartlarında ve sık sorulan sorularda karşılanır.
+ * Arama verisi: arastirma/openseo-2026-11-14.md
+ *
+ * Düzen google-ads-yonetimi.astro kalıbını izler (15 Kasım 2026):
+ * SayfaBasi > BuSayfada > kapsam kartları > soru kartları > çalışma adımları > iki durum (yeni site / sonuç alınamamış SEO) >
+ * teknik kontrol örneği > arama niyeti, içerik kararı ve proje > sık sorulan sorular > ilgili sayfalar > görüşme.
+ * Anlatım sırası: derinlemesine inceleme, bilinçli kurulum, düzenli optimizasyon, müşteri hedefi.
+ * Çapalar: #teknik-bulgu (eski düzenden korunur), #ilk-seo, #seo-inceleme, #arama-niyeti, #icerik-karari.
+ *
+ * Platform bilgileri (Search Console rapor ve araç adları) 14 Kasım 2026'da Google yardım sayfalarından doğrulandı.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import SehirBaglantilari from '../../components/SehirBaglantilari.astro';
+import ProjeKarti from '../../components/ProjeKarti.astro';
+import Cizim from '../../components/Cizim.astro';
+import Isaret from '../../components/Isaret.astro';
+import Ikon from '../../components/Ikon.astro';
+import { hizmetBul, SITE } from '../../site.config';
+
+import gorsel from '../../assets/gorseller/yol-cevap.jpg';
+import yolYapayZeka from '../../assets/gorseller/yol-yapay-zeka.jpg';
+import yolSite from '../../assets/gorseller/yol-site.jpg';
+import yolArama from '../../assets/gorseller/yol-arama.jpg';
+import yolAkis from '../../assets/gorseller/yol-akis.jpg';
+import harita from '../../assets/cizimler/harita.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import hedef from '../../assets/cizimler/hedef.png';
+import takvim from '../../assets/cizimler/takvim.png';
+import defter from '../../assets/cizimler/defter.png';
+import yapboz from '../../assets/cizimler/yapboz.png';
+import alet from '../../assets/cizimler/alet.png';
+import liste from '../../assets/cizimler/liste.png';
+import soru from '../../assets/cizimler/soru.png';
+import kitaplik from '../../assets/cizimler/kitaplik.png';
+
+const hizmet = hizmetBul('seo');
+const kirintilar = [
+  { ad: 'Hizmetler', url: '/hizmetler/' },
+  { ad: 'SEO danışmanlığı', url: hizmet.url },
+];
+
+const kapsam = [
+  { ad: 'Teknik SEO', aciklama: 'Sayfalarınızın Google tarafından taranıp dizine eklenebildiğini kontrol ediyor; yönlendirme, site haritası, hız ve mobil görünüm sorunlarını düzeltiyoruz.' },
+  { ad: 'Anahtar kelime ve arama niyeti araştırması', aciklama: 'Müşterinizin hizmetinizi ve yaşadığı sorunu hangi sözlerle aradığını çıkarıyor, her aramanın arkasındaki niyeti ayırıyoruz.' },
+  { ad: 'Hizmet sayfaları ve içerik', aciklama: 'Her hizmete, arayan kişinin sorusunu yanıtlayan bir sayfa kuruyor; sitede cevabı olmayan sorular için rehber içerikleri planlıyoruz.' },
+  { ad: 'Site yapısı ve iç bağlantı', aciklama: 'Her önemli arama için tek bir sayfa belirliyor, ilgili sayfaları birbirine bağlayarak ziyaretçinin ve Google’ın yolunu kısaltıyoruz.' },
+  { ad: 'Yerel SEO', aciklama: 'Bölgenizde arama yapanlar için Google İşletme Profilinizi, adres ve telefon bilgilerinizin tutarlılığını ve bölge sayfalarınızı ele alıyoruz.' },
+  { ad: 'Düzenli kontrol', aciklama: 'Search Console verisini düzenli okuyor; görünmeyen sayfayı, tıklanmayan başlığı ve yeni çıkan teknik sorunu sıraya alıyoruz.' },
+];
+
+const sorunlar = [
+  {
+    soru: 'Web sitem Google’da neden çıkmıyor?',
+    ornek:
+      'Yeni açılan bir pilates stüdyosunun sitesi yayında ama stüdyonun adı aratıldığında bile çıkmıyor. Çoğu zaman sayfalar bir tema ayarı yüzünden dizine kapalıdır ya da Google siteyi henüz taramamıştır.',
+    care: 'Search Console’da sayfaların dizin durumuna bakıyor, Google’ı engelleyen ayarı bulup kaldırıyoruz.',
+    bag: { etiket: 'Teknik kontrolde neye bakıyoruz?', url: '#teknik-bulgu' },
+    cizim: buyutec,
+  },
+  {
+    soru: 'Rakibim neden benden üstte?',
+    ornek:
+      'Bir mobilyacı “mutfak dolabı” aramasında rakibini üstte görüyor. Çoğu zaman rakibin o iş için ayrı bir sayfası, ölçü ve malzeme bilgisi, iş örnekleri vardır; kendi sitesinde ise bütün hizmetler tek sayfada durur.',
+    care: 'Üstte çıkan sayfaları inceliyor, sizin sayfanızda eksik kalan cevabı ve yapıyı çıkarıyoruz.',
+    bag: { etiket: 'Hangi arama hangi sayfaya gitmeli?', url: '#arama-niyeti' },
+    cizim: hedef,
+  },
+  {
+    soru: 'Reklamı durdurunca neden müşteri kesiliyor?',
+    ornek:
+      'Bir kombi servisi reklam verdiği sürece telefon alıyor, reklamı durdurduğu gün telefon susuyor. Ziyaretçilerin neredeyse tamamı reklamdan geliyorsa bu beklenen sonuçtur: sitenin aramada reklamsız görünen bir sayfası yoktur.',
+    care: 'Reklamda talep getiren aramaları alıyor, bu aramalara cevap veren sayfaları sitenizde kuruyoruz.',
+    bag: { etiket: 'SEO’ya nereden başlıyoruz?', url: '#ilk-seo' },
+    cizim: takvim,
+  },
+  {
+    soru: 'Blog yazıyorum, neden trafik gelmiyor?',
+    ornek:
+      'Bir güzellik salonu düzenli blog yazısı yayımlıyor ama yazılar aramadan ziyaretçi almıyor. Konular müşterinin sorduğu sorulardan seçilmemiştir ya da aynı konuyu anlatan birkaç yazı birbirinin önünü kesiyordur.',
+    care: 'Yazıları tek tek inceliyor; hangisinin birleşeceğine, düzeleceğine ya da bir hizmete bağlanacağına karar veriyoruz.',
+    bag: { etiket: 'İlk içerik kararını nasıl veriyoruz?', url: '#icerik-karari' },
+    cizim: defter,
+    genis: true,
+  },
+];
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'Site, rakip ve arama analizi', aciklama: 'Sitenizin Google’a açık olup olmadığına, rakiplerin hangi sayfalarla göründüğüne ve müşterinizin neyi aradığına bakıyoruz.' },
+  { ad: 'Strateji', ozet: 'Arama ve sayfa planı', aciklama: 'Hangi aramanın hangi sayfaya ait olduğunu belirliyor, bulguları öncelik sırasına koyuyoruz.' },
+  { ad: 'Kurulum', ozet: 'Teknik düzeltme, sayfa, içerik', aciklama: 'Teknik sorunları gideriyor, hizmet sayfalarını ve eksik içerikleri bu plana göre kuruyoruz.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Arama verisini düzenli okuyor; görünmeyen sayfayı ve tıklanmayan başlığı yeniden ele alıyoruz.' },
+  { ad: 'Hedef', ozet: 'Organik talep ve müşteri', aciklama: 'Başarıyı ziyaretçi sayısıyla değil, aramadan gelip talep bırakan müşteriyle değerlendiriyoruz.' },
+];
+
+// Temsili teknik bulgular. Gerçek bir sitenin denetiminden alınmadı; kararın ve kontrolün nasıl yazıldığını gösterir.
+const bulgular = [
+  {
+    bulgu: 'Hizmet sayfaları tema ayarı yüzünden “noindex” ile işaretli',
+    yer: 'Hizmet sayfaları',
+    oncelik: 'Yüksek',
+    tur: 'isaret',
+    duzeltme: 'İşaret kaldırıldı.',
+    kontrol: 'URL Denetleme Aracı’nın canlı testinde sayfa dizine eklenebilir görünüyor.',
+  },
+  {
+    bulgu: 'Yenilenen sayfanın eski adresi de aynı içerikle açılıyor',
+    yer: 'Taşınan hizmet adresleri',
+    oncelik: 'Yüksek',
+    tur: 'isaret',
+    duzeltme: 'Eski adres yenisine kalıcı olarak yönlendirildi.',
+    kontrol: 'Eski adres açıldığında tek adımda yeni adrese gidiyor.',
+  },
+  {
+    bulgu: 'Bir blog yazısı ile hizmet sayfası aynı işi anlatıyor',
+    yer: 'Blog ve hizmet sayfası',
+    oncelik: 'Orta',
+    tur: '',
+    duzeltme: 'Yazının başlığı soruya çevrildi, yazı hizmet sayfasına bağlandı.',
+    kontrol: 'İki sayfanın başlığı ve H1’i ayrı birer niyeti söylüyor.',
+  },
+  {
+    bulgu: 'Site haritasında yayından kalkmış adresler duruyor',
+    yer: 'Site haritası',
+    oncelik: 'Orta',
+    tur: '',
+    duzeltme: 'Harita yalnız yayındaki sayfalarla yeniden üretildi.',
+    kontrol: 'Haritadaki her adres açılıyor, hiçbiri yönlenmiyor.',
+  },
+  {
+    bulgu: 'Telefonda teklif formunun gönder düğmesi ekranın dışında kalıyor',
+    yer: 'Teklif formu',
+    oncelik: 'Yüksek',
+    tur: 'isaret',
+    duzeltme: 'Form düzeni dar ekrana göre düzeltildi.',
+    kontrol: '360 piksel genişlikte deneme başvurusu gönderildi ve ulaştı.',
+  },
+];
+
+// Temsili aramalar: aynı işin iki ayrı yoldan nasıl arandığını gösterir.
+const arayanlar = [
+  {
+    kim: 'Hizmetin adını yazan müşteri',
+    sorgu: 'havuz yenileme firması',
+    bekledigi: 'Sizi başka firmalarla karşılaştırıyor. Yaptığınız işi, çalıştığınız bölgeyi, iş örneklerini ve teklif yolunu görmek istiyor.',
+    sayfa: 'Hizmet sayfası',
+    ek: 'İş örnekleri ve teklif yoluyla birlikte.',
+    cizim: liste,
+  },
+  {
+    kim: 'Sorununu yazan müşteri',
+    sorgu: 'havuz seramiği neden dökülür',
+    bekledigi: 'Henüz kime ihtiyacı olduğunu bilmiyor. Sorunun nedenini, ne zaman yenileme gerektiğini ve bir sonraki adımı öğrenmek istiyor.',
+    sayfa: 'Soruyu yanıtlayan rehber',
+    ek: 'Sonunda ilgili hizmet sayfasına bağlanır.',
+    cizim: soru,
+  },
+];
+
+const icerikKarari = [
+  {
+    ad: 'Soruyu kimin sorduğuna bakıyoruz',
+    aciklama: 'Satış görüşmelerinizde tekrar eden soruları ve Search Console’da gösterim alan aramaları aynı listede topluyoruz.',
+  },
+  {
+    ad: 'Sitede cevabı var mı diye bakıyoruz',
+    aciklama: 'Cevap bir sayfanın ortasında gömülüyse yeni yazı açmıyor, o sayfayı düzeltiyoruz. Hiç yoksa yeni sayfa sıraya giriyor.',
+  },
+  {
+    ad: 'Cevabı bir hizmete bağlıyoruz',
+    aciklama: 'Her rehber ilgili hizmete, hizmet sayfası da aynı soruya bağlanıyor. Hiçbir hizmete bağlanmayan konu beklemeye alınıyor.',
+  },
+];
+
+const sorular = [
+  {
+    soru: 'SEO nedir?',
+    cevap:
+      'SEO (arama motoru optimizasyonu), bir web sitesinin Google gibi arama motorlarında reklam vermeden, organik sonuçlarda görünmesi için yapılan çalışmaların bütünüdür. Sitenin teknik yapısını, sayfalarını, içeriğini ve başka sitelerden aldığı bağlantıları kapsar. Reklamdan farkı, tıklama başına ödeme yapılmamasıdır.',
+  },
+  {
+    soru: 'SEO danışmanlığı ile SEO ajansı arasındaki fark ne?',
+    cevap:
+      'SEO danışmanlığında işi biz yönlendirir ve denetleriz, uygulamayı sizin ekibiniz ya da geliştiriciniz yapabilir; SEO ajansı hizmetinde ise incelemeyi, düzeltmeyi ve içerik planını baştan sona ajans üstlenir. İki biçimde de çalışıyoruz. Hangisinin size uyduğu, sitenize kimin erişebildiğine ve ekibinizin işin ne kadarını üstlenebileceğine göre ilk görüşmede netleşir.',
+  },
+  {
+    soru: 'SEO ne zaman sonuç verir?',
+    cevap:
+      'Kesin bir süre söylemek doğru olmaz, çünkü dört ayrı şey farklı hızda değişir. Tarama ve dizine eklenme düzeltmeleri önce görünür. Hangi aramalarda gösterildiğiniz ondan sonra değişir. Talep en son gelir ve yalnız aramaya değil, sayfanın kendisine de bağlıdır. Sıra ya da tarih için söz vermiyoruz.',
+  },
+  {
+    soru: 'SEO mu, Google Ads mi?',
+    cevap:
+      'İkisi farklı iş görür: Google Ads’te bütçe ayırdığınız sürece reklamla görünürsünüz, SEO’da ise sitenizin reklam vermeden, organik sonuçlarda görünmesi için çalışılır. Hemen talebe ihtiyacı olan işletmeler çoğunlukla reklamla başlar ve SEO çalışmasını yanında yürütür. Reklamda talep getiren aramalar, SEO’da hangi sayfaların önce kurulacağını da gösterir.',
+    bag: { etiket: 'Google Ads yönetimi', url: '/hizmetler/google-ads-yonetimi/' },
+  },
+  {
+    soru: 'Yerel SEO nedir?',
+    cevap:
+      'Yerel SEO, bir işletmenin bulunduğu ya da hizmet verdiği bölgede yapılan aramalarda ve Google Haritalar’da görünmesi için yapılan çalışmadır. Google İşletme Profili’nin doğru doldurulmasını, adres ve telefon bilgisinin her yerde aynı olmasını, yorumları ve bölgeye özel sayfaları kapsar. Çilingir, kombi servisi ya da restoran gibi müşterisi yakınından gelen işletmelerde ilk ele alınan iştir.',
+  },
+  {
+    soru: 'İçeriği kim yazar?',
+    cevap:
+      'Metni kimin yazacağı çalışmanın kapsamında, işe başlamadan netleşir. Hangi sayfanın yazılacağına birlikte karar veririz. Kim yazarsa yazsın, işinizi bilen biri okuyup onaylamadan içerik yayımlanmaz.',
+  },
+  {
+    soru: 'Teknik düzeltmeleri kim yapar?',
+    cevap:
+      'Sitenize erişimimiz varsa düzeltmeyi biz yaparız; yoksa geliştiricinize ne yapılacağını ve nasıl kontrol edileceğini yazılı veririz. Kimin yapacağı işe başlamadan netleşir. Her düzeltme, sizin de tekrarlayabileceğiniz bir kontrolle doğrulanır.',
+  },
+  {
+    soru: 'Mevcut sitemle SEO yapılır mı, yeni site mi gerekir?',
+    cevap:
+      'Çoğu durumda mevcut siteyle başlanır; yeni site ancak altyapı temel düzeltmelere izin vermiyorsa gündeme gelir. İncelemede sayfaların dizine eklenebildiğine, telefonda düzgün çalıştığına ve içeriğin düzenlenebildiğine bakıyoruz. Yeni site gerekiyorsa eski adreslerin yeni adreslere yönlendirilmesini baştan planlıyoruz.',
+    bag: { etiket: 'Kurumsal web tasarım', url: '/hizmetler/web-tasarim/' },
+  },
+  {
+    soru: 'Sıralama garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Google’da belirli bir sıra, belirli bir trafik ya da talep sayısı için söz vermiyoruz; sıralamayı Google belirler. Söz verdiğimiz şey sitenizi ayrıntılı incelemek, neyi neden düzelttiğimizi göstermek ve düzenli optimizasyon yapmaktır.',
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'SEO danışmanlığı',
+    alternateName: 'SEO hizmeti',
+    serviceType: 'SEO danışmanlığı, teknik SEO ve yerel SEO',
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    url: `${SITE.url}${hizmet.url}`,
+    description:
+      'Ayrıntılı site incelemesi, teknik SEO, anahtar kelime ve arama niyeti araştırması, hizmet sayfaları ve içerik, yerel SEO ve düzenli optimizasyonu kapsayan SEO danışmanlığı.',
+  },
+];
+---
+
+<Temel
+  baslik="SEO Danışmanlığı ve SEO Ajansı Hizmeti | Satışları Artır"
+  aciklama="SEO danışmanlığı: ayrıntılı site incelemesi, teknik SEO, hizmet sayfaları, içerik ve yerel SEO. Yeni siteler ve SEO yaptırıp sonuç alamayan işletmeler için."
+  sayfaTuru="hizmet"
+  hizmet="seo"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: hizmet.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik="SEO danışmanlığı"
+    gorsel={gorsel}
+    gorselBicimi="dikey"
+    mobilOdak="50% 62%"
+    gorselAlt="Kâğıttan dev bir açık kitaba yürüyen, elinde soru işareti taşıyan küçük bir müşteri; kırmızı kalem çizgisi kitabın içindeki kapıdan ışıkları yanan dükkâna uzanıyor"
+    cagri={{ etiket: hizmet.cagri, url: '#gorusme', kanal: 'seo' }}
+    ikincil={{ etiket: 'Örnek teknik kontrolü görün', url: '#teknik-bulgu' }}
+  >
+    <p>
+      SEO danışmanlığı, bir web sitesinin Google’da hizmetini arayan kişilere görünmesi için sitenin teknik yapısını,
+      sayfalarını ve içeriğini inceleyip düzeltme işidir.
+    </p>
+    <p>
+      Siteniz yeniyse temeli baştan kuruyor, daha önce SEO yaptırıp sonuç alamadıysanız işin nerede takıldığını bulup
+      oradan devam ediyoruz. Sıralama sözü vermiyoruz; neyi neden düzelttiğimizi gösteriyoruz.
+    </p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Neleri kapsar?', hedef: 'kapsam' },
+      { etiket: 'Sık yaşanan sorunlar', hedef: 'sorunlar' },
+      { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+      { etiket: 'Yeni site ya da mevcut SEO', hedef: 'ilk-seo' },
+      { etiket: 'Teknik kontrol örneği', hedef: 'teknik-bulgu' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Kapsam -->
+  <section class="bolum bolum--beyaz" id="kapsam">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">SEO danışmanlığı neleri kapsar?</h2>
+          <div class="metin">
+            <p>
+              İster SEO ajansı ister SEO danışmanı deyin, iyi bir SEO hizmeti tek bir işten oluşmaz. Sitenin Google’a
+              açık olması, doğru aramada doğru sayfanın çıkması ve gelen kişinin aradığını bulması ayrı işlerdir.
+            </p>
+          </div>
+        </div>
+        <Cizim src={harita} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili">
+          {
+            kapsam.map((k) => (
+              <li>
+                <strong>{k.ad}</strong>
+                <span>{k.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık yaşanan sorunlar -->
+  <section class="bolum" id="sorunlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">SEO’da en sık duyduğumuz sorular</h2>
+        <p class="giris">Sitesi olan işletmeler çoğunlukla bu dört sorudan birini soruyor. Her birinde ilk baktığımız yer:</p>
+      </div>
+      <SoruKartlari kartlar={sorunlar} />
+    </div>
+  </section>
+
+  <!-- Yöntem -->
+  <section class="bolum bolum--beyaz" id="yontem">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">SEO çalışmasını nasıl yürütüyoruz?</h2>
+        <p class="giris">
+          İçerik yazıp beklemiyoruz. Önce sitenizi inceliyor, sonra bulguya göre kuruyor, ardından düzenli takip ve
+          optimizasyonla hedefinize yaklaştırıyoruz.
+        </p>
+      </div>
+      <Adimlar adimlar={adimlar} />
+    </div>
+  </section>
+
+  <!-- İki durum: yeni site / sonuç alınamamış SEO -->
+  <IkiDurum
+    kimlik="ilk-seo"
+    baslik="Siteniz yeni mi, SEO yaptırıp sonuç alamadınız mı?"
+    giris="İki durumda başlangıç noktası farklıdır. Hangisindeyseniz oradan başlıyoruz."
+    sol={{
+      ust: 'Siteniz yeniyse ya da hiç SEO yaptırmadıysanız',
+      baslik: 'Temeli baştan, doğru sırayla kuruyoruz',
+      metin: 'İlk SEO çalışmasında en pahalı hata, site Google’a açık mı diye bakmadan içerik yazmaya başlamaktır. İşe üç soruyla başlıyoruz.',
+      maddeler: [
+        { ad: 'Siteniz Google’a açık mı?', aciklama: 'Yeni sitelerde sayfalar bir tema ya da ayar yüzünden dizine kapalı kalabilir. İlk kontrol budur.' },
+        { ad: 'Müşteri sizi hangi sözlerle arıyor?', aciklama: 'Hizmetin adı, sorunun adı ve bölge. Her önemli arama için tek bir sayfa belirliyoruz.' },
+        { ad: 'Önce hangi sayfalar gerekiyor?', aciklama: 'Önce hizmet sayfaları, sonra müşterinizin en çok sorduğu soruları yanıtlayan içerikler.' },
+      ],
+      cagri: { etiket: 'SEO’ya başlamayı görüşelim', kampanyaDurumu: 'new', kanal: 'seo', yer: 'ilk-seo' },
+      bag: { etiket: 'Yeni site gerekiyorsa: web tasarım', url: '/hizmetler/web-tasarim/' },
+      cizim: yapboz,
+    }}
+    sag={{
+      kimlik: 'seo-inceleme',
+      ust: 'SEO yaptırdıysanız ama sonuç alamadıysanız',
+      baslik: 'İşin nerede takıldığını dört aşamada arıyoruz',
+      metin: 'Bir SEO ajansıyla ya da danışmanla çalıştınız ama bir şey değişmedi. Bu tek bir sorun gibi görünür; aslında dört ayrı aşama vardır ve iş çoğu zaman bunlardan birinde takılmıştır.',
+      maddeler: [
+        { ad: 'Tarama', aciklama: 'Google sayfalarınıza ulaşabiliyor mu? Sunucunun yanıtına, robots.txt dosyasına ve site haritasına bakıyoruz.' },
+        { ad: 'Dizine eklenme', aciklama: 'Sayfalar Google’ın dizininde mi? Search Console’daki Sayfa dizine ekleme raporunu ve URL Denetleme Aracı’nı kullanıyoruz.' },
+        { ad: 'Görünürlük', aciklama: 'Hangi aramalarda gösteriliyorsunuz, hangilerinde tıklanıyorsunuz? Arama performansı verisini okuyoruz.' },
+        { ad: 'Talep', aciklama: 'Aramadan gelen kişi talep bıraktı mı? Gösterim artarken talep yerinde sayıyorsa sıradaki iş yeni içerik değil, sayfanın kendisidir.' },
+      ],
+      cagri: { etiket: hizmet.cagri, kampanyaDurumu: 'existing', kanal: 'seo', yer: 'seo-inceleme' },
+    }}
+  />
+
+  <!-- Çalışma örneği: teknik kontrol -->
+  <section class="bolum bolum--beyaz teknik" id="teknik-bulgu">
+    <div class="sarici konu">
+      <div class="konu__baslik konu__baslik--yapiskan">
+        <h2 class="baslik-2">Sitenin Google’a açık olduğunu nasıl kontrol ediyoruz?</h2>
+        <div class="metin">
+          <p>
+            Yeni içerik yazmadan önce var olan sayfaların Google’a açık olduğunu görmemiz gerekir. Search Console’daki
+            <a href="https://support.google.com/webmasters/answer/7440203?hl=tr" rel="noopener">Sayfa dizine ekleme raporu</a>
+            hangi sayfaların dizinde olmadığını ve nedenini söyler. Tek tek sayfaları
+            <a href="https://support.google.com/webmasters/answer/9012289?hl=tr" rel="noopener">URL Denetleme Aracı</a> ile
+            test ediyoruz.
+          </p>
+          <p>
+            Her bulguyu önceliğiyle, yapılan düzeltmeyle ve düzeltmenin çalıştığını gösteren kontrolle birlikte
+            yazıyoruz. Neyi neden düzelttiğimizi siz de görürsünüz.
+          </p>
+        </div>
+        <Cizim src={alet} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik konu__icerik--genis">
+        <div class="ornek" data-gir>
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Bir hizmet sitesi için teknik SEO bulguları</h3>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+          <table class="tablo tablo--yigin bulgu-tablosu">
+            <thead>
+              <tr>
+                <th scope="col">Bulgu</th>
+                <th scope="col">Öncelik</th>
+                <th scope="col">Yapılan düzeltme</th>
+                <th scope="col">Kontrol</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                bulgular.map((b) => (
+                  <tr>
+                    <td data-baslik="Bulgu">
+                      <div>
+                        <span class="bulgu__ad">{b.bulgu}</span>
+                        <span class="bulgu__yer">{b.yer}</span>
+                      </div>
+                    </td>
+                    <td data-baslik="Öncelik">
+                      <span class:list={['hukum', b.tur && `hukum--${b.tur}`]}>{b.oncelik}</span>
+                    </td>
+                    <td data-baslik="Yapılan düzeltme">{b.duzeltme}</td>
+                    <td data-baslik="Kontrol">{b.kontrol}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <p class="ornek__not">
+            Bulgular gerçek bir sitenin denetiminden alınmadı. Sizin sitenizde bu listeyi kendi sayfalarınızla
+            çıkarıyoruz; kontrolü geçmeyen düzeltme tamamlanmış sayılmaz.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Arama niyeti, içerik kararı ve proje -->
+  <section class="bolum bolum--acik" id="arama-niyeti">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Müşteriniz hizmeti mi arıyor, sorunu mu?</h2>
+        <p class="giris">
+          Aynı müşteri size iki ayrı yoldan gelebilir. İkisine aynı sayfayı göstermek birini kaçırır; bu yüzden her
+          önemli arama için tek bir sayfa belirliyoruz.
+        </p>
+      </div>
+
+      <div class="niyet">
+        {
+          arayanlar.map((a, i) => (
+            <article class="niyet__kart" data-gir style={`--gecikme:${i * 120}ms`}>
+              <h3 class="niyet__kim">{a.kim}</h3>
+              <div class="niyet__cizim" aria-hidden="true">
+                <Cizim src={a.cizim} sizes="(max-width: 47.99rem) 30vw, 12vw" genislikler={[240, 360, 520]} />
+              </div>
+              <p class="niyet__kutu">
+                <Ikon ad="magnifying-glass" boyut={22} />
+                <span class="sorgu">{a.sorgu}</span>
+              </p>
+              <p class="niyet__beklenti">{a.bekledigi}</p>
+              <p class="niyet__sayfa">
+                <span class="niyet__etiket">Gitmesi gereken sayfa</span>
+                <strong>
+                  <Isaret tip="alt">{a.sayfa}</Isaret>
+                </strong>
+                <span class="niyet__ek">{a.ek}</span>
+              </p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="niyet-alt">
+        <span class="temsili">Temsili aramalar</span>
+        <p class="kucuk">İki sayfa aynı aramaya oynuyorsa ikisi de zayıflar. Hangi aramanın hangi sayfaya ait olduğunu işin başında yazıyoruz.</p>
+      </div>
+
+      <div class="karar" id="icerik-karari" data-gir>
+        <div class="karar__ust">
+          <h3 class="karar__baslik">İlk içerik kararını nasıl veriyoruz?</h3>
+          <p>
+            İçerik planı anahtar kelime listesinden çıkmaz. Müşterinizin gerçekten sorduğu, sitenizde cevabı bulunmayan
+            ve bir hizmetinize bağlanan sorudan çıkar.
+          </p>
+          <Cizim src={kitaplik} class="karar__cizim" sizes="(max-width: 55.99rem) 34vw, 12vw" genislikler={[240, 360, 520]} />
+        </div>
+        <ol class="adimlar karar__adimlar">
+          {
+            icerikKarari.map((k) => (
+              <li>
+                <h4>{k.ad}</h4>
+                <p>{k.aciklama}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="proje-yeri">
+        <ProjeKarti
+          kimlik="tarum-havuz"
+          metin="Havuz yaptırmak isteyenle havuzunu yenilemek isteyen aynı siteye farklı aramalarla gelir. Projenin web sitesi ve SEO işinde çıkış sorusu buydu: hangisi hangi sayfayı görecek?"
+        />
+      </div>
+      <a class="ok-bag proje-yeri__bag" href="/calismalarimiz/">
+        Diğer çalışmalarımızı inceleyin
+        <Ikon ad="arrow-right" boyut={16} />
+      </a>
+    </div>
+  </section>
+
+  <Sss
+    baslik="SEO danışmanlığı hakkında sık sorulan sorular"
+    giris="SEO hizmeti, ajansla çalışma, içerik ve yerel SEO hakkında en çok sorulanlar."
+    sorular={sorular}
+  />
+
+  <SehirBaglantilari hizmet="seo" baslik="Şehrinize göre SEO" metin="Yerel aramalarda harita, ilçe adı ve işletme profili öne geçer. Şehirlere göre ayrı sayfalar yazdık." />
+
+  <IlgiliSayfalar
+    baslik="SEO ile birlikte ele alınan işler"
+    sayfalar={[
+      {
+        tur: 'Hizmet',
+        baslik: 'GEO ve AEO danışmanlığı',
+        metin: 'Yapay zekâ yanıtlarında markanız nasıl anlatılıyor?',
+        url: '/hizmetler/yapay-zeka-gorunurlugu/',
+        gorsel: yolYapayZeka,
+        gorselAlt: 'Kâğıttan bir robot ve konuşma balonunun içinde dükkânlar',
+      },
+      {
+        tur: 'Hizmet',
+        baslik: 'Kurumsal web tasarım',
+        metin: 'Arama ziyaretçi getiriyor ama sayfa talebe dönüşmüyorsa.',
+        url: '/hizmetler/web-tasarim/',
+        gorsel: yolSite,
+        gorselAlt: 'Ekranı dükkân vitrini olan kâğıttan bir dizüstü bilgisayar',
+      },
+      {
+        tur: 'Hizmet',
+        baslik: 'Google Ads yönetimi',
+        metin: 'Hemen talep gerekiyorsa reklam ve SEO birlikte yürür.',
+        url: '/hizmetler/google-ads-yonetimi/',
+        gorsel: yolArama,
+        gorselAlt: 'Kâğıttan dev bir arama kutusuna uzanan küçük bir müşteri',
+      },
+      {
+        tur: 'Blog',
+        baslik: 'Google Ads mi, Instagram reklamı mı?',
+        metin: 'Reklamla başlayacaksanız ilk kanalı nasıl seçersiniz?',
+        url: '/blog/google-ads-mi-instagram-reklami-mi/',
+        gorsel: yolAkis,
+        gorselAlt: 'Kâğıttan dev bir telefonda Instagram akışı',
+      },
+    ]}
+  />
+
+  <GorusmeBandi
+    baslik="Sitenizin bugünkü durumuna birlikte bakalım."
+    metin="Sitenizin adresini ve müşterinizin sizi hangi sözlerle aradığını yazın. Görüşmeye buradan başlayalım."
+    kanal="seo"
+    cagri={hizmet.cagri}
+    konum="hizmet-seo"
+  />
+</Temel>
+
+<style>
+  /* ---- Teknik bulgu tablosu ------------------------------------------------- */
+  .bulgu-tablosu td {
+    color: var(--murekkep-2);
+  }
+  .bulgu__ad {
+    display: block;
+    font-weight: 600;
+    color: var(--murekkep);
+  }
+  .bulgu__yer {
+    display: block;
+    margin-block-start: 0.2rem;
+    font-size: var(--b-mikro);
+    color: var(--ikincil);
+  }
+  @media (min-width: 44rem) {
+    .bulgu-tablosu th:nth-child(1) {
+      width: 31%;
+    }
+    .bulgu-tablosu th:nth-child(2) {
+      width: 12%;
+    }
+    .bulgu-tablosu th:nth-child(3) {
+      width: 26%;
+    }
+  }
+  /* Dört sütunlu tablo tablette ve dar masaüstünde sıkışmasın: başlık üste çıkar, kâğıt tam genişliğe yayılır,
+     nesne yazının sağında durur. */
+  @media (min-width: 48rem) and (max-width: 74.99rem) {
+    .teknik .konu__baslik,
+    .teknik .konu__icerik {
+      grid-column: 1 / -1;
+    }
+    .teknik .konu__baslik {
+      position: static;
+      grid-template-columns: minmax(0, 44rem) auto;
+      justify-content: space-between;
+      align-items: end;
+      column-gap: 2rem;
+    }
+    .teknik .konu__baslik > h2,
+    .teknik .konu__baslik > .metin {
+      grid-column: 1;
+    }
+    .teknik .konu__baslik :global(.konu__cizim) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      width: clamp(8.5rem, 17vw, 12.5rem);
+      margin: 0;
+    }
+  }
+
+  /* ---- İki arayan: arama kutusu ve gitmesi gereken sayfa --------------------- */
+  .niyet {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .niyet__kart {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto 1fr auto;
+    column-gap: 1rem;
+    row-gap: 1.1rem;
+    padding: clamp(1.4rem, 2.6vw, 2.5rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .niyet__kim {
+    align-self: end;
+    font-size: clamp(1.4rem, 1.05rem + 1.2vw, 2.05rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.06;
+    letter-spacing: -0.024em;
+    max-width: 9em;
+  }
+  .niyet__cizim {
+    width: clamp(5.5rem, 10vw, 9rem);
+    margin: -0.9rem -0.6rem -0.2rem 0;
+  }
+  .niyet__kutu,
+  .niyet__beklenti,
+  .niyet__sayfa {
+    grid-column: 1 / -1;
+  }
+  .niyet__kutu {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 3.5rem;
+    padding: 0.65rem 1.25rem 0.65rem 1rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.3rem 0.3rem 0 rgb(23 61 166 / 0.16);
+    font-size: clamp(1.15rem, 1rem + 0.7vw, 1.55rem);
+    line-height: 1.15;
+  }
+  .niyet__kutu :global(svg) {
+    flex: none;
+    color: var(--ikincil);
+  }
+  .niyet__beklenti {
+    max-width: 34em;
+    color: var(--murekkep-2);
+  }
+  .niyet__sayfa {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.95rem 1.1rem 1.05rem;
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  .niyet__etiket {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    color: var(--ikincil);
+  }
+  .niyet__sayfa strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem);
+    font-weight: 670;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.2;
+  }
+  .niyet__ek {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  .niyet-alt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1.5rem;
+    margin-block-start: 1.1rem;
+    color: var(--murekkep-2);
+  }
+  .niyet-alt .temsili {
+    flex: none;
+  }
+  .niyet-alt p {
+    flex: 1 1 18rem;
+    max-width: 44rem;
+  }
+
+  /* ---- İçerik kararı: beyaz kâğıtta üç adım ---------------------------------- */
+  .karar {
+    --zemin: var(--beyaz);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 1.75rem;
+    align-items: start;
+    margin-block-start: clamp(2.25rem, 4.5vw, 4rem);
+    padding: clamp(1.4rem, 3vw, 2.75rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    scroll-margin-top: 1rem;
+  }
+  .karar__ust {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .karar__baslik {
+    font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.4rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.05;
+    letter-spacing: -0.024em;
+  }
+  .karar__ust p {
+    max-width: 32em;
+    color: var(--murekkep-2);
+  }
+  .karar__ust :global(.karar__cizim) {
+    width: min(52%, 13rem);
+    margin-inline-start: -0.75rem;
+  }
+  .karar__adimlar {
+    grid-column: 7 / -1;
+    align-self: center;
+  }
+  .karar__adimlar h4 {
+    font-size: 1.22rem;
+    font-weight: 660;
+    font-stretch: 92%;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---- Proje kartı --------------------------------------------------------------- */
+  .proje-yeri {
+    margin-block-start: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .proje-yeri__bag {
+    margin-block-start: 1.5rem;
+  }
+
+  @media (max-width: 55.99rem) {
+    .karar__ust,
+    .karar__adimlar {
+      grid-column: 1 / -1;
+    }
+    .karar__ust :global(.karar__cizim) {
+      width: 7.5rem;
+    }
+  }
+  @media (min-width: 36rem) and (max-width: 55.99rem) {
+    .karar__ust {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 1.5rem;
+      align-items: end;
+    }
+    .karar__ust > h3,
+    .karar__ust > p {
+      grid-column: 1;
+    }
+    .karar__ust :global(.karar__cizim) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      width: 8.5rem;
+      margin: 0;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .niyet {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .proje-yeri__bag {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+</style>

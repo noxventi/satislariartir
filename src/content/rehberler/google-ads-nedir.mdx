@@ -1,0 +1,230 @@
+---
+no: 7
+kapak: google-ads-nedir
+kapakAlt: "Kâğıttan dev bir arama kutusunun önünde levhalarını kaldırarak teklif veren küçük esnaflar; birinin levhası kırmızı kalemle çemberlenmiş"
+soru: Google Ads nedir, nasıl çalışır?
+baslik: Google Ads Nedir, Nasıl Çalışır?
+aciklama: >-
+  Google Ads nedir, reklamın hangi aramada ve kaçıncı sırada çıkacağına nasıl karar verilir? Açık artırma,
+  kampanya türleri ve ilk kampanya öncesi hazırlık.
+aramalar:
+  - google ads nedir
+  - google adwords nedir
+  - google reklamları nasıl çalışır
+kisaCevap: >-
+  Google Ads, Google’ın reklam platformudur. İşletmeler bu platformla Google aramalarında, YouTube’da ve Google’ın
+  anlaştığı sitelerde reklam gösterir. Arama reklamlarında ödeme, reklam göründüğünde değil tıklandığında doğar.
+  Reklamın çıkıp çıkmayacağına ve kaçıncı sırada duracağına her aramada yeniden yapılan bir açık artırma karar verir.
+  Bu açık artırmada yalnız teklif değil, reklamın ve açtığı sayfanın kalitesi de hesaba katılır.
+elinizeGecen: Açık artırmanın şeması, kampanya türleri ve ilk kampanya öncesi kontrol listesi
+hizmetler: [google-ads]
+hizmetBaglantisi:
+  etiket: Google Ads yönetimi
+  url: /hizmetler/google-ads-yonetimi/
+sonraki: google-reklam-nasil-verilir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Ads Yardım, Reklam sıralaması hakkında
+    url: https://support.google.com/google-ads/answer/1722122?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Arama Ağı kampanyaları için kalite puanı hakkında
+    url: https://support.google.com/google-ads/answer/6167118?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Anahtar kelime eşleme seçenekleri hakkında
+    url: https://support.google.com/google-ads/answer/7478529?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Doğru kampanya türünü seçme
+    url: https://support.google.com/google-ads/answer/2567043?hl=tr
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import Akis from '../../components/blog/Akis.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Kombiniz bozulduğunda Google’a “kombi servisi” yazarsınız. Çıkan ilk birkaç sonucun üstünde küçük bir “Sponsorlu” yazısı durur. O sonuçlar oraya Google Ads ile gelmiştir.
+
+Google Ads’in eski adı AdWords’tür; platform 2018’de bugünkü adını aldı. Çalışma mantığı aynı kaldı: işletme, müşterisinin yazacağı aramaları seçer ve o aramalarda görünmek için teklif verir.
+
+<SonucSayfasi sorgu="kombi servisi kadıköy" vurgu="reklam">
+  Arama sonuç sayfasında üç ayrı bölge vardır. Bu yazı en üstteki reklam alanını anlatır. Alttaki organik sonuçlarda
+  sıra reklamla satın alınmaz.
+</SonucSayfasi>
+
+## Google Ads nedir?
+
+Google Ads, işletmelerin Google’da ve Google’a bağlı yerlerde reklam vermesini sağlayan platformdur. Bir hesap açarsınız, hangi aramalarda ya da kimlere görünmek istediğinizi seçersiniz, bir günlük bütçe belirlersiniz. Reklamınız bu sınırlar içinde gösterilir.
+
+Televizyon ya da ilan panosundan farkı şudur: arama reklamı, hizmetinizi o anda arayan kişiye gösterilir. Kombisi bozulan kişi çözümü zaten arıyordur. Reklamın işi ilgiyi yaratmak değil, var olan ihtiyaca cevap vermektir.
+
+## Google Ads nasıl çalışır?
+
+Biri Google’a bir şey yazdığında, o aramayı hedefleyen reklamlar arasında saniyeden kısa süren bir açık artırma yapılır. Bu açık artırma her aramada baştan kurulur. Sabah üçüncü sırada çıkan reklam öğleden sonra birinci sırada çıkabilir ya da hiç çıkmayabilir.
+
+<Akis
+  asamalar={[
+    { ad: 'Arama', aciklama: 'Biri Google’a hizmetinizi yazar.' },
+    { ad: 'Açık artırma', aciklama: 'O aramayı hedefleyen reklamlar yarışır.', olcu: 'Her aramada yeniden' },
+    { ad: 'Reklam sıralaması', aciklama: 'Hangi reklamın nerede duracağı belirlenir.', olcu: 'Teklif ve kalite' },
+    { ad: 'Tıklama', aciklama: 'Kişi reklamınıza tıklar; ödeme o anda doğar.', olcu: 'Tıklama başına ödeme' },
+  ]}
+/>
+
+Reklamın sırasını belirleyen değere Google “reklam sıralaması” der. Google’ın yardım sayfasına göre bu hesapta altı etken vardır:
+
+- **Teklifiniz.** Bir tıklama için ödemeye razı olduğunuz üst sınır. Çoğu zaman bu sınırdan daha azını ödersiniz.
+- **Reklamın ve açılış sayfasının kalitesi.** Reklam aramayla ne kadar ilgili, tıklayan kişi aradığını sayfada buluyor mu?
+- **Reklam sıralaması eşikleri.** Reklamın gösterilebilmesi için geçmesi gereken asgari düzey.
+- **Açık artırmanın rekabet gücü.** Aynı yer için yarışan reklamların birbirine ne kadar yakın olduğu.
+- **Aramanın bağlamı.** Kişinin yazdığı ifade, bulunduğu yer, kullandığı cihaz ve aramanın saati.
+- **Reklam öğelerinin beklenen etkisi.** Telefon numarası ya da ek bağlantılar gibi eklerin katkısı.
+
+<AraGorsel cizim="terazi" alt="Bir kefesinde büyüteç, diğerinde fotoğraf duran kâğıttan bir terazi">
+  En yüksek teklifi veren her zaman en üstte çıkmaz. Aramayla ilgili, iyi yazılmış bir reklam daha düşük teklifle öne
+  geçebilir.
+</AraGorsel>
+
+Bu yüzden iki işletme aynı aramaya aynı bütçeyle reklam verip çok farklı sonuç alabilir. Fark çoğu zaman teklifte değil, reklamın neye cevap verdiğinde ve tıklayan kişinin açılan sayfada ne gördüğündedir.
+
+## Kalite Puanı nedir?
+
+Kalite Puanı, reklamınızın kalitesinin aynı aramadaki diğer reklamlara göre nerede durduğunu gösteren bir teşhis aracıdır. Anahtar kelime düzeyinde, 1 ile 10 arasında ölçülür ve üç bileşenden hesaplanır: beklenen tıklama oranı, reklam alaka düzeyi ve açılış sayfası deneyimi.
+
+Puan düşükse hangi bileşenin zayıf olduğuna bakılır. Reklam metni aramaya uymuyorsa metin, tıklayan kişi sayfada aradığını bulamıyorsa sayfa düzeltilir.
+
+Hesabı okurken en sık karşılaşacağınız dört terim şunlardır:
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Anahtar kelime',
+      tanim: 'Reklamınızın hangi aramalarda gösterilebileceğini Google’a bildirdiğiniz kelime ya da kelime grubu.',
+      ornek: 'Hesaba “kombi servisi” yazarsınız.',
+    },
+    {
+      ad: 'Arama terimi',
+      tanim: 'Kişinin Google’a gerçekten yazdığı ifade. Bütçeyi anahtar kelime değil, arama terimi harcar.',
+      ornek: '“Kadıköy acil kombi servisi” yazan kişi reklamınızı görür.',
+    },
+    {
+      ad: 'Negatif anahtar kelime',
+      tanim: 'Reklamınızın gösterilmesini istemediğiniz aramaları belirten kelime.',
+      ornek: '“İş ilanı” kelimesini eklerseniz iş arayanlara reklam gösterilmez.',
+    },
+    {
+      ad: 'Dönüşüm',
+      tanim: 'Tıklamadan sonra gerçekleşmesini istediğiniz işlem: telefon araması, form, WhatsApp mesajı ya da satın alma.',
+      ornek: 'Reklama tıklayan kişi numaranıza dokunup arar.',
+    },
+  ]}
+/>
+
+Anahtar kelime ile arama terimi arasındaki bağı eşleme türü kurar. Google üç eşleme türü tanımlar ve her biri reklamın ne kadar geniş bir arama kümesinde gösterileceğini değiştirir.
+
+<Ornek
+  baslik="“kombi servisi” anahtar kelimesi hangi aramalarda görünebilir?"
+  not="Aramalar temsilidir. Hangi aramada görüneceğinize o andaki açık artırma karar verir; gerçek listeyi hesabınızdaki arama terimleri raporunda görürsünüz."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Eşleme türü</th>
+        <th scope="col">Nasıl çalışır?</th>
+        <th scope="col">Görünebileceği arama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Eşleme türü"><strong>Geniş eşleme</strong></td>
+        <td data-baslik="Nasıl çalışır?">Anahtar kelimeyle ilgili aramalarda da gösterir. En geniş kapsam budur.</td>
+        <td data-baslik="Görünebileceği arama"><span class="sorgu">“petek temizliği kim yapar”</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Eşleme türü"><strong>Sıralı eşleme</strong></td>
+        <td data-baslik="Nasıl çalışır?">Anahtar kelimenin anlamını içeren aramalarda gösterir.</td>
+        <td data-baslik="Görünebileceği arama"><span class="sorgu">“kadıköy acil kombi servisi”</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Eşleme türü"><strong>Tam eşleme</strong></td>
+        <td data-baslik="Nasıl çalışır?">Yalnız anahtar kelimeyle aynı anlamı taşıyan aramalarda gösterir. En dar kapsam budur.</td>
+        <td data-baslik="Görünebileceği arama"><span class="sorgu">“kombi servisi”</span></td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+## Google Ads’te hangi kampanya türleri var?
+
+Google Ads yalnız arama reklamı değildir. Google’ın saydığı başlıca kampanya türleri şunlardır:
+
+- **Arama Ağı kampanyaları.** Reklam, Google arama sonuçlarında yazı olarak görünür.
+- **Görüntülü Reklam Ağı kampanyaları.** Görsel reklam, Google’ın anlaştığı sitelerde ve uygulamalarda gösterilir.
+- **Video kampanyaları.** Reklam YouTube’da gösterilir.
+- **Alışveriş kampanyaları.** Ürün, fotoğrafı ve fiyatıyla birlikte listelenir. Ürün bilgisi için Merchant Center gerekir.
+- **Uygulama kampanyaları.** Mobil uygulamanın indirilmesi için kullanılır.
+- **Maksimum Performans kampanyaları.** Tek kampanyayla Google’ın bütün reklam alanlarında yayın yapar.
+
+Hizmeti adıyla aranan işletmelerde ilk kampanya çoğu zaman Arama Ağı kampanyasıdır. Sebebi basit: hangi aramaya para harcadığınızı satır satır görürsünüz ve neyin sonuç getirdiğini oradan öğrenirsiniz.
+
+## Google Ads hangi işletmeler için uygun?
+
+Belirleyici soru şudur: müşteriniz hizmetinizi adıyla arıyor mu, yoksa görünce mi istiyor?
+
+<Karsilastirma
+  sol={{
+    ust: 'Arayan müşteri',
+    baslik: 'Google Ads',
+    maddeler: [
+      'İhtiyaç zaten doğmuştur, adı bellidir.',
+      'Kişi birkaç firmayı karşılaştırıp arar.',
+      'Reklam, o aramayı yapan kişiye gösterilir.',
+    ],
+    uygun: 'Kombi servisi, çilingir, nakliye, havuz yapımı',
+  }}
+  sag={{
+    ust: 'Gören müşteri',
+    baslik: 'Instagram reklamı',
+    maddeler: [
+      'Kişi o anda bir şey aramıyordur.',
+      'Ürünü ya da mekânı görünce ilgilenir.',
+      'Reklam, ilgi alanına göre seçilen kişilere gösterilir.',
+    ],
+    uygun: 'Kafe, butik, güzellik salonu, el yapımı ürün',
+  }}
+/>
+
+Birçok işletme için cevap ikisinin karışımıdır. Hangisiyle başlayacağınızı tartıyorsanız [Google Ads mi, Instagram reklamı mı](/blog/google-ads-mi-instagram-reklami-mi/) yazısı aynı işletme üzerinden iki kanalı karşılaştırır.
+
+## İlk kampanyadan önce neleri hazırlamalısınız?
+
+Hesabı açmak birkaç dakika sürer. Zor olan, reklam yayına girmeden önce verilmesi gereken kararlardır. Aşağıdaki liste tamamlanmadan reklam açarsanız bütçenin nereye gittiğini göremezsiniz.
+
+<KontrolListesi
+  kimlik="google-ads-nedir-ilk-kampanya"
+  baslik="İlk kampanya öncesi kontrol"
+  adimlar={[
+    'Reklamdan ne istediğim belli: telefon araması, form, WhatsApp mesajı ya da satın alma.',
+    'Müşterimin hizmetimi hangi sözlerle aradığını en az on ifadeyle yazdım.',
+    'Reklamın açacağı sayfayı kendi telefonumda açtım; numaraya dokunulabiliyor, form çalışıyor.',
+    'Dönüşüm takibini kurdum ve bir deneme başvurusuyla sayıldığını gördüm.',
+    'Hizmet vermediğim işleri ve bölgeleri not ettim; ilk negatif kelime listem hazır.',
+  ]}
+  not="İşaretleyemediğiniz madde, ilk haftanın bütçesini en çok harcayacak yerdir."
+/>
+
+<Not baslik="Hesap kimin adına açılmalı?" tur="dikkat">
+  Hesabı işletmenizin kendi Google hesabıyla açın. Bir ajansla çalışacaksanız şifre paylaşmayın, yönetici erişimi verin.
+  Hesap, ödeme yöntemi ve geçmiş veriler sizde kalır; erişimi dilediğinizde kaldırırsınız.
+</Not>
+
+Hesabı açıp ilk kampanyayı adım adım kurmak için [Google’a reklam nasıl verilir](/blog/google-reklam-nasil-verilir/) yazısına geçebilirsiniz.
+
+Reklam yayına girdikten sonra iş bitmez, başlar. Arama terimleri raporu her hafta yeni bir şey söyler: hangi arama talep getirdi, hangisi yalnız bütçe harcadı. [Google Ads yönetimi](/hizmetler/google-ads-yonetimi/) dediğimiz iş, bu raporu düzenli okuyup hesabı ona göre düzeltmektir.

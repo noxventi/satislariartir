@@ -1,0 +1,1342 @@
+---
+/**
+ * Kurumsal web tasarım hizmet sayfası.
+ * Ana niyet: "kurumsal web tasarım" (2.900/ay, H1), "web tasarım", "web tasarım ajansı", "web sitesi yaptırmak",
+ * "web sitesi kurma", "landing page (reklam açılış sayfası)". Arama verisi: arastirma/openseo-2026-11-14.md
+ *
+ * Düzen (15 Kasım 2026, kalıp: google-ads-yonetimi.astro):
+ * SayfaBasi (tanım cümlesi + kâğıt işi sahne) > BuSayfada > beş özellik kartı (hız, mobil, kullanıcı, SEO, yapay zekâ) >
+ * kapsam kartları > soru kartları > ilk ekran (üç soru ve hizmet sayfası örneği) > "neden böyle tasarlıyoruz" (üç "çünkü"
+ * cümlesi, lacivert bant) > çalışma adımları ve teslim listesi > iki durum (site yok / site var) > canlı form gösterimi >
+ * yayındaki siteler > sık sorulan sorular > ilgili sayfalar > görüşme.
+ * Sayfa içi çapalar: #ozellikler, #kapsam, #sorunlar, #ilk-ekran, #neden, #yontem, #site-durumu (#site-yok, #site-var),
+ * #form-gosterimi, #yayindaki-siteler, #sss.
+ *
+ * Özellik kartlarının adları ve kısa sözleri ile "çünkü" bölümünün düşüncesi marka sahibinden geldi (15 Kasım 2026);
+ * cümleler birebir alınmadı, sitenin diliyle yeniden yazıldı.
+ *
+ * "Yayındaki siteler" bölümündeki görüntüler canlı sitelerin gerçek ekran görüntüleridir (araclar/proje-ekran.mjs).
+ * Üretilmiş ya da taklit edilmiş ekran görüntüsü yoktur. Kullanım izni marka sahipleriyle teyit edilmelidir.
+ * Yalnız kapsamında "Web sitesi tasarımı" olan projeler gösterilir (src/data/projeler.ts).
+ * Soru kartlarındaki ve havuz firması örneğindeki işletmeler temsilidir, müşteri değildir.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import SehirBaglantilari from '../../components/SehirBaglantilari.astro';
+import ProjeEkrani from '../../components/ProjeEkrani.astro';
+import FormGosterimi from '../../components/web/FormGosterimi.astro';
+import Cizim from '../../components/Cizim.astro';
+import Ikon from '../../components/Ikon.astro';
+import Isaret from '../../components/Isaret.astro';
+import { hizmetBul, SITE } from '../../site.config';
+import { projeBul } from '../../data/projeler';
+
+import gorsel from '../../assets/gorseller/yol-site.jpg';
+import alet from '../../assets/cizimler/alet.png';
+import dukkan from '../../assets/cizimler/dukkan.png';
+import soruCizim from '../../assets/cizimler/soru.png';
+import yapboz from '../../assets/cizimler/yapboz.png';
+import harita from '../../assets/cizimler/harita.png';
+import taslak from '../../assets/cizimler/taslak.png';
+import kilit from '../../assets/cizimler/kilit.png';
+import takvim from '../../assets/cizimler/takvim.png';
+import telefon from '../../assets/cizimler/telefon.png';
+import kronometre from '../../assets/cizimler/kronometre.png';
+import mesaj from '../../assets/cizimler/mesaj.png';
+import hedef from '../../assets/cizimler/hedef.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import robot from '../../assets/cizimler/robot.png';
+
+import celikMasaustu from '../../assets/projeler/celikvillam-masaustu.jpg';
+import celikMobil from '../../assets/projeler/celikvillam-mobil.jpg';
+import tarumMasaustu from '../../assets/projeler/tarumhavuz-masaustu.jpg';
+import bodrumMasaustu from '../../assets/projeler/bodrumolivehouse-masaustu.jpg';
+import burgerMasaustu from '../../assets/projeler/burgerengineer-masaustu.jpg';
+import estikaMasaustu from '../../assets/projeler/estika-masaustu.jpg';
+import esviaMasaustu from '../../assets/projeler/esvia-masaustu.jpg';
+
+const hizmet = hizmetBul('web');
+const kirintilar = [
+  { ad: 'Hizmetler', url: '/hizmetler/' },
+  { ad: 'Kurumsal web tasarım', url: hizmet.url },
+];
+
+/** Her sitede aranan beş özellik. Adlar ve kısa sözler marka sahibinden; açıklamalar bizim nasıl yaptığımızı söyler. */
+const ozellikler = [
+  {
+    ad: 'Hız ve performans',
+    soz: 'Yüksek hız, kesintisiz deneyim',
+    aciklama: 'Görselleri ekrana uygun boyutta sunuyor, sayfayı ağırlaştıran betikleri yüklemiyoruz. Site telefonda ve zayıf bağlantıda da çabuk açılır.',
+    cizim: kronometre,
+  },
+  {
+    ad: 'Mobil uyumluluk',
+    soz: 'Tüm cihazlarda kusursuz görünüm',
+    aciklama: 'Sayfaları önce telefon ekranı için tasarlıyoruz. Yazı, düğme ve form telefonda, tablette ve bilgisayarda aynı rahatlıkla kullanılır.',
+    cizim: mesaj,
+  },
+  {
+    ad: 'Kullanıcı odaklı',
+    soz: 'UX odaklı modern arayüzler',
+    aciklama: 'Ziyaretçi aradığı hizmeti ilk ekranda görür ve ne yapacağını düşünmeden, tek dokunuşla size ulaşır.',
+    cizim: hedef,
+  },
+  {
+    ad: 'SEO dostu',
+    soz: 'Arama motorları için optimize',
+    aciklama: 'Her sayfanın başlığı, açıklaması ve adresi müşterinizin Google’a yazdığı aramaya göre hazırlanır; site haritası yayınla birlikte teslim edilir.',
+    cizim: buyutec,
+  },
+  {
+    ad: 'Yapay zekâ arama görünürlüğü',
+    soz: 'ChatGPT ve Google’ın yapay zekâ yanıtlarına hazır',
+    aciklama: 'Sayfalar, sorulara açık cevap veren ve yapay zekâ araçlarının okuyup kaynak gösterebileceği biçimde kurulur.',
+    cizim: robot,
+  },
+];
+
+// Hız ve arama uyumu yukarıdaki özellik kartlarında anlatılır; burada yalnız teslim edilen dört iş durur.
+const kapsam = [
+  { ad: 'Hizmet sayfaları', aciklama: 'Müşterinizin ayrı ayrı aradığı her iş için bir sayfa açıyoruz. Sayfa, o işi arayan kişinin görmek istediği fotoğrafı ve aradığı bilgiyi taşır.' },
+  { ad: 'Reklam açılış sayfası (landing page)', aciklama: 'Reklama tıklayan kişinin indiği sayfayı reklamdaki sözle aynı başlıkla, tek bir talebe götürecek şekilde kuruyoruz.' },
+  { ad: 'Mobil form ve WhatsApp', aciklama: 'Formu, telefon ve WhatsApp düğmelerini dar ekranda deniyor, talebin size ulaştığını bir deneme başvurusuyla görüyoruz.' },
+  { ad: 'Yönetim paneli ve teslim', aciklama: 'Metin ve görselleri kendi ekibinizin güncelleyebileceği bir yönetim paneli kuruyor, yayın günü erişimi size devrediyoruz.' },
+];
+
+/** Neden böyle tasarlıyoruz: üç karar ve gerekçesi. Her cümle "çünkü" ile ikiye ayrılır. */
+const nedenler = [
+  { ne: 'Güncel ve sağlam teknolojiyle kuruyoruz,', neden: 'geç açılan, telefonda bozulan bir site ziyaretçiyi rakibinize gönderir.' },
+  { ne: 'Hep bir adım sonrasını düşünüyoruz,', neden: 'müşteriniz artık yalnız Google’a yazmıyor, yapay zekâya da soruyor.' },
+  { ne: 'Tasarımda yaratıcı davranıyoruz,', neden: 'fark edilmeyen sayfa tıklanmaz, tıklanmayan sayfa satış getirmez.' },
+];
+
+// Örnekler gündelik işletmelerdir, müşteri değildir.
+const sorunlar = [
+  {
+    soru: 'Web sitem var, neden müşteri getirmiyor?',
+    ornek:
+      'Bir kombi servisinin sitesi “Hakkımızda” yazısıyla açılıyor, bütün hizmetler tek sayfada sıralanmış, telefon numarası en altta. Kombisi arızalanan kişi aradığını ilk ekranda göremeyince bir sonraki sonuca geçiyor.',
+    care: 'Her hizmete kendi sayfasını açıyor, ilk ekrana işin adını ve tek bir görüşme düğmesini koyuyoruz.',
+    bag: { etiket: 'İlk ekranda ne olmalı?', url: '#ilk-ekran' },
+    cizim: dukkan,
+    genis: true,
+  },
+  {
+    soru: 'Sitem telefonda neden kötü görünüyor?',
+    ornek: 'Masaüstünde düzgün duran bir mimarlık ofisi sitesi telefonda açılınca yazılar küçülüyor, menü ekrana sığmıyor, numaraya dokununca arama başlamıyor. Site geniş ekran için çizilmiş, telefona sonradan sığdırılmıştır.',
+    care: 'Sayfaları önce telefon ekranı için tasarlıyor, formu ve düğmeleri yayından önce dar ekranda deniyoruz.',
+    bag: { etiket: 'Form gösterimini deneyin', url: '#form-gosterimi' },
+    cizim: soruCizim,
+    genis: false,
+  },
+  {
+    soru: 'Hazır şablon mu, özel tasarım mı?',
+    ornek: 'Yeni açılan bir pilates stüdyosuna birkaç sayfalık hazır bir şablon çoğu zaman yeter. Üç ayrı hizmeti üç ayrı müşteriye anlatan bir mobilyacıda ise şablonun sayfa düzeni işin anlatımına dar gelir.',
+    care: 'Kararı görünüşe göre değil, kaç hizmeti kime anlatacağınıza göre birlikte veriyoruz.',
+    bag: { etiket: 'Siteniz yoksa nereden başlıyoruz?', url: '#site-yok' },
+    cizim: yapboz,
+    genis: false,
+  },
+  {
+    soru: 'Reklam için ayrı sayfa gerekir mi?',
+    ornek:
+      'Bir halı yıkama firmasının “koltuk yıkama” reklamına tıklayan kişi ana sayfaya inerse aradığı hizmeti menüde aramak zorunda kalır. Landing page (reklam açılış sayfası), reklamdaki sözü ilk ekranda tekrar eden ve tek bir talebe götüren sayfadır.',
+    care: 'Reklamdaki vaadin, sayfa başlığının ve formun aynı konuyu söylediği açılış sayfaları hazırlıyoruz.',
+    bag: { etiket: 'Google Ads yönetimi', url: '/hizmetler/google-ads-yonetimi/' },
+    cizim: harita,
+    genis: true,
+  },
+];
+
+/** İlk ekranın cevaplaması gereken üç soru. x ve y, taslak görselindeki işaretin yeridir (yüzde). */
+const ilkEkran = [
+  {
+    soru: 'Bu firma hangi işi yapıyor?',
+    cevap: 'Başlık, hizmeti adıyla söyler. “Hayalinizdeki yaşam alanları” bir slogan olur ama havuz yaptığınızı söylemez.',
+    x: 22.6,
+    y: 30.4,
+  },
+  {
+    soru: 'Benim işimi de yapıyor mu?',
+    cevap: 'Fotoğraf ve ilk cümle ziyaretçinin kendi durumunu gösterir. Yeni havuz mu arıyor, eski havuzunu mu yeniletecek?',
+    x: 38.3,
+    y: 41.2,
+  },
+  {
+    soru: 'Konuşmak istersem ne yapacağım?',
+    cevap: 'Tek bir belirgin düğme vardır ve telefonda başparmağın ulaştığı yerde durur. İkinci bir düğme onunla yarışmaz.',
+    x: 86.5,
+    y: 59.5,
+  },
+];
+
+// Temsili örnek: aynı firmanın iki ayrı hizmet sayfası.
+const hizmetSayfalari = [
+  {
+    soz: 'Havuz yaptırmak istiyorum',
+    sayfa: 'Havuz yapımı sayfası',
+    foto: 'Bitmiş havuzlar ve bahçeye nasıl yerleştiği',
+    bilgi: 'Havuz türleri, yapım aşamaları, işin nasıl ilerlediği',
+    talep: 'Arsa ya da bahçe için keşif görüşmesi',
+  },
+  {
+    soz: 'Havuzumu yenilemek istiyorum',
+    sayfa: 'Havuz yenileme sayfası',
+    foto: 'Yenileme öncesi ve sonrası aynı havuz',
+    bilgi: 'Hangi sorun neyle çözülür: kaplama, sızdırmazlık, tesisat',
+    talep: 'Mevcut havuzun yerinde incelenmesi',
+  },
+];
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'İşletme, rakip ve arama analizi', aciklama: 'İşinizi, rakip siteleri ve müşterinizin Google’a yazdığı aramaları inceliyoruz. Siteniz varsa ziyaretçinin bugün nerede takıldığına bakıyoruz.' },
+  { ad: 'Plan', ozet: 'İçerik ve yapı planı', aciklama: 'Hangi hizmete sayfa açılacağını, her sayfanın ilk ekranında ne yazacağını ve talebin size nasıl ulaşacağını yazıya döküyoruz.' },
+  { ad: 'Tasarım', ozet: 'Önce telefon ekranı', aciklama: 'Sayfaları önce dar ekran için tasarlıyor, başlıkları ve düğme metinlerini gerçek içerikle gösteriyoruz.' },
+  { ad: 'Kurulum', ozet: 'Kurulum ve test', aciklama: 'Siteyi aramaya kapalı bir taslak ortamda kuruyor; formu, telefon ve WhatsApp düğmelerini telefonda deniyoruz.' },
+  { ad: 'Yayın', ozet: 'Yayın ve teslim', aciklama: 'Siteyi yayına alıyor, eski adreslerin yönlendirmesini kontrol ediyor ve yönetim erişimini size devrediyoruz.' },
+];
+
+const teslim = [
+  { ad: 'Hizmet ayrımına göre kurulmuş sayfalar', aciklama: 'Her hizmet için ayrı sayfa, her sayfada tek bir görüşme çağrısı.' },
+  { ad: 'Telefonda denenmiş form', aciklama: 'Dar ekranda gönderilmiş ve kaydı size ulaşmış bir deneme başvurusu.' },
+  { ad: 'Yönetim erişimi', aciklama: 'Sitenin yönetim erişimi size devredilir. Alan adı ve barındırmanın kimin hesabında duracağı teklifte yazar.' },
+  { ad: 'Eski adreslerin yönlendirme listesi', aciklama: 'Site yenileniyorsa eski her adresin yeni karşılığı ve yayın sonrası kontrolü.' },
+  { ad: 'Ölçüm notu', aciklama: 'Form gönderiminin, telefon ve WhatsApp dokunuşlarının nasıl sayıldığını gösteren deneme kaydı.' },
+  { ad: 'Aramaya açık sayfalar', aciklama: 'Her sayfanın başlığı, açıklaması ve site haritası. Taslak ortam aramaya kapalı tutulur.' },
+];
+
+const formDavranisi = [
+  { ad: 'Hata, alanın altında söylenir', aciklama: 'Ziyaretçi neyi düzelteceğini okur. Ekran ilk hatalı alana gider.' },
+  { ad: 'Başarı, kayıt alınınca gösterilir', aciklama: '“Talebiniz ulaştı” yazısı, başvuru gerçekten kaydedildikten sonra çıkar.' },
+  { ad: 'Çift tıklama talebi çoğaltmaz', aciklama: 'Aynı form iki kez gönderilse de tek kayıt açılır. Bağlantı koparsa yazılanlar durur.' },
+  { ad: 'WhatsApp ve telefon formu örtmez', aciklama: 'Ekranın altındaki sabit düğmeler, form görünürken çekilir.' },
+];
+
+// Yayındaki siteler: yalnız kapsamında web sitesi tasarımı olan projeler.
+const webProjesi = (kimlik: string) => {
+  const p = projeBul(kimlik);
+  if (!p.obrandyKapsami.includes('Web sitesi tasarımı')) throw new Error(`Web tasarım kapsamı olmayan proje: ${kimlik}`);
+  return p;
+};
+const celik = webProjesi('celikvillam');
+const tarum = webProjesi('tarum-havuz');
+const digerSiteler = [
+  { p: webProjesi('bodrum-olive-house'), ekran: bodrumMasaustu },
+  { p: webProjesi('burger-engineer'), ekran: burgerMasaustu },
+  { p: webProjesi('estika'), ekran: estikaMasaustu },
+  { p: webProjesi('esvia'), ekran: esviaMasaustu },
+];
+
+const sorular = [
+  {
+    soru: 'Kurumsal web tasarım nedir?',
+    cevap:
+      'Kurumsal web tasarım, bir işletmenin hizmetlerini ve iletişim yollarını anlatan web sitesinin planlanması, tasarlanması ve yayına alınması işidir. İyi kurulmuş bir kurumsal sitede ziyaretçi aradığı hizmeti ilk ekranda görür ve telefon, form ya da WhatsApp ile talep bırakabilir. Hizmet sayfalarını, mobil uyumu, sayfa hızını ve arama motorlarına uygun yapıyı kapsar.',
+  },
+  {
+    soru: 'Web sitesi yaptırmak ne kadar sürer?',
+    cevap:
+      'Süre, sayfa sayısına ve içeriğin ne kadar hazır olduğuna bağlıdır; kapsam netleşmeden tarih söylemek doğru olmaz. Çoğu projede en çok zaman alan kısım tasarım değil, metinlerin ve fotoğrafların toplanmasıdır. Görüşmede sayfa listesini ve elinizdeki içeriği birlikte çıkarıyor, takvimi buna göre yazıyoruz.',
+  },
+  {
+    soru: 'Web sitesi fiyatı neye göre belirlenir?',
+    cevap:
+      'Web sitesi fiyatını sayfa sayısı, içeriği kimin hazırlayacağı, dil sayısı ve randevu, katalog ya da çok adımlı form gibi özel işlevler belirler. Aynı sektördeki iki işletmenin ihtiyacı bile farklı olabildiği için hazır bir rakam vermiyoruz. Kapsamı görüşmede netleştiriyor, teklifi kalem kalem yazıyoruz.',
+  },
+  {
+    soru: 'Web sitesi kurma işini kendim yapabilir miyim?',
+    cevap:
+      'Yapabilirsiniz; hazır site kurma araçlarıyla birkaç sayfalık bir siteyi kendiniz yayına alabilirsiniz. Zor olan sayfayı açmak değildir. Hangi hizmete ayrı sayfa gerektiğine, ilk ekranda ne yazacağına ve talebin size nasıl ulaşacağına karar vermek gerekir. Bir web tasarım ajansı bu kararları işletmenizi ve müşterinizin aramalarını inceleyerek verir.',
+  },
+  {
+    soru: 'Siteyi kendim güncelleyebilir miyim?',
+    cevap:
+      'Evet. Yönetim erişimi sizde olur; metinleri ve görselleri kendi ekibiniz güncelleyebilir. Güncellemeyi bizim yapmamızı isterseniz bakım ve desteğin kapsamı teklifte ayrı bir satır olarak yazar. Hangi işin kimde olduğu yayından önce netleşir.',
+  },
+  {
+    soru: 'Alan adı ve barındırma kimin adına olur?',
+    cevap:
+      'Alan adı ve barındırmanın kimin hesabında duracağı teklifte açıkça yazar; her durumda sitenin yönetim erişimi sizde olur. İlk görüşmede mevcut alan adınızın ve barındırmanızın bugün kimin hesabında kayıtlı olduğuna birlikte bakıyoruz. Böylece yayından sonra siteye kimin eriştiği konusunda belirsizlik kalmaz.',
+  },
+  {
+    soru: 'Mevcut sitemi yenilerken Google sıralamalarım ne olur?',
+    cevap:
+      'Sıralama kaybının bilinen nedeni, eski adreslerin karşılıksız kalmasıdır. Yayından önce eski her adresi yeni karşılığıyla eşleştirir, kalıcı yönlendirmeleri kurarız. Yayından sonra eski adresleri tek tek açıp yeni sayfaya gittiğini kontrol ederiz. Sıralamanın aynı kalacağına söz veremeyiz. Kaybın bilinen nedenlerini ortadan kaldırırız.',
+    bag: { etiket: 'SEO danışmanlığı', url: '/hizmetler/seo-danismanligi/' },
+  },
+  {
+    soru: 'Reklam açılış sayfası da yapıyor musunuz?',
+    cevap:
+      'Evet. Reklam açılış sayfası (landing page), reklama tıklayan kişinin indiği ve tek bir talebe odaklanan sayfadır. Reklamın verdiği söz daraldığında ziyaretçiyi genel hizmet sayfasına değil, o söze özel bir sayfaya göndermek gerekir. Açılış sayfasında reklamdaki vaat, sayfa başlığı ve form aynı konuyu söyler.',
+    bag: { etiket: 'Google Ads yönetimi', url: '/hizmetler/google-ads-yonetimi/' },
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Kurumsal web tasarım',
+    serviceType: 'Kurumsal web tasarım, web sitesi kurulumu ve reklam açılış sayfası (landing page)',
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    url: `${SITE.url}${hizmet.url}`,
+    description:
+      'Ayrıntılı inceleme, içerik ve yapı planı, mobil öncelikli tasarım, kurulum ve teslimle yürütülen kurumsal web tasarım: hizmet sayfaları, reklam açılış sayfası, mobilde denenmiş form ve SEO’ya uygun yapı.',
+  },
+];
+---
+
+<Temel
+  baslik="Kurumsal Web Tasarım ve Web Sitesi Yaptırma | Satışları Artır"
+  aciklama="Kurumsal web tasarım: hizmet sayfaları, reklam açılış sayfası (landing page), mobilde denenmiş form ve SEO’ya uygun yapı. Yayındaki siteleri inceleyin."
+  sayfaTuru="hizmet"
+  hizmet="web"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: hizmet.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik="Kurumsal web tasarım"
+    gorsel={gorsel}
+    gorselBicimi="dikey"
+    gorselAlt="Ekranı dükkân vitrini olan kâğıttan bir dizüstü bilgisayar; üç ayrı yönden gelen kırmızı kalem çizgileri kapıda birleşiyor, küçük müşteriler içeri giriyor"
+    cagri={{ etiket: hizmet.cagri, url: '#gorusme', kanal: 'web' }}
+    ikincil={{ etiket: 'Yayındaki siteleri inceleyin', url: '#yayindaki-siteler' }}
+  >
+    <p>
+      Kurumsal web tasarım, işletmenizin hizmetlerini anlatan ve ziyaretçinin telefon, form ya da WhatsApp ile size
+      ulaşmasını sağlayan web sitesinin planlanması, tasarlanması ve yayına alınması işidir.
+    </p>
+    <p>
+      Hiç web siteniz yoksa siteyi baştan kuruyoruz. Siteniz olduğu hâlde talep gelmiyorsa önce nedenini inceliyor,
+      sayfaları buna göre yeniden düzenliyoruz.
+    </p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Site nasıl olmalı?', hedef: 'ozellikler' },
+      { etiket: 'Neleri kapsar?', hedef: 'kapsam' },
+      { etiket: 'İlk ekran', hedef: 'ilk-ekran' },
+      { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+      { etiket: 'Yayındaki siteler', hedef: 'yayindaki-siteler' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Beş özellik -->
+  <section class="bolum bolum--siki" id="ozellikler">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">İyi bir kurumsal web sitesi nasıl olmalı?</h2>
+        <p class="giris">Sektörünüz ne olursa olsun, teslim ettiğimiz her sitede bu beş özellik bulunur.</p>
+      </div>
+      <ul class="oz">
+        {
+          ozellikler.map((o, i) => (
+            <li class="oz__kart" data-gir style={`--gecikme:${i * 70}ms`}>
+              <div class="oz__cizim" aria-hidden="true">
+                <Cizim src={o.cizim} sizes="(max-width: 47.99rem) 26vw, 12vw" genislikler={[200, 320, 480]} />
+              </div>
+              <h3 class="oz__ad">{o.ad}</h3>
+              <p class="oz__soz">{o.soz}</p>
+              <p class="oz__aciklama">{o.aciklama}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Kapsam -->
+  <section class="bolum bolum--beyaz" id="kapsam">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Kurumsal web tasarım neleri kapsar?</h2>
+          <div class="metin">
+            <p>
+              Bir web tasarım projesinin görünen kısmı renk ve görseldir. Ziyaretçinin aradığı hizmeti bulup size
+              ulaşması ise aşağıdaki dört işin birlikte yapılmasına bağlıdır.
+            </p>
+          </div>
+        </div>
+        <Cizim src={alet} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili kapsam-liste">
+          {
+            kapsam.map((k) => (
+              <li>
+                <strong>{k.ad}</strong>
+                <span>{k.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık yaşanan sorunlar -->
+  <section class="bolum" id="sorunlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Web sitesi hakkında en sık duyduğumuz sorular</h2>
+        <p class="giris">Sitesi olan da, ilk kez web sitesi yaptırmak isteyen de çoğu zaman aynı dört soruyla geliyor. Her birinde ilk baktığımız yer:</p>
+      </div>
+      <SoruKartlari kartlar={sorunlar} />
+    </div>
+  </section>
+
+  <!-- İlk ekran: üç soru ve hizmet sayfası örneği -->
+  <section class="bolum bolum--beyaz" id="ilk-ekran">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">İlk ekranda müşteri neyi anlamalı?</h2>
+        <p class="giris">
+          Web sitesi yaptırmak isteyen çoğu işletme renkten ve görselden başlar. Biz ziyaretçiden başlıyoruz: sitenize
+          ilk kez gelen biri, sayfayı kaydırmadan üç sorunun cevabını bulmalı.
+        </p>
+      </div>
+
+      <div class="ilk">
+        <figure class="ilk__gorsel" data-gir>
+          <div class="ilk__cizim">
+            <Cizim
+              src={taslak}
+              alt="Kâğıttan dizüstü bilgisayar ve telefon üzerinde sayfa taslağı: üstte başlık şeridi, ortada fotoğraf kutusu, altta düğme. Telefondaki düğme kırmızı kalemle çembere alınmış."
+              sizes="(max-width: 55.99rem) 82vw, 32vw"
+              genislikler={[360, 520, 720, 1024]}
+            />
+            {
+              ilkEkran.map((s, i) => (
+                <span class:list={['ilk__isaret', `ilk__isaret--${i + 1}`]} style={`--x:${s.x}%;--y:${s.y}%;--sira:${i}`} aria-hidden="true">
+                  {i + 1}
+                </span>
+              ))
+            }
+          </div>
+          <figcaption class="kucuk">Bir sayfa taslağında üç yer: başlık, fotoğraf ve düğme.</figcaption>
+        </figure>
+
+        <ol class="ilk__sorular">
+          {
+            ilkEkran.map((s, i) => (
+              <li class:list={['ilk__kart', `ilk__kart--${i + 1}`]} data-gir style={`--gecikme:${i * 110}ms`}>
+                <span class="ilk__no" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 class="ilk__soru">{s.soru}</h3>
+                  <p class="ilk__cevap">{s.cevap}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="ilk__not">
+          Yayından önce sayfayı ilk kez gören birine birkaç saniye gösterip ne anladığını sormak, yapılabilecek
+          <Isaret tip="alt">en ucuz testtir.</Isaret> Kendi sözleriyle anlatamıyorsa başlık ya da düğme metni değişir.
+        </p>
+      </div>
+
+      <div class="ayrim">
+        <div class="ayrim__ust">
+          <h3 class="baslik-3">Hizmet sayfanızın içeriğini nasıl kuruyoruz?</h3>
+          <p>
+            İkinci sorunun cevabı hizmet ayrımındadır. Hizmetleri sizin iç düzeninize göre değil, ziyaretçinin
+            ihtiyacına göre ayırıyoruz. Her hizmet sayfası tek bir ihtiyaca cevap verir: o işi arayan kişinin görmek
+            istediği fotoğraf, aradığı bilgi ve bırakmak istediği talep.
+          </p>
+        </div>
+        <div class="ornek" data-gir>
+          <div class="ornek__ust">
+            <h4 class="baslik-4">Bir havuz firmasının iki hizmet sayfası</h4>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+          <ul class="ayrim__izgara">
+            {
+              hizmetSayfalari.map((s) => (
+                <li class="ayrim__yol">
+                  <p class="ayrim__arama">
+                    <Ikon ad="magnifying-glass" boyut={18} />
+                    <span class="sorgu">“{s.soz}”</span>
+                  </p>
+                  <span class="ayrim__ok" aria-hidden="true">
+                    <Ikon ad="arrow-down" boyut={26} />
+                  </span>
+                  <div class="ayrim__sayfa">
+                    <p class="ayrim__ad">
+                      <Ikon ad="file-text" boyut={22} />
+                      {s.sayfa}
+                    </p>
+                    <dl class="ayrim__icerik">
+                      <div>
+                        <dt>Görmek istediği fotoğraf</dt>
+                        <dd>{s.foto}</dd>
+                      </div>
+                      <div>
+                        <dt>Aradığı bilgi</dt>
+                        <dd>{s.bilgi}</dd>
+                      </div>
+                      <div>
+                        <dt>Bırakmak istediği talep</dt>
+                        <dd>{s.talep}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="ornek__not">
+            İki ziyaretçi aynı sayfaya gönderilirse biri aradığı fotoğrafı, diğeri aradığı bilgiyi bulamaz. Reklam ve
+            arama da bu ayrıma göre doğru sayfayı açar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Neden böyle tasarlıyoruz: üç "çünkü" cümlesi -->
+  <section class="bolum nd koyu-zemin" id="neden">
+    <div class="sarici nd__ic">
+      <div class="nd__giris">
+        <h2 class="baslik-2">Neden böyle tasarlıyoruz?</h2>
+        <p>
+          İlk izlenim, çoğu zaman ilk satın alma kararını da belirler. Sitenizi bir kez bakılıp geçilsin diye değil,
+          yıllarca rahatça kullanılsın diye tasarlıyoruz.
+        </p>
+        <p>Teknolojiyi yakından izleyen bir ekibiz ve sizin için tasarlamaktan keyif alıyoruz.</p>
+        <a class="ok-bag" href="#gorusme" data-olay="cta_click" data-yer="web-neden" data-kanal="web">
+          Projenizi anlatın
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </div>
+      <ol class="nd__liste">
+        {
+          nedenler.map((n, i) => (
+            <li data-gir style={`--gecikme:${i * 130}ms`}>
+              <span class="nd__ne">{n.ne}</span> <span class="nd__cunku">çünkü</span> <span class="nd__neden">{n.neden}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Yöntem ve teslim -->
+  <section class="bolum" id="yontem">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Web tasarım süreci nasıl işliyor?</h2>
+        <p class="giris">
+          Tasarıma geçmeden önce işinizi ve müşterinizin aramalarını inceliyor, sayfaları yazılı bir plana bağlıyoruz.
+          Sonrası tasarım, kurulum ve teslimdir.
+        </p>
+      </div>
+      <Adimlar adimlar={adimlar} />
+
+      <div class="teslim ornek" data-gir>
+        <div class="teslim__giris">
+          <div class="teslim__cizim" aria-hidden="true">
+            <Cizim src={kilit} sizes="(max-width: 55.99rem) 32vw, 12vw" genislikler={[240, 360, 520]} />
+          </div>
+          <h3 class="baslik-3">Site yayına çıkınca ne teslim alırsınız?</h3>
+          <p>Yayın günü elinizde yalnız bir adres kalmaz. Altı şeyi ayrı ayrı teslim ediyoruz.</p>
+        </div>
+        <ul class="tikli teslim__liste">
+          {
+            teslim.map((t) => (
+              <li>
+                <strong>{t.ad}</strong>
+                <span>{t.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- İki durum: site yok / site var -->
+  <IkiDurum
+    kimlik="site-durumu"
+    zemin="beyaz"
+    baslik="Web siteniz yok mu, var ama talep mi gelmiyor?"
+    giris="İki durumda başlangıç noktası farklıdır. Hangisindeyseniz oradan başlıyoruz."
+    sol={{
+      kimlik: 'site-yok',
+      ust: 'Hiç web siteniz yoksa',
+      baslik: 'Siteyi baştan, işinize göre kuruyoruz',
+      metin: 'İlk sitede en sık hata, bütün hizmetleri tek sayfaya sıkıştırmaktır. Tasarıma geçmeden önce üç şeyi birlikte netleştiriyoruz.',
+      maddeler: [
+        { ad: 'Hangi hizmetlere sayfa açılacak?', aciklama: 'Müşterinizin ayrı ayrı aradığı her iş için bir sayfa. Sayfa listesi müşterinizin sözleriyle yazılır.' },
+        { ad: 'Metin ve fotoğraflar nereden gelecek?', aciklama: 'Hangi sayfaya hangi fotoğrafın ve bilginin gerektiğini listeliyor, elinizdekileri birlikte gözden geçiriyoruz.' },
+        { ad: 'Talep size nasıl ulaşacak?', aciklama: 'Telefon, form ya da WhatsApp. Düğmeler ve form bu seçime göre kurulur.' },
+      ],
+      cagri: { etiket: 'İlk sitemi planlayalım', kanal: 'web', yer: 'site-yok' },
+      bag: { etiket: 'Yayındaki siteleri inceleyin', url: '#yayindaki-siteler' },
+      cizim: takvim,
+    }}
+    sag={{
+      kimlik: 'site-var',
+      ust: 'Siteniz var ama talep gelmiyorsa',
+      baslik: 'Yenilemeden önce mevcut siteyi inceliyoruz',
+      metin: 'Her zaman yeni bir site gerekmez. Önce ziyaretçinin bugün nerede takıldığını görmemiz gerekir; bazen birkaç sayfayı yeniden kurmak yeter.',
+      maddeler: [
+        { ad: 'İlk ekran', aciklama: 'Ana sayfayı ve hizmet sayfalarını telefonda açıp üç soruya cevap verip vermediğine bakıyoruz.' },
+        { ad: 'Hizmet ayrımı', aciklama: 'Farklı işler aynı sayfada mı toplanmış? Hangi hizmete ayrı sayfa gerektiğini çıkarıyoruz.' },
+        { ad: 'Form, telefon ve WhatsApp', aciklama: 'Deneme başvurusu gönderiyor, numaraya ve WhatsApp düğmesine telefonda dokunuyoruz.' },
+        { ad: 'Eski adresler', aciklama: 'Site yenilenecekse eski her adresi yeni karşılığıyla eşleştirip yönlendirme listesini hazırlıyoruz.' },
+      ],
+      cagri: { etiket: hizmet.cagri, kanal: 'web', yer: 'site-var' },
+      bag: { etiket: 'Sitem Google’da neden çıkmıyor?', url: '/hizmetler/seo-danismanligi/' },
+    }}
+  />
+
+  <!-- Canlı form gösterimi -->
+  <section class="bolum bolum--acik" id="form-gosterimi">
+    <div class="sarici fb">
+      <div class="fb__metin">
+        <div class="fb__ust">
+          <div class="fb__cizim" aria-hidden="true">
+            <Cizim src={telefon} sizes="(max-width: 55.99rem) 34vw, 13vw" genislikler={[240, 360, 520]} />
+          </div>
+          <h2 class="baslik-2">Form ve WhatsApp mobilde nasıl çalışacak?</h2>
+          <p class="giris">
+            Ziyaretçilerin çoğu sayfanızı telefonda açar. Talep bırakma anı, tasarımın en az konuşulan ve en çok iş
+            kaybedilen yeridir. Teslim ettiğimiz formun dört davranışı vardır; bu bölümdeki gösterimde kendiniz
+            deneyebilirsiniz.
+          </p>
+        </div>
+        <ul class="tikli tikli--ikili fb__liste">
+          {
+            formDavranisi.map((f) => (
+              <li>
+                <strong>{f.ad}</strong>
+                <span>{f.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="fb__gosterim" data-gir>
+        <FormGosterimi />
+        <p class="kucuk fb__not">
+          Bu sitenin kendi formu da aynı kurallarla çalışır.
+          <a href="#gorusme">Sayfanın sonundaki formda</a> görebilirsiniz.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Yayındaki siteler -->
+  <section class="bolum bolum--beyaz" id="yayindaki-siteler">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Yayındaki siteler</h2>
+        <p class="giris">
+          Yürüttüğümüz web projelerinden altısı ve her birinde tasarımın cevap aradığı soru. Ekran görüntüleri canlı
+          sitelerden alındı; adresleri kendi telefonunuzdan açıp inceleyebilirsiniz.
+        </p>
+      </div>
+
+      <div class="siteler">
+        <article class="site site--buyuk" data-gir>
+          <div class="site__ekran site__ekran--cift">
+            <ProjeEkrani gorsel={celikMasaustu} marka="ÇelikVillam" alanAdi={celik.alanAdi} tur="masaustu" sizes="(max-width: 61.99rem) 88vw, 38vw" />
+            <div class="yalniz-masaustu">
+              <ProjeEkrani gorsel={celikMobil} marka="ÇelikVillam" alanAdi={celik.alanAdi} tur="mobil" sizes="14vw" />
+            </div>
+          </div>
+          <div class="site__metin">
+            <h3 class="site__ad">{celik.siteAdi}</h3>
+            <p class="site__karar">{celik.karar}</p>
+            <p class="mikro ikincil">{celik.sektor} · {celik.obrandyKapsami.join(', ')}</p>
+            <a class="ok-bag" href={celik.dosya} data-olay="cta_click" data-yer="web-yayindaki-siteler">
+              ÇelikVillam projesini inceleyin
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </div>
+        </article>
+
+        <article class="site site--orta" data-gir style="--gecikme:110ms">
+          <div class="site__ekran">
+            <ProjeEkrani gorsel={tarumMasaustu} marka={tarum.marka} alanAdi={tarum.alanAdi} tur="masaustu" sizes="(max-width: 61.99rem) 88vw, 34vw" />
+          </div>
+          <div class="site__metin">
+            <h3 class="site__ad">{tarum.marka}</h3>
+            <p class="site__karar">{tarum.karar}</p>
+            <p class="mikro ikincil">{tarum.sektor} · {tarum.obrandyKapsami.join(', ')}</p>
+          </div>
+        </article>
+
+        <ul class="siteler__kucuk">
+          {
+            digerSiteler.map((d, i) => (
+              <li class="site site--kucuk" data-gir style={`--gecikme:${i * 90}ms`}>
+                <div class="site__ekran">
+                  <ProjeEkrani
+                    gorsel={d.ekran}
+                    marka={d.p.siteAdi ?? d.p.marka}
+                    alanAdi={d.p.alanAdi}
+                    tur="masaustu"
+                    sizes="(max-width: 43.99rem) 72vw, (max-width: 61.99rem) 44vw, 21vw"
+                  />
+                </div>
+                <div class="site__metin">
+                  <h3 class="site__ad">{d.p.siteAdi ?? d.p.marka}</h3>
+                  <p class="site__karar kucuk">{d.p.karar}</p>
+                  <p class="mikro ikincil">{d.p.sektor} · {d.p.obrandyKapsami.join(', ')}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="siteler__alt">
+        <a class="ok-bag" href="/calismalarimiz/">
+          Bütün çalışmalar
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <Sss
+    baslik="Kurumsal web tasarım hakkında sık sorulan sorular"
+    giris="Web sitesi yaptırmak, süre, fiyat ve site sahipliği hakkında en çok sorulanlar."
+    sorular={sorular}
+  />
+
+  <SehirBaglantilari hizmet="web" baslik="Şehrinize göre web tasarım" metin="Web sitesi yaptırmak isteyenler aramayı çoğu zaman şehir ya da ilçe adıyla yapıyor. En çok aranan yerler için ayrı sayfalar yazdık." />
+
+  <IlgiliSayfalar
+    baslik="Web sitenize ziyaretçi getiren hizmetler"
+    giris="Web tasarım ajansı, SEO ajansı ve reklam ajansından ayrı ayrı alacağınız işleri tek ekip olarak yürütüyoruz. Site hazır olduğunda arama ve reklam tarafı için:"
+    sayfalar={[
+      {
+        tur: 'Hizmet',
+        baslik: 'SEO danışmanlığı',
+        metin: 'Sayfalarınızın Google’ın reklam dışı sonuçlarında görünmesi için.',
+        url: '/hizmetler/seo-danismanligi/',
+        cizim: harita,
+      },
+      {
+        tur: 'Hizmet',
+        baslik: 'Google Ads yönetimi',
+        metin: 'Hizmetinizi arayan kişiyi doğru açılış sayfasına getirmek için.',
+        url: '/hizmetler/google-ads-yonetimi/',
+        cizim: telefon,
+      },
+      {
+        tur: 'Projeler',
+        baslik: 'Çalışmalarımız',
+        metin: 'Yürüttüğümüz web, SEO ve reklam projeleri, canlı siteleriyle.',
+        url: '/calismalarimiz/',
+        cizim: taslak,
+      },
+    ]}
+  />
+
+  <GorusmeBandi
+    baslik="Projeniz mi var? Bizimle iletişime geçebilirsiniz."
+    metin="Sitenizin adresini ve en çok talep almak istediğiniz hizmeti yazın. Henüz siteniz yoksa işinizi anlatın. Görüşmeye buradan başlayalım."
+    kanal="web"
+    cagri={hizmet.cagri}
+    konum="hizmet-web"
+  />
+</Temel>
+
+<style>
+  /* ---- Beş özellik: tek sırada beş kart; satırlar (görsel, ad, kısa söz, açıklama) subgrid ile hizalı. */
+  .oz {
+    --kart-arasi: clamp(0.75rem, 1.4vw, 1.25rem);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: var(--kart-arasi);
+    row-gap: 0.6rem;
+  }
+  .oz__kart {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    align-items: start;
+    margin-block-end: calc(var(--kart-arasi) - 0.6rem);
+    padding: clamp(1rem, 1.6vw, 1.5rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .oz__kart:nth-child(even) {
+    background: var(--mavi-acik);
+  }
+  .oz__cizim {
+    justify-self: end;
+    width: min(72%, 8.75rem);
+    margin: -0.6rem -0.6rem 0 0;
+  }
+  .oz__ad {
+    font-size: clamp(1.25rem, 1.08rem + 0.6vw, 1.6rem);
+    font-weight: 710;
+    font-stretch: 85%;
+    letter-spacing: -0.022em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+  .oz__soz {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    line-height: 1.3;
+    color: var(--mavi);
+  }
+  .oz__aciklama {
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  /* Orta genişlik: üstte üç, altta iki kart. */
+  @media (max-width: 74.99rem) {
+    .oz {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .oz__kart {
+      grid-column: span 2;
+    }
+    .oz__kart:nth-child(n + 4) {
+      grid-column: span 3;
+    }
+  }
+  /* Telefon: kart yatay satıra döner, görsel sağda küçük durur. */
+  @media (max-width: 47.99rem) {
+    .oz {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 0.75rem;
+    }
+    .oz__kart,
+    .oz__kart:nth-child(n + 4) {
+      grid-column: auto;
+      grid-row: auto;
+      grid-template-columns: minmax(0, 1fr) 5.75rem;
+      grid-template-rows: auto auto 1fr;
+      column-gap: 0.75rem;
+      row-gap: 0.35rem;
+      margin-block-end: 0;
+    }
+    .oz__cizim {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      width: 100%;
+      margin: -0.25rem -0.4rem 0 0;
+    }
+    .oz__ad,
+    .oz__soz,
+    .oz__aciklama {
+      grid-column: 1;
+    }
+  }
+
+  /* Kapsam: dört kalem iki sütunda durur (üçlü ızgarada tek kart yetim kalıyordu). */
+  @media (min-width: 48rem) {
+    .kapsam-liste {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ---- Neden böyle tasarlıyoruz: lacivert bant, büyük cümleler; "çünkü" kâğıt bir etiket gibi durur. */
+  .nd {
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .nd__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .nd__giris {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+    color: rgb(255 255 255 / 0.8);
+  }
+  .nd__giris h2 {
+    color: var(--beyaz);
+  }
+  .nd__giris :global(.ok-bag) {
+    margin-block-start: 0.4rem;
+    color: var(--beyaz);
+  }
+  .nd__liste {
+    display: grid;
+  }
+  .nd__liste li {
+    padding-block: clamp(1.4rem, 2.6vw, 2.25rem);
+    border-block-end: 1.5px solid rgb(255 255 255 / 0.2);
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.55rem, 1.05rem + 2.05vw, 2.85rem);
+    font-weight: 690;
+    font-stretch: 86%;
+    letter-spacing: -0.024em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+  .nd__liste li:first-child {
+    padding-block-start: 0;
+  }
+  .nd__liste li:last-child {
+    padding-block-end: 0;
+    border-block-end: 0;
+  }
+  .nd__neden {
+    color: rgb(255 255 255 / 0.72);
+  }
+  .nd__cunku {
+    display: inline-block;
+    margin-inline: 0.12em;
+    padding: 0.02em 0.36em 0.1em;
+    background: var(--kagit);
+    border-radius: 3px;
+    box-shadow: 0.12em 0.12em 0 var(--kirmizi);
+    font-size: 0.74em;
+    font-stretch: 94%;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--murekkep);
+    rotate: -2.5deg;
+    translate: 0 -0.08em;
+  }
+  @media (max-width: 61.99rem) {
+    .nd__ic {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .nd__giris {
+      position: static;
+    }
+  }
+
+  /* ---- İlk ekran: taslak görseli ve üç soru --------------------------------------- */
+  .ilk {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  .ilk__gorsel {
+    grid-column: 1 / span 5;
+    grid-row: 1 / span 2;
+    display: grid;
+    align-content: center;
+    gap: 0;
+    padding: clamp(0.5rem, 1vw, 1rem) clamp(0.5rem, 1vw, 1rem) clamp(1.25rem, 2vw, 1.75rem);
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  /* z-index verilmez: çizim alttaki mavi zemine karışsın. */
+  .ilk__cizim {
+    position: relative;
+    width: min(100%, 33rem);
+    margin-inline: auto;
+  }
+  .ilk__gorsel figcaption {
+    text-align: center;
+    color: var(--murekkep-2);
+  }
+  .ilk__isaret,
+  .ilk__no {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--kirmizi);
+    color: var(--beyaz);
+    font-family: var(--yazi-baslik);
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  .ilk__isaret {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    translate: -50% -50%;
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.95rem;
+    box-shadow: 0 0 0 3px var(--mavi-acik);
+    transition: scale 260ms var(--yumusak);
+  }
+  /* Görsel görünüme girince işaretler sırayla belirir; bir sorunun üzerine gelince taslaktaki yeri büyür. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .ilk__gorsel:global(.girdi-goruldu) .ilk__isaret {
+      animation: isaret-gir 460ms cubic-bezier(0.3, 1.6, 0.5, 1) calc(450ms + var(--sira) * 170ms) backwards;
+    }
+    @keyframes isaret-gir {
+      from {
+        scale: 0;
+      }
+    }
+  }
+  @media (hover: hover) {
+    .ilk:has(.ilk__kart--1:hover) .ilk__isaret--1,
+    .ilk:has(.ilk__kart--2:hover) .ilk__isaret--2,
+    .ilk:has(.ilk__kart--3:hover) .ilk__isaret--3 {
+      scale: 1.35;
+    }
+  }
+  .ilk__sorular {
+    grid-column: 6 / -1;
+    display: grid;
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  }
+  .ilk__kart {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: clamp(0.9rem, 1.6vw, 1.4rem);
+    align-items: start;
+    padding: clamp(1.15rem, 2vw, 1.75rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .ilk__no {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.15rem;
+  }
+  .ilk__soru {
+    font-size: clamp(1.3rem, 1.08rem + 0.95vw, 1.85rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.08;
+  }
+  .ilk__cevap {
+    margin-block-start: 0.5rem;
+    max-width: 36em;
+    color: var(--murekkep-2);
+  }
+  .ilk__not {
+    grid-column: 6 / -1;
+    max-width: 40em;
+    padding-inline: clamp(1.15rem, 2vw, 1.75rem);
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 55.99rem) {
+    .ilk__gorsel,
+    .ilk__sorular,
+    .ilk__not {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+    .ilk__cizim {
+      width: min(100%, 21rem);
+    }
+    .ilk__not {
+      padding-inline: 0;
+    }
+  }
+
+  /* ---- Hizmet sayfası örneği: iki arama, iki sayfa --------------------------------- */
+  .ayrim {
+    display: grid;
+    gap: clamp(1.25rem, 2.4vw, 2rem);
+    margin-block-start: clamp(2.75rem, 5.5vw, 5rem);
+  }
+  .ayrim__ust {
+    display: grid;
+    gap: 0.8rem;
+    max-width: 46rem;
+    color: var(--murekkep-2);
+  }
+  .ayrim__ust h3 {
+    color: var(--murekkep);
+  }
+  .ayrim__izgara {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.6vw, 2.5rem);
+    margin-block-start: clamp(1rem, 2vw, 1.5rem);
+  }
+  .ayrim__yol {
+    display: grid;
+    justify-items: start;
+    align-content: start;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+  .ayrim__arama {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.9rem;
+    max-width: 100%;
+    padding: 0.45rem 1rem 0.45rem 0.85rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.25rem 0.25rem 0 var(--mavi-acik);
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.2;
+  }
+  .ayrim__arama :global(svg) {
+    flex: none;
+    color: var(--ikincil);
+  }
+  .ayrim__ok {
+    margin-inline-start: 1.1rem;
+    color: var(--kirmizi);
+  }
+  .ayrim__sayfa {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    padding: clamp(1.1rem, 2vw, 1.6rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+  }
+  .ayrim__ad {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.2rem, 1.06rem + 0.55vw, 1.5rem);
+    font-weight: 670;
+    font-stretch: 90%;
+    letter-spacing: -0.016em;
+    line-height: 1.14;
+  }
+  .ayrim__ad :global(svg) {
+    flex: none;
+    color: var(--mavi);
+  }
+  .ayrim__icerik {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .ayrim__icerik dt {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    color: var(--ikincil);
+  }
+  .ayrim__icerik dd {
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 43.99rem) {
+    .ayrim__izgara {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 1.75rem;
+    }
+  }
+
+  /* ---- Teslim listesi ------------------------------------------------------------ */
+  .teslim {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 4vw, 4.5rem);
+    align-items: center;
+    margin-block-start: clamp(2.75rem, 5.5vw, 5rem);
+    padding: clamp(1.4rem, 3.2vw, 3rem);
+  }
+  .teslim__giris {
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+    color: var(--murekkep-2);
+  }
+  .teslim__giris h3 {
+    color: var(--murekkep);
+  }
+  .teslim__cizim {
+    width: clamp(7rem, 12vw, 10.5rem);
+    margin: -0.75rem 0 -0.25rem -0.75rem;
+  }
+  .teslim__liste {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 3vw, 2.75rem);
+    row-gap: clamp(1.1rem, 2vw, 1.6rem);
+  }
+  @media (max-width: 61.99rem) {
+    .teslim {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .teslim__liste {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Form gösterimi ------------------------------------------------------------- */
+  .fb {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 2rem;
+    align-items: start;
+  }
+  .fb__metin {
+    grid-column: 1 / span 6;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .fb__ust {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+  .fb__cizim {
+    width: clamp(7.5rem, 13vw, 11rem);
+    margin: -1.25rem 0 -0.5rem -0.75rem;
+  }
+  .fb__liste {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fb__gosterim {
+    grid-column: 8 / -1;
+    justify-self: end;
+    width: min(100%, 29rem);
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+    display: grid;
+    gap: 1rem;
+  }
+  .fb__not {
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 61.99rem) {
+    .fb__metin,
+    .fb__gosterim {
+      grid-column: 1 / -1;
+    }
+    .fb__gosterim {
+      position: static;
+      justify-self: start;
+      width: min(100%, 30rem);
+    }
+  }
+  /* Dar masaüstünde ve telefonda davranış kartları tek sütun. */
+  @media (max-width: 43.99rem), (min-width: 62rem) and (max-width: 77.99rem) {
+    .fb__liste {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Yayındaki siteler ---------------------------------------------------------- */
+  .siteler {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .site {
+    display: grid;
+    align-content: start;
+    gap: clamp(1rem, 1.6vw, 1.35rem);
+    min-width: 0;
+    padding: clamp(1rem, 1.8vw, 1.6rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .site--buyuk {
+    grid-column: span 7;
+  }
+  .site--orta {
+    grid-column: span 5;
+  }
+  .siteler__kucuk {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: inherit;
+  }
+  /* Masaüstü ve telefon görüntüsü aynı yükseklikte dursun: 16:10 ile 9:16 oranlarının genişlik karşılığı. */
+  .site__ekran--cift {
+    display: grid;
+    grid-template-columns: minmax(0, 2.844fr) minmax(0, 1fr);
+    gap: clamp(0.75rem, 1.6vw, 1.5rem);
+    align-items: start;
+  }
+  .site__metin {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+  }
+  .site__ad {
+    font-size: clamp(1.4rem, 1.15rem + 1vw, 2rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.06;
+  }
+  .site--kucuk .site__ad {
+    font-size: clamp(1.2rem, 1.08rem + 0.4vw, 1.4rem);
+    font-weight: 670;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.14;
+  }
+  .site__karar {
+    max-width: 34em;
+    color: var(--murekkep-2);
+  }
+  .site .ok-bag {
+    margin-block-start: 0.35rem;
+  }
+  .siteler__alt {
+    margin-block-start: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  @media (max-width: 61.99rem) {
+    .site--buyuk,
+    .site--orta {
+      grid-column: 1 / -1;
+    }
+    .siteler__kucuk {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .site__ekran--cift {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .site .ok-bag,
+    .siteler__alt .ok-bag {
+      min-height: 2.75rem;
+      align-items: center;
+      margin-block-start: 0;
+    }
+  }
+  /* Telefonda dört küçük kart yana kayar; yarım görünen kart devamı olduğunu söyler. */
+  @media (max-width: 43.99rem) {
+    .siteler__kucuk {
+      display: flex;
+      overflow-x: auto;
+      margin-inline: calc(var(--kenar) * -1);
+      padding-inline: var(--kenar);
+      scroll-padding-inline: var(--kenar);
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+    }
+    .siteler__kucuk::-webkit-scrollbar {
+      display: none;
+    }
+    .siteler__kucuk > li {
+      flex: 0 0 78%;
+      scroll-snap-align: start;
+    }
+  }
+</style>

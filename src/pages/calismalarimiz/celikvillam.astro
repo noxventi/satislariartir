@@ -1,0 +1,846 @@
+---
+/**
+ * Proje sayfası: ÇelikVillam (Rotech Mühendislik).
+ *
+ * Düzen (15 Kasım 2026): üst alan (gerçek site görüntüsü) > bu sayfada > proje künyesi > işletmenin sorusu >
+ * ne yaptık (adımlar + dört karar) > hangi soru hangi sayfaya > ilk görüşme ve talebin ayrılması >
+ * ekran görüntüleri > bu projedeki hizmetler > diğer proje > görüşme.
+ * Anlatım sırası: inceleme, bilinçli kurulum, düzenli optimizasyon, hedef.
+ *
+ * - Ölçülmüş sonuç yok: sayfa "ne yapıldı ve neden" sorusunu yanıtlar. Müşteri onaylı ölçüm gelene kadar rakam yazılmaz.
+ * - İşletmeye dair olgular 14 Kasım 2026'da celikvillam.com'dan alındı. Arama terimleri ve talep ayrımı temsilidir.
+ * - Görseller: canlı sitenin gerçek ilk ekranı (masaüstü ve telefon) ve kâğıt işi nesneler.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import ProjeKunyesi from '../../components/proje/ProjeKunyesi.astro';
+import ProjeKarti from '../../components/ProjeKarti.astro';
+import ProjeEkrani from '../../components/ProjeEkrani.astro';
+import Cizim from '../../components/Cizim.astro';
+import Ikon from '../../components/Ikon.astro';
+import Isaret from '../../components/Isaret.astro';
+import { KAYNAK_KONTROL_TARIHI, projeBul } from '../../data/projeler';
+
+import ekranMasaustu from '../../assets/projeler/celikvillam-masaustu.jpg';
+import ekranMobil from '../../assets/projeler/celikvillam-mobil.jpg';
+import alet from '../../assets/cizimler/alet.png';
+import yapboz from '../../assets/cizimler/yapboz.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+import taslak from '../../assets/cizimler/taslak.png';
+import harita from '../../assets/cizimler/harita.png';
+import hedef from '../../assets/cizimler/hedef.png';
+import liste from '../../assets/cizimler/liste.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import terazi from '../../assets/cizimler/terazi.png';
+import telefon from '../../assets/cizimler/telefon.png';
+import mesaj from '../../assets/cizimler/mesaj.png';
+import robot from '../../assets/cizimler/robot.png';
+import megafon from '../../assets/cizimler/megafon.png';
+
+const CAGRI = 'Benzer bir projeyi görüşelim';
+const p = projeBul('celikvillam');
+const canli = `https://${p.alanAdi}/`;
+const kirintilar = [
+  { ad: 'Çalışmalarımız', url: '/calismalarimiz/' },
+  { ad: 'ÇelikVillam', url: p.dosya! },
+];
+
+// İşletmenin sorusu: son sözler kırmızı kalemle çizilir.
+const VURGU = 'hangi sayfaya gider?';
+const [soruBasi, soruSonu = ''] = p.karar.split(VURGU);
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'Ziyaretçinin soruları', aciklama: 'Çelik villa yaptırmak isteyen kişinin neyi, hangi sırayla sorduğunu çıkardık: model, maliyet, teklif.' },
+  { ad: 'Strateji', ozet: 'Tek hedef: teklif talebi', aciklama: 'Reklamda hedeflenecek başvuruyu tek tuttuk: ziyaretçinin kendi projesi için teklif istemesi.' },
+  { ad: 'Kurulum', ozet: 'Her soruya bir sayfa', aciklama: 'Siteyi bu sorulara göre kurduk, sayfaları aramadaki doğru soruyla eşleştirdik.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Reklamları, teklif isteyen ziyaretçiye göre düzenlemeyi sürdürüyoruz.' },
+  { ad: 'Hedef', ozet: 'Teklif görüşmesi', aciklama: 'Projeyi tıklamayla değil, kendi arsası için teklif isteyen ziyaretçiyle değerlendiriyoruz.' },
+];
+
+// Dört karar: önce nedeni (incelemede gördüğümüz), sonra yaptığımız iş.
+const kararlar = [
+  {
+    soru: 'Web sitesi neye göre kuruldu?',
+    ornek: 'Model araştıran ziyaretçiyle arsası hazır olan ziyaretçi aynı şeyi sormuyor. Aynı ilk ekranı da görmemeli.',
+    care: 'Model, uygulama ve teklif bilgisi arayan ziyaretçi için ayrı sayfalar tasarladık. Her sayfa kendi sorusunu yanıtlıyor.',
+    bag: { etiket: 'Kurumsal web tasarım', url: '/hizmetler/web-tasarim/' },
+    cizim: taslak,
+    genis: true,
+  },
+  {
+    soru: 'Arama görünürlüğü için ne yapıldı?',
+    ornek: 'Çelik villa arayan kişinin yazdığı soru, hangi sayfayı görmesi gerektiğini de söylüyor.',
+    care: 'Sayfaların arama sonuçlarında ve yapay zekâ yanıtlarında doğru soruyla eşleşmesi için SEO ve GEO çalışması yürüttük.',
+    bag: { etiket: 'SEO danışmanlığı', url: '/hizmetler/seo-danismanligi/' },
+    cizim: harita,
+    genis: false,
+  },
+  {
+    soru: 'Reklamlar neyi hedefliyor?',
+    ornek: 'Modeller raftan satılan ürün değil; satış bir görüşmeyle başlıyor. Tıklama, o görüşmenin yerini tutmuyor.',
+    care: 'Reklamlarda tek bir başvuruyu hedef aldık: ziyaretçinin kendi projesi için teklif istemesi.',
+    bag: { etiket: 'Google Ads yönetimi', url: '/hizmetler/google-ads-yonetimi/' },
+    cizim: hedef,
+    genis: false,
+  },
+  {
+    soru: 'Reklam yayına girdikten sonra ne yapıyoruz?',
+    ornek: 'Aynı kelimeyi model araştıran da yazar, iş arayan da, teklif isteyen de. Hangisinin teklife gittiği yayından sonra görülür.',
+    care: 'Reklamları, kendi projesi için teklif isteyen ziyaretçiye göre düzenlemeyi sürdürüyoruz.',
+    bag: { etiket: 'Arama terimlerine nasıl karar veriyoruz?', url: '/hizmetler/google-ads-yonetimi/#ornek' },
+    cizim: liste,
+    genis: true,
+  },
+];
+
+// Temsili aramalar: hangi sorunun hangi sayfaya gittiğini gösterir, gerçek hesap verisi değildir.
+const sayfalar = [
+  {
+    arama: 'çelik villa modelleri',
+    soru: 'Nasıl bir ev olabilir?',
+    sayfa: 'Model koleksiyonu',
+    aciklama: 'On sekiz konsept model: tek katlı, dubleks, klasik, Passivhaus ve balistik korumalı yapılar. Her model özel bir projenin başlangıç noktası olarak sunuluyor.',
+    cizim: buyutec,
+  },
+  {
+    arama: 'çelik villa fiyatları',
+    soru: 'Maliyeti ne belirler?',
+    sayfa: 'Maliyeti belirleyen unsurlar',
+    aciklama: 'Sayfa tek bir rakam vermiyor. Maliyetin neye göre değiştiğini anlatıyor; rakam, arsa ve ihtiyaç konuşulduktan sonra netleşiyor.',
+    cizim: terazi,
+  },
+  {
+    arama: 'arsama çelik villa yaptırmak istiyorum',
+    soru: 'Benim arsama ne yapılır?',
+    sayfa: 'Görüşme talebi',
+    aciklama: 'Ziyaretçi ne soracağını ve firmaya nasıl ulaşacağını ilk ekranda görüyor. Reklamda hedeflenen başvuru bu sorudan doğuyor.',
+    cizim: telefon,
+  },
+];
+
+const gorusmeSorulari = [
+  { ad: 'Arsanın konumu', aciklama: 'Uygulama Türkiye genelinde yapılıyor. Konum, projenin koşullarını belirliyor.' },
+  { ad: 'İstenen yapı tipi', aciklama: 'Tek katlı mı, dubleks mi, özel bir konsept mi?' },
+  { ad: 'Yaklaşık alan', aciklama: 'Teklifin ölçeğini bu bilgi çiziyor.' },
+];
+
+// Temsili ayrım: ilk görüşmedeki üç bilginin gelen talebi nasıl ayırdığını gösterir.
+const ayrim = [
+  {
+    durum: 'Arsası hazır, yapı tipini ve yaklaşık alanı söylüyor.',
+    hukum: 'Teklif görüşmesi',
+    tur: 'evet',
+    sonra: 'Proje için teklif hazırlanır. Bu talebi getiren arama reklamda öne alınır.',
+  },
+  {
+    durum: 'Model soruyor, arsası henüz yok.',
+    hukum: 'Bilgi',
+    tur: '',
+    sonra: 'Model ve süreç bilgisi verilir. Arsa netleşince yeniden görüşülür.',
+  },
+  {
+    durum: 'İş arıyor ya da başka bir hizmet soruyor.',
+    hukum: 'Kapsam dışı',
+    tur: 'hayir',
+    sonra: 'Bu aramayı getiren terim reklamdan çıkarılır.',
+  },
+];
+
+// Masaüstü görüntüsündeki işaretler: x yüzde, y görüntü yüksekliğinin yüzdesi (1440x900 kaynakta ölçüldü).
+const isaretler = [
+  {
+    x: 60.6,
+    y: 33,
+    ad: 'Ne yapıldığı ilk cümlede',
+    aciklama: 'Başlık işin kendisini söylüyor: Türkiye genelinde çelik villa ve çelik ev yapımı. Ziyaretçi doğru yerde olduğunu ilk bakışta görüyor.',
+  },
+  {
+    x: 27,
+    y: 82.6,
+    ad: 'Görüşmeye iki yol',
+    aciklama: 'Telefon ve WhatsApp ilk ekranda. Arsası hazır olan ziyaretçi firmaya ulaşmak için sayfayı kaydırmak zorunda kalmıyor.',
+  },
+  {
+    x: 63.6,
+    y: 86.4,
+    ad: 'Araştıran için ayrı kapı',
+    aciklama: '“Modelleri İnceleyin” bağlantısı, henüz karar vermemiş ziyaretçiyi model koleksiyonuna götürüyor.',
+  },
+];
+---
+
+<Temel
+  baslik="ÇelikVillam Projesi: Web Sitesi, SEO ve Reklam | Satışları Artır"
+  aciklama="ÇelikVillam projesinde ne yaptık ve neden? Çelik villa arayan ziyaretçinin sorularını inceledik; siteyi, arama görünürlüğünü ve reklamları bu sorulara göre kurduk."
+  sayfaTuru="proje"
+  proje="celikvillam"
+  hizmet="google-ads"
+  kirintilar={kirintilar}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <!-- Üst alan: yazı solda, canlı sitenin gerçek ilk ekranı sağda -->
+  <div class="proje-ust">
+    <SayfaBasi
+      kirintilar={kirintilar}
+      ust={p.sektor}
+      baslik="ÇelikVillam"
+      cagri={{ etiket: CAGRI, url: '#gorusme', kanal: 'google-ads' }}
+      ikincil={{ etiket: 'Canlı siteyi açın', url: canli }}
+    >
+      <p>
+        Rotech Mühendislik’in çelik villa ve çelik ev sitesi ÇelikVillam için yürüttüğümüz projede siteyi, arama
+        görünürlüğünü ve reklamları ziyaretçinin model, maliyet ve teklif sorularına göre kurduk.
+      </p>
+    </SayfaBasi>
+    <div class="sarici proje-ust__ekran">
+      <div class="proje-ust__cerceve">
+        <ProjeEkrani gorsel={ekranMasaustu} marka="ÇelikVillam" alanAdi={p.alanAdi} tur="masaustu" sizes="(max-width: 55.99rem) 92vw, 46vw" />
+      </div>
+    </div>
+  </div>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Künye', hedef: 'kunye' },
+      { etiket: 'İşletmenin sorusu', hedef: 'soru' },
+      { etiket: 'Ne yaptık?', hedef: 'ne-yaptik' },
+      { etiket: 'Sorular ve sayfalar', hedef: 'sayfalar' },
+      { etiket: 'Ekran görüntüleri', hedef: 'ekranlar' },
+      { etiket: 'Hizmetler', hedef: 'hizmetler' },
+    ]}
+  />
+
+  <ProjeKunyesi kimlik="celikvillam" isletme="Rotech Mühendislik, Ankara" sektorCizim={alet} isCizim={yapboz} />
+
+  <!-- İşletmenin sorusu -->
+  <section class="bolum soru" id="soru">
+    <div class="sarici">
+      <div class="soru__ust">
+        <div class="soru__baslik">
+          <p class="soru__ad">İşletmenin sorusu</p>
+          <h2 class="dev soru__soz">
+            {soruBasi}{p.karar.includes(VURGU) && <Isaret tip="alt">{VURGU}</Isaret>}{soruSonu}
+          </h2>
+        </div>
+        <div class="soru__cizim" aria-hidden="true">
+          <Cizim src={yolAyrimi} sizes="(max-width: 55.99rem) 40vw, 20vw" genislikler={[240, 360, 520, 720]} />
+        </div>
+      </div>
+      <div class="soru__alt">
+        <h3 class="baslik-3">ÇelikVillam nasıl satış yapıyor?</h3>
+        <div class="soru__sutunlar">
+          <p>
+            Rotech Mühendislik, Türkiye genelinde çelik villa ve çelik ev tasarlıyor, imal ediyor ve anahtar teslim
+            uyguluyor. Sitedeki koleksiyonda on sekiz konsept model var.
+          </p>
+          <p>
+            <strong>Modeller raftan satılan ürün değil.</strong> Her biri, arsaya ve ihtiyaca göre şekillenecek özel bir
+            projenin başlangıç noktası. Bu yüzden satış bir sepetle değil, bir görüşmeyle başlıyor.
+          </p>
+          <p>
+            Siteye gelen herkes aynı yerde değil: kimi modellere bakıyor, kimi maliyeti soruyor, kimi kendi arsası için
+            teklif istiyor. İş, her birine kendi sayfasını göstermekti.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ne yaptık: adımlar ve dört karar -->
+  <section class="bolum bolum--beyaz" id="ne-yaptik">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">ÇelikVillam projesinde ne yaptık?</h2>
+        <p class="giris">
+          Reklamı açıp beklemedik. Önce ziyaretçinin sorularını inceledik, sonra siteyi ve reklamları bu sorulara göre
+          kurduk. Çalışma düzenli optimizasyonla sürüyor.
+        </p>
+      </div>
+      <Adimlar adimlar={adimlar} />
+
+      <div class="kararlar">
+        <h3 class="baslik-3 kararlar__baslik">Dört karar ve nedenleri</h3>
+        <SoruKartlari kartlar={kararlar} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Hangi soru hangi sayfaya -->
+  <section class="bolum bolum--acik" id="sayfalar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Hangi soru hangi sayfaya gidiyor?</h2>
+        <p class="giris">
+          Çelik villa yaptırmak isteyen biri önce modellere bakıyor, sonra maliyeti soruyor, en son kendi arsası için
+          teklif istiyor. Üç ayrı soru, üç ayrı sayfa.
+        </p>
+        <p class="kucuk ikincil sayfalar__not">
+          <span class="temsili">Temsili aramalar</span>
+          Aramalar gerçek hesap verisi değildir; hangi sorunun hangi sayfayla karşılandığını gösterir.
+        </p>
+      </div>
+      <ol class="sayfalar">
+        {
+          sayfalar.map((s, i) => (
+            <li class="sayfa" data-gir style={`--gecikme:${i * 110}ms`}>
+              <div class="sayfa__cizim" aria-hidden="true">
+                <Cizim src={s.cizim} sizes="(max-width: 47.99rem) 34vw, 12vw" genislikler={[200, 320, 480]} />
+              </div>
+              <p class="sayfa__arama">
+                <Ikon ad="magnifying-glass" boyut={16} />
+                <span class="sorgu">“{s.arama}”</span>
+              </p>
+              <h3 class="sayfa__soru">{s.soru}</h3>
+              <p class="sayfa__hedef">
+                <Ikon ad="arrow-right" boyut={18} />
+                <span>
+                  <span class="gorunmez">Açılan sayfa: </span>
+                  {s.sayfa}
+                </span>
+              </p>
+              <p class="sayfa__aciklama">{s.aciklama}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- İlk görüşme ve talebin ayrılması -->
+  <section class="bolum bolum--beyaz" id="ilk-gorusme">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Model, görüşmenin başlangıcıdır</h2>
+          <div class="metin">
+            <p>
+              Koleksiyondaki bir model satın alınacak bir ürün gibi sunulmuyor. Sayfa, ziyaretçiyi “bu modeli istiyorum”
+              demeye değil, “benim arsamda nasıl olur” diye sormaya götürüyor.
+            </p>
+            <p>
+              Ziyaretçi firmaya telefonla ya da WhatsApp’tan ulaşıyor. Hangisini seçerse seçsin ilk görüşmede aynı üç
+              bilgi isteniyor.
+            </p>
+          </div>
+        </div>
+        <Cizim src={mesaj} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik gorusme">
+        <div class="gorusme__sorular">
+          <h3 class="baslik-3">İlk görüşmede sorulan üç bilgi</h3>
+          <ul class="tikli tikli--ikili gorusme__liste">
+            {
+              gorusmeSorulari.map((g) => (
+                <li>
+                  <strong>{g.ad}</strong>
+                  <span>{g.aciklama}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="gorusme__ayrim">
+          <p class="gorusme__giris">
+            Bu üç bilgi, gelen talebin teklif görüşmesi mi yoksa bilgi isteği mi olduğunu ayırıyor. Düzenli
+            optimizasyonda baktığımız yer de burası: hangi arama teklif görüşmesine gidiyor, hangisi gitmiyor?
+          </p>
+          <div class="ornek">
+            <div class="ornek__ust">
+              <h3 class="baslik-4">İlk görüşmedeki üç soru gelen talebi nasıl ayırır?</h3>
+              <span class="temsili">Temsili ayrım</span>
+            </div>
+            <table class="tablo tablo--yigin">
+              <thead>
+                <tr>
+                  <th scope="col">Arayan kişi</th>
+                  <th scope="col">Karar</th>
+                  <th scope="col">Sonraki adım</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  ayrim.map((a) => (
+                    <tr>
+                      <td data-baslik="Arayan kişi">{a.durum}</td>
+                      <td data-baslik="Karar">
+                        <span class:list={['hukum', a.tur && `hukum--${a.tur}`]}>{a.hukum}</span>
+                      </td>
+                      <td data-baslik="Sonraki adım">{a.sonra}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+            <p class="ornek__not">
+              Tablo bir çalışma biçimini gösterir, firmanın kayıtlarından alınmış veri değildir. Tıklamayı getiren
+              aramalara kendi hesabınızda nasıl bakacağınızı rehberde anlattık:
+              <a href="/blog/google-ads-tiklama-var-telefon-yok/">Google Ads’te tıklama var ama neden telefon gelmiyor?</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ekran görüntüleri: masaüstü ve telefon yan yana -->
+  <section class="bolum" id="ekranlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">ÇelikVillam web sitesi: masaüstü ve telefon görünümü</h2>
+        <p class="giris">
+          Yayındaki sitenin ilk ekranı. Kırmızı işaretler, yukarıda anlattığımız kararların ekranda nerede durduğunu
+          gösteriyor. Görsele dokunarak canlı siteyi açabilirsiniz.
+        </p>
+      </div>
+
+      <div class="ekranlar">
+        <div class="ekranlar__masaustu" data-gir>
+          <ProjeEkrani gorsel={ekranMasaustu} marka="ÇelikVillam" alanAdi={p.alanAdi} tur="masaustu" sizes="(max-width: 47.99rem) 92vw, 62vw" />
+          {
+            isaretler.map((n, i) => (
+              <span class="igne" style={`--x:${n.x};--y:${n.y}`} aria-hidden="true">
+                {i + 1}
+              </span>
+            ))
+          }
+        </div>
+        <ol class="isaretler">
+          {
+            isaretler.map((n) => (
+              <li>
+                <h3>{n.ad}</h3>
+                <p>{n.aciklama}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="ekranlar__mobil" data-gir style="--gecikme:140ms">
+          <ProjeEkrani gorsel={ekranMobil} marka="ÇelikVillam" alanAdi={p.alanAdi} tur="mobil" sizes="(max-width: 47.99rem) 56vw, 22vw" />
+        </div>
+      </div>
+
+      <p class="kucuk ikincil ekranlar__kaynak">
+        İşletmeye dair bilgiler {KAYNAK_KONTROL_TARIHI} tarihinde <a href={canli} rel="noopener">{p.alanAdi}</a> üzerinden
+        kontrol edildi. Bu sayfada sonuç rakamı yok: müşterinin onayladığı bir ölçüm geldiğinde tarih aralığı, veri kaynağı
+        ve dönüşüm tanımıyla birlikte eklenecek.
+      </p>
+    </div>
+  </section>
+
+  <!-- Bu projedeki hizmetler -->
+  <div id="hizmetler">
+    <IlgiliSayfalar
+      baslik="Bu projedeki hizmetler"
+      giris="ÇelikVillam’da yürüttüğümüz işlerin her birini ayrı bir hizmet olarak da veriyoruz."
+      sayfalar={[
+        { tur: 'Hizmet', baslik: 'Kurumsal web tasarım', metin: 'Ziyaretçinin sorusuna göre kurulan hizmet ve açılış sayfaları.', url: '/hizmetler/web-tasarim/', cizim: taslak },
+        { tur: 'Hizmet', baslik: 'SEO danışmanlığı', metin: 'Sayfaların, müşterinin yazdığı aramalarla eşleşmesi.', url: '/hizmetler/seo-danismanligi/', cizim: buyutec },
+        { tur: 'Hizmet', baslik: 'GEO ve AEO danışmanlığı', metin: 'Yapay zekâ yanıtlarında markanın doğru bilgiyle anılması.', url: '/hizmetler/yapay-zeka-gorunurlugu/', cizim: robot },
+        { tur: 'Hizmet', baslik: 'Google Ads yönetimi', metin: 'Bütçenin, teklif isteyen aramalara yönlendirilmesi.', url: '/hizmetler/google-ads-yonetimi/', cizim: megafon },
+      ]}
+    />
+  </div>
+
+  <!-- Diğer proje ve bütün çalışmalar -->
+  <section class="bolum bolum--siki">
+    <div class="sarici">
+      <div class="diger__ust">
+        <h2 class="baslik-3">Bir başka proje</h2>
+        <a class="ok-bag" href="/calismalarimiz/">
+          Bütün çalışmalarımız
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </div>
+      <ProjeKarti
+        kimlik="hun-education"
+        metin="Macaristan’da üniversite okumak isteyen öğrencilere ve ailelerine ulaşmak için yürüttüğümüz reklam çalışması. Kampanyaları programlara ve hedef kitlelere göre kurduk."
+      />
+    </div>
+  </section>
+
+  <GorusmeBandi
+    baslik="Sizde teklif hangi yoldan geliyor?"
+    metin="İşletmenizin nasıl satış yaptığını ve müşterinizin size hangi soruyla geldiğini anlatın. Görüşmeye buradan başlayalım."
+    kanal="google-ads"
+    cagri={CAGRI}
+    konum="proje-celikvillam"
+    kanit={false}
+  />
+</Temel>
+
+<style>
+  /* ---- Üst alan ----------------------------------------------------------
+     SayfaBasi ile ekran görüntüsü aynı ızgara hücresini paylaşır: yazı solda altı sütunda, görüntü sağda.
+     Dar ekranda görüntü yazının altına iner. */
+  .proje-ust {
+    display: grid;
+  }
+  .proje-ust > :global(*) {
+    grid-area: 1 / 1;
+    min-width: 0;
+  }
+  .proje-ust__ekran {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    align-self: center;
+    padding-block: clamp(3.5rem, 5vw, 4.5rem) clamp(2rem, 4vw, 3.5rem);
+    pointer-events: none;
+  }
+  .proje-ust__cerceve {
+    grid-column: 7 / -1;
+    pointer-events: auto;
+  }
+  /* Proje adı kısa olduğu için başlık bir kademe büyür. */
+  .proje-ust :global(.sb__baslik) {
+    font-size: clamp(3rem, 1.6rem + 5.4vw, 6.25rem);
+    line-height: 0.94;
+  }
+  @media (min-width: 56rem) {
+    .proje-ust :global(.sb__metin) {
+      grid-column: 1 / span 6;
+    }
+  }
+  @media (max-width: 55.99rem) {
+    .proje-ust {
+      display: block;
+    }
+    .proje-ust :global(.sb) {
+      padding-block-end: 1.75rem;
+    }
+    .proje-ust__ekran {
+      display: block;
+      padding-block: 0 clamp(2rem, 5vw, 3rem);
+    }
+  }
+
+  /* ---- İşletmenin sorusu ----------------------------------------------------
+     Soru büyük başlıktır; yanında kâğıt işi nesne, altında işletmenin satış biçimi üç sütunda durur. */
+  .soru__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 9fr) minmax(0, 3fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+    row-gap: 1rem;
+    align-items: end;
+  }
+  .soru__baslik {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  .soru__ad {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem);
+    font-weight: 640;
+    font-stretch: 94%;
+    line-height: 1.2;
+    color: var(--mavi);
+  }
+  .soru__ad::before {
+    content: '';
+    flex: none;
+    width: 2.25rem;
+    height: 2px;
+    background: var(--kirmizi);
+  }
+  .soru__soz {
+    font-size: clamp(2.05rem, 0.85rem + 4.1vw, 4.6rem);
+    line-height: 0.98;
+    max-width: 15em;
+  }
+  .soru__cizim {
+    margin: 0 -0.5rem -1rem 0;
+  }
+  .soru__alt {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin-block-start: clamp(2.25rem, 5vw, 4.25rem);
+  }
+  .soru__sutunlar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1em clamp(1.5rem, 3.4vw, 3.5rem);
+    color: var(--murekkep-2);
+  }
+  .soru__sutunlar strong {
+    color: var(--murekkep);
+  }
+  @media (max-width: 55.99rem) {
+    .soru__ust,
+    .soru__sutunlar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .soru__cizim {
+      width: min(46%, 11.5rem);
+      margin: -0.25rem 0 -0.5rem -0.5rem;
+    }
+  }
+
+  /* ---- Dört karar ------------------------------------------------------------- */
+  .kararlar {
+    margin-block-start: clamp(3rem, 6vw, 5rem);
+  }
+  .kararlar__baslik {
+    margin-block-end: clamp(1.1rem, 2vw, 1.6rem);
+  }
+
+  /* ---- Soru ve sayfa kartları ------------------------------------------------- */
+  .sayfalar__not {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+  }
+  .sayfalar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .sayfa {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 2.2vw, 2rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+    min-width: 0;
+  }
+  .sayfa__cizim {
+    width: clamp(6.5rem, 11vw, 9.5rem);
+    margin: -0.5rem 0 -0.25rem -0.5rem;
+  }
+  /* Arama satırı: üst alandaki arama kutusunun küçüğü. */
+  .sayfa__arama {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 100%;
+    padding: 0.4rem 0.8rem 0.45rem 0.65rem;
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.2rem 0.2rem 0 var(--mavi-acik);
+    font-size: var(--b-kucuk);
+    line-height: 1.25;
+  }
+  .sayfa__arama :global(svg) {
+    flex: none;
+    color: var(--ikincil);
+  }
+  .sayfa__soru {
+    font-size: clamp(1.5rem, 1.15rem + 1.3vw, 2.2rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.04;
+    letter-spacing: -0.024em;
+    margin-block-start: 0.35rem;
+  }
+  .sayfa__hedef {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--yazi-baslik);
+    font-size: 1.125rem;
+    font-weight: 660;
+    font-stretch: 94%;
+    line-height: 1.25;
+    color: var(--murekkep);
+  }
+  .sayfa__hedef :global(svg) {
+    flex: none;
+    align-self: center;
+    color: var(--kirmizi);
+  }
+  .sayfa__aciklama {
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 55.99rem) {
+    .sayfalar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sayfa {
+      padding-inline-end: clamp(6.5rem, 30vw, 10rem);
+    }
+    .sayfa__cizim {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.5rem;
+      width: clamp(5.5rem, 24vw, 8.5rem);
+      margin: 0;
+      z-index: -1;
+    }
+  }
+
+  /* ---- İlk görüşme -------------------------------------------------------------- */
+  .gorusme {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+    row-gap: 2rem;
+    align-items: start;
+  }
+  .gorusme__sorular,
+  .gorusme__ayrim {
+    display: grid;
+    gap: 1.1rem;
+    min-width: 0;
+  }
+  .gorusme__liste {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .gorusme__giris {
+    max-width: 42em;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 55.99rem) {
+    .gorusme {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Ekran görüntüleri ----------------------------------------------------------
+     Sütun oranı iki görüntünün yüksekliğini eşitler: 16:10 masaüstü ile 9:16 telefon. */
+  .ekranlar {
+    display: grid;
+    grid-template-columns: minmax(0, 2.844fr) minmax(0, 1fr);
+    grid-template-areas:
+      'masaustu mobil'
+      'isaretler isaretler';
+    column-gap: clamp(1rem, 3vw, 3rem);
+    row-gap: clamp(1.75rem, 3.5vw, 3rem);
+    align-items: start;
+  }
+  .ekranlar__masaustu {
+    grid-area: masaustu;
+    position: relative;
+    container-type: inline-size;
+  }
+  .ekranlar__mobil {
+    grid-area: mobil;
+  }
+  /* Kırmızı kalem işareti: konumu görüntünün kendi ölçüsüne bağlıdır. */
+  .igne {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 0.625cqw);
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--kirmizi);
+    color: var(--beyaz);
+    box-shadow:
+      0 0 0 3px var(--beyaz),
+      0 6px 14px rgb(16 28 57 / 0.45);
+    font-family: var(--yazi-baslik);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+    pointer-events: none;
+  }
+  .isaretler {
+    grid-area: isaretler;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 3rem);
+    counter-reset: isaret;
+  }
+  .isaretler li {
+    counter-increment: isaret;
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+    padding-inline-start: 2.9rem;
+  }
+  .isaretler li::before {
+    content: counter(isaret);
+    position: absolute;
+    left: 0;
+    top: -0.15rem;
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: var(--kirmizi);
+    color: var(--beyaz);
+    font-family: var(--yazi-baslik);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  .isaretler h3 {
+    font-size: clamp(1.2rem, 1.08rem + 0.5vw, 1.5rem);
+    font-weight: 680;
+    font-stretch: 88%;
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+  }
+  .isaretler p {
+    color: var(--murekkep-2);
+    max-width: 28em;
+  }
+  .ekranlar__kaynak {
+    max-width: 52rem;
+    margin-block-start: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+  @media (max-width: 47.99rem) {
+    /* İşaretlerin açıklaması masaüstü görüntüsünün hemen altına gelir, telefon görüntüsü sonra. */
+    .ekranlar {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'masaustu' 'isaretler' 'mobil';
+      row-gap: 1.5rem;
+    }
+    /* Telefon görüntüsü açık mavi bir sahnede ortada durur. */
+    .ekranlar__mobil {
+      display: grid;
+      justify-items: center;
+      padding: 1.5rem 1.25rem 1.1rem;
+      background: var(--mavi-acik);
+      border-radius: var(--kose);
+    }
+    .ekranlar__mobil :global(.pe) {
+      width: min(68%, 15rem);
+    }
+    .igne {
+      width: 1.4rem;
+      height: 1.4rem;
+      font-size: 0.8rem;
+      box-shadow:
+        0 0 0 2px var(--beyaz),
+        0 4px 10px rgb(16 28 57 / 0.45);
+    }
+    .isaretler {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---- Diğer proje ------------------------------------------------------------------ */
+  .diger__ust {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-block-end: clamp(1.1rem, 2vw, 1.6rem);
+  }
+  .diger__ust .ok-bag {
+    min-height: 2.75rem;
+    align-items: center;
+  }
+</style>

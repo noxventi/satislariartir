@@ -1,0 +1,258 @@
+---
+no: 28
+kapak: mimarlik-ofisi-web-sitesi-nasil-olmali
+kapakAlt: "Çizim masasında rulo kat planı, gönye ve ekranında ışıkları yanan bir konak ile iki boş kart duran kâğıt dizüstü; kırmızı kalem çizgisi üzerinde yürüyen üç kişi dizüstüne gidiyor, biri koltuğunun altında rulo plan taşıyor"
+soru: Mimarlık ofisi web sitesi nasıl olmalı?
+baslik: Mimarlık Ofisi Web Sitesi Nasıl Olmalı?
+aciklama: >-
+  Mimarlık ofisi web sitesinde hangi sayfalar olur, proje sayfası ne anlatır, site reklam olmadan görüşme talebini
+  nasıl getirir? Sayfa planı ve kontrol listesi.
+aramalar:
+  - mimarlık web sitesi
+  - mimar web sitesi
+  - mimarlık siteleri
+  - mimarlar nasıl iş bulur
+kisaCevap: >-
+  Bir mimarlık ofisi web sitesi, tamamlanan yapıları ayrı proje sayfalarında gösteren ve ziyaretçiyi ilk görüşmeye
+  götüren sitedir. Ana sayfa, ofisin hangi yapılarda ve hangi şehirde çalıştığını ilk ekranda söyler. Her proje
+  sayfasında yapı türü, yer, ofisin üstlendiği iş, plan ve fotoğraflar birlikte durur ve sayfa bir görüşme adımıyla
+  biter. Mimarlar Odası’nın meslek kuralları reklama izin vermediği için site, arama görünürlüğü ve Google İşletme
+  Profili ile birlikte ofisi tanımayan kişinin ofise ulaştığı yoldur.
+elinizeGecen: Sayfa planı, proje sayfası düzeni, görüşme formu soruları ve yayın kontrolü
+hizmetler: [web]
+hizmetBaglantisi:
+  etiket: Mimarlık ofisleri için web sitesi
+  url: /sektorler/mimarlik-ofisleri/
+sonraki: google-isletme-profili-nasil-acilir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 9
+kaynaklar:
+  - ad: Google Arama Merkezi, Resim SEO En İyi Uygulamaları
+    url: https://developers.google.com/search/docs/appearance/google-images?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Core Web Vitals ve Google arama sonuçlarını anlama
+    url: https://developers.google.com/search/docs/appearance/core-web-vitals?hl=tr
+    tur: resmi
+  - ad: Google İşletme Profili Yardım, Google’daki yerel sıralamanızı yükseltmeyle ilgili ipuçları
+    url: https://support.google.com/business/answer/7091?hl=tr
+    tur: resmi
+  - ad: Google İşletme Profili Yardım, İşletmenizin Google’da gösterilmesiyle ilgili kurallar
+    url: https://support.google.com/business/answer/3038177?hl=tr
+    tur: resmi
+  - ad: "Search Console Yardımı, Performans raporu (Arama sonuçları): Genel bakış ve temel kurulum"
+    url: https://support.google.com/webmasters/answer/7576553?hl=tr
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import Akis from '../../components/blog/Akis.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Not from '../../components/blog/Not.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Bodrum’da arsası olan bir aile, komşusunun evini çizen mimarın adını öğreniyor ve akşam ofisin adını Google’a yazıyor. Açılan sitede tam ekran bir fotoğraf ve altında iki sözcük var: “Projeler” ve “İletişim”. Ailenin merak ettiklerinin hiçbiri sayfada yok: bu ofis müstakil ev çiziyor mu, iş nasıl ilerliyor, kime yazılacak?
+
+Mimarlık ofislerinin siteleri çoğu zaman meslektaşın gözüyle kurulur: büyük görsel, az yazı. Ev yaptıracak kişi ise karar vermek için okur. Bu rehber sitenin bölümlerini o kişinin sorularına göre sıralar.
+
+<SonucSayfasi
+  sorgu="bodrum mimarlık ofisi"
+  vurgu="organik"
+  bolgeler={['harita', 'organik']}
+  aciklamalar={{
+    harita: 'Google İşletme Profili’nden gelir. Ofisin adı, adresi, kategorisi ve biten işlerin fotoğrafları burada görünür.',
+    organik: 'Ofisin sitesindeki sayfalar. Şehir ve yapı türüyle yapılan aramalarda proje ve hizmet sayfaları burada çıkar.',
+  }}
+>
+  Reklam vermeyen bir mimarlık ofisi, şehrinin adıyla arama yapan kişiye iki yerde görünür: haritada ve kendi sitesinin sayfalarıyla.
+</SonucSayfasi>
+
+## Mimarlık ofisi web sitesi ne işe yarar?
+
+Mimarlar işlerini çoğu zaman tavsiyeyle, önceki işverenlerinden ve yarışmalardan alır. Site bu yolların yerine geçmez, onlara bir yol ekler. Tavsiyeyle gelen kişi görüşmeden önce ofisin adını arar ve biten işlere bakar. Ofisi hiç tanımayan kişi ise şehrin adıyla ve yaptırmak istediği yapıyla arama yapıp bir proje sayfasına iner.
+
+Sitenin bu işi yüklenmesinin bir nedeni daha var. TMMOB Mimarlar Odası Mesleki Davranış Kuralları Yönetmeliği’nin 7. maddesi mimar için “Hiçbir şekilde reklam yapamaz” der ([yönetmelik metni](http://www.mo.org.tr/mevzuatDocs/mesleki-davranis-080609.doc)). Bu yüzden mimarlık ofislerine ücretli reklam önermiyor, işi site, arama görünürlüğü ve Google İşletme Profili üzerine kuruyoruz. Kuralın kendi işinize nasıl uygulandığını bağlı olduğunuz şubeye sorabilirsiniz.
+
+Instagram hesabı olan ofisler sitenin gerekip gerekmediğini de sorar. Instagram ofisin vitrinidir; ama ev yaptıracak kişi karar vermeden önce projenin künyesini, işin nasıl ilerlediğini ve ofiste kimin çalıştığını okumak ister. Profildeki bağlantı paylaşılan projenin sayfasını açtığında iki kanal birbirini tamamlar.
+
+<Akis
+  asamalar={[
+    { ad: 'Arama', aciklama: 'Ofisin adı ya da şehir ve yapı türü yazılır.' },
+    { ad: 'Proje sayfası', aciklama: 'Kendi işine benzeyen yapıyı görür.', olcu: 'İlk karar' },
+    { ad: 'Süreç ve ofis', aciklama: 'İşin aşamalarını ve kiminle çalışacağını okur.' },
+    { ad: 'Görüşme', aciklama: 'Formu doldurur ya da arar.', olcu: 'Talep' },
+  ]}
+/>
+
+## Mimarlık sitesinde hangi sayfalar olmalı?
+
+Uzun bir sayfa listesi gerekmez. Gereken, her sayfanın ziyaretçinin tek bir sorusuna cevap vermesidir. Konut çizen bir ofis için temsili bir plan şöyle görünür:
+
+<Ornek
+  baslik="Konut projeleri çizen bir ofis için sayfa planı"
+  not="Plan temsilidir. Restorasyon ya da ticari yapı ağırlıklı bir ofiste proje kümeleri ve hizmet sayfaları ona göre değişir."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Sayfa</th>
+        <th scope="col">Cevap verdiği soru</th>
+        <th scope="col">Sayfada ne durur?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Ana sayfa</strong></td>
+        <td data-baslik="Cevap verdiği soru">Bu ofis ne yapıyor, nerede çalışıyor?</td>
+        <td data-baslik="Sayfada ne durur?">İlk ekranda yapı türleri ve şehir, seçilmiş birkaç proje, görüşme düğmesi</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Projeler</strong></td>
+        <td data-baslik="Cevap verdiği soru">Benim işime benzeyen bir iş var mı?</td>
+        <td data-baslik="Sayfada ne durur?">Yapı türüne göre ayrılmış liste: müstakil konut, apartman, ticari yapı, restorasyon</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Proje sayfası</strong></td>
+        <td data-baslik="Cevap verdiği soru">Bu yapıda ofis ne yaptı?</td>
+        <td data-baslik="Sayfada ne durur?">Künye, ofisin üstlendiği iş, plan, fotoğraflar, benzer bir iş için görüşme adımı</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Hizmetler ve süreç</strong></td>
+        <td data-baslik="Cevap verdiği soru">İş hangi aşamalarla ilerler?</td>
+        <td data-baslik="Sayfada ne durur?">Avan projeden ruhsat ve uygulama projelerine kadar aşamalar, her aşamada sizden istenenler</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>Ofis</strong></td>
+        <td data-baslik="Cevap verdiği soru">Kiminle çalışacağım?</td>
+        <td data-baslik="Sayfada ne durur?">Kurucu mimarın adı ve mesleki geçmişi, ekip, ofisin adresi</td>
+      </tr>
+      <tr>
+        <td data-baslik="Sayfa"><strong>İletişim</strong></td>
+        <td data-baslik="Cevap verdiği soru">Nasıl başlarım?</td>
+        <td data-baslik="Sayfada ne durur?">Görüşme formu, telefon, adres ve harita</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Hizmetler sayfasına eklenecek kısa soru cevaplar da iş görür: imar durumu nereden öğrenilir, ruhsat için hangi projeler hazırlanır, ilk görüşmeye ne getirilir? Bunlar ev yaptıracak kişinin Google’a ve yapay zekâ araçlarına sorduğu sorulardır. Cevabı ofisin sitesinde düz bir dille durduğunda ofis bu sorularda da anılabilir; konuyu [GEO nedir](/blog/geo-nedir/) yazısında açtık.
+
+Projelerin hangi sırayla dizileceğini ve hangisinin öne alınacağını [mimarlık portfolyosu nasıl hazırlanır](/blog/mimarlik-portfolyosu-nasil-hazirlanir/) yazısında anlattık. Alan adı, barındırma ve kurulumun kendisi için [web sitesi nasıl kurulur](/blog/web-sitesi-nasil-kurulur/) yazısına bakabilirsiniz.
+
+## Proje sayfası nasıl hazırlanır?
+
+Aramadan gelen ziyaretçi çoğu zaman doğrudan bir proje sayfasına iner ve ana sayfayı hiç görmeyebilir. Bu yüzden her proje sayfası tek başına açıldığında da ofisi, işi ve bir sonraki adımı anlatmalıdır. Sayfanın başlığı yapının türünü ve yerini taşır: “Proje 07” yerine “Bodrum’da taş cepheli müstakil konut”. Sayfayı oluşturan beş parça:
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Künye',
+      tanim: 'Yapının türü, yeri, yılı ve durumu; sayfanın başında tek satırda.',
+      ornek: 'Müstakil konut, Bodrum, 2025, tamamlandı.',
+    },
+    {
+      ad: 'Ofisin üstlendiği iş',
+      tanim: 'Mimari proje mi, uygulama mı, iç mekân mı; hangi aşamada ofisin imzası var.',
+      ornek: 'Mimari proje ve şantiye sürecinde denetim.',
+    },
+    {
+      ad: 'Fotoğraf ya da görselleştirme',
+      tanim: 'Biten yapının fotoğrafı ile bilgisayarda üretilmiş görsel ayrı etiketlenir.',
+      ornek: 'Görselin altında “Görselleştirme” yazar.',
+    },
+    {
+      ad: 'Alt metin',
+      acilim: 'alt text',
+      tanim: 'Görselin ne gösterdiğini anlatan, ekranda görünmeyen kısa açıklama.',
+      ornek: '“Taş cepheli iki katlı müstakil konut, bahçe cephesi.”',
+    },
+    {
+      ad: 'Görüşme adımı',
+      tanim: 'Sayfanın sonunda, benzer bir iş için yazılacak yer.',
+      ornek: '“Benzer bir ev için görüşelim” düğmesi formu açar.',
+    },
+  ]}
+/>
+
+Google’ın görseller için önerileri de aynı yöne gider. Görseli ilgili metnin yakınına koymayı, alt metni anahtar kelime yığmadan görselin ne gösterdiğini anlatacak biçimde yazmayı ve “IMG_0042.jpg” gibi genel adlar yerine kısa, açıklayıcı dosya adları kullanmayı önerir. Yalnız görselden oluşan bir proje sayfasında bu ipuçlarının hiçbiri bulunmaz.
+
+## Görüşme formunda neler sorulmalı?
+
+Formun işi ilk telefonu kısaltmaktır. Çok soru soran form yarıda bırakılır; hiç soru sormayan form ise yalnız “ücret ne kadar?” mesajları toplar. Önce sitenin hangi işi üstlendiğinizi açıkça söylemesi gerekir, çünkü iki ayrı müşteri aynı forma yazar:
+
+<Karsilastirma
+  sol={{
+    ust: 'Proje çizimi arayan',
+    baslik: 'Arsası var, yapımı başkası yürütecek',
+    maddeler: [
+      'Ruhsat için gereken projeleri ister.',
+      'Yapımı kendisi ya da müteahhidi üstlenir.',
+      'Süreci ve hangi belgelerin gerektiğini sorar.',
+    ],
+    uygun: 'Hizmet sayfası aşamaları ve sizden istenenleri anlatır',
+  }}
+  sag={{
+    ust: 'Anahtar teslim arayan',
+    baslik: 'Tasarımı ve yapımı tek elden ister',
+    maddeler: [
+      'Tek bir muhatapla çalışmak ister.',
+      'Yapım süresini ve sorumluluğu sorar.',
+      'Uygulama yapılmış işleri görmek ister.',
+    ],
+    uygun: 'Uygulamayı üstleniyorsanız ayrı sayfa; üstlenmiyorsanız bu açıkça yazılır',
+  }}
+  uygunEtiketi="Sitede"
+/>
+
+Formda beş soru çoğu ofis için yeter:
+
+- Arsanın ya da yapının yeri: il ve ilçe.
+- Yapı türü: müstakil konut, apartman, ticari yapı, tadilat ya da restorasyon.
+- İmar durumu biliniyor mu: evet, hayır, bilmiyorum.
+- İşin ne zaman başlaması isteniyor?
+- Nasıl dönüş istenir: telefon, e-posta ya da WhatsApp.
+
+Yayından önce formu kendi telefonunuzdan doldurun ve talebin kime, hangi kutuya düştüğünü görün. Talep ortak bir e-posta kutusuna düşüyorsa ona kimin, hangi gün içinde bakacağını da belirleyin.
+
+## Mimarlık sitesi telefonda neden yavaş açılır?
+
+Mimarlık siteleri büyük görsellerle çalışır. Google, görsellerin çoğu zaman sayfanın en büyük parçası olduğunu ve sayfayı yavaşlatabildiğini söyler; farklı ekran boyutları için farklı boyutta görsel sunmayı önerir. Masaüstü ekranı için hazırlanmış tek bir dev fotoğraf, telefonda da aynı ağırlıkla iner.
+
+<AraGorsel cizim="taslak" alt="Kâğıttan tel kafes çizimiyle bir dizüstü ve bir telefon">
+  Proje sayfasını önce telefonda açın. Masaüstünde etkileyici duran tam ekran görsel, mobil veride sayfanın açılmasını bekletebilir.
+</AraGorsel>
+
+Sitenin genel durumuna Search Console’daki Core Web Vitals raporundan bakılır; Google site sahiplerine bu metriklerde iyi sonuç almayı önerir. Tek bir sayfayı denemek için Google’ın ücretsiz aracı PageSpeed Insights yeterlidir. Ölçümü yeni proje eklendikçe tekrarlayın; uzun bir fotoğraf dizisi eklenen sayfa yeniden ağırlaşabilir.
+
+## Site yayına girdikten sonra iş getirmesi için ne yapılır?
+
+Şehrin adıyla “mimarlık ofisi” arayan kişiye Google çoğu zaman haritayı da gösterir. Google, yerel sonuçlarda alaka düzeyine, mesafeye ve belirginliğe baktığını; bilgileri eksiksiz ve doğru olan işletmelerin bu sonuçlarda çıkma olasılığının daha yüksek olduğunu söyler. Sitedeki ad, adres ve telefon profildekiyle aynı durmalıdır.
+
+<Not baslik="Profildeki ad, ofisin gerçek adı olmalı" tur="dikkat">
+  “Ofis Adı Mimarlık Bodrum Villa Projeleri” gibi ad eklemeleri Google’ın kurallarına aykırıdır ve profilin askıya alınmasına
+  yol açabilir. Yapı türleri ve şehir, sitenizde ve profilin diğer alanlarında durur.
+</Not>
+
+Sonra düzenli iş başlar. Biten her yapı siteye ve profile eklenir. Search Console’daki performans raporu sitenin hangi aramalarda gösterildiğini ve tıklandığını sorgu sorgu gösterir.
+
+“Villa projeleri” gibi fikir aramalarından ziyaretçi gelip görüşme talebi gelmiyorsa o proje sayfalarının sonundaki adım yeniden yazılır. Şehrin adıyla yapılan aramalarda hiç görünmüyorsanız önce ofis sayfasına ve profile bakılır. Yayından önce son kontrol:
+
+<KontrolListesi
+  kimlik="mimarlik-ofisi-sitesi-yayin"
+  baslik="Yayına almadan önce"
+  adimlar={[
+    'Ana sayfanın ilk ekranı, ofisin hangi yapılarda ve hangi şehirde çalıştığını söylüyor.',
+    'Her projenin kendi sayfası var; künye, ofisin üstlendiği iş ve görüşme adımı yazılı.',
+    'Fotoğraf ve görselleştirme ayrı etiketlendi, görsellerin alt metni yazıldı.',
+    'Formu telefondan doldurdum ve talebin doğru kişiye ulaştığını gördüm.',
+    'Bir proje sayfasını mobil veriyle açtım; görseller beklemeden yükleniyor.',
+    'Google İşletme Profili’ndeki ad, adres ve telefon sitedekiyle aynı.',
+  ]}
+  not="İşaretleyemediğiniz madde, ziyaretçinin siteden ayrıldığı yer olabilir."
+/>
+
+Profiliniz henüz açık değilse sıradaki adım [Google İşletme Profili nasıl açılır](/blog/google-isletme-profili-nasil-acilir/) yazısıdır. Siteyi birlikte kurmak isterseniz [kurumsal web tasarım](/hizmetler/web-tasarim/) işinde önce ofisinizin projelerini ve bugün arandığınızda ne çıktığını inceliyor, sayfa planını sizinle yazıyor, fotoğraf ve çizimlerinizi yerleştirip formu kuruyoruz. Mimarlık ofisleriyle nasıl çalıştığımız [mimarlık ofisleri için dijital pazarlama](/sektorler/mimarlik-ofisleri/) sayfasında.

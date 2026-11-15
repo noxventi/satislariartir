@@ -1,0 +1,1044 @@
+---
+/**
+ * Meta hizmet sayfası.
+ * Ana niyet: "meta reklam yönetimi", "instagram reklam verme", "instagram reklamları", "facebook reklam verme".
+ * H1 kararı ve arama verisi: arastirma/openseo-2026-11-14.md
+ *
+ * Düzen Google Ads sayfasındaki kalıbı izler (15 Kasım 2026):
+ * SayfaBasi (tanım cümlesi + kâğıt işi sahne) > BuSayfada > kapsam kartları > soru kartları > çalışma adımları >
+ * iki durum (ilk kez / reklam veren) > kampanya hedefi + kreatif testi > başvuru değerlendirme + proje >
+ * sık sorulan sorular > ilgili sayfalar > görüşme.
+ * Anlatım sırası: derinlemesine inceleme, bilinçli kurulum, düzenli optimizasyon, satış hedefi.
+ * Başka sayfalardan bağlanan çapalar: #kampanya-hedefi, #basvuru-degerlendirme, #ilk-kampanya.
+ * Bütün örnekler temsilidir. Meta arayüzüne dair ayrıntı yazılmaz; genel ve doğru kalan ifadeler kullanılır,
+ * ayrıntı için resmî yardım sayfalarına bağlantı verilir.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import SehirBaglantilari from '../../components/SehirBaglantilari.astro';
+import ProjeKarti from '../../components/ProjeKarti.astro';
+import MusteriSozu from '../../components/MusteriSozu.astro';
+import Cizim from '../../components/Cizim.astro';
+import Ikon from '../../components/Ikon.astro';
+import Isaret from '../../components/Isaret.astro';
+import { hizmetBul, SITE } from '../../site.config';
+import { MUSTERI_SOZLERI } from '../../data/projeler';
+
+import gorsel from '../../assets/gorseller/yol-akis.jpg';
+import kitle from '../../assets/cizimler/kitle.png';
+import mesaj from '../../assets/cizimler/mesaj.png';
+import megafon from '../../assets/cizimler/megafon.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+import terazi from '../../assets/cizimler/terazi.png';
+import takvim from '../../assets/cizimler/takvim.png';
+import hedef from '../../assets/cizimler/hedef.png';
+import kreatif from '../../assets/cizimler/kreatif.png';
+import telefon from '../../assets/cizimler/telefon.png';
+
+const hizmet = hizmetBul('meta');
+const soz = MUSTERI_SOZLERI['hun-education'];
+const kirintilar = [
+  { ad: 'Hizmetler', url: '/hizmetler/' },
+  { ad: 'Meta reklam yönetimi', url: hizmet.url },
+];
+
+const kapsam = [
+  {
+    ad: 'Hesap, kitle ve rakip incelemesi',
+    aciklama: 'Hesabınız varsa reklamlarınızı ve gelen mesajları, yoksa müşterinizi ve rakiplerinizi inceliyor; kime ne söyleneceğini çıkarıyoruz.',
+  },
+  { ad: 'Kampanya hedefi ve yapısı', aciklama: 'Mesaj, form ya da web sitesi hedefini iş düzeninize göre seçiyor, kampanyaları bu hedefe göre kuruyoruz.' },
+  { ad: 'Kitle ve bölge', aciklama: 'Reklamın kime ve nerede gösterileceğini, hizmet verdiğiniz bölgeye ve müşterinize göre belirliyoruz.' },
+  { ad: 'Kreatif ve reklam metni', aciklama: 'Hangi sözün ve hangi görsel fikrinin deneneceğini planlıyor, testleri tek değişkenle kuruyoruz.' },
+  {
+    ad: 'Form, ilk mesaj ve piksel',
+    aciklama: 'İlgisiz başvuruyu ayıklayan form sorusunu ve ilk yanıt metnini hazırlıyor; siteden başvuru alıyorsanız Meta Pikseli’nin doğru saydığını yayından önce test ediyoruz.',
+  },
+  { ad: 'Düzenli optimizasyon', aciklama: 'Gelen başvurulara düzenli bakıyor; sonuç getiren kreatifi ve kitleyi güçlendiriyor, getirmeyeni kapatıyoruz.' },
+];
+
+// Kapsamın dışında kalan ya da ilk görüşmede netleşen işler.
+const sizde = [
+  'Gelen mesajlara ve formlara dönmek',
+  'Başvurunun sonucunu bizimle paylaşmak: uygun muydu, görüşmeye döndü mü?',
+  'Reklam hesabının, Instagram hesabının ve Facebook sayfasının sahipliği',
+];
+const gorusmede = ['Fotoğraf ve video çekimi', 'Görsel tasarım ve video kurgusu', 'Reklam hesabı ve işletme hesabı kurulumu'];
+
+const sorunlar = [
+  {
+    soru: 'Instagram reklamından mesaj geliyor, neden satış olmuyor?',
+    ornek:
+      'Bir güzellik salonuna haftada onlarca mesaj geliyor ama randevu defteri dolmuyor. Yazanların bir kısmı başka şehirdedir, bir kısmı fiyat sorup kaybolur, bir kısmına da yanıt geç gitmiştir.',
+    care: 'Son mesajları tek tek okuyor; sorunun kitlede mi, reklamın sözünde mi, ilk yanıtta mı olduğunu buluyoruz.',
+    bag: { etiket: 'Mesaj geliyor, satış yok rehberi', url: '/blog/instagram-reklam-mesajlari-satisa-donusmuyor/' },
+    cizim: mesaj,
+  },
+  {
+    soru: 'Gönderiyi öne çıkardım, neden sonuç alamadım?',
+    ornek:
+      'Bir mobilyacı en çok beğenilen gönderisini öne çıkarıyor; beğeni artıyor, mağazaya gelen olmuyor. Öne çıkar düğmesinin hedef ve kitle seçenekleri Reklam Yöneticisi’ne göre sınırlıdır.',
+    care: 'Kampanyayı Reklam Yöneticisi’nde, istediğiniz başvuruya göre seçilmiş hedef ve kitleyle kuruyoruz.',
+    bag: { etiket: 'Reklam vermek için gerekenler', url: '/blog/meta-reklam-vermek-icin-gerekenler/' },
+    cizim: megafon,
+  },
+  {
+    soru: 'Mesaj mı, form mu, web sitesi mi?',
+    ornek:
+      'Pilates stüdyosuna yazan kişi o an yanıt bekler. Mimarlık ofisinin ise aramadan önce metrekareyi ve bölgeyi öğrenmesi gerekir. Aynı reklam, işe göre farklı bir yere çıkmalıdır.',
+    care: 'Hedefi, mesajlara kimin ne zaman döndüğüne ve ilk görüşmede hangi bilgiye ihtiyacınız olduğuna göre seçiyoruz.',
+    bag: { etiket: 'Kampanya hedefi nasıl seçilir?', url: '#kampanya-hedefi' },
+    cizim: yolAyrimi,
+  },
+  {
+    soru: 'Reklam görselim neden tutmuyor?',
+    ornek:
+      'Bir restoran özenle çekilmiş tabak fotoğrafıyla reklam veriyor; beğeni geliyor, rezervasyon gelmiyor. Beğeni toplayan görsel ile başvuru getiren görsel çoğu zaman aynı değildir.',
+    care: 'Aynı kitleye iki farklı söz gösteriyor, hangisinin başvuru getirdiğine bakıp sonraki kreatifi ona göre hazırlıyoruz.',
+    bag: { etiket: 'İlk kreatif testi nasıl kurulur?', url: '#kreatif-testi' },
+    cizim: terazi,
+    genis: true,
+  },
+];
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'Hesap, kitle ve mesaj analizi', aciklama: 'Hesabınızı ve gelen mesajları ya da pazarınızı inceliyor; müşterinizin kim olduğunu, neye karşılık verdiğini çıkarıyoruz.' },
+  { ad: 'Strateji', ozet: 'Hedef ve kampanya planı', aciklama: 'Mesaj, form ya da web sitesi hedefini seçiyor; kitleyi, bölgeyi ve reklamın vereceği sözü planlıyoruz.' },
+  { ad: 'Kurulum', ozet: 'Kampanya, kreatif, başvuru yolu', aciklama: 'Kampanyaları, ilk kreatifleri, form sorusunu ve ilk yanıt metnini kuruyor, yayından önce deniyoruz.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli takip ve kreatif testi', aciklama: 'Gelen başvurulara düzenli bakıyor, tek değişkenli testlerle sonuç getireni güçlendirip getirmeyeni kapatıyoruz.' },
+  { ad: 'Hedef', ozet: 'Satış ve müşteri hedefiniz', aciklama: 'Başarıyı beğeni ya da mesaj sayısıyla ölçmüyoruz; işletmenize gelen uygun talebe ve satışa bakıyoruz.' },
+];
+
+// Reklamın çıkabileceği üç yer. İşletme örnekleri temsilidir.
+const hedefler = [
+  {
+    ad: 'Mesaj',
+    ne: 'Reklama dokunan kişi WhatsApp ya da Instagram’da size yazar.',
+    ulasan: 'Yanıt bekleyen bir konuşma. İlk soruyu siz sorarsınız.',
+    uyar: 'Müşterisi soru sorarak karar veren ve mesajlara gün içinde dönebilen işletmelere. Güzellik salonu ya da pilates stüdyosu gibi.',
+    soru: 'Mesajlara kim, hangi saatlerde dönüyor?',
+  },
+  {
+    ad: 'Form',
+    ne: 'Kişi Instagram ya da Facebook’tan çıkmadan birkaç soruyu yanıtlar.',
+    ulasan: 'Adı ve iletişim bilgisi olan bir kayıt. Arayan taraf siz olursunuz.',
+    uyar: 'Aramadan önce iki üç sabit bilgiye ihtiyaç duyan işletmelere. Mimarlık ofisi ya da kombi servisi gibi.',
+    soru: 'Formdaki hangi soru ilgisiz başvuruyu ayıklar?',
+  },
+  {
+    ad: 'Web sitesi',
+    ne: 'Kişi sayfanıza gelir, ürünü ya da hizmeti inceler.',
+    ulasan: 'Sitedeki formdan, sepetten ya da telefondan gelen talep.',
+    uyar: 'Müşterisi karar vermeden önce ayrıntı görmek isteyen işletmelere. Mobilyacı ya da restoran gibi.',
+    soru: 'Sayfa telefonda sorunsuz açılıyor ve başvuruyu doğru sayıyor mu?',
+  },
+];
+
+// Temsili kreatif fikirleri: aynı hizmet, iki farklı söz.
+const kreatifler = [
+  {
+    ad: 'Kreatif A',
+    aci: 'Sorunu gösterir',
+    once: 'Havuzunuzun seramiği ',
+    vurgu: 'dökülüyorsa',
+    sonra: ' sezon açılmadan yenileyelim.',
+    gorsel: 'Aynı havuzun dökülen seramiği ve yenilenmiş hâli, yan yana iki fotoğraf.',
+    kime: 'Sorunu yaşayan ama henüz firma aramayan havuz sahibi.',
+  },
+  {
+    ad: 'Kreatif B',
+    aci: 'Sonraki adımı söyler',
+    once: 'Havuz yenileme için ',
+    vurgu: 'yerinde keşif',
+    sonra: ' isteyin.',
+    gorsel: 'Ustanın havuz kenarında ölçü aldığı an.',
+    kime: 'Yenilemeye karar vermiş, firma seçen havuz sahibi.',
+  },
+];
+
+const testFisi = [
+  { ad: 'Değişen tek şey', deger: 'Reklamın verdiği söz.' },
+  { ad: 'Sabit kalanlar', deger: 'Kitle, bölge, bütçe ve formdaki ilk soru.' },
+  { ad: 'Karar ölçütü', deger: 'Hizmet bölgesinden gelen, ihtiyacı açık başvuru. Mesaj sayısı tek başına ölçüt olmaz.' },
+  { ad: 'Sonraki test', deger: 'Öne geçen sözle iki farklı görsel.' },
+];
+
+// Temsili konuşma: reklamın sözü ile ilk yanıt aynı konuyu sürdürür.
+const konusma = [
+  { kim: 'Reklamın sözü', tur: 'reklam', metin: '“Havuz yenileme için yerinde keşif isteyin.”' },
+  { kim: 'Müşteri', tur: 'musteri', metin: '“Merhaba, keşif için bilgi alabilir miyim?”' },
+  { kim: 'İşletme', tur: 'isletme', metin: '“Merhaba. Havuzunuz hangi ilçede, yaklaşık kaç metrekare?”' },
+];
+
+// Temsili başvurular. Gerçek hesap verisi değildir; kararın nasıl verildiğini gösterir.
+const basvurular = [
+  { basvuru: '“Çankaya’dayız, villa havuzunun seramiği dökülüyor.”', karar: 'Uygun', tur: 'evet', degisen: 'Görüşmeye döner. Bu başvuruyu getiren söz ve kitle güçlendirilir.' },
+  { basvuru: '“Fiyat ne kadar?” Sonrasında yanıt yok.', karar: 'Belirsiz', tur: '', degisen: 'İlk yanıt gözden geçirilir: fiyat yerine ilçeyi ve ölçüyü sorar, keşfi önerir.' },
+  { basvuru: '“İzmir’deyim, gelir misiniz?”', karar: 'Bölge dışı', tur: 'hayir', degisen: 'Reklamın gösterildiği bölge, hizmet verilen bölgeyle sınırlanır.' },
+  { basvuru: '“Havuz kimyasalı satıyor musunuz?”', karar: 'Başka iş', tur: 'hayir', degisen: 'Reklam metni işi açık söyler: kimyasal satışı yok, yenileme var.' },
+];
+
+const sorular = [
+  {
+    soru: 'Meta reklam yönetimi nedir?',
+    cevap:
+      'Meta reklam yönetimi, Instagram ve Facebook’ta reklam veren bir işletmenin kampanyalarının hedefe göre kurulması, kitlenin ve kreatiflerin düzenli test edilmesi ve bütçenin başvuru getiren reklamlara yönlendirilmesi işidir. Kampanya hedefi seçimini, kitle ve bölge ayarını, reklam görseli ve metni planını, form ya da mesaj akışını ve düzenli optimizasyonu kapsar.',
+  },
+  {
+    soru: 'Instagram reklam verme işini kendim yapabilir miyim?',
+    cevap:
+      'Yapabilirsiniz; bir gönderiyi öne çıkarabilir ya da Meta Reklam Yöneticisi’nde kendi kampanyanızı kurabilirsiniz. Reklamı açmak kolaydır. Zaman alan kısım hedefi işinize göre seçmek, doğru kitleye göstermek ve gelen mesajlara bakıp neyin değişeceğine karar vermektir. Başlamadan önce hangi hesap ve yetkilerin gerektiğini rehberimizde anlattık.',
+    bag: { etiket: 'Instagram ve Facebook’ta reklam vermek için neler gerekir?', url: '/blog/meta-reklam-vermek-icin-gerekenler/' },
+  },
+  {
+    soru: 'Gönderiyi öne çıkarmak ile reklam vermek arasındaki fark ne?',
+    cevap:
+      'Gönderiyi öne çıkarmak, paylaştığınız bir gönderiyi uygulamanın içinden birkaç adımda reklama çevirir. Meta Reklam Yöneticisi’nde ise kampanya, istediğiniz sonuca göre seçilen hedeften başlanarak kurulur. Öne çıkar düğmesinin hedef ve kitle seçenekleri Reklam Yöneticisi’ne göre sınırlıdır. Beğeni ve görüntülenme için öne çıkarmak iş görebilir; mesaj, form ya da satış istiyorsanız Reklam Yöneticisi daha fazla seçenek sunar.',
+    bag: { etiket: 'Meta’nın kendi karşılaştırması', url: 'https://www.facebook.com/business/help/317083072148603' },
+  },
+  {
+    soru: 'Instagram reklamı mı, Facebook reklamı mı?',
+    cevap:
+      'İkisi aynı yerden, Meta Reklam Yöneticisi’nden yönetilir ve aynı kampanya hem Instagram’da hem Facebook’ta gösterilebilir. Hangisine ağırlık verileceğini müşterinizin hangi uygulamada vakit geçirdiği belirler. Başlangıçta genellikle ikisini birlikte açıyor, başvurunun hangisinden geldiğine bakarak bütçeyi düzenliyoruz.',
+  },
+  {
+    soru: 'Reklam hesabı kimin adına açılır?',
+    cevap:
+      'Reklam hesabı, Instagram hesabı ve Facebook sayfası işletmenizin adına açılır ve sizde kalır. Bize iş ortağı erişimi verirsiniz. Ödeme yöntemi ve sahiplik sizde durur; erişimi dilediğiniz zaman kaldırabilirsiniz. Hesaplarınız başka birinin adına açıldıysa nasıl devralınacağına ilk görüşmede birlikte bakarız.',
+  },
+  {
+    soru: 'Web sitem olmadan Instagram reklamı verebilir miyim?',
+    cevap:
+      'Evet, verebilirsiniz. Reklam web sitesi yerine WhatsApp ya da Instagram yazışmasına ya da reklamın içinde açılan bir forma yönlendirilebilir. Bu durumda mesajlara kimin, ne zaman döneceği daha da önem kazanır. Ürününüzü ya da hizmetinizi ayrıntılı göstermeniz gerekiyorsa sonradan bir sayfa eklenebilir.',
+    bag: { etiket: 'Web sitesi tasarımı hizmetimiz', url: '/hizmetler/web-tasarim/' },
+  },
+  {
+    soru: 'Reklam görsellerini ve videoları kim hazırlıyor?',
+    cevap:
+      'Hangi sözün ve hangi görsel fikrinin deneneceğini biz planlıyoruz. Fotoğraf, video çekimi ve tasarımın kimde olacağı işinize ve elinizdeki malzemeye göre değişir, ilk görüşmede netleşir. Elinizde işinizi gösteren gerçek fotoğraflar varsa ilk testler onlarla kurulabilir.',
+  },
+  {
+    soru: 'Instagram reklam bütçesi ne kadar olmalı?',
+    cevap:
+      'Tek bir doğru rakam yoktur. Bütçe; reklamı göstereceğiniz bölgenin büyüklüğüne, kaç başvuruya ihtiyacınız olduğuna ve aynı anda kaç kreatif denemek istediğinize göre belirlenir. Görüşmede işinizi ve hedefinizi birlikte ele alıp gerçekçi bir başlangıç planı çıkarıyoruz.',
+  },
+  {
+    soru: 'Sonuç garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Mesaj sayısı, mesaj maliyeti ya da satış için söz vermiyoruz. Söz verdiğimiz şey hesabınızı ve gelen başvuruları ayrıntılı incelemek, verdiğimiz kararları gerekçesiyle anlatmak ve düzenli optimizasyon yapmaktır.',
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Meta reklam yönetimi',
+    alternateName: 'Instagram ve Facebook reklam yönetimi',
+    serviceType: 'Instagram ve Facebook reklam yönetimi',
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    url: `${SITE.url}${hizmet.url}`,
+    description:
+      'Hesap ve kitle incelemesi, hedefe göre kampanya kurulumu, kreatif testleri ve düzenli optimizasyonla yürütülen Instagram ve Facebook (Meta) reklam yönetimi.',
+  },
+];
+---
+
+<Temel
+  baslik="Meta Reklam Yönetimi: Instagram ve Facebook | Satışları Artır"
+  aciklama="Instagram ve Facebook reklam yönetimi: hesap ve kitle incelemesi, hedefe göre kampanya kurulumu, kreatif testleri ve düzenli optimizasyon. İlk kampanyanız için de."
+  sayfaTuru="hizmet"
+  hizmet="meta"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: hizmet.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik="Instagram ve Facebook için Meta reklam yönetimi"
+    gorsel={gorsel}
+    gorselBicimi="dikey"
+    mobilOdak="50% 46%"
+    gorselAlt="Kâğıttan dev bir telefonun ekranındaki Instagram akışına bakan küçük müşteriler; akıştaki ışıkları yanan dükkân gönderisi kırmızı kalemle halkaya alınmış"
+    cagri={{ etiket: hizmet.cagri, url: '#gorusme', kanal: 'meta' }}
+    ikincil={{ etiket: 'İlk kampanyamı planlamak istiyorum', url: '#ilk-kampanya' }}
+  >
+    <p>
+      Meta reklam yönetimi, işinizi Instagram ve Facebook’ta doğru kişiye gösterme ve bütçeyi mesaj, form ya da satış
+      getiren reklamlara yönlendirme işidir.
+    </p>
+    <p>
+      İlk kez Instagram’da reklam verecekseniz kampanyayı hazırlığıyla birlikte kuruyor, reklam veriyorsanız hesabınızı
+      ve gelen mesajları inceleyip düzenli optimizasyonla geliştiriyoruz.
+    </p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Neleri kapsar?', hedef: 'kapsam' },
+      { etiket: 'Sık yaşanan sorunlar', hedef: 'sorunlar' },
+      { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+      { etiket: 'İlk kez ya da mevcut reklam', hedef: 'ilk-kampanya' },
+      { etiket: 'Hedef ve kreatif', hedef: 'kampanya-hedefi' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Kapsam -->
+  <section class="bolum bolum--beyaz" id="kapsam">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Meta reklam yönetimi neleri kapsar?</h2>
+          <div class="metin">
+            <p>
+              Gönderiyi öne çıkarmak işin küçük kısmıdır. Reklamın kime gösterileceği, ne söyleyeceği ve dokunan kişinin
+              nereye gideceği, yayından önce verilen kararlardır.
+            </p>
+          </div>
+        </div>
+        <Cizim src={kitle} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili">
+          {
+            kapsam.map((k) => (
+              <li>
+                <strong>{k.ad}</strong>
+                <span>{k.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="pay">
+          <div class="pay__giris">
+            <h3 class="baslik-3">Instagram reklamlarında hangi iş kimde?</h3>
+            <p class="kucuk">Yukarıdaki altı iş bizde. Kimin neyi üstlendiğini çalışmaya başlamadan önce birlikte yazıyoruz.</p>
+          </div>
+          <div class="pay__sutun">
+            <h4 class="baslik-4">Sizde kalan işler</h4>
+            <ul class="pay__liste">
+              {sizde.map((s) => <li>{s}</li>)}
+            </ul>
+          </div>
+          <div class="pay__sutun">
+            <h4 class="baslik-4">İlk görüşmede netleşenler</h4>
+            <ul class="pay__liste">
+              {gorusmede.map((s) => <li>{s}</li>)}
+            </ul>
+            <p class="mikro ikincil">Bu işler, sunduğumuz ölçüde ve elinizdeki malzemeye göre kapsama eklenir.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık yaşanan sorunlar -->
+  <section class="bolum" id="sorunlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Instagram reklamlarında en sık duyduğumuz sorular</h2>
+        <p class="giris">
+          İlk kez reklam veren de yıllardır veren de çoğu zaman aynı dört noktada takılıyor. Her birinde ilk baktığımız yer:
+        </p>
+      </div>
+      <SoruKartlari kartlar={sorunlar} />
+    </div>
+  </section>
+
+  <!-- Yöntem -->
+  <section class="bolum bolum--beyaz" id="yontem">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Instagram ve Facebook reklamlarında nasıl çalışıyoruz?</h2>
+        <p class="giris">
+          Reklamı açıp beklemiyoruz. Önce inceliyor, sonra kuruyor, ardından düzenli takip ve optimizasyonla hedefinize
+          yaklaştırıyoruz.
+        </p>
+      </div>
+      <Adimlar adimlar={adimlar} />
+    </div>
+  </section>
+
+  <!-- İki durum: ilk kez / reklam veren -->
+  <IkiDurum
+    kimlik="ilk-kampanya"
+    baslik="İlk kez mi reklam vereceksiniz, zaten veriyor musunuz?"
+    giris="İki durumda başlangıç noktası farklıdır. Hangisindeyseniz oradan başlıyoruz."
+    sol={{
+      ust: 'İlk kez Instagram’da reklam verecekseniz',
+      baslik: 'İlk kampanyayı hazırlığıyla birlikte kuruyoruz',
+      metin: 'İlk kampanyada reklamdan önce hazırlığı konuşuyoruz. Yayına çıkmadan dört soruya birlikte cevap veriyoruz.',
+      maddeler: [
+        { ad: 'Reklamı nereden açacaksınız?', aciklama: 'Gönderiyi öne çıkarmak ile Reklam Yöneticisi aynı hazırlığı istemez. Hesapların ve yetkilerin kimde olduğuna birlikte bakıyoruz.' },
+        { ad: 'Hangi başvuruyu istiyorsunuz?', aciklama: 'Mesaj, form ya da web sitesinden satış. Kampanyanın hedefi bu seçime göre kurulur.' },
+        { ad: 'Mesajlara kim dönecek?', aciklama: 'İlk yanıtı kimin, hangi saatlerde vereceği reklamdan önce belli olmalı.' },
+        { ad: 'İşinizi gösteren neyiniz var?', aciklama: 'Yaptığınız işin gerçek fotoğrafı ya da videosu. İlk kreatif fikirleri buradan çıkar.' },
+      ],
+      cagri: { etiket: 'İlk kampanyamı planlayalım', kampanyaDurumu: 'new', kanal: 'meta', yer: 'ilk-kampanya' },
+      bag: { etiket: 'Google Ads mi, Instagram mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+      cizim: takvim,
+    }}
+    sag={{
+      kimlik: 'hesap-inceleme',
+      ust: 'Instagram ya da Facebook’ta reklam veriyorsanız',
+      baslik: 'Yeni kampanya açmadan önce hesabınızı inceliyoruz',
+      metin: 'Hesaba baktığımız ilk gün yeni kampanya açmıyor, bütçeyi de artırmıyoruz. Önce reklamın bugün kime gittiğini ve size kimin yazdığını görmemiz gerekir.',
+      maddeler: [
+        { ad: 'Kampanya hedefi', aciklama: 'Kampanya beğeni ve etkileşim için mi kurulmuş, başvuru için mi? Hedef, istediğiniz sonuçla aynı mı?' },
+        { ad: 'Kitle ve bölge', aciklama: 'Reklamın gösterildiği kişileri ve bölgeyi, hizmet verdiğiniz yerle ve müşterinizle karşılaştırıyoruz.' },
+        { ad: 'Kreatif ve reklamın sözü', aciklama: 'Hangi görsel ve hangi söz başvuru getirmiş, hangisi yalnız beğeni toplamış?' },
+        { ad: 'Gelen mesajlar ve ilk yanıt', aciklama: 'Son mesajları birlikte okuyor; yazanların uygunluğuna ve ilk yanıtın reklamdaki sözü sürdürüp sürdürmediğine bakıyoruz.' },
+      ],
+      cagri: { etiket: hizmet.cagri, kampanyaDurumu: 'existing', kanal: 'meta', yer: 'hesap-inceleme' },
+    }}
+  />
+
+  <!-- Kampanya hedefi ve kreatif testi -->
+  <section class="bolum bolum--beyaz" id="kampanya-hedefi">
+    <div class="sarici">
+      <div class="hedef-ust">
+        <div class="hedef-ust__cizim" aria-hidden="true">
+          <Cizim src={hedef} sizes="(max-width: 47.99rem) 34vw, 15vw" genislikler={[240, 360, 520, 760]} />
+        </div>
+        <div class="hedef-ust__metin">
+          <h2 class="baslik-2">Mesaj, form ya da web sitesi: kampanya hedefi nasıl seçilir?</h2>
+          <p class="giris">
+            Aynı reklam üç ayrı yere çıkabilir: bir yazışmaya, reklamın içindeki bir forma ya da web sitenize. Hangisini
+            seçtiğiniz, ertesi sabah ekibinizin önüne ne düşeceğini belirler.
+          </p>
+        </div>
+      </div>
+
+      <ul class="hedefler">
+        {
+          hedefler.map((h, i) => (
+            <li class="hk" data-gir style={`--gecikme:${i * 90}ms`}>
+              <h3 class="hk__ad">{h.ad}</h3>
+              <p class="hk__ne">{h.ne}</p>
+              <dl class="hk__bilgi">
+                <div>
+                  <dt>Size ulaşan</dt>
+                  <dd>{h.ulasan}</dd>
+                </div>
+                <div>
+                  <dt>Kime uyar?</dt>
+                  <dd>{h.uyar}</dd>
+                </div>
+              </dl>
+              <p class="hk__soru">
+                <span>Önce bunu sorun</span>
+                <strong>{h.soru}</strong>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="hedef-alt">
+        <p class="metin">
+          Bir yolu diğerinden üstün saymıyoruz. Mesajlara gün içinde dönebilen bir ekip için yazışma, akşam topluca arama
+          yapan bir ekip için form daha uygun olabilir. Hedefi iş düzeninize göre seçiyor, gelen başvurulara bakıp
+          gerektiğinde değiştiriyoruz.
+        </p>
+        <ul class="hedef-alt__baglar">
+          <li>
+            <a class="ok-bag" href="/blog/meta-reklam-formu-mu-whatsapp-mi/">
+              Form mu, WhatsApp mesajı mı?
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </li>
+          <li class="kucuk ikincil">
+            Meta’nın kendi anlatımı:
+            <a href="https://www.facebook.com/business/help/1438417719786914" rel="noopener">Reklam Yöneticisi’nde reklam verme amacı seçme</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kreatif testi: aynı hizmet, iki söz -->
+      <div class="masa" id="kreatif-testi">
+        <div class="masa__ust">
+          <div class="masa__metin">
+            <h3 class="masa__baslik">İlk kreatif testi nasıl kurulur?</h3>
+            <div class="metin">
+              <p>
+                Hedef seçildikten sonra sıra reklamın ne söyleyeceğine gelir. İlk testte daha güzel olanı aramıyoruz,
+                farklı bir söz vereni arıyoruz. İki kreatif aynı kitleye, aynı bütçeyle, aynı form sorusuyla çıkar.
+                Değişen tek şey reklamın verdiği sözdür.
+              </p>
+            </div>
+          </div>
+          <div class="masa__cizim" aria-hidden="true">
+            <Cizim src={kreatif} sizes="(max-width: 47.99rem) 44vw, 18vw" genislikler={[280, 420, 640, 1024]} />
+          </div>
+        </div>
+
+        <div class="masa__fisler">
+          {
+            kreatifler.map((k, i) => (
+              <article class="ornek fis" data-gir style={`--gecikme:${i * 120}ms`}>
+                <div class="ornek__ust">
+                  <h4 class="baslik-4">{k.ad}</h4>
+                  <span class="hukum">{k.aci}</span>
+                </div>
+                <figure class="fis__gorsel">
+                  <div class="fis__cerceve" aria-hidden="true" />
+                  <figcaption class="kucuk">
+                    <span>Görsel fikri</span>
+                    {k.gorsel}
+                  </figcaption>
+                </figure>
+                <p class="fis__soz">“{k.once}<Isaret tip="alt">{k.vurgu}</Isaret>{k.sonra}”</p>
+                <p class="fis__kime kucuk">
+                  <span>Kime konuşur?</span>
+                  {k.kime}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="ornek test">
+          <div class="ornek__ust">
+            <h4 class="baslik-4">Test fişi</h4>
+            <span class="temsili">Temsili örnek: havuz yenileme</span>
+          </div>
+          <dl class="test__liste">
+            {
+              testFisi.map((t) => (
+                <div>
+                  <dt>{t.ad}</dt>
+                  <dd>{t.deger}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          <p class="ornek__not">
+            İki fikir de temsilidir. Sizin testiniz kendi işinizin gerçek görüntüsüyle ve kendi müşterinizin sözleriyle kurulur.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Başvuru değerlendirme -->
+  <section class="bolum" id="basvuru-degerlendirme">
+    <div class="sarici konu">
+      <div class="konu__baslik konu__baslik--yapiskan basvuru-baslik">
+        <h2 class="baslik-2">Gelen başvuruları nasıl değerlendiriyoruz?</h2>
+        <div class="metin">
+          <p>
+            Reklam panelinde her mesaj bir sayıdır. İşletmede ise her biri ayrı bir konuşmadır: biri hizmet
+            bölgenizdedir, biri fiyat sorup kaybolur, bir başkası sizin yapmadığınız bir işi arıyordur.
+          </p>
+          <p>
+            Örnekteki dört başvuruyu panel dört başvuru olarak sayar; yalnız biri görüşmeye döner. Kampanyayı panelin
+            sayısına göre büyütürseniz aynı dört başvurudan daha fazlasını alırsınız.
+          </p>
+          <p>
+            Bu yüzden gelen mesajları sizinle birlikte okuyor, her biri için kampanyada neyin değişeceğine karar
+            veriyoruz.
+          </p>
+        </div>
+        <a class="ok-bag basvuru-bag" href="/blog/instagram-reklam-mesajlari-satisa-donusmuyor/">
+          Kendi mesajlarınızı sınıflandırın
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+        <Cizim src={telefon} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik konu__icerik--genis">
+        <div class="ornek">
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Reklamın sözünden ilk yanıta</h3>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+          <ol class="ks">
+            {
+              konusma.map((k) => (
+                <li class:list={['ks__oge', `ks__oge--${k.tur}`]}>
+                  <span class="ks__kim">{k.kim}</span>
+                  <p class="sorgu">{k.metin}</p>
+                </li>
+              ))
+            }
+            <li class="ks__sonuc">
+              <span class="hukum hukum--evet">Sonraki adım</span>
+              <p>Keşif günü belirlenir.</p>
+            </li>
+          </ol>
+          <p class="ornek__not">
+            İlk yanıt reklamdaki sözü sürdürür ve uygunluğu bir iki soruyla anlar. Form kullanılıyorsa aynı soru formun ilk
+            sorusudur.
+          </p>
+        </div>
+
+        <div class="ornek">
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Dört başvuru, dört karar</h3>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+          <table class="tablo tablo--yigin">
+            <thead>
+              <tr>
+                <th scope="col">Başvuru</th>
+                <th scope="col">Karar</th>
+                <th scope="col">Kampanyada ne değişir?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                basvurular.map((b) => (
+                  <tr>
+                    <td data-baslik="Başvuru">
+                      <span class="sorgu">{b.basvuru}</span>
+                    </td>
+                    <td data-baslik="Karar">
+                      <span class:list={['hukum', b.tur && `hukum--${b.tur}`]}>{b.karar}</span>
+                    </td>
+                    <td data-baslik="Ne değişir?">{b.degisen}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <p class="ornek__not">
+            Tabloda isim ve telefon yok; değerlendirme için gerekmez. Sizin kampanyanızda bu tabloyu kendi mesajlarınızla
+            kuruyoruz.
+          </p>
+        </div>
+      </div>
+      <div class="konu__tam proje-yeri">
+        <ProjeKarti
+          kimlik="hun-education"
+          metin="Macaristan’da üniversite okumak isteyen öğrencilere ve ailelerine ulaşmak için yürüttüğümüz reklam çalışması. Kampanyaları programlara ve hedef kitlelere göre ayırdık; bütçeyi, dönüşüm takibini ve iletişimi işletmenin de görebileceği biçimde düzenledik."
+        />
+      </div>
+    </div>
+  </section>
+
+  <Sss
+    baslik="Meta reklam yönetimi hakkında sık sorulan sorular"
+    giris="Instagram ve Facebook reklamları, hesap sahipliği ve ajansla çalışma hakkında en çok sorulanlar."
+    sorular={sorular}
+    zemin="acik"
+  />
+
+  <SehirBaglantilari hizmet="reklam" baslik="Şehrinize göre reklam yönetimi" metin="Hedefleme, mevsim ve mesaj düzeni şehre göre değişir. Altı şehir için ayrı sayfalar yazdık." />
+
+  <IlgiliSayfalar
+    baslik="Instagram reklam rehberleri ve ilgili hizmetler"
+    sayfalar={[
+      { tur: 'Blog', baslik: 'Instagram reklamından mesaj geliyor ama neden satış olmuyor?', url: '/blog/instagram-reklam-mesajlari-satisa-donusmuyor/', cizim: mesaj },
+      { tur: 'Blog', baslik: 'Instagram reklamında form mu, WhatsApp mı?', url: '/blog/meta-reklam-formu-mu-whatsapp-mi/', cizim: yolAyrimi },
+      { tur: 'Blog', baslik: 'Instagram’da reklam vermek için neler gerekir?', url: '/blog/meta-reklam-vermek-icin-gerekenler/', cizim: takvim },
+      { tur: 'Hizmet', baslik: 'Google Ads reklam yönetimi', url: '/hizmetler/google-ads-yonetimi/', cizim: hedef },
+    ]}
+  />
+
+  <GorusmeBandi
+    baslik="Son on mesajınıza birlikte bakalım."
+    metin="Reklam veriyorsanız son dönemde gelen mesajları, vermiyorsanız ulaşmak istediğiniz müşteriyi anlatın. Görüşmeye buradan başlayalım."
+    kanal="meta"
+    cagri={hizmet.cagri}
+    konum="hizmet-meta"
+  >
+    <MusteriSozu soz={soz.soz} kisi={soz.kisi} kurum={soz.kurum} baglam={soz.baglam} kaynakUrl={soz.kaynakUrl} zemin="koyu" />
+  </GorusmeBandi>
+</Temel>
+
+<style>
+  /* ---- Kapsam: hangi iş kimde ------------------------------------------------ */
+  .pay {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.6vw, 2.5rem);
+    align-items: start;
+    padding: clamp(1.4rem, 2.6vw, 2.25rem);
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  .pay__giris,
+  .pay__sutun {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+  }
+  .pay__giris p {
+    color: var(--murekkep-2);
+    max-width: 24em;
+  }
+  .pay__liste {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .pay__liste li {
+    position: relative;
+    padding-inline-start: 1.3rem;
+    color: var(--murekkep-2);
+  }
+  .pay__liste li::before {
+    content: '';
+    position: absolute;
+    left: 0.1rem;
+    top: 0.62em;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 1px;
+    background: var(--mavi);
+  }
+  @media (max-width: 55.99rem) {
+    .pay {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---- Kampanya hedefi: üç yol ------------------------------------------------ */
+  .hedef-ust {
+    display: grid;
+    grid-template-columns: clamp(9rem, 17vw, 15.5rem) minmax(0, 46rem);
+    column-gap: clamp(1rem, 3vw, 3rem);
+    align-items: center;
+    margin-block-end: clamp(2rem, 4vw, 3.25rem);
+  }
+  /* Çizimin kendi beyaz payı kadar dışarı taşar: hedef tahtası başlıkla aynı hizada görünür. */
+  .hedef-ust__cizim {
+    margin: -1.5rem 0 -1.5rem -1.75rem;
+  }
+  .hedef-ust__metin {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .hedefler {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  }
+  .hk {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1rem;
+    padding: clamp(1.3rem, 2.2vw, 2rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .hk__ad {
+    font-size: clamp(2rem, 1.5rem + 1.9vw, 3rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    letter-spacing: -0.028em;
+    line-height: 1;
+  }
+  .hk__ne {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.0938rem, 1.02rem + 0.3vw, 1.25rem);
+    font-weight: 600;
+    font-stretch: 94%;
+    letter-spacing: -0.008em;
+    line-height: 1.28;
+    max-width: 22em;
+  }
+  .hk__bilgi {
+    display: grid;
+    gap: 0.85rem;
+    align-content: start;
+  }
+  .hk__bilgi dt,
+  .test__liste dt,
+  .fis__gorsel span,
+  .fis__kime span,
+  .hk__soru span,
+  .ks__kim {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    line-height: 1.3;
+    color: var(--ikincil);
+  }
+  .hk__bilgi dt {
+    margin-block-end: 0.15rem;
+  }
+  .hk__bilgi dd {
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  /* Karar sorusu: kartın altına iliştirilmiş beyaz not kâğıdı. */
+  .hk__soru {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.9rem 1rem 1rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0 1px 2px rgb(16 28 57 / 0.08);
+  }
+  .hk__soru span {
+    color: var(--kirmizi-koyu);
+  }
+  .hk__soru strong {
+    font-family: var(--yazi-baslik);
+    font-size: 1.0938rem;
+    font-weight: 640;
+    font-stretch: 94%;
+    letter-spacing: -0.008em;
+    line-height: 1.25;
+  }
+  /* Üç kart yan yanayken satırlar hizalanır: başlık, cümle, bilgi ve soru aynı çizgide başlar. */
+  @supports (grid-template-rows: subgrid) {
+    @media (min-width: 62rem) {
+      .hk {
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+      }
+    }
+  }
+  .hedef-alt {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 1.25rem clamp(1.5rem, 5vw, 5rem);
+    align-items: start;
+    margin-block-start: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .hedef-alt__baglar {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+  }
+  @media (max-width: 61.99rem) {
+    .hedefler {
+      grid-template-columns: 1fr;
+    }
+    .hk {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-rows: auto 1fr auto;
+      column-gap: clamp(1.25rem, 3vw, 2.5rem);
+    }
+    .hk__ad,
+    .hk__ne {
+      grid-column: 1;
+    }
+    .hk__bilgi {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+    .hk__soru {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .hedef-ust {
+      grid-template-columns: 1fr;
+      row-gap: 0.75rem;
+    }
+    .hedef-ust__cizim {
+      width: 8.5rem;
+      margin: -0.75rem 0 -0.75rem -1rem;
+    }
+    .hedef-alt {
+      grid-template-columns: 1fr;
+    }
+    .hk {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+    }
+    .hk__bilgi {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+
+  /* ---- Kreatif testi: soluk mavi masada iki taslak ve test fişi ------------------ */
+  .masa {
+    display: grid;
+    gap: clamp(1.25rem, 2.6vw, 2.25rem);
+    margin-block-start: clamp(3rem, 6vw, 5.5rem);
+    padding: clamp(1.5rem, 3.4vw, 3.25rem);
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  .masa__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 44rem) auto;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 2rem;
+  }
+  .masa__metin {
+    display: grid;
+    gap: 1rem;
+  }
+  .masa__baslik {
+    font-size: clamp(1.7rem, 1.3rem + 1.7vw, 2.7rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.024em;
+    line-height: 1.04;
+  }
+  .masa__cizim {
+    width: clamp(9.5rem, 17vw, 14.5rem);
+    margin-block: clamp(-2.5rem, -3vw, -1rem);
+  }
+  .masa__fisler {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.6vw, 1.4rem);
+  }
+  /* Beyaz bölümde örnek kâğıdı kırık beyaza döner; mavi masanın üstünde yeniden beyaz ve gölgeli durur. */
+  .masa .ornek {
+    background: var(--beyaz);
+    box-shadow: var(--golge);
+  }
+  .fis {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1.1rem;
+  }
+  .fis .ornek__ust {
+    align-items: center;
+    margin-block-end: 0;
+  }
+  /* Görsel fikri: reklam taslağında görselin geleceği, çapraz çizgili boş çerçeve ve altındaki not. */
+  .fis__gorsel {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .fis__cerceve {
+    height: clamp(4.25rem, 7.5vw, 6.75rem);
+    border: 1.5px dashed var(--cizgi-koyu);
+    border-radius: var(--kose);
+    background:
+      linear-gradient(to top right, transparent calc(50% - 0.6px), var(--cizgi) calc(50% - 0.6px), var(--cizgi) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
+      linear-gradient(to bottom right, transparent calc(50% - 0.6px), var(--cizgi) calc(50% - 0.6px), var(--cizgi) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
+      var(--kagit);
+  }
+  .fis__gorsel figcaption {
+    display: grid;
+    gap: 0.15rem;
+    color: var(--murekkep-2);
+    max-width: 32em;
+  }
+  .fis__soz {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.45rem, 1.15rem + 1.3vw, 2.15rem);
+    font-weight: 660;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.14;
+    text-wrap: balance;
+  }
+  .fis__kime {
+    display: grid;
+    gap: 0.15rem;
+    color: var(--murekkep-2);
+  }
+  .test__liste {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem clamp(1.25rem, 3vw, 2.75rem);
+    margin-block-start: 1.1rem;
+  }
+  .test__liste dt {
+    margin-block-end: 0.2rem;
+  }
+  .test__liste dd {
+    font-family: var(--yazi-baslik);
+    font-size: 1.0938rem;
+    font-weight: 560;
+    font-stretch: 94%;
+    letter-spacing: -0.006em;
+    line-height: 1.3;
+  }
+  @media (max-width: 61.99rem) {
+    .test__liste {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 47.99rem) {
+    /* Telefonda masa ekranın iki kenarına dayanır: kâğıtlar daralmasın. */
+    .masa {
+      margin-inline: calc(var(--kenar) * -1);
+      padding: 2rem var(--kenar);
+      border-radius: 0;
+    }
+    .masa__ust {
+      grid-template-columns: 1fr;
+      row-gap: 0.5rem;
+    }
+    .masa__cizim {
+      order: -1;
+      width: 9.5rem;
+      margin: -1rem 0 -0.75rem -0.75rem;
+    }
+    .masa__fisler {
+      grid-template-columns: 1fr;
+    }
+    .test__liste {
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+  }
+
+  /* ---- Başvuru değerlendirme: örnek konuşma ---------------------------------------- */
+  .ks {
+    display: grid;
+    gap: 0.6rem;
+    margin-block-start: 1rem;
+  }
+  .ks__oge {
+    display: grid;
+    gap: 0.2rem;
+    max-width: min(88%, 30rem);
+    padding: 0.7rem 0.95rem 0.8rem;
+    border-radius: var(--kose);
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.2rem);
+    line-height: 1.3;
+  }
+  .ks__oge--reklam {
+    max-width: none;
+    background: var(--mavi-acik);
+  }
+  .ks__oge--musteri {
+    justify-self: start;
+    background: var(--kagit);
+  }
+  .ks__oge--isletme {
+    justify-self: end;
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .ks__oge--isletme .ks__kim {
+    color: rgb(255 255 255 / 0.72);
+  }
+  .ks__sonuc {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    padding-block-start: 0.35rem;
+    font-weight: 600;
+  }
+  /* Yapışkan başlık kendi katmanını açar; zemin verilmezse içindeki çizim bölüm zeminine karışmaz. */
+  .basvuru-baslik {
+    background: var(--zemin);
+  }
+  .basvuru-bag {
+    justify-self: start;
+  }
+  @media (max-width: 47.99rem) {
+    .basvuru-bag,
+    .hedef-alt__baglar .ok-bag {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+  .proje-yeri {
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+  }
+</style>

@@ -1,0 +1,251 @@
+---
+no: 23
+kapak: seo-analizi
+kapakAlt: "Ön duvarı kaldırılmış iki katlı kâğıt dükkân; öndeki denetçi dev bir büyüteçle içeriye bakıyor, merdivendeki ikinci denetçi kapıyı şerit metreyle ölçüyor, yerde satırları kırmızı kalemle işaretli bir not panosu duruyor"
+soru: SEO analizi nasıl yapılır?
+baslik: SEO Analizi Nasıl Yapılır?
+aciklama: >-
+  SEO analizi nasıl yapılır? Google’ın ücretsiz araçlarıyla sitenizin dizin durumuna, göründüğü aramalara ve
+  hızına sırayla bakın; bulguları önceliklendirin.
+aramalar:
+  - seo analizi
+  - site seo analizi
+  - seo araçları
+kisaCevap: >-
+  SEO analizi, bir web sitesinin Google’da görünmesini engelleyen ya da zorlaştıran sorunları bulmak için yapılan
+  incelemedir. Sırayla dört şeye bakılır: sayfalar Google’ın dizininde mi, site hangi aramalarda gösteriliyor,
+  sayfalar telefonda hızlı ve düzgün açılıyor mu, başlıklar ve sayfa yapısı aramaya cevap veriyor mu. Bunların hepsi
+  Google’ın ücretsiz araçlarıyla, yani site: aramasıyla, Search Console’la ve PageSpeed Insights’la yapılabilir.
+  Analizin çıktısı, öncelik sırasına konmuş bir düzeltme listesidir.
+elinizeGecen: Altı adımlı analiz sırası, dört ücretsiz araç ve bulgu öncelik tablosu
+hizmetler: [seo]
+hizmetBaglantisi:
+  etiket: SEO danışmanlığı
+  url: /hizmetler/seo-danismanligi/
+sonraki: backlink-nedir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 9
+kaynaklar:
+  - ad: Search Console Yardımı, Sayfa dizine ekleme raporu
+    url: https://support.google.com/webmasters/answer/7440203?hl=tr
+    tur: resmi
+  - ad: "Search Console Yardımı, Performans raporu (Arama sonuçları): Genel bakış ve temel kurulum"
+    url: https://support.google.com/webmasters/answer/7576553?hl=tr
+    tur: resmi
+  - ad: Search Console Yardımı, Core Web Vitals raporu
+    url: https://support.google.com/webmasters/answer/9205520?hl=tr
+    tur: resmi
+  - ad: Google for Developers, PageSpeed Insights Hakkında
+    url: https://developers.google.com/speed/docs/insights/v5/about?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, SEO’ya ihtiyacınız var mı?
+    url: https://developers.google.com/search/docs/fundamentals/do-i-need-seo?hl=tr
+    tur: resmi
+---
+
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Bir nakliye firmasının sahibini düşünün. İnternette bulduğu bir araca sitesinin adresini yazıyor; ekranda büyük bir puan ve altında kırmızıyla işaretlenmiş uzun bir hata listesi çıkıyor.
+
+Liste, hangi hatanın müşteri kaybettirdiğini söylemiyor. SEO analizi bu soruya cevap arar: sitenin Google’da görünmesini bugün ne engelliyor ve hangisi önce düzeltilmeli? Bunun için gereken araçların hepsi Google’ın kendi araçlarıdır.
+
+<AraGorsel cizim="harita" alt="Bir ana sayfadan dallanan kâğıttan site haritası; alt sıradaki sayfalardan biri kırmızı kalemle işaretli">
+  Analiz, Google’ın izlediği sırayı izler: sayfa önce taranır, sonra dizine girer, en son sıralanır.
+</AraGorsel>
+
+## SEO analizi nedir?
+
+SEO (arama motoru optimizasyonu) analizi, bir web sitesinin Google’da görünmesini engelleyen ya da zorlaştıran sorunları bulmak için yapılan incelemedir. SEO denetimi ya da site SEO analizi diye de anılır. Sonunda elinizde neyin, hangi sırayla düzeltileceğini söyleyen bir liste olur.
+
+Analiz üç soruya cevap verir:
+
+- Google sayfalarınıza ulaşabiliyor ve onları dizine ekliyor mu?
+- Siteniz hangi aramalarda gösteriliyor, hangilerinde tıklanıyor?
+- Gelen kişi sayfayı telefonunda rahatça açıp aradığını bulabiliyor mu?
+
+Site yeni yayına girdiğinde, yenilendiğinde ya da başka bir adrese taşındığında analiz yapılır. Aramadan gelen ziyaretçi belirgin biçimde düştüğünde de ilk iş budur. SEO çalışmasına başlamadan önce yapılan analiz, işin nereden başlayacağını belirler.
+
+## SEO analizi için hangi araçlar gerekir?
+
+İlk analiz için dört araç yeter. Dördü de Google’ındır ve kullanmak için ödeme yapmazsınız.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'site: araması',
+      tanim: 'Google’a site:alanadiniz.com yazarak dizindeki sayfalarınızdan bir örnek görmenizi sağlayan arama operatörü.',
+      ornek: 'site:alanadiniz.com nakliye yazarsanız o konudaki sayfalarınız listelenir.',
+    },
+    {
+      ad: 'Search Console',
+      tanim: 'Google’ın, sitenizin arama sonuçlarındaki durumunu izlemeniz ve sorunları gidermeniz için sunduğu ücretsiz hizmet.',
+      ornek: 'Sayfa dizine ekleme, Performans ve Core Web Vitals raporları buradadır.',
+    },
+    {
+      ad: 'URL Denetleme aracı',
+      tanim: 'Tek bir sayfanın Google dizinindeki durumunu gösteren ve sayfanın dizine eklenebilir olup olmadığını test eden Search Console aracı.',
+      ornek: 'Yeni yazdığınız hizmet sayfasının adresini araca yapıştırırsınız.',
+    },
+    {
+      ad: 'PageSpeed Insights',
+      tanim: 'Bir sayfanın mobil ve masaüstü cihazlardaki kullanıcı deneyimini raporlayan ve iyileştirme önerileri sunan araç.',
+      ornek: 'Ana sayfanızın adresini yazıp mobil sonuca bakarsınız.',
+    },
+  ]}
+/>
+
+### SEO puanı veren araçlara ne kadar güvenilir?
+
+Bu dört aracın dışında, adresinizi yazınca puan veren araçlar ve rakip siteleri toplu gösteren ücretli SEO araçları da vardır. Hızlı bir ilk bakış sunarlar ve gözden kaçan bir şeyi yakalayabilirler. Sınırlarını bilerek kullanın: puan, onu veren aracın kendi kontrol listesine göre hesaplanır. Araç, hesabınıza bağlanmadığı sürece Search Console verinizi görmez; sayfanızın hangi aramalarda gösterildiğini bilmez.
+
+Google’ın bu konudaki ifadesi açıktır: üçüncü taraf SEO araçlarını değerlendirmez ve desteklemez; bu araçların Google’ın dahili sıralama verilerine erişimi yoktur. Önerisi, bir aracın raporuna dayanarak sitede büyük bir değişiklik yapmadan önce o öneriyi Google’ın resmî belgeleriyle karşılaştırmaktır.
+
+## Site SEO analizi hangi sırayla yapılır?
+
+Sıra, Google’ın bir sayfayı işlediği sırayla aynıdır: önce tarama ve dizine ekleme, sonra görünürlük, en son sayfanın kendisi. Üstteki adımda sorun varsa alttakilere geçmek zaman kaybettirir.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Google’da site: araması yapın',
+      aciklama:
+        'Arama kutusuna site:alanadiniz.com yazın. Sonuç çıkıyorsa siteniz dizindedir. Ardından ana sayfanızın ve hizmet sayfalarınızın tam adresini aynı biçimde arayın.',
+      not: 'Bu arama dizindeki bütün sayfaları göstermez; bir örnek verir.',
+    },
+    {
+      ad: 'Sayfa dizine ekleme raporunu açın',
+      aciklama:
+        'Search Console’daki bu rapor hangi sayfaların dizine eklendiğini, hangilerinin eklenmediğini ve nedenini gösterir. Müşteri getirmesini beklediğiniz sayfaların hepsi dizinde olmalıdır.',
+      not: 'Bilerek kapattığınız ya da kopya olan sayfaların dizin dışında kalması sorun sayılmaz.',
+    },
+    {
+      ad: 'Performans raporunda sorgulara bakın',
+      aciklama:
+        'Hangi aramalarda gösterildiğinizi, kaç tıklama aldığınızı, tıklama oranını (TO) ve ortalama konumu görürsünüz. Çok gösterilip az tıklanan sayfaları not edin.',
+    },
+    {
+      ad: 'Hızı ve telefondaki görünümü ölçün',
+      aciklama:
+        'Core Web Vitals raporu sayfalarınızın gerçek kullanıcı verisine göre durumunu gösterir. Tek tek sayfaları PageSpeed Insights ile test edin, sonra aynı sayfayı kendi telefonunuzda açın.',
+    },
+    {
+      ad: 'Başlıkları ve açıklamaları okuyun',
+      aciklama:
+        'Her sayfanın başlığı o sayfaya özgü mü, sayfanın ne sunduğunu söylüyor mu? Google, sonuçtaki başlığı sayfanın başlık etiketinden ve sayfadaki başlıklardan, altındaki açıklamayı da sayfanın içeriğinden ya da meta açıklamasından üretir.',
+    },
+    {
+      ad: 'Sayfa yapısını ve iç bağlantıları kontrol edin',
+      aciklama:
+        'Her hizmetin ayrı bir sayfası var mı? Google’ın önerisi, önemsediğiniz her sayfaya sitenizdeki en az bir başka sayfadan bağlantı verilmesidir.',
+    },
+  ]}
+/>
+
+Daha önce SEO yaptırdıysanız ve sonuç alamadıysanız üçüncü adımda durun. Gösterim artıyor ama tıklama artmıyorsa başlıklar aramaya cevap vermiyordur. Tıklama var ama arayan yoksa sorun aramada aranmaz; sayfanın kendisine bakılır.
+
+## Sitem Google’da neden çıkmıyor?
+
+Analizin ilk iki adımı bu soruya cevap verir. Küçük bir siteniz varsa işiniz daha kolaydır: Search Console’un yardım sayfası, 500’den az sayfası olan sitelerin çoğu zaman Sayfa dizine ekleme raporuna bile ihtiyaç duymadığını, site: aramasının yettiğini söyler.
+
+Sayfanız dizinde değilse bakılacak dört yer vardır:
+
+- **Sayfa dizine kapatılmış olabilir.** Sayfada “noindex” kuralı vardır. Yeni kurulan sitelerde bu ayar yapım aşamasından açık kalmış olabilir.
+- **Google sayfaya ulaşamıyor olabilir.** robots.txt dosyasındaki bir kural taramayı engelliyordur ya da sunucu hata veriyordur.
+- **Sayfaya giden bir yol olmayabilir.** Google’ın bir sayfayı tarayabilmesi için o sayfaya bilinen bir sayfadan ya da site haritasından bağlantı verilmiş olmalıdır.
+- **Site yeni olabilir.** Google’ın yeni bir siteyi taramaya başlaması ve dizine eklemesi bir haftayı bulabilir.
+
+Dizinde olmak, her aramada görünmek anlamına gelmez. Google, sonuçların arayan kişinin konumuna, arama geçmişine ve başka değişkenlere göre değiştiğini yazar. Sitenizi kendi telefonunuzda arayıp gördüğünüz sıraya güvenmeyin; Performans raporundaki ortalama konuma bakın.
+
+## Site hızı ve Core Web Vitals nasıl ölçülür?
+
+Google, dizine eklerken ve sıralarken [sitenin telefonda görünen sürümünü](https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing?hl=tr) kullanır. Telefonda eksik açılan bir sayfa Google için de eksiktir. Hız tarafında bakılan üç ölçünün ortak adı Core Web Vitals’tır; Türkçede Önemli Web Verileri diye de geçer.
+
+- **LCP (Largest Contentful Paint).** Sayfanın ana içeriğinin yüklenme süresi. İyi sayılan değer 2,5 saniye ve altıdır.
+- **INP (Interaction to Next Paint).** Sayfanın dokunmaya ve tıklamaya yanıt verme süresi. İyi sayılan değer 200 milisaniye ve altıdır.
+- **CLS (Cumulative Layout Shift).** Sayfa yüklenirken öğelerin yerinden oynama miktarı. İyi sayılan değer 0,1 ve altıdır.
+
+Search Console’daki Core Web Vitals raporu sayfalarınızı bu ölçülere göre gruplar ve bir sayfa grubunun durumunu en kötü ölçüsü belirler. Rapor gerçek kullanıcı verisine dayandığı için yeni bir sitede “veri yok” gösterebilir.
+
+PageSpeed Insights iki tür veri gösterir. Alan verisi, sayfanızı son 28 günde gerçekten açmış kullanıcılardan gelir; yeni ya da az ziyaret alan sayfalarda bulunmayabilir. Laboratuvar verisi o anda yapılan tek bir denemedir ve sorunun kaynağını bulmak için kullanılır.
+
+## SEO analizinde bulgular nasıl önceliklendirilir?
+
+Analiz bittiğinde elinizde uzunca bir liste olur. Hepsini aynı anda düzeltmeye çalışmayın. Önce taramayı ve dizine eklemeyi engelleyenler gelir. Ardından talebi doğrudan kesenler: çalışmayan form, dokunulamayan telefon numarası. Başlıklar ve içerik bunlardan sonra, küçük iyileştirmeler en sonda ele alınır.
+
+<Ornek
+  baslik="Bir nakliye firmasının sitesi için analiz bulguları"
+  not="Bulgular gerçek bir sitenin analizinden alınmadı; önceliğin nasıl verildiğini gösterir. Sizin sitenizde sıra farklı çıkabilir."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Bulgu</th>
+        <th scope="col">Nerede görüldü</th>
+        <th scope="col">Öncelik</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Bulgu"><strong>Hizmet sayfaları “noindex” ile işaretli, dizinde yok</strong></td>
+        <td data-baslik="Nerede">Sayfa dizine ekleme raporu</td>
+        <td data-baslik="Öncelik"><span class="hukum hukum--isaret">Önce</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Bulgu"><strong>Telefonda teklif formunun gönder düğmesi ekranın dışında kalıyor</strong></td>
+        <td data-baslik="Nerede">Kendi telefonunda deneme</td>
+        <td data-baslik="Öncelik"><span class="hukum hukum--isaret">Önce</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Bulgu"><strong>Ev taşıma ve ofis taşıma tek sayfada anlatılıyor</strong></td>
+        <td data-baslik="Nerede">Performans raporundaki sorgular</td>
+        <td data-baslik="Öncelik"><span class="hukum">Sonra</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Bulgu"><strong>Bütün sayfaların başlığı yalnız firma adı</strong></td>
+        <td data-baslik="Nerede">site: araması</td>
+        <td data-baslik="Öncelik"><span class="hukum">Sonra</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Bulgu"><strong>Ana sayfanın LCP değeri “İyileştirme gerektiriyor” durumunda</strong></td>
+        <td data-baslik="Nerede">PageSpeed Insights</td>
+        <td data-baslik="Öncelik"><span class="hukum">Sonra</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Bulgu"><strong>Bazı görsellerde alternatif metin yok</strong></td>
+        <td data-baslik="Nerede">Sayfaların tek tek okunması</td>
+        <td data-baslik="Öncelik"><span class="hukum hukum--hayir">Bekleyebilir</span></td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Her bulgunun yanına düzeltmeyi kimin yapacağını ve düzeltmenin çalıştığını nasıl göreceğinizi yazın. “noindex” kaldırıldıysa URL Denetleme aracında sayfa dizine eklenebilir görünmelidir. Form düzeltildiyse kendi telefonunuzdan gönderdiğiniz deneme başvurusu size ulaşmalıdır.
+
+<Not baslik="Analizi başkasına yaptıracaksanız" tur="ipucu">
+  Google, SEO denetimi teklif eden kişiye bu aşamada Search Console’da yalnız okuma erişimi verilmesini, yazma erişimi
+  verilmemesini önerir. Hesap sizin adınıza açılmış olsun; erişimi dilediğinizde kaldırırsınız.
+</Not>
+
+<KontrolListesi
+  kimlik="seo-analizi-cikti"
+  baslik="Analiz bittiğinde elimde olanlar"
+  adimlar={[
+    'Müşteri getirmesini beklediğim sayfaların hepsi dizinde; olmayanların nedenini biliyorum.',
+    'Hangi aramalarda gösterildiğimi ve hangilerinde tıklanmadığımı listeledim.',
+    'Ana sayfamı ve hizmet sayfalarımı PageSpeed Insights’ta ve kendi telefonumda denedim.',
+    'Her sayfanın başlığı o sayfaya özgü ve ne sunduğunu söylüyor.',
+    'Bulguları öncelik sırasına koydum; ilk sıradakileri kimin düzelteceği belli.',
+  ]}
+  not="Sitede büyük bir değişiklik yaptıktan sonra aynı listeyi yeniden doldurun."
+/>
+
+Analiz size eksik sayfaları gösterdiyse hangi sayfaların gerektiğini [anahtar kelime nedir, nasıl bulunur](/blog/anahtar-kelime-nedir/) yazısındaki eşleştirme tablosuyla çıkarabilirsiniz. Bağlantı tarafını [backlink nedir](/blog/backlink-nedir/) yazısı, işin bütününü [SEO nedir](/blog/seo-nedir/) yazısı anlatır.
+
+Bulguları çıkardınız ama hangisinin önce geleceğine karar veremiyorsanız ya da düzeltmeleri yapacak kimseniz yoksa sıradaki adım listeye birlikte bakmaktır. [SEO danışmanlığı](/hizmetler/seo-danismanligi/) çalışmasına bu incelemeyle başlıyoruz; her bulguyu önceliğiyle, yapılan düzeltmeyle ve düzeltmenin çalıştığını gösteren kontrolle birlikte yazıyoruz.

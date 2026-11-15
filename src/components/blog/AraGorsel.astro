@@ -1,0 +1,24 @@
+---
+/**
+ * Yazı içi görsel: soluk mavi kartta kâğıt işi nesne ve yanında bölümün ana cümlesi.
+ * Kullanım (MDX): <AraGorsel cizim="terazi" alt="...">Bölümün tek cümlelik özü.</AraGorsel>
+ * "cizim", src/assets/cizimler/ altındaki dosyanın adıdır (uzantısız). Görünüm kuralları blog/[slug].astro içindedir.
+ */
+import type { ImageMetadata } from 'astro';
+import Cizim from '../Cizim.astro';
+
+const cizimler = import.meta.glob<{ default: ImageMetadata }>('../../assets/cizimler/*.png', { eager: true });
+
+interface Props {
+  cizim: string;
+  alt?: string;
+}
+const { cizim, alt = '' } = Astro.props;
+const kayit = cizimler[`../../assets/cizimler/${cizim}.png`];
+if (!kayit) throw new Error(`AraGorsel: src/assets/cizimler/${cizim}.png bulunamadı.`);
+---
+
+<figure class="ara-gorsel" data-gir>
+  <Cizim src={kayit.default} alt={alt} sizes="(max-width: 35.99rem) 44vw, 13rem" genislikler={[240, 360, 520]} />
+  <figcaption><slot /></figcaption>
+</figure>

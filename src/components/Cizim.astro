@@ -1,0 +1,49 @@
+---
+/**
+ * Marka illüstrasyonu. Çizimler saf beyaz zeminde üretilir ve "multiply" ile alttaki yüzeye karışır:
+ * kırık beyaz, beyaz ya da açık mavi kartlarda zemin kendiliğinden kaybolur.
+ * Koyu zeminde kullanılmaz.
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt?: string;
+  sizes?: string;
+  genislikler?: number[];
+  oncelik?: boolean;
+  class?: string;
+}
+const { src, alt = '', sizes = '(max-width: 47.99rem) 70vw, 28vw', genislikler = [320, 480, 720, 960], oncelik = false, class: sinif } = Astro.props;
+
+const liste = genislikler.filter((w) => w <= src.width);
+if (!liste.length) liste.push(src.width);
+const webp = await getImage({ src, widths: liste, format: 'webp', quality: 84 });
+const yedek = await getImage({ src, width: Math.min(720, src.width), format: 'png' });
+---
+
+<picture class:list={['cizim', sinif]}>
+  <source type="image/webp" srcset={webp.srcSet.attribute} sizes={sizes} />
+  <img
+    src={yedek.src}
+    alt={alt}
+    width={src.width}
+    height={src.height}
+    loading={oncelik ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={oncelik ? 'high' : undefined}
+  />
+</picture>
+
+<style>
+  .cizim {
+    display: block;
+  }
+  .cizim img {
+    display: block;
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+  }
+</style>

@@ -1,0 +1,328 @@
+{
+  "celikvillam": {
+    "gor": [
+      {
+        "src": "https://celikvillam.com/brand/rotech-symbol-192.webp",
+        "srcset": "/brand/rotech-symbol-96.webp 1x, /brand/rotech-symbol-192.webp 2x",
+        "dogal": [
+          96,
+          96
+        ],
+        "ust": 16
+      },
+      {
+        "src": "https://celikvillam.com/brand/rotech-symbol-192.webp",
+        "srcset": "/brand/rotech-symbol-96.webp 1x, /brand/rotech-symbol-192.webp 2x",
+        "dogal": [
+          96,
+          96
+        ],
+        "ust": 0
+      },
+      {
+        "src": "https://celikvillam.com/brand/rotech-logo-720.webp",
+        "srcset": null,
+        "dogal": [
+          0,
+          0
+        ],
+        "ust": 14053
+      }
+    ],
+    "og": "https://celikvillam.com/og/ana-sayfa.jpg",
+    "dokunma": "/apple-touch-icon.png",
+    "simge": [
+      "48x48 https://celikvillam.com/favicon.ico",
+      "32x32 https://celikvillam.com/favicon-32.png"
+    ],
+    "ld": [
+      "\"logo\":{\"@type\":\"ImageObject\",\"@id\":\"https://celikvillam.com/#logo\",\"url\":\"https://celikvillam.com/brand/rotech-logo.png\",\"contentUrl\":\"https://celikvillam.com/brand/rotech-logo.png\",\"width\":1690,\"height\":1498,\"caption\":\"Rotech Mühendislik\"}"
+    ],
+    "markaYazi": "ROTECH MÜHENDİSLİK Rotech Mühendislik ana sayfa",
+    "markaFont": "Archivo, \"Archivo Fallback\", system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  },
+  "burger-engineer": {
+    "gor": [
+      {
+        "src": "https://burgerengineer.com.tr/_astro/mark.Dq5cJo2E.svg",
+        "srcset": null,
+        "dogal": [
+          260,
+          150
+        ],
+        "ust": 21
+      },
+      {
+        "src": "https://burgerengineer.com.tr/_astro/mark.Dq5cJo2E.svg",
+        "srcset": null,
+        "dogal": [
+          260,
+          150
+        ],
+        "ust": 0
+      }
+    ],
+    "og": "https://burgerengineer.com.tr/og.jpg",
+    "dokunma": "/apple-touch-icon.png",
+    "simge": [
+      "32x32 https://burgerengineer.com.tr/favicon.ico",
+      " https://burgerengineer.com.tr/favicon.svg"
+    ],
+    "ld": [
+      "\"logo\":\"https://burgerengineer.com.tr/brand/burger-engineer-logo.png\""
+    ],
+    "markaYazi": "Burger Engineer",
+    "markaFont": "\"Barlow Condensed\", \"Arial Narrow\", \"Roboto Condensed\", sans-serif"
+  },
+  "eduregist": {
+    "gor": [
+      {
+        "src": "https://eduregist.com/brand/mark.png",
+        "srcset": null,
+        "dogal": [
+          512,
+          512
+        ],
+        "ust": 0
+      },
+      {
+        "src": "https://eduregist.com/brand/mark-dark.png",
+        "srcset": null,
+        "dogal": [
+          512,
+          512
+        ],
+        "ust": 17
+      },
+      {
+        "src": "https://eduregist.com/brand/mark.png",
+        "srcset": null,
+        "dogal": [
+          512,
+          512
+        ],
+        "ust": 0
+      },
+      {
+        "src": "https://eduregist.com/brand/mark-dark.png",
+        "srcset": null,
+        "dogal": [
+          512,
+          512
+        ],
+        "ust": 14442
+      }
+    ],
+    "og": "https://eduregist.com/opengraph-image.jpg?opengraph-image.2mu_gwrw4b5jb.jpg",
+    "dokunma": "/apple-icon.png?apple-icon.2rc9di6gty5nr.png",
+    "simge": [
+      "256x256 https://eduregist.com/icon.png?icon.00v3l7vqwe0bo.png"
+    ],
+    "ld": [],
+    "markaYazi": "İçeriğe geç",
+    "markaFont": "Geist, \"Geist Fallback\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  },
+  "esvia": {
+    "gor": [
+      {
+        "src": "https://www.esvia.com.tr/images/brand/esvia-logo@3x.png?v=2",
+        "srcset": "/images/brand/esvia-logo.png?v=2 1x, /images/brand/esvia-logo@2x.png?v=2 2x, /images/brand/esvia-logo@3x.png?v=2 3x",
+        "dogal": [
+          92,
+          64
+        ],
+        "ust": 8
+      },
+      {
+        "src": "https://www.esvia.com.tr/images/brand/esvia-logo@2x.png?v=2",
+        "srcset": "/images/brand/esvia-logo.png?v=2 1x, /images/brand/esvia-logo@2x.png?v=2 2x",
+        "dogal": [
+          92,
+          64
+        ],
+        "ust": 0
+      },
+      {
+        "src": "https://www.esvia.com.tr/images/brand/esvia-logo@3x.png?v=2",
+        "srcset": "/images/brand/esvia-logo@2x.png?v=2 1x, /images/brand/esvia-logo@3x.png?v=2 2x",
+        "dogal": [
+          138,
+          96
+        ],
+        "ust": 7974
+      }
+    ],
+    "og": "https://www.esvia.com.tr/images/og/esvia-og.jpg",
+    "dokunma": "/apple-touch-icon.png",
+    "simge": [
+      " https://www.esvia.com.tr/favicon.svg",
+      "32x32 https://www.esvia.com.tr/favicon-32.png"
+    ],
+    "ld": [
+      "\"logo\":\"https://www.esvia.com.tr/images/brand/esvia-logo@2x.png?v=2\""
+    ],
+    "markaYazi": "",
+    "markaFont": "Manrope, \"Manrope Fallback\", system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif"
+  },
+  "white-earth-atelier": {
+    "gor": [
+      {
+        "src": "https://whiteearthatelier.com/brand/lockup.webp",
+        "srcset": "/brand/lockup.webp 640w, /brand/lockup@2x.webp 1280w",
+        "dogal": [
+          190,
+          36
+        ],
+        "ust": 18
+      }
+    ],
+    "og": "https://whiteearthatelier.com/brand/og-default.jpg",
+    "dokunma": "/brand/apple-touch-icon.png",
+    "simge": [
+      "32x32 https://whiteearthatelier.com/brand/favicon-32.png"
+    ],
+    "ld": [
+      "\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://whiteearthatelier.com/brand/white-earth-atelier-logo.png\",\"width\":1024,\"height\":1024}"
+    ],
+    "markaYazi": "",
+    "markaFont": "Manrope, \"Manrope Fallback\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  },
+  "estika": {
+    "gor": [
+      {
+        "src": "https://estika.com.tr/assets/brand/estika-logo@2x.png",
+        "srcset": "/assets/brand/estika-logo.png 316w, /assets/brand/estika-logo@2x.png 632w",
+        "dogal": [
+          132,
+          63
+        ],
+        "ust": 10
+      },
+      {
+        "src": "https://estika.com.tr/assets/brand/estika-logo-light.png",
+        "srcset": "/assets/brand/estika-logo-light.png 316w, /assets/brand/estika-logo-light@2x.png 632w",
+        "dogal": [
+          0,
+          0
+        ],
+        "ust": 6850
+      }
+    ],
+    "og": "https://estika.com.tr/assets/social/estika-og.jpg",
+    "dokunma": "/assets/brand/apple-touch-icon.png",
+    "simge": [
+      "48x48 https://estika.com.tr/favicon.ico",
+      "32x32 https://estika.com.tr/assets/brand/favicon-32.png"
+    ],
+    "ld": [
+      "\"logo\":\"https://estika.com.tr/assets/brand/estika-logo.png\""
+    ],
+    "markaYazi": "",
+    "markaFont": "Manrope, system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif"
+  },
+  "suha-akyildiz": {
+    "gor": [
+      {
+        "src": "https://suha.av.tr/_astro/logo.CVDs51qk_jkh9k.webp",
+        "srcset": "/_astro/logo.CVDs51qk_ZcwkWk.webp 56w, /_astro/logo.CVDs51qk_Z24tpxS.webp 112w, /_astro/logo.CVDs51qk_jkh9k.webp 168w",
+        "dogal": [
+          56,
+          50
+        ],
+        "ust": 17
+      },
+      {
+        "src": "https://suha.av.tr/_astro/logo.CVDs51qk_jkh9k.webp",
+        "srcset": "/_astro/logo.CVDs51qk_ZcwkWk.webp 56w, /_astro/logo.CVDs51qk_Z24tpxS.webp 112w, /_astro/logo.CVDs51qk_jkh9k.webp 168w",
+        "dogal": [
+          56,
+          50
+        ],
+        "ust": 0
+      },
+      {
+        "src": "https://suha.av.tr/_astro/logo.CVDs51qk_Z1Wb71A.webp",
+        "srcset": "/_astro/logo.CVDs51qk_ZCEzH7.webp 72w, /_astro/logo.CVDs51qk_Z1Wb71A.webp 144w, /_astro/logo.CVDs51qk_1arKrj.webp 200w",
+        "dogal": [
+          0,
+          0
+        ],
+        "ust": 7195
+      }
+    ],
+    "og": "https://suha.av.tr/assets/og/P01.png",
+    "dokunma": "/apple-touch-icon.png",
+    "simge": [
+      "32x32 https://suha.av.tr/favicon.ico",
+      "192x192 https://suha.av.tr/assets/icon-192.png"
+    ],
+    "ld": [
+      "\"logo\":\"https://suha.av.tr/assets/logo.png\""
+    ],
+    "markaYazi": "Av. Suha Akyıldız Akyıldız Hukuk ve Danışmanlık , ana sayfa",
+    "markaFont": "Archivo-49d86c7bc00ee9ab, \"Archivo-49d86c7bc00ee9ab fallback: Arial\", Arial, sans-serif"
+  },
+  "rotech-danismanlik": {
+    "gor": [
+      {
+        "src": "https://rotechdanismanlik.com/assets/brand/rotech-logo-720.webp",
+        "srcset": "/assets/brand/rotech-logo-240.webp 240w, /assets/brand/rotech-logo-360.webp 360w, /assets/brand/rotech-logo-480.webp 480w, /assets/brand/rotech-logo-720.webp 720w",
+        "dogal": [
+          138,
+          52
+        ],
+        "ust": 12
+      },
+      {
+        "src": "https://rotechdanismanlik.com/assets/brand/rotech-logo-720.webp",
+        "srcset": "/assets/brand/rotech-logo-240.webp 240w, /assets/brand/rotech-logo-360.webp 360w, /assets/brand/rotech-logo-480.webp 480w, /assets/brand/rotech-logo-720.webp 720w",
+        "dogal": [
+          240,
+          91
+        ],
+        "ust": 7134
+      }
+    ],
+    "og": "https://rotechdanismanlik.com/og/home.jpg",
+    "dokunma": "/apple-icon.png?bd708f0db2f66007",
+    "simge": [
+      "96x96 https://rotechdanismanlik.com/icon.png?4f955dd7461e180e"
+    ],
+    "ld": [
+      "\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://rotechdanismanlik.com/brand/rotech-logo.png\",\"width\":1513,\"height\":573}"
+    ],
+    "markaYazi": "",
+    "markaFont": "\"Red Hat Text Web\", \"Red Hat Text Fallback\", system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  },
+  "bodrum-olive-house": {
+    "gor": [
+      {
+        "src": "https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light.png",
+        "srcset": "https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light-300x148.png 300w, https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light-768x380.png 768w, https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light.png 829w",
+        "dogal": [
+          300,
+          148
+        ],
+        "ust": 12
+      },
+      {
+        "src": "https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light.png",
+        "srcset": "https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light-300x148.png 300w, https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light-768x380.png 768w, https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light.png 829w",
+        "dogal": [
+          300,
+          148
+        ],
+        "ust": 9116
+      }
+    ],
+    "og": "https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-hero-coastline-1024x576.jpg",
+    "dokunma": "https://bodrumolivehouse.com/wp-content/uploads/2026/08/cropped-551f2284-3ba3-4447-bb53-f7636647656f-180x180.png",
+    "simge": [
+      "32x32 https://bodrumolivehouse.com/wp-content/uploads/2026/08/cropped-551f2284-3ba3-4447-bb53-f7636647656f-32x32.png",
+      "192x192 https://bodrumolivehouse.com/wp-content/uploads/2026/08/cropped-551f2284-3ba3-4447-bb53-f7636647656f-192x192.png"
+    ],
+    "ld": [],
+    "markaYazi": "",
+    "markaFont": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif"
+  }
+}

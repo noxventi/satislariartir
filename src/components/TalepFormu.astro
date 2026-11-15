@@ -1,0 +1,333 @@
+---
+/**
+ * Görüşme talebi formu.
+ *
+ * - İlk görünüm: ad, işletme adı ve tek bir iletişim tercihi. Seçilen yöntemin alanı zorunludur.
+ * - Kanal geldiği sayfadan dolu gelir, düzenlenebilir.
+ * - Betik olmadan da gönderilir (sunucu doğrular ve yönlendirir). Betikle: alan altı hata,
+ *   tekrar önleme anahtarı, korunmuş alanlarla yeniden deneme.
+ * - Başarı yalnız sunucu kaydı kalıcılaştırdığında gösterilir (/tesekkurler/).
+ */
+import Ikon from './Ikon.astro';
+import { KANALLAR, type KanalDegeri } from '../site.config';
+
+interface Props {
+  kanal?: KanalDegeri;
+  /** Gönder düğmesi. Sayfanın ana çağrısıyla aynı etiket. */
+  cagri?: string;
+  /** new: ilk kampanya. existing: mevcut hesap. */
+  kampanyaDurumu?: 'new' | 'existing' | '';
+  /** Ölçümde form_location. */
+  konum: string;
+  kimlik?: string;
+}
+const { kanal = 'belirsiz', cagri = 'Talebimi gönder', kampanyaDurumu = '', konum, kimlik = 'talep' } = Astro.props;
+const k = (ad: string) => `${kimlik}-${ad}`;
+---
+
+<form
+  class="talep"
+  method="post"
+  action="/api/talep/"
+  novalidate
+  data-talep-formu
+  data-konum={konum}
+  aria-labelledby={Astro.slots.has('baslik') ? k('baslik') : undefined}
+>
+  {Astro.slots.has('baslik') && <div id={k('baslik')} class="talep__baslik"><slot name="baslik" /></div>}
+
+  <input type="hidden" name="talep_kimligi" value="" />
+  <input type="hidden" name="kampanya_durumu" value={kampanyaDurumu} />
+  <input type="hidden" name="kaynak" value="" />
+  <input type="hidden" name="sayfa" value={Astro.url.pathname} />
+  <input type="hidden" name="acilis" value="" />
+  {/* Otomatik doldurucuları ayıklayan alan. İnsan ziyaretçi görmez, doldurmaz. */}
+  <div class="talep__bal" aria-hidden="true">
+    <label>Bu alanı boş bırakın <input type="text" name="firma_web" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <div class="talep__durum" role="alert" tabindex="-1" data-form-durumu hidden>
+    <Ikon ad="warning-circle" boyut={20} />
+    <div>
+      <p data-form-durumu-metni></p>
+      <button type="submit" class="ok-bag" data-yeniden hidden>
+        <Ikon ad="arrow-counter-clockwise" boyut={16} />Yeniden dene
+      </button>
+    </div>
+  </div>
+
+  <div class="talep__ikili">
+    <div class="alan">
+      <label for={k('ad')}>Adınız</label>
+      <input class="girdi" id={k('ad')} name="ad" type="text" autocomplete="name" required maxlength="80" aria-describedby={k('ad-hata')} />
+      <p class="alan__hata" id={k('ad-hata')} data-hata="ad" hidden></p>
+    </div>
+    <div class="alan">
+      <label for={k('isletme')}>İşletme adınız</label>
+      <input class="girdi" id={k('isletme')} name="isletme" type="text" autocomplete="organization" required maxlength="120" aria-describedby={k('isletme-hata')} />
+      <p class="alan__hata" id={k('isletme-hata')} data-hata="isletme" hidden></p>
+    </div>
+  </div>
+
+  <fieldset class="talep__yontem">
+    <legend class="alan__etiket">Size nasıl dönelim?</legend>
+    <div class="secim">
+      <label class="secim__oge">
+        <input type="radio" name="yontem" value="telefon" checked />
+        <span><Ikon ad="phone" boyut={18} />Telefonla</span>
+      </label>
+      <label class="secim__oge">
+        <input type="radio" name="yontem" value="eposta" />
+        <span><Ikon ad="envelope-simple" boyut={18} />E-postayla</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="alan" data-yontem="telefon">
+    <label for={k('telefon')}>Telefon numaranız</label>
+    <input class="girdi" id={k('telefon')} name="telefon" type="tel" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="05xx xxx xx xx" aria-describedby={k('telefon-hata')} />
+    <p class="alan__hata" id={k('telefon-hata')} data-hata="telefon" hidden></p>
+  </div>
+  <div class="alan" data-yontem="eposta">
+    <label for={k('eposta')}>E-posta adresiniz</label>
+    <input class="girdi" id={k('eposta')} name="eposta" type="email" inputmode="email" autocomplete="email" maxlength="160" placeholder="ad@isletme.com" aria-describedby={k('eposta-hata')} />
+    <p class="alan__hata" id={k('eposta-hata')} data-hata="eposta" hidden></p>
+  </div>
+
+  <div class="alan">
+    <label for={k('kanal')}>Hangi konuda görüşmek istiyorsunuz?</label>
+    <select class="girdi" id={k('kanal')} name="kanal">
+      {KANALLAR.map((o) => <option value={o.deger} selected={o.deger === kanal}>{o.etiket}</option>)}
+    </select>
+  </div>
+
+  <details class="talep__ek">
+    <summary>
+      <Ikon ad="plus" boyut={16} />
+      <span class="talep__ek-etiket">Not ya da site adresi ekleyin <span class="alan__istege">(isteğe bağlı)</span></span>
+    </summary>
+    <div class="talep__ek-ic">
+      <div class="alan">
+        <label for={k('mesaj')}>Kısaca neyi çözmek istiyorsunuz?</label>
+        <textarea class="girdi" id={k('mesaj')} name="mesaj" rows="3" maxlength="1200"></textarea>
+      </div>
+      <div class="alan">
+        <label for={k('adres')}>Web sitesi ya da Instagram adresiniz</label>
+        <input class="girdi" id={k('adres')} name="adres" type="text" inputmode="url" autocomplete="url" maxlength="200" />
+      </div>
+    </div>
+  </details>
+
+  <button class="dugme dugme--tam talep__gonder" type="submit" data-ana-cagri data-gonder>
+    <span data-gonder-metni>{cagri}</span>
+    <Ikon ad="arrow-right" boyut={18} class="talep__ok" />
+    <Ikon ad="circle-notch" boyut={18} class="talep__bekle" />
+  </button>
+
+  <p class="talep__bilgi mikro">
+    Bilgileriniz yalnız bu görüşme talebini yanıtlamak için kullanılır. Ayrıntılar
+    <a href="/aydinlatma/">aydınlatma metninde</a>.
+  </p>
+</form>
+
+<script>
+  import { talepFormlariniBaslat } from '../scripts/talep-formu.ts';
+  talepFormlariniBaslat();
+</script>
+
+<style>
+  .talep {
+    display: grid;
+    gap: 1.15rem;
+    container-type: inline-size;
+  }
+  .talep__baslik {
+    margin-block-end: 0.35rem;
+  }
+  .talep__bal {
+    position: absolute;
+    left: -200vw;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .talep__ikili {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem 1rem;
+  }
+  @container (max-width: 30rem) {
+    .talep__ikili {
+      grid-template-columns: 1fr;
+    }
+  }
+  .talep__yontem {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+  .talep__yontem legend {
+    padding: 0;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 620;
+    font-stretch: 98%;
+    margin-block-end: 0.45rem;
+  }
+  .secim {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .secim__oge {
+    position: relative;
+    cursor: pointer;
+  }
+  .secim__oge input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .secim__oge span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.125rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    font-family: var(--yazi-baslik);
+    font-weight: 600;
+    font-stretch: 96%;
+    font-size: 1rem;
+    color: var(--murekkep-2);
+    background: var(--beyaz);
+    transition:
+      border-color var(--hizli),
+      background-color var(--hizli),
+      color var(--hizli);
+  }
+  .secim__oge:hover span {
+    border-color: var(--murekkep);
+  }
+  .secim__oge input:checked + span {
+    border-color: var(--murekkep);
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .secim__oge input:focus-visible + span {
+    outline: 2px solid var(--mavi);
+    outline-offset: 3px;
+  }
+
+  /* Seçilen yöntemin tek alanı görünür. Betik gerekmez. */
+  .talep:has(input[name='yontem'][value='telefon']:checked) [data-yontem='eposta'],
+  .talep:has(input[name='yontem'][value='eposta']:checked) [data-yontem='telefon'] {
+    display: none;
+  }
+
+  .talep__ek {
+    border-block: 1px solid var(--cizgi);
+  }
+  .talep__ek summary {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 3rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 600;
+    font-stretch: 98%;
+    color: var(--murekkep);
+  }
+  .talep__ek summary :global(svg) {
+    flex: none;
+  }
+  .talep__ek-etiket {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.35em;
+    line-height: 1.3;
+    padding-block: 0.6rem;
+  }
+  .talep__ek-etiket .alan__istege {
+    white-space: nowrap;
+  }
+  .talep__ek summary::-webkit-details-marker {
+    display: none;
+  }
+  .talep__ek summary :global(svg) {
+    transition: transform 220ms var(--yumusak);
+  }
+  .talep__ek[open] summary :global(svg) {
+    transform: rotate(45deg);
+  }
+  .talep__ek-ic {
+    display: grid;
+    gap: 1.15rem;
+    padding-block: 0.35rem 1.25rem;
+  }
+
+  .talep__durum {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    padding: 0.85rem 1rem;
+    border-radius: var(--kose);
+    background: #f9e9ec;
+    color: var(--kirmizi-koyu);
+    font-size: var(--b-kucuk);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .talep__durum :global(svg) {
+    flex: none;
+    margin-block-start: 0.08em;
+  }
+  .talep__durum .ok-bag {
+    margin-block-start: 0.5rem;
+    color: var(--kirmizi-koyu);
+    font-size: var(--b-kucuk);
+  }
+  .talep__gonder {
+    margin-block-start: 0.25rem;
+  }
+  /* Uzun çağrı etiketleri dar fişte tek satırda kalsın. */
+  @container (max-width: 21rem) {
+    .talep__gonder {
+      padding-inline: 0.75rem;
+      gap: 0.45rem;
+      font-size: 0.96rem;
+      font-stretch: 90%;
+      letter-spacing: -0.01em;
+    }
+  }
+  .talep__gonder :global(.talep__bekle),
+  .talep__gonder[aria-busy='true'] :global(.talep__ok) {
+    display: none;
+  }
+  .talep__gonder[aria-busy='true'] :global(.talep__bekle) {
+    display: block;
+    animation: don 900ms linear infinite;
+  }
+  @keyframes don {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .talep__gonder[aria-busy='true'] :global(.talep__bekle) {
+      animation: none;
+    }
+  }
+  .talep__bilgi {
+    color: var(--ikincil);
+  }
+</style>

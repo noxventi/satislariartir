@@ -1,0 +1,280 @@
+---
+/**
+ * Çerez tercihleri: ziyaretçi ölçüm ve pazarlama iznini buradan verir, geri alır.
+ * Zorunlu olmayan hiçbir araç izin verilmeden yüklenmez; izin vermeyen ziyaretçi siteyi ve formu kullanır.
+ */
+import YasalDuzen from '../components/YasalDuzen.astro';
+
+const kayitlar = [
+  { ad: 'sa_onay', tur: 'Çerez', grup: 'Zorunlu', amac: 'Gönderdiğiniz talebin başarı sayfasını bir kez göstermek.', sure: '10 dakika, sayfa açılınca silinir' },
+  { ad: 'sa_tercih', tur: 'Yerel depolama', grup: 'Zorunlu', amac: 'Bu sayfadaki çerez seçiminizi hatırlamak.', sure: 'Siz değiştirene kadar' },
+  { ad: 'sa_olaylar', tur: 'Yerel depolama', grup: 'Zorunlu', amac: 'Aynı talebin iki kez sayılmasını önlemek. Yalnız kayıt numarası tutulur.', sure: 'Son 20 kayıt' },
+  { ad: 'sa_giris, sa_oturum_ilk, sa_oturum_son', tur: 'Oturum depolaması', grup: 'İşlevsel', amac: 'Talebinizin hangi sayfadan ve hangi kampanyadan geldiğini forma eklemek.', sure: 'Sekme kapanınca silinir' },
+  { ad: 'sa_kontrol_*, sa_calisma_tablosu', tur: 'Yerel depolama', grup: 'İşlevsel', amac: 'Rehberlerdeki kontrol listelerinde ve çalışma tablosunda yaptığınız işaretleri bu cihazda saklamak.', sure: 'Siz temizleyene kadar' },
+  { ad: 'sa_ilk_temas, sa_son_temas', tur: 'Yerel depolama', grup: 'Ölçüm', amac: 'İlk ve son ziyaretinizin kaynağını ve varsa reklam tıklama kimliğini saklamak.', sure: 'İzni geri alınca silinir' },
+  { ad: 'Google etiketleri', tur: 'Üçüncü taraf çerezi', grup: 'Ölçüm', amac: 'Ziyaretleri ve Google reklamlarından gelen talepleri ölçmek.', sure: 'Sağlayıcının belirlediği süre' },
+  { ad: 'Meta Piksel', tur: 'Üçüncü taraf çerezi', grup: 'Pazarlama', amac: 'Instagram ve Facebook reklamlarından gelen talepleri ölçmek.', sure: 'Sağlayıcının belirlediği süre' },
+];
+---
+
+<YasalDuzen
+  baslik="Çerez tercihleri"
+  aramaBasligi="Çerez Tercihleri | Satışları Artır"
+  aciklama="Satışları Artır web sitesinde ölçüm ve pazarlama çerezlerine izin verin ya da izninizi geri alın. İzin vermeden de siteyi ve formu kullanabilirsiniz."
+  yol="/cerez-tercihleri/"
+  guncelleme="14 Kasım 2026"
+>
+  {/* Sol sütun: açıklama ve seçim kartları. Geniş ekranda yapışkan durur; kayıt listesi sağda akar. */}
+  <Fragment slot="yan">
+    <p>
+      Ziyaretleri ve reklam sonuçlarını ölçen araçlar yalnız siz izin verirseniz çalışır. İzin vermeseniz de sitenin
+      tamamını ve görüşme formunu kullanabilirsiniz.
+    </p>
+
+    <form class="ct" data-cerez-formu>
+      <fieldset class="ct__grup" disabled>
+        <label class="ct__satir">
+          <input type="checkbox" checked disabled />
+          <span class="ct__kutu" aria-hidden="true"></span>
+          <span class="ct__metin">
+            <strong>Zorunlu ve işlevsel</strong>
+            <span>Formun çalışması, talebinizin kaydedilmesi ve bu seçimin hatırlanması için gerekir. Kapatılamaz.</span>
+          </span>
+        </label>
+      </fieldset>
+      <label class="ct__satir">
+        <input type="checkbox" name="olcum" />
+        <span class="ct__kutu" aria-hidden="true"></span>
+        <span class="ct__metin">
+          <strong>Ölçüm</strong>
+          <span>Hangi sayfaların ziyaret edildiğini ve Google reklamlarından gelen talepleri ölçmemize izin verir.</span>
+        </span>
+      </label>
+      <label class="ct__satir">
+        <input type="checkbox" name="pazarlama" />
+        <span class="ct__kutu" aria-hidden="true"></span>
+        <span class="ct__metin">
+          <strong>Pazarlama</strong>
+          <span>Instagram ve Facebook reklamlarından gelen talepleri ölçmemize izin verir.</span>
+        </span>
+      </label>
+
+      <div class="ct__eylem">
+        <button type="submit" class="dugme dugme--murekkep">Seçimimi kaydet</button>
+        <button type="button" class="dugme dugme--cizgi" data-hepsini-reddet>Hepsini reddet</button>
+      </div>
+      <p class="ct__durum kucuk" role="status" aria-live="polite" data-cerez-durumu></p>
+      <noscript>
+        <p class="kucuk ikincil">Tarayıcınızda betikler kapalı. Bu durumda ölçüm ve pazarlama araçları zaten çalışmaz.</p>
+      </noscript>
+    </form>
+  </Fragment>
+
+  <h2>Bu sitenin tarayıcınızda tuttuğu kayıtlar</h2>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Kayıt</th>
+        <th scope="col">Grup</th>
+        <th scope="col">Ne için?</th>
+        <th scope="col">Süre</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        kayitlar.map((k) => (
+          <tr>
+            <td data-baslik="Kayıt">
+              <span class="ct__ad">{k.ad}</span>
+              <span class="mikro ikincil ct__tur">{k.tur}</span>
+            </td>
+            <td data-baslik="Grup">{k.grup}</td>
+            <td data-baslik="Ne için?">{k.amac}</td>
+            <td data-baslik="Süre">{k.sure}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  <p class="kucuk ikincil">
+    Üçüncü taraf etiketleri sitede tanımlı değilse izin verseniz de yüklenmez. Kişisel verilerinizin işlenmesine ilişkin
+    ayrıntı için <a href="/aydinlatma/">aydınlatma metnine</a> bakın.
+  </p>
+</YasalDuzen>
+
+<script>
+  import { tercihOku, tercihYaz } from '../scripts/olcum';
+
+  const form = document.querySelector<HTMLFormElement>('[data-cerez-formu]');
+  if (form) {
+    const olcum = form.elements.namedItem('olcum') as HTMLInputElement;
+    const pazarlama = form.elements.namedItem('pazarlama') as HTMLInputElement;
+    const durum = form.querySelector<HTMLElement>('[data-cerez-durumu]')!;
+    const mevcut = tercihOku();
+    olcum.checked = Boolean(mevcut?.olcum);
+    pazarlama.checked = Boolean(mevcut?.pazarlama);
+    if (mevcut) durum.textContent = 'Kayıtlı bir seçiminiz var. Dilediğiniz zaman değiştirebilirsiniz.';
+
+    const kaydet = (o: boolean, p: boolean) => {
+      tercihYaz({ olcum: o, pazarlama: p });
+      olcum.checked = o;
+      pazarlama.checked = p;
+      durum.textContent = o || p ? 'Seçiminiz kaydedildi.' : 'Seçiminiz kaydedildi. Ölçüm ve pazarlama araçları çalışmayacak.';
+      // Açık duran çerez bandı varsa kapat.
+      const bant = document.querySelector<HTMLElement>('[data-cerez-bandi]');
+      if (bant) bant.hidden = true;
+      document.body.removeAttribute('data-cerez-acik');
+      document.dispatchEvent(new Event('sa:cerez-bandi'));
+    };
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      kaydet(olcum.checked, pazarlama.checked);
+    });
+    form.querySelector('[data-hepsini-reddet]')?.addEventListener('click', () => kaydet(false, false));
+  }
+</script>
+
+<style>
+  /* Seçimler: her biri ayrı bir kart. Seçilen kart lacivert çerçeve ve sert gölgeyle öne çıkar. */
+  .ct {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .ct__grup {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .ct__satir {
+    --ic-y: 1.05rem;
+    --ic-x: 1.15rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.6rem minmax(0, 1fr);
+    gap: 0.95rem;
+    align-items: start;
+    padding: var(--ic-y) var(--ic-x);
+    background: var(--kagit);
+    border: 1.5px solid transparent;
+    border-radius: var(--kose);
+    cursor: pointer;
+    transition:
+      border-color 180ms,
+      background-color 180ms,
+      box-shadow 220ms var(--yumusak);
+  }
+  .ct__satir:hover {
+    border-color: var(--cizgi-koyu);
+  }
+  .ct__satir:has(input:checked) {
+    background: var(--beyaz);
+    border-color: var(--murekkep);
+    box-shadow: 0.3rem 0.3rem 0 rgb(23 61 166 / 0.18);
+  }
+  /* Zorunlu grup kapatılamaz: soluk mavi, çerçevesiz ve gölgesiz durur. */
+  .ct__grup .ct__satir,
+  .ct__grup .ct__satir:hover {
+    background: var(--mavi-acik);
+    border-color: transparent;
+    box-shadow: none;
+    cursor: default;
+  }
+  .ct__satir input {
+    position: absolute;
+    top: var(--ic-y);
+    left: var(--ic-x);
+    opacity: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0;
+  }
+  .ct__kutu {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-block-start: 0.1rem;
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    background: var(--beyaz);
+    display: grid;
+    place-items: center;
+  }
+  .ct__kutu::after {
+    content: '';
+    width: 0.8rem;
+    height: 0.42rem;
+    border-left: 2.5px solid var(--beyaz);
+    border-bottom: 2.5px solid var(--beyaz);
+    transform: translateY(-0.08rem) rotate(-48deg) scale(0);
+    transition: transform 180ms var(--yumusak);
+  }
+  .ct__satir input:checked + .ct__kutu {
+    background: var(--murekkep);
+    border-color: var(--murekkep);
+  }
+  .ct__satir input:checked:disabled + .ct__kutu {
+    background: var(--ikincil);
+    border-color: var(--ikincil);
+  }
+  .ct__satir input:checked + .ct__kutu::after {
+    transform: translateY(-0.08rem) rotate(-48deg) scale(1);
+  }
+  .ct__satir input:focus-visible + .ct__kutu {
+    outline: 2px solid var(--mavi);
+    outline-offset: 3px;
+  }
+  .ct__metin {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .ct__metin strong {
+    font-family: var(--yazi-baslik);
+    font-size: 1.15rem;
+    font-weight: 650;
+    font-stretch: 92%;
+    letter-spacing: -0.01em;
+  }
+  .ct__metin span {
+    color: var(--murekkep-2);
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+  }
+  .ct__eylem {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-block-start: 0.9rem;
+  }
+  .ct__durum {
+    margin-block-start: 0.3rem;
+    color: var(--murekkep-2);
+    min-height: 1.5em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ct__satir {
+      transition: none;
+    }
+  }
+  .ct__ad {
+    display: block;
+    font-family: var(--yazi-baslik);
+    font-weight: 620;
+    font-size: 0.9375rem;
+    overflow-wrap: anywhere;
+  }
+  .ct__tur {
+    display: block;
+  }
+  /* Yığılmış tabloda kayıt türü, kayıt adının altında (etiket sütununda değil) dursun. */
+  @media (max-width: 43.99rem) {
+    .ct__tur {
+      grid-column: 2;
+      margin-block-start: -0.6rem;
+    }
+  }
+  @media (max-width: 30rem) {
+    .ct__eylem .dugme {
+      width: 100%;
+    }
+  }
+</style>

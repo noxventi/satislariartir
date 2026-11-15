@@ -1,0 +1,711 @@
+---
+/**
+ * Çalışmalar: gerçek site görüntülerinden oluşan bir duvar.
+ *
+ * - Görüntüler canlı sitelerin ilk ekranlarıdır (araclar/proje-ekran.mjs), üretilmiş ya da taklit edilmiş değildir.
+ * - Web tasarımı yapılmayan projelerde (yalnız reklam ya da SEO) site görüntüsü kullanılmaz: tasarım ekibe atfedilmez.
+ *   Avukat ve hekim sitelerinde de kişi portresi içerdiği için görüntü yerine yazı karosu kullanılır.
+ * - Sağlık markalarında reklam yönetimi satırı yoktur. Ölçülmüş sonuç hiçbir kayıtta yer almaz.
+ */
+import type { ImageMetadata } from 'astro';
+import Temel from '../../layouts/Temel.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import Gorsel from '../../components/Gorsel.astro';
+import Ikon from '../../components/Ikon.astro';
+import { KAYNAK_KONTROL_TARIHI, MUSTERI_SOZLERI, PROJELER, projeBul, type Proje } from '../../data/projeler';
+
+const CAGRI = 'Benzer bir projeyi görüşelim';
+const kirintilar = [{ ad: 'Çalışmalarımız', url: '/calismalarimiz/' }];
+const sektorSayisi = new Set(PROJELER.map((p) => p.sektor)).size;
+
+const ekranlar = import.meta.glob<{ default: ImageMetadata }>('../../assets/projeler/*.jpg', { eager: true });
+const ekranBul = (p: Proje, tur: 'masaustu' | 'mobil') => ekranlar[`../../assets/projeler/${p.alanAdi.split('.')[0]}-${tur}.jpg`]?.default;
+
+const isler = (p: Proje) => [
+  ...p.obrandyKapsami,
+  ...(p.reklamYonetimi === 'beyan' && !p.obrandyKapsami.includes('Dijital reklam yönetimi') ? ['Google Ads ve Meta yönetimi'] : []),
+];
+/** Süzgeç anahtarları. */
+const turler = (p: Proje) =>
+  [
+    p.obrandyKapsami.includes('Web sitesi tasarımı') && 'web',
+    p.obrandyKapsami.some((k) => k.startsWith('SEO')) && 'seo',
+    p.reklamYonetimi === 'beyan' && 'reklam',
+  ].filter(Boolean) as string[];
+
+const celik = projeBul('celikvillam');
+const hun = projeBul('hun-education');
+const soz = MUSTERI_SOZLERI['hun-education'];
+
+/**
+ * Duvarın dizilişi. G: masaüstü görüntüsü (geniş), D: telefon görüntüsü (dar), T: yazı karosu.
+ * Her satır 12 sütunu doldurur: G D D / D G T / T D G / G D D / D T T T.
+ */
+const dizilis: [string, 'G' | 'D' | 'T'][] = [
+  ['burger-engineer', 'G'],
+  ['tarum-havuz', 'D'],
+  ['estika', 'D'],
+  ['esvia', 'D'],
+  ['white-earth-atelier', 'G'],
+  ['1001-art', 'T'],
+  ['suha-akyildiz', 'T'],
+  ['rotech-danismanlik', 'D'],
+  ['rotech-defense', 'G'],
+  ['bodrum-olive-house', 'G'],
+  ['yurt-disi-egitim-rehberim', 'D'],
+  ['eduregist', 'D'],
+  ['ilk-gunebakan', 'D'],
+  ['pinar-tasdemir', 'T'],
+  ['emre-apaydin', 'T'],
+  ['belda-yurtseven-tuner', 'T'],
+];
+const RENKLER = ['mavi', 'acik', 'murekkep', 'acik', 'mavi'];
+let yaziSirasi = 0;
+const duvar = dizilis.map(([kimlik, istenen]) => {
+  const p = projeBul(kimlik);
+  const gorsel = istenen === 'T' ? undefined : ekranBul(p, istenen === 'G' ? 'masaustu' : 'mobil');
+  const tur = gorsel ? istenen : 'T';
+  return { p, tur, gorsel, isler: isler(p), turler: turler(p), renk: tur === 'T' ? RENKLER[yaziSirasi++ % RENKLER.length] : '' };
+});
+
+const suzgecler = [
+  { anahtar: 'hepsi', etiket: 'Hepsi', adet: duvar.length },
+  { anahtar: 'web', etiket: 'Web tasarım', adet: duvar.filter((d) => d.turler.includes('web')).length },
+  { anahtar: 'seo', etiket: 'SEO ve GEO', adet: duvar.filter((d) => d.turler.includes('seo')).length },
+  { anahtar: 'reklam', etiket: 'Reklam yönetimi', adet: duvar.filter((d) => d.turler.includes('reklam')).length },
+];
+---
+
+<Temel
+  baslik="Projeler ve Müşteri Görüşleri | Satışları Artır"
+  aciklama={`Yürüttüğümüz seçili projeler: ${sektorSayisi} sektörden ${PROJELER.length} marka, canlı site görüntüleri ve yapılan işle birlikte.`}
+  sayfaTuru="projeler"
+  kirintilar={kirintilar}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <!-- Başlık -->
+  <section class="cb">
+    <div class="sarici">
+      <nav aria-label="Sayfa konumu">
+        <ol class="kirinti">
+          <li><a href="/">Ana sayfa</a></li>
+          <li><span aria-current="page">Çalışmalarımız</span></li>
+        </ol>
+      </nav>
+      <div class="cb__ic">
+        <h1 class="dev cb__baslik">Çalıştığımız markalar</h1>
+        <p class="giris cb__giris">
+          Yapıdan eğitime, yeme içmeden üretime {sektorSayisi} sektörden {PROJELER.length} marka. Aşağıdaki görüntüler
+          yayındaki sitelerin kendisi: dokunun, canlı siteyi açıp kendiniz inceleyin.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ayrıntılı iki dosya -->
+  <section class="one-cikan">
+    <div class="sarici">
+      <h2 class="gorunmez">Ayrıntılı proje dosyaları</h2>
+
+      <article class="dosya dosya--celik">
+        <div class="dosya__metin">
+          <p class="etiket">{celik.sektor}</p>
+          <h3 class="dosya__ad">{celik.siteAdi}</h3>
+          <p class="dosya__karar">{celik.karar}</p>
+          <ul class="cipler" aria-label="Yapılan iş">
+            {isler(celik).map((i) => <li>{i}</li>)}
+          </ul>
+          <a class="dugme dugme--murekkep" href={celik.dosya} data-olay="cta_click" data-yer="projeler-dosya">
+            Projeyi inceleyin
+            <Ikon ad="arrow-right" boyut={18} />
+          </a>
+        </div>
+        <a class="dosya__ekran" href={celik.dosya} tabindex="-1" aria-hidden="true">
+          <span class="dosya__masaustu">
+            <Gorsel src={ekranBul(celik, 'masaustu')!} alt="" sizes="(max-width: 55.99rem) 92vw, 50vw" genislikler={[640, 960, 1280, 1440]} kalite={72} oncelik />
+          </span>
+          <span class="dosya__telefon">
+            <Gorsel src={ekranBul(celik, 'mobil')!} alt="" sizes="(max-width: 55.99rem) 30vw, 14vw" genislikler={[240, 360, 480, 780]} kalite={72} oncelik />
+          </span>
+        </a>
+      </article>
+
+      <article class="dosya dosya--hun koyu-zemin">
+        <figure class="dosya__soz">
+          <blockquote>
+            <p>“{soz.soz}”</p>
+          </blockquote>
+          <figcaption>
+            <strong>{soz.kisi}</strong>, {soz.kurum}
+          </figcaption>
+        </figure>
+        <div class="dosya__metin">
+          <p class="etiket">{hun.sektor}</p>
+          <h3 class="dosya__ad">{hun.marka}</h3>
+          <p class="dosya__karar">{hun.karar}</p>
+          <ul class="cipler" aria-label="Yapılan iş">
+            {isler(hun).map((i) => <li>{i}</li>)}
+          </ul>
+          <a class="dugme dosya__dugme" href={hun.dosya} data-olay="cta_click" data-yer="projeler-dosya">
+            Projeyi inceleyin
+            <Ikon ad="arrow-right" boyut={18} />
+          </a>
+          <p class="mikro dosya__not">{hun.tasarimNotu}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Duvar -->
+  <section class="bolum bolum--beyaz">
+    <div class="sarici">
+      <div class="duvar-ust">
+        <h2 class="baslik-2">Yayındaki siteler</h2>
+        <div class="suzgec" role="group" aria-label="Yapılan işe göre süz" data-suzgec>
+          {
+            suzgecler.map((s, i) => (
+              <button type="button" class="suzgec__dugme" data-anahtar={s.anahtar} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {s.etiket}
+                <span class="rakam">{s.adet}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <ul class="duvar" data-duvar>
+        {
+          duvar.map((d) => {
+            const ad = d.p.siteAdi ?? d.p.marka;
+            const canli = `https://${d.p.alanAdi}/`;
+            return (
+              <li class:list={['kare', `kare--${d.tur.toLowerCase()}`, d.renk && `kare--${d.renk}`]} data-turler={d.turler.join(' ')}>
+                {d.gorsel ? (
+                  <a class="kare__gorsel" href={canli} rel="noopener" aria-label={`${ad}: canlı siteyi açın`}>
+                    <Gorsel
+                      src={d.gorsel}
+                      alt={`${ad} web sitesinin ${d.tur === 'D' ? 'telefondaki' : 'masaüstündeki'} ilk ekranı`}
+                      sizes={d.tur === 'G' ? '(max-width: 47.99rem) 100vw, (max-width: 61.99rem) 64vw, 48vw' : '(max-width: 47.99rem) 50vw, (max-width: 61.99rem) 32vw, 24vw'}
+                      genislikler={d.tur === 'G' ? [640, 960, 1280, 1440] : [320, 480, 640, 780]}
+                      kalite={70}
+                    />
+                  </a>
+                ) : (
+                  <a class="kare__yazi" href={canli} rel="noopener" aria-label={`${ad}: canlı siteyi açın`}>
+                    <span>{d.p.karar}</span>
+                  </a>
+                )}
+                <div class="kare__metin">
+                  <p class="mikro ikincil">{d.p.sektor}</p>
+                  <h3 class="kare__ad">{ad}</h3>
+                  {d.gorsel && <p class="kucuk kare__karar">{d.p.karar}</p>}
+                  <p class="mikro kare__is">{d.isler.join(', ')}</p>
+                  <a class="kare__bag mikro" href={canli} rel="noopener">
+                    {d.p.alanAdi}
+                    <Ikon ad="arrow-up-right" boyut={13} />
+                  </a>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+      <p class="duvar__bos kucuk ikincil" data-bos hidden>Bu süzgeçte proje yok.</p>
+      <p class="mikro ikincil duvar__tarih">Ekran görüntüleri {KAYNAK_KONTROL_TARIHI} tarihinde alındı. Siteler o günden sonra değişmiş olabilir.</p>
+    </div>
+  </section>
+
+  <!-- Üç söz -->
+  <section class="bolum bolum--siki">
+    <div class="sarici">
+      <h2 class="baslik-2 soz-baslik">Projeleri anlatırken üç şeye dikkat ediyoruz</h2>
+      <ul class="sozler">
+        <li>
+          <strong>Kanıt canlı sitedir.</strong>
+          <span>Her markanın yanında yaptığımız iş ve sitenin adresi yazar. Açıp kendiniz bakabilirsiniz.</span>
+        </li>
+        <li>
+          <strong>Ölçmediğimiz sonucu yazmayız.</strong>
+          <span>Müşterinin onayladığı bir ölçüm gelmeden hiçbir projeye sonuç rakamı koymuyoruz.</span>
+        </li>
+        <li>
+          <strong>Sağlıkta reklam referansı göstermeyiz.</strong>
+          <span>Hekim sitelerini yalnız web ve arama görünürlüğü işleriyle anlatıyoruz.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <GorusmeBandi
+    baslik="Sıradaki proje sizinki olsun."
+    metin="İşletmenizi ve ulaşmak istediğiniz müşteriyi anlatın. Benzer bir işi nasıl kurduğumuzu görüşmede anlatalım."
+    cagri={CAGRI}
+    konum="projeler"
+    kimlik="projeler"
+  />
+</Temel>
+
+<script>
+  // Süzgeç: yalnız göster ve gizle, adres üretmez. Betik yoksa bütün projeler görünür.
+  const suzgec = document.querySelector<HTMLElement>('[data-suzgec]');
+  const kareler = [...document.querySelectorAll<HTMLElement>('[data-duvar] > li')];
+  const bos = document.querySelector<HTMLElement>('[data-bos]');
+  suzgec?.addEventListener('click', (e) => {
+    const dugme = (e.target as Element).closest<HTMLButtonElement>('button[data-anahtar]');
+    if (!dugme) return;
+    const anahtar = dugme.dataset.anahtar!;
+    suzgec.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === dugme)));
+    let gorunen = 0;
+    kareler.forEach((k) => {
+      const uygun = anahtar === 'hepsi' || (k.dataset.turler || '').split(' ').includes(anahtar);
+      k.hidden = !uygun;
+      if (uygun) gorunen++;
+    });
+    if (bos) bos.hidden = gorunen > 0;
+  });
+</script>
+
+<style>
+  /* ---- Başlık ------------------------------------------------------------- */
+  .cb {
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(2rem, 4vw, 3.5rem);
+  }
+  .cb__ic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 1.25rem;
+    align-items: end;
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .cb__baslik {
+    grid-column: 1 / span 7;
+    font-size: clamp(2.9rem, 0.9rem + 6.6vw, 6.5rem);
+  }
+  .cb__giris {
+    grid-column: 8 / -1;
+    padding-block-end: 0.5rem;
+  }
+  @media (max-width: 55.99rem) {
+    .cb__baslik,
+    .cb__giris {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---- İki dosya ------------------------------------------------------------ */
+  .one-cikan {
+    padding-block-end: var(--bolum);
+  }
+  .one-cikan .sarici {
+    display: grid;
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .dosya {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 2rem;
+    align-items: center;
+    padding: clamp(1.5rem, 4vw, 4rem);
+    border-radius: var(--kose);
+    overflow: hidden;
+  }
+  .dosya--celik {
+    background: var(--mavi-acik);
+  }
+  .dosya--hun {
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .dosya__metin {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .dosya--hun .dosya__metin {
+    grid-column: 8 / -1;
+  }
+  .dosya__metin .etiket {
+    color: var(--mavi);
+  }
+  .dosya--hun .dosya__metin .etiket {
+    color: rgb(255 255 255 / 0.7);
+  }
+  .dosya__ad {
+    font-size: clamp(2.2rem, 1.4rem + 3.2vw, 4.25rem);
+    font-weight: 730;
+    font-stretch: 84%;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+  .dosya__karar {
+    font-size: var(--b-giris);
+    line-height: 1.4;
+    max-width: 24em;
+    color: var(--murekkep-2);
+  }
+  .dosya--hun .dosya__karar {
+    color: rgb(255 255 255 / 0.88);
+  }
+  .cipler {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block: 0.25rem 0.5rem;
+  }
+  .cipler li {
+    padding: 0.35em 0.7em 0.4em;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px var(--cizgi-koyu);
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--murekkep);
+    background: rgb(255 255 255 / 0.6);
+  }
+  .dosya--hun .cipler li {
+    color: var(--beyaz);
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
+  }
+  .dosya__dugme {
+    --dz: var(--beyaz);
+    --dz-uzeri: #e8edf8;
+    --dy: var(--murekkep);
+    --dg: var(--kirmizi);
+    --dk: var(--beyaz);
+  }
+  .dosya__not {
+    color: rgb(255 255 255 / 0.62);
+    max-width: 30em;
+  }
+
+  /* Masaüstü ve telefon görüntüsü birlikte */
+  .dosya__ekran {
+    grid-column: 7 / -1;
+    position: relative;
+    display: block;
+    margin-inline-end: clamp(-4rem, -4vw, -1.5rem);
+    padding-block-end: 9%;
+  }
+  .dosya__masaustu,
+  .dosya__telefon {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--kose);
+    box-shadow:
+      0 0 0 1px rgb(16 28 57 / 0.12),
+      0 30px 60px -24px rgb(16 28 57 / 0.5);
+    background: var(--beyaz);
+  }
+  .dosya__masaustu :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .dosya__telefon {
+    position: absolute;
+    left: -7%;
+    bottom: 0;
+    width: 25%;
+  }
+  .dosya__telefon :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 17;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .dosya__ekran :global(img) {
+    transition: transform 900ms var(--yumusak);
+  }
+  .dosya--celik:hover .dosya__masaustu :global(img) {
+    transform: scale(1.02);
+  }
+
+  /* Müşteri sözü */
+  .dosya__soz {
+    grid-column: 1 / span 6;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .dosya__soz blockquote p {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.5rem, 1.1rem + 1.7vw, 2.6rem);
+    font-weight: 620;
+    font-stretch: 88%;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .dosya__soz figcaption {
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid #ff6b7f;
+    color: rgb(255 255 255 / 0.82);
+  }
+  @media (max-width: 55.99rem) {
+    .dosya__metin,
+    .dosya--hun .dosya__metin,
+    .dosya__ekran,
+    .dosya__soz {
+      grid-column: 1 / -1;
+    }
+    .dosya__ekran {
+      margin-inline: 6% 0;
+    }
+    .dosya__telefon {
+      left: -7%;
+      width: 28%;
+    }
+  }
+
+  /* ---- Duvar ------------------------------------------------------------------ */
+  .duvar-ust {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    margin-block-end: clamp(1.75rem, 3.5vw, 3rem);
+  }
+  .suzgec {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .suzgec__dugme {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--kose);
+    box-shadow: inset 0 0 0 1.5px var(--cizgi-koyu);
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 600;
+    font-stretch: 96%;
+    color: var(--murekkep);
+    transition:
+      background-color var(--hizli),
+      color var(--hizli),
+      box-shadow var(--hizli);
+  }
+  .suzgec__dugme .rakam {
+    font-size: var(--b-mikro);
+    color: var(--ikincil);
+  }
+  .suzgec__dugme:hover {
+    box-shadow: inset 0 0 0 1.5px var(--murekkep);
+  }
+  .suzgec__dugme[aria-pressed='true'] {
+    background: var(--murekkep);
+    color: var(--beyaz);
+    box-shadow: inset 0 0 0 1.5px var(--murekkep);
+  }
+  .suzgec__dugme[aria-pressed='true'] .rakam {
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .duvar {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(0.75rem, 1.8vw, 1.75rem);
+    row-gap: 0.9rem;
+    grid-auto-flow: dense;
+  }
+  /* Her karo iki satır kaplar: görüntü ve yazı. Alt ızgara sayesinde aynı sıradaki görüntüler aynı yükseklikte durur. */
+  .kare {
+    grid-column: span 3;
+    grid-row: span 2;
+    display: grid;
+    grid-template-rows: subgrid;
+    min-width: 0;
+  }
+  .kare--g {
+    grid-column: span 6;
+  }
+  .kare__gorsel,
+  .kare__yazi {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--kose);
+  }
+  .kare__gorsel {
+    box-shadow: 0 0 0 1px var(--cizgi);
+    background: var(--kagit);
+  }
+  .kare__gorsel :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .kare__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 900ms var(--yumusak);
+  }
+  .kare--g .kare__gorsel :global(img) {
+    aspect-ratio: 16 / 10.4;
+  }
+  .kare--d .kare__gorsel :global(img) {
+    aspect-ratio: 3 / 4;
+  }
+  .kare:hover .kare__gorsel :global(img) {
+    transform: scale(1.03);
+  }
+  /* Yazı karosu: görüntü yerine projenin sorusu. */
+  .kare__yazi {
+    display: grid;
+    align-content: end;
+    aspect-ratio: 3 / 4;
+    padding: clamp(1rem, 1.8vw, 1.6rem);
+    text-decoration: none;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 0.9rem + 0.9vw, 1.6rem);
+    font-weight: 680;
+    font-stretch: 86%;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    transition: transform 320ms var(--yumusak);
+  }
+  .kare--mavi .kare__yazi {
+    background: var(--mavi);
+    color: var(--beyaz);
+  }
+  .kare--murekkep .kare__yazi {
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .kare--acik .kare__yazi {
+    background: var(--mavi-acik);
+    color: var(--murekkep);
+  }
+  .kare:hover .kare__yazi {
+    transform: translateY(-3px);
+  }
+  .kare__metin {
+    display: grid;
+    gap: 0.3rem;
+    align-content: start;
+    justify-items: start;
+    padding-block-end: clamp(2rem, 4vw, 3.5rem);
+  }
+  .kare__ad {
+    font-size: clamp(1.2rem, 1.08rem + 0.5vw, 1.5rem);
+    font-weight: 690;
+    font-stretch: 88%;
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+  }
+  .kare__karar {
+    color: var(--murekkep-2);
+    max-width: 30em;
+  }
+  .kare__is {
+    color: var(--ikincil);
+    margin-block-start: 0.2rem;
+  }
+  .kare__bag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 1.75rem;
+    font-family: var(--yazi-baslik);
+    font-weight: 620;
+    color: var(--murekkep);
+    text-decoration-color: var(--cizgi-koyu);
+  }
+  .kare__bag:hover {
+    text-decoration-color: var(--kirmizi);
+  }
+  .duvar__tarih {
+    margin-block-start: 0.5rem;
+  }
+  .duvar__bos {
+    padding-block: 2rem;
+  }
+  @media (max-width: 61.99rem) {
+    .kare {
+      grid-column: span 4;
+    }
+    .kare--g {
+      grid-column: span 8;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .kare {
+      grid-column: span 6;
+    }
+    .kare--g {
+      grid-column: span 12;
+    }
+    .kare__karar {
+      font-size: var(--b-mikro);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kare__gorsel :global(img),
+    .kare__yazi,
+    .dosya__ekran :global(img) {
+      transition: none;
+    }
+  }
+
+  /* ---- Üç söz ---------------------------------------------------------------- */
+  .soz-baslik {
+    max-width: 16em;
+    margin-block-end: clamp(1.75rem, 3vw, 2.75rem);
+  }
+  .sozler {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 4vw, 4rem);
+  }
+  .sozler li {
+    position: relative;
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    padding-block-start: 2.4rem;
+  }
+  /* Kırmızı kalem tiki */
+  .sozler li::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    top: 0.5rem;
+    width: 1.5rem;
+    height: 0.75rem;
+    border-left: 3.5px solid var(--kirmizi);
+    border-bottom: 3.5px solid var(--kirmizi);
+    transform: rotate(-48deg);
+    transform-origin: left bottom;
+    border-radius: 1px;
+  }
+  .sozler strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+    font-weight: 680;
+    font-stretch: 88%;
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+  }
+  .sozler span {
+    color: var(--murekkep-2);
+    max-width: 26em;
+  }
+  @media (max-width: 47.99rem) {
+    .sozler {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

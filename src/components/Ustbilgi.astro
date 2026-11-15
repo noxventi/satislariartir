@@ -1,0 +1,1033 @@
+---
+/**
+ * Üst bilgi (15 Kasım 2026 düzeni).
+ *
+ * Masaüstü: logo, ortada ana menü, sağda görüşme düğmesi. "Hizmetler" ve "Sektörler" görselli birer panel açar:
+ * panel, mürekkep çerçeveli beyaz bir kâğıttır; hizmetler ve sektörler kâğıt işi sahneleriyle durur.
+ * - Bağlantının üstüne gelince ve bulunulan sayfada, altına kırmızı kalemle bir çizgi çekilir.
+ * - Sayfa kaydıkça üst bilginin alt kenarında kırmızı kalem çizgisi ilerler (okunan kısım kadar).
+ * - Panel açıkken sayfanın geri kalanı hafifçe kararır.
+ *
+ * Erişilebilirlik: her panelin yanında klavye ve dokunma için ayrı bir düğme vardır (aria-expanded). Escape kapatır,
+ * odak menüden çıkınca panel kapanır. Betik çalışmazsa paneller fareyle üzerine gelince ve odakla açılır;
+ * "Hizmetler" ve "Sektörler" bağlantıları her durumda kendi dizin sayfalarına gider.
+ *
+ * Başarım: paneller kapalıyken çizilmez (display: none), içlerindeki görseller ilk açılışa kadar indirilmez.
+ * Betik, fare menüye ilk yaklaştığında görselleri önden indirir (src/scripts/site.ts).
+ *
+ * Dar ekran: logo ve "Menü" düğmesi. Menü tam ekran bir diyalogdur: hizmetler görselleriyle, sektörler iki sütunda.
+ */
+import type { ImageMetadata } from 'astro';
+import Logo from './Logo.astro';
+import Ikon from './Ikon.astro';
+import Gorsel from './Gorsel.astro';
+import { ANA_MENU, GENEL_CAGRI, HIZMETLER, SITE, type HizmetKimligi } from '../site.config';
+import { SEKTORLER, sektorGorseli, sektorUrl } from '../data/sektorler';
+import { TELEFON_BAGLANTISI, TELEFON_YAZISI, whatsappBaglantisi } from '../lib/iletisim';
+
+import yolArama from '../assets/gorseller/yol-arama.jpg';
+import yolAkis from '../assets/gorseller/yol-akis.jpg';
+import yolCevap from '../assets/gorseller/yol-cevap.jpg';
+import yolYapayZeka from '../assets/gorseller/yol-yapay-zeka.jpg';
+import yolSite from '../assets/gorseller/yol-site.jpg';
+
+interface Props {
+  /** Reklam açılış sayfalarında yalnız küçük marka başlığı ve iki bağlantı gösterilir. */
+  sade?: boolean;
+  sadeBaglantilar?: { etiket: string; url: string }[];
+}
+const { sade = false, sadeBaglantilar = [] } = Astro.props;
+const yol = Astro.url.pathname;
+const etkin = (url: string) => (yol === url || (url !== '/' && yol.startsWith(url)) ? 'page' : undefined);
+const { telefon, whatsapp } = SITE.iletisim;
+const whatsappAdresi = whatsappBaglantisi();
+
+const HIZMET_GORSELI: Record<HizmetKimligi, { gorsel: ImageMetadata; odak: string }> = {
+  'google-ads': { gorsel: yolArama, odak: '50% 50%' },
+  meta: { gorsel: yolAkis, odak: '50% 38%' },
+  seo: { gorsel: yolCevap, odak: '50% 64%' },
+  geo: { gorsel: yolYapayZeka, odak: '50% 50%' },
+  web: { gorsel: yolSite, odak: '50% 42%' },
+};
+const hizmetler = HIZMETLER.map((h) => ({ ...h, ...HIZMET_GORSELI[h.kimlik] }));
+const sektorler = sade ? [] : SEKTORLER.map((s) => ({ ad: s.ad, kimler: s.kimler, url: sektorUrl(s), gorsel: sektorGorseli(s.kimlik) }));
+
+const baslangiclar = [
+  { ikon: 'megaphone', ad: 'İlk kez reklam verecekseniz', alt: 'Hazırlık ve ilk kampanya', url: '/#ilk-reklam' },
+  { ikon: 'magnifying-glass', ad: 'Reklam verip sonuç alamıyorsanız', alt: 'Önce hesabı inceliyoruz', url: '/hizmetler/google-ads-yonetimi/#hesap-inceleme' },
+] as const;
+---
+
+<header class="ust" data-ust>
+  <div class="sarici ust__ic">
+    <Logo canli />
+
+    {
+      sade ? (
+        <nav class="ust__sade" aria-label="Sayfa bağlantıları">
+          {sadeBaglantilar.map((b) => (
+            <a class="ust__bag" href={b.url}>
+              <span>{b.etiket}</span>
+            </a>
+          ))}
+        </nav>
+      ) : (
+        <>
+          <nav class="ust__menu" aria-label="Ana menü">
+            <ul class="ust__liste">
+              <li class="ust__oge ust__oge--panelli" data-alt-menu>
+                <a class="ust__bag" href="/hizmetler/" aria-current={etkin('/hizmetler/')}>
+                  <span>Hizmetler</span>
+                </a>
+                <button type="button" class="ust__ac" aria-expanded="false" aria-controls="panel-hizmetler" aria-label="Hizmetler menüsü">
+                  <Ikon ad="caret-down" boyut={14} />
+                </button>
+                <div class="panel" id="panel-hizmetler">
+                  <div class="panel__ic">
+                    <ul class="panel__hizmetler">
+                      {hizmetler.map((h, i) => (
+                        <li style={`--i:${i}`}>
+                          <a class="hk" href={h.url} aria-current={etkin(h.url)}>
+                            <span class="hk__gorsel" style={`--odak:${h.odak}`}>
+                              <Gorsel src={h.gorsel} alt="" sizes="13rem" genislikler={[240, 360, 480]} kalite={60} />
+                            </span>
+                            <span class="hk__ad">
+                              <span>{h.menuAdi}</span>
+                            </span>
+                            <span class="hk__ozet">{h.menuOzeti}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                    <div class="panel__yan">
+                      <p class="panel__yan-ad">Nereden başlamalı?</p>
+                      <ul class="panel__yollar">
+                        {baslangiclar.map((b) => (
+                          <li>
+                            <a href={b.url}>
+                              <span class="panel__ikon" aria-hidden="true">
+                                <Ikon ad={b.ikon} boyut={18} />
+                              </span>
+                              <span>
+                                <strong>{b.ad}</strong>
+                                <small>{b.alt}</small>
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                      <a class="ok-bag panel__tumu" href="/hizmetler/">
+                        Bütün hizmetler
+                        <Ikon ad="arrow-right" boyut={16} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="ust__oge ust__oge--panelli" data-alt-menu>
+                <a class="ust__bag" href="/sektorler/" aria-current={etkin('/sektorler/')}>
+                  <span>Sektörler</span>
+                </a>
+                <button type="button" class="ust__ac" aria-expanded="false" aria-controls="panel-sektorler" aria-label="Sektörler menüsü">
+                  <Ikon ad="caret-down" boyut={14} />
+                </button>
+                <div class="panel" id="panel-sektorler">
+                  <div class="panel__ic">
+                    <ul class="panel__sektorler" style={`--sutun:${sektorler.length % 3 === 0 ? 3 : 4}`}>
+                      {sektorler.map((s, i) => (
+                        <li style={`--i:${i}`}>
+                          <a class="st" href={s.url} aria-current={etkin(s.url)}>
+                            <span class="st__gorsel">
+                              <Gorsel src={s.gorsel} alt="" sizes="5rem" genislikler={[120, 180, 240]} kalite={60} />
+                            </span>
+                            <span class="st__metin">
+                              <span class="st__ad">
+                                <span>{s.ad}</span>
+                              </span>
+                              <span class="st__kimler">{s.kimler}</span>
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                    <div class="panel__yan">
+                      <p class="panel__yan-ad">Sektörünüz listede yok mu?</p>
+                      <p class="panel__yan-metin">Yöntem aynıdır: önce müşterinizin sizi nasıl aradığını ve nasıl karar verdiğini inceliyoruz.</p>
+                      <div class="panel__baglar">
+                        <a class="ok-bag" href="/sektorler/">
+                          Bütün sektörler
+                          <Ikon ad="arrow-right" boyut={16} />
+                        </a>
+                        <a class="ok-bag" href="/sehirler/">
+                          Şehrinize göre sayfalar
+                          <Ikon ad="arrow-right" boyut={16} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              {ANA_MENU.map((m) => (
+                <li class="ust__oge">
+                  <a class="ust__bag" href={m.url} aria-current={etkin(m.url)}>
+                    <span>{m.etiket}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {TELEFON_BAGLANTISI && (
+            <a class="ust__tel" href={TELEFON_BAGLANTISI} data-yer="ust-menu" aria-label={`Telefon: ${TELEFON_YAZISI}`}>
+              <Ikon ad="phone" boyut={18} />
+              {TELEFON_YAZISI}
+            </a>
+          )}
+          <a class="dugme dugme--kucuk ust__cagri" href={GENEL_CAGRI.url} data-olay="cta_click" data-yer="ust-menu">
+            {GENEL_CAGRI.etiket}
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+
+          {/* Betik gecikirse ya da çalışmazsa bu bağlantı sayfa sonundaki menüye iner. */}
+          <a class="ust__menu-dugme" href="#alt-menu" data-menu-ac aria-haspopup="dialog">
+            <span class="ust__cizgiler" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </span>
+            <span>Menü</span>
+          </a>
+        </>
+      )
+    }
+  </div>
+  {!sade && <span class="ust__perde" aria-hidden="true" />}
+  <span class="ust__ilerleme" aria-hidden="true">
+    <i />
+  </span>
+</header>
+
+{
+  !sade && (
+    <dialog class="mm" id="mobil-menu" aria-label="Menü">
+      <div class="mm__ust">
+        <Logo />
+        <button type="button" class="mm__kapat" data-menu-kapat>
+          <Ikon ad="x" boyut={20} />
+          <span>Kapat</span>
+        </button>
+      </div>
+      <nav class="mm__govde" aria-label="Ana menü">
+        <section class="mm__bolum" style="--i:0">
+          <p class="mm__ad">
+            <span>Hizmetler</span>
+            <a href="/hizmetler/">Hepsi</a>
+          </p>
+          <ul class="mm__hizmetler">
+            {hizmetler.map((h) => (
+              <li>
+                <a href={h.url} aria-current={etkin(h.url)}>
+                  <span class="mm__gorsel" style={`--odak:${h.odak}`}>
+                    <Gorsel src={h.gorsel} alt="" sizes="4rem" genislikler={[120, 180, 240]} kalite={60} />
+                  </span>
+                  <span class="mm__metin">
+                    <strong>{h.menuAdi}</strong>
+                    <small>{h.menuOzeti}</small>
+                  </span>
+                  <Ikon ad="arrow-right" boyut={18} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="mm__bolum" style="--i:1">
+          <p class="mm__ad">
+            <span>Sektörler</span>
+            <a href="/sektorler/">Hepsi</a>
+          </p>
+          <ul class="mm__sektorler">
+            {sektorler.map((s) => (
+              <li>
+                <a href={s.url} aria-current={etkin(s.url)}>
+                  <span class="mm__gorsel mm__gorsel--kucuk">
+                    <Gorsel src={s.gorsel} alt="" sizes="3rem" genislikler={[120, 180]} kalite={60} />
+                  </span>
+                  <strong>{s.ad}</strong>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="mm__bolum" style="--i:2">
+          <ul class="mm__sayfalar">
+            {ANA_MENU.map((m) => (
+              <li>
+                <a href={m.url} aria-current={etkin(m.url)}>
+                  {m.etiket}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="/sehirler/" aria-current={etkin('/sehirler/')}>
+                Şehirler
+              </a>
+            </li>
+            <li>
+              <a href="/iletisim/" aria-current={etkin('/iletisim/')}>
+                İletişim
+              </a>
+            </li>
+          </ul>
+        </section>
+      </nav>
+      <div class="mm__alt">
+        <a class="dugme dugme--tam" href={GENEL_CAGRI.url} data-olay="cta_click" data-yer="mobil-menu">
+          {GENEL_CAGRI.etiket}
+          <Ikon ad="arrow-right" boyut={18} />
+        </a>
+        {(telefon || whatsapp) && (
+          <p class="mm__iletisim kucuk">
+            {TELEFON_BAGLANTISI && <a href={TELEFON_BAGLANTISI} data-yer="mobil-menu">{TELEFON_YAZISI}</a>}
+            {whatsappAdresi && <a href={whatsappAdresi} rel="noopener" data-yer="mobil-menu">WhatsApp’tan yazın</a>}
+          </p>
+        )}
+      </div>
+    </dialog>
+  )
+}
+
+<style>
+  /* ---- Çubuk -------------------------------------------------------------------- */
+  .ust {
+    --kalem-cizgisi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1.5 5.2C14 2.7 27 6.3 41 4.4S69 2.5 82 4.6 95 4.1 98.5 3.4' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--kagit);
+    transition: box-shadow 220ms;
+  }
+  .ust:global([data-kaydi]) {
+    box-shadow: 0 1px 0 var(--cizgi);
+  }
+  .ust__ic {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 1.6vw, 2rem);
+    height: var(--ust-bant);
+  }
+  .ust__menu {
+    margin-inline: auto;
+  }
+  .ust__liste {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.9rem, 1.9vw, 2.1rem);
+  }
+  .ust__oge {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    height: var(--ust-bant);
+  }
+
+  /* Bağlantı: üzerine gelince ve bulunulan sayfada altına kırmızı kalem çizgisi çekilir. */
+  .ust__bag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 2.75rem;
+    font-family: var(--yazi-baslik);
+    font-size: 1.0125rem;
+    font-weight: 580;
+    font-stretch: 96%;
+    letter-spacing: -0.004em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  .ust__bag::after {
+    content: '';
+    position: absolute;
+    inset: auto -0.15rem 0.42rem;
+    height: 0.5rem;
+    background: var(--kirmizi);
+    -webkit-mask: var(--kalem-cizgisi) center / 100% 100% no-repeat;
+    mask: var(--kalem-cizgisi) center / 100% 100% no-repeat;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 420ms cubic-bezier(0.6, 0.05, 0.25, 1);
+  }
+  .ust__bag:hover::after,
+  .ust__bag:focus-visible::after,
+  .ust__bag[aria-current='page']::after,
+  .ust__oge--panelli:global([data-acik]) .ust__bag::after {
+    clip-path: inset(0 0 0 0);
+  }
+  .ust__ac {
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 2.75rem;
+    color: var(--murekkep);
+    border-radius: var(--kose);
+  }
+  .ust__ac :global(svg) {
+    transition: transform 260ms var(--yumusak);
+  }
+  .ust__oge--panelli:global([data-acik]) .ust__ac :global(svg) {
+    transform: rotate(180deg);
+    color: var(--kirmizi);
+  }
+
+  /* Telefon: yalnız çok geniş ekranda, çağrı düğmesinin solunda. Dokununca arama başlar. */
+  .ust__tel {
+    display: none;
+    flex: none;
+    align-items: center;
+    gap: 0.45rem;
+    height: 2.75rem;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 620;
+    font-stretch: 94%;
+    font-variant-numeric: lining-nums tabular-nums;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  .ust__tel :global(svg) {
+    color: var(--mavi);
+  }
+  .ust__tel:hover {
+    color: var(--mavi);
+  }
+  @media (min-width: 86rem) {
+    .ust__tel {
+      display: inline-flex;
+    }
+  }
+
+  .ust__cagri {
+    flex: none;
+    margin-inline-start: auto;
+  }
+  .ust__tel + .ust__cagri {
+    margin-inline-start: 0;
+  }
+  .ust__menu + .ust__cagri {
+    margin-inline-start: 0;
+  }
+
+  /* Menü düğmesi (dar ekran): üç çizgi, üzerine gelince ortadaki kırmızıya döner. */
+  .ust__menu-dugme {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding-inline: 0.8rem 0.95rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.2rem 0.2rem 0 var(--mavi-acik);
+    font-family: var(--yazi-baslik);
+    font-weight: 640;
+    font-stretch: 96%;
+    font-size: 0.9875rem;
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      transform 180ms var(--yumusak),
+      box-shadow 180ms var(--yumusak);
+  }
+  .ust__menu-dugme:active {
+    transform: translate(0.12rem, 0.12rem);
+    box-shadow: 0.08rem 0.08rem 0 var(--mavi-acik);
+  }
+  .ust__cizgiler {
+    display: grid;
+    gap: 0.25rem;
+    width: 1.15rem;
+  }
+  .ust__cizgiler i {
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+  .ust__cizgiler i:nth-child(2) {
+    width: 72%;
+    background: var(--kirmizi);
+  }
+
+  .ust__sade {
+    margin-inline-start: auto;
+    display: flex;
+    gap: clamp(1rem, 3vw, 2rem);
+  }
+  .ust__sade .ust__bag {
+    font-size: 0.9875rem;
+  }
+
+  /* ---- Okuma çizgisi: sayfa kaydıkça alt kenarda kırmızı kalemle uzar. */
+  .ust__ilerleme {
+    position: absolute;
+    inset: auto 0 -1.5px;
+    height: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 260ms;
+  }
+  .ust:global([data-kaydi]) .ust__ilerleme {
+    opacity: 1;
+  }
+  .ust__ilerleme i {
+    display: block;
+    height: 100%;
+    background: var(--kirmizi);
+    transform-origin: left;
+    transform: scaleX(var(--okunan, 0));
+  }
+
+  /* ---- Perde: panel açıkken sayfa hafifçe kararır. Tıklamayı engellemez. */
+  .ust__perde {
+    position: fixed;
+    inset: var(--ust-bant) 0 0;
+    z-index: -1;
+    background: rgb(16 28 57 / 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms;
+  }
+  .ust:global([data-menu-acik]) .ust__perde {
+    opacity: 1;
+  }
+
+  /* ---- Panel ----------------------------------------------------------------------
+     Kapalıyken çizilmez. Betik çalışıyorsa data-acik ile, çalışmıyorsa üzerine gelince ya da odakla açılır. */
+  .panel {
+    display: none;
+    position: absolute;
+    inset-inline: 0;
+    top: calc(100% - 0.35rem);
+    padding-block-start: 0.35rem;
+  }
+  .ust__oge--panelli:global([data-acik]) > .panel,
+  :global(html:not(.js)) .ust__oge--panelli:hover > .panel,
+  :global(html:not(.js)) .ust__oge--panelli:focus-within > .panel {
+    display: block;
+  }
+  .panel__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(14.5rem, 21vw, 17.5rem);
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.5rem 0.5rem 0 rgb(23 61 166 / 0.26);
+    overflow: hidden;
+  }
+  .panel__hizmetler {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0.75rem;
+  }
+  .panel__sektorler {
+    display: grid;
+    grid-template-columns: repeat(var(--sutun, 4), minmax(0, 1fr));
+    gap: 0.25rem 0.35rem;
+    align-content: start;
+    padding: 0.75rem;
+  }
+
+  /* Hizmet kartı: sahne üstte, ad ve tek satır altında. */
+  .hk {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 0.5rem;
+    height: 100%;
+    padding: 0.5rem 0.5rem 0.85rem;
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition: background-color 180ms;
+  }
+  .hk:hover,
+  .hk[aria-current='page'] {
+    background: var(--kagit);
+  }
+  .hk__gorsel {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #c9d5ee;
+  }
+  .hk__gorsel :global(picture),
+  .hk__gorsel :global(img),
+  .st__gorsel :global(picture),
+  .st__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .hk__gorsel :global(img) {
+    object-fit: cover;
+    object-position: var(--odak, 50% 50%);
+    transition: transform 600ms var(--yumusak);
+  }
+  .hk:hover .hk__gorsel :global(img),
+  .st:hover .st__gorsel :global(img) {
+    transform: scale(1.06);
+  }
+  .hk__ad,
+  .st__ad {
+    font-family: var(--yazi-baslik);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.14;
+  }
+  .hk__ad {
+    padding-inline: 0.15rem;
+    font-size: clamp(1rem, 0.86rem + 0.42vw, 1.16rem);
+    text-wrap: balance;
+  }
+  /* Üzerine gelince ad kırmızı kalemle çizilir. */
+  .hk__ad span,
+  .st__ad span {
+    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 100% / 0 2px;
+    padding-block-end: 0.1em;
+    transition: background-size 420ms cubic-bezier(0.6, 0.05, 0.25, 1);
+  }
+  .hk:hover .hk__ad span,
+  .hk[aria-current='page'] .hk__ad span,
+  .st:hover .st__ad span,
+  .st[aria-current='page'] .st__ad span {
+    background-size: 100% 2px;
+  }
+  .hk__ozet {
+    padding-inline: 0.15rem;
+    font-size: 0.875rem;
+    line-height: 1.36;
+    color: var(--ikincil);
+  }
+
+  /* Sektör karosu: solda kare sahne, sağda ad ve kimler için olduğu. */
+  .st {
+    display: grid;
+    grid-template-columns: clamp(3.5rem, 4.6vw, 4.5rem) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    height: 100%;
+    padding: 0.5rem;
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition: background-color 180ms;
+  }
+  .st:hover,
+  .st[aria-current='page'] {
+    background: var(--kagit);
+  }
+  .st__gorsel {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #c9d5ee;
+  }
+  .st__gorsel :global(img) {
+    object-fit: cover;
+    transition: transform 600ms var(--yumusak);
+  }
+  .st__metin {
+    display: grid;
+    gap: 0.22rem;
+    min-width: 0;
+  }
+  .st__ad {
+    font-size: clamp(0.98rem, 0.88rem + 0.3vw, 1.1rem);
+  }
+  .st__kimler {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    color: var(--ikincil);
+  }
+
+  /* Yan sütun: kâğıt zeminde kısa yol. */
+  .panel__yan {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 0.85rem;
+    align-content: start;
+    padding: 1.3rem 1.3rem 1.2rem;
+    background: var(--kagit);
+    border-inline-start: 1.5px solid var(--murekkep);
+  }
+  .panel__yan-ad {
+    font-family: var(--yazi-baslik);
+    font-size: 1.0625rem;
+    font-weight: 690;
+    font-stretch: 92%;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+  .panel__yan-metin {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  .panel__yollar {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .panel__yollar a {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: center;
+    margin-inline: -0.45rem;
+    padding: 0.45rem;
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition: background-color 180ms;
+  }
+  .panel__yollar a:hover {
+    background: var(--beyaz);
+  }
+  .panel__ikon {
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
+    background: var(--mavi-acik);
+    color: var(--mavi);
+  }
+  .panel__yollar strong {
+    display: block;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9375rem;
+    font-weight: 640;
+    font-stretch: 95%;
+    line-height: 1.22;
+  }
+  .panel__yollar small {
+    display: block;
+    margin-block-start: 0.12rem;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    color: var(--ikincil);
+  }
+  .panel__baglar {
+    display: grid;
+    gap: 0.55rem;
+    justify-items: start;
+    align-self: end;
+    font-size: var(--b-kucuk);
+  }
+  .panel__tumu {
+    align-self: end;
+    justify-self: start;
+    font-size: var(--b-kucuk);
+  }
+
+  /* Açılış: kâğıt yukarıdan iner, kartlar sırayla belirir. */
+  @media (prefers-reduced-motion: no-preference) {
+    .panel__ic {
+      animation: panel-ac 260ms var(--yumusak) both;
+    }
+    .panel__hizmetler > li,
+    .panel__sektorler > li {
+      animation: panel-kart 420ms var(--yumusak) both;
+      animation-delay: calc(var(--i) * 32ms + 50ms);
+    }
+    .panel__yan {
+      animation: panel-kart 420ms var(--yumusak) 120ms both;
+    }
+    @keyframes panel-ac {
+      from {
+        opacity: 0;
+        transform: translateY(-0.6rem);
+      }
+    }
+    @keyframes panel-kart {
+      from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ust__bag::after,
+    .hk__gorsel :global(img),
+    .st__gorsel :global(img),
+    .hk__ad span,
+    .st__ad span {
+      transition: none;
+    }
+  }
+
+  /* ---- Dar ekran: menü düğmesi --------------------------------------------------- */
+  @media (max-width: 67.99rem) {
+    .ust__menu,
+    .ust__perde {
+      display: none;
+    }
+    .ust__cagri,
+    .ust__menu + .ust__cagri,
+    .ust__tel + .ust__cagri {
+      margin-inline-start: auto;
+    }
+    .ust__menu-dugme {
+      display: inline-flex;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .ust__cagri {
+      display: none;
+    }
+    .ust__menu-dugme {
+      margin-inline-start: auto;
+    }
+  }
+
+  /* ---- Mobil menü (diyalog) ------------------------------------------------------- */
+  .mm {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--kagit);
+    color: var(--murekkep);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .mm[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .mm::backdrop {
+    background: var(--kagit);
+  }
+  .mm__ust {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: none;
+    height: var(--ust-bant);
+    padding-inline: var(--kenar);
+    background: var(--kagit);
+    box-shadow: 0 1px 0 var(--cizgi);
+  }
+  .mm__kapat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem 0.95rem;
+    background: var(--murekkep);
+    border-radius: var(--kose);
+    font-family: var(--yazi-baslik);
+    font-weight: 640;
+    font-size: 0.9875rem;
+    color: var(--beyaz);
+  }
+  .mm__govde {
+    display: grid;
+    gap: 1.6rem;
+    align-content: start;
+    flex: 1;
+    padding: 1.4rem var(--kenar) 1.5rem;
+  }
+  .mm__bolum {
+    display: grid;
+    gap: 0.7rem;
+  }
+  .mm__ad {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 660;
+    color: var(--ikincil);
+  }
+  .mm__ad a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding-inline-start: 1rem;
+    font-weight: 620;
+    color: var(--mavi);
+    text-underline-offset: 0.2em;
+  }
+  .mm__hizmetler {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .mm__hizmetler a {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    gap: 0.85rem;
+    align-items: center;
+    min-height: 4.75rem;
+    padding: 0.4rem 0.85rem 0.4rem 0.4rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  .mm__hizmetler a > :global(svg) {
+    color: var(--kirmizi);
+  }
+  .mm__gorsel {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #c9d5ee;
+  }
+  .mm__gorsel :global(picture),
+  .mm__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .mm__gorsel :global(img) {
+    object-fit: cover;
+    object-position: var(--odak, 50% 50%);
+  }
+  .mm__metin {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  .mm__metin strong,
+  .mm__sektorler strong {
+    font-family: var(--yazi-baslik);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.14;
+  }
+  .mm__metin strong {
+    font-size: 1.14rem;
+  }
+  .mm__metin small {
+    font-size: 0.875rem;
+    line-height: 1.3;
+    color: var(--ikincil);
+  }
+  .mm__sektorler {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+  .mm__sektorler a {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: center;
+    height: 100%;
+    min-height: 3.6rem;
+    padding: 0.4rem 0.6rem 0.4rem 0.4rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  .mm__sektorler strong {
+    font-size: 0.9875rem;
+  }
+  .mm__sayfalar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+    padding-block-start: 0.6rem;
+    border-block-start: 1px solid var(--cizgi-koyu);
+  }
+  .mm__sayfalar a {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+    font-family: var(--yazi-baslik);
+    font-stretch: 90%;
+    font-weight: 680;
+    font-size: 1.3rem;
+    letter-spacing: -0.016em;
+    line-height: 1.1;
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  .mm a[aria-current='page'] strong,
+  .mm__sayfalar a[aria-current='page'] {
+    color: var(--kirmizi-koyu);
+  }
+  .mm__alt {
+    position: sticky;
+    bottom: 0;
+    flex: none;
+    padding: 0.9rem var(--kenar) calc(0.9rem + env(safe-area-inset-bottom));
+    background: var(--kagit);
+    box-shadow: 0 -1px 0 var(--cizgi);
+  }
+  .mm__iletisim {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    margin-block-start: 0.8rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mm[open] {
+      animation: mm-ac 240ms var(--yumusak);
+    }
+    .mm[open] .mm__bolum {
+      animation: panel-kart 460ms var(--yumusak) both;
+      animation-delay: calc(var(--i) * 70ms + 60ms);
+    }
+    @keyframes mm-ac {
+      from {
+        opacity: 0;
+        transform: translateY(-0.5rem);
+      }
+    }
+  }
+  /* Tablet genişliğinde menü içeriği ortalanır, hizmetler iki sütuna geçer. */
+  @media (min-width: 40rem) {
+    .mm__govde {
+      width: min(100%, 46rem);
+      margin-inline: auto;
+    }
+    .mm__hizmetler {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .mm__sektorler {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .mm__alt :global(.dugme) {
+      display: flex;
+      width: min(100%, 24rem);
+      margin-inline: auto;
+    }
+  }
+</style>

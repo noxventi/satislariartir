@@ -1,0 +1,673 @@
+{
+  "celikvillam": {
+    "alan": "celikvillam.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://celikvillam.com/brand/rotech-symbol-192.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          16,
+          16,
+          44,
+          44
+        ],
+        "dogal": [
+          96,
+          96
+        ],
+        "zemin": "rgb(243, 242, 238)",
+        "dosya": "gorsel-kaynak/logolar/ham/celikvillam-0.webp",
+        "boyut": 7328
+      },
+      {
+        "tur": "img",
+        "puan": 6,
+        "src": "https://celikvillam.com/brand/rotech-logo-720.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "Rotech Mühendislik ana sayfa",
+        "kutu": [
+          81,
+          16178,
+          172,
+          152
+        ],
+        "dogal": [
+          0,
+          0
+        ],
+        "zemin": "rgb(243, 242, 238)",
+        "dosya": "gorsel-kaynak/logolar/ham/celikvillam-1.webp",
+        "boyut": 36868
+      }
+    ]
+  },
+  "hun-education": {
+    "alan": "huneducation.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://huneducation.com/wp-content/uploads/2023/02/logo-huneducation.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Hun Education",
+        "kutu": [
+          40,
+          14,
+          170,
+          49
+        ],
+        "dogal": [
+          419,
+          120
+        ],
+        "zemin": "rgb(247, 246, 242)",
+        "dosya": "gorsel-kaynak/logolar/ham/hun-education-0.png",
+        "boyut": 15660
+      }
+    ]
+  },
+  "burger-engineer": {
+    "alan": "burgerengineer.com.tr",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://burgerengineer.com.tr/_astro/mark.Dq5cJo2E.svg",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          63,
+          21,
+          52,
+          30
+        ],
+        "dogal": [
+          260,
+          150
+        ],
+        "zemin": "rgb(23, 22, 19)",
+        "dosya": "gorsel-kaynak/logolar/ham/burger-engineer-0.svg",
+        "boyut": 9120
+      }
+    ]
+  },
+  "rotech-defense": {
+    "alan": "gabionmaterials.com",
+    "adaylar": [
+      {
+        "tur": "svg",
+        "puan": 14,
+        "src": null,
+        "renk": "rgb(244, 246, 245)",
+        "alt": "",
+        "kutu": [
+          56,
+          13,
+          158,
+          42
+        ],
+        "dogal": null,
+        "zemin": "rgb(244, 246, 245)",
+        "dosya": "gorsel-kaynak/logolar/ham/rotech-defense-0.svg"
+      },
+      {
+        "tur": "svg",
+        "puan": 6,
+        "src": null,
+        "renk": "rgb(244, 246, 245)",
+        "alt": "",
+        "kutu": [
+          56,
+          14239,
+          181,
+          48
+        ],
+        "dogal": null,
+        "zemin": "rgb(11, 14, 16)",
+        "dosya": "gorsel-kaynak/logolar/ham/rotech-defense-1.svg"
+      },
+      {
+        "tur": "svg",
+        "puan": 5,
+        "src": null,
+        "renk": "rgb(23, 33, 38)",
+        "alt": "",
+        "kutu": [
+          736,
+          138,
+          107,
+          40
+        ],
+        "dogal": null,
+        "zemin": "rgb(244, 246, 245)",
+        "dosya": "gorsel-kaynak/logolar/ham/rotech-defense-2.svg"
+      },
+      {
+        "tur": "svg",
+        "puan": 5,
+        "src": null,
+        "renk": "rgb(23, 33, 38)",
+        "alt": "",
+        "kutu": [
+          1000,
+          138,
+          107,
+          40
+        ],
+        "dogal": null,
+        "zemin": "rgb(244, 246, 245)",
+        "dosya": "gorsel-kaynak/logolar/ham/rotech-defense-3.svg"
+      }
+    ]
+  },
+  "1001-art": {
+    "alan": "1001art.org",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://www.1001art.org/themes/default/images/logo.svg",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          80,
+          20,
+          96,
+          40
+        ],
+        "dogal": [
+          96,
+          40
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/1001-art-0.svg",
+        "boyut": 3625
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "https://www.1001art.org/themes/default/images/searchIcon.svg",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          658,
+          28,
+          25,
+          24
+        ],
+        "dogal": [
+          25,
+          24
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/1001-art-1.svg",
+        "boyut": 797
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "https://www.1001art.org/themes/default/images/shopping-basket.svg",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          1318,
+          29,
+          24,
+          24
+        ],
+        "dogal": [
+          24,
+          24
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/1001-art-2.svg",
+        "boyut": 1517
+      }
+    ]
+  },
+  "rotech-danismanlik": {
+    "alan": "rotechdanismanlik.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://rotechdanismanlik.com/assets/brand/rotech-logo-360.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "Rotech Danışmanlık",
+        "kutu": [
+          48,
+          12,
+          138,
+          52
+        ],
+        "dogal": [
+          138,
+          52
+        ],
+        "zemin": "rgb(244, 238, 228)",
+        "dosya": "gorsel-kaynak/logolar/ham/rotech-danismanlik-0.webp",
+        "boyut": 12996
+      },
+      {
+        "tur": "img",
+        "puan": 6,
+        "src": "https://rotechdanismanlik.com/assets/brand/rotech-logo-480.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "Rotech Danışmanlık",
+        "kutu": [
+          48,
+          7134,
+          237,
+          90
+        ],
+        "dogal": [
+          240,
+          91
+        ],
+        "zemin": "rgb(235, 226, 212)",
+        "dosya": "gorsel-kaynak/logolar/ham/rotech-danismanlik-1.webp",
+        "boyut": 16948
+      }
+    ]
+  },
+  "estika": {
+    "alan": "estika.com.tr",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://estika.com.tr/assets/brand/estika-logo.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Estika",
+        "kutu": [
+          148,
+          10,
+          132,
+          63
+        ],
+        "dogal": [
+          132,
+          63
+        ],
+        "zemin": "rgb(246, 242, 234)",
+        "dosya": "gorsel-kaynak/logolar/ham/estika-0.png",
+        "boyut": 5480
+      }
+    ]
+  },
+  "white-earth-atelier": {
+    "alan": "whiteearthatelier.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://whiteearthatelier.com/brand/lockup.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "White Earth Atelier",
+        "kutu": [
+          40,
+          18,
+          186,
+          36
+        ],
+        "dogal": [
+          190,
+          36
+        ],
+        "zemin": "rgb(7, 7, 7)",
+        "dosya": "gorsel-kaynak/logolar/ham/white-earth-atelier-0.webp",
+        "boyut": 44546
+      }
+    ]
+  },
+  "bodrum-olive-house": {
+    "alan": "bodrumolivehouse.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://bodrumolivehouse.com/wp-content/uploads/boh/bodrum-olive-house-logo-light-768x380.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Bodrum Olive House logo",
+        "kutu": [
+          110,
+          12,
+          97,
+          48
+        ],
+        "dogal": [
+          300,
+          148
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/bodrum-olive-house-0.png",
+        "boyut": 71628
+      },
+      {
+        "tur": "svg",
+        "puan": 8,
+        "src": null,
+        "renk": "rgb(115, 122, 54)",
+        "alt": "",
+        "kutu": [
+          250,
+          783,
+          26,
+          26
+        ],
+        "dogal": null,
+        "zemin": "rgb(255, 253, 248)",
+        "dosya": "gorsel-kaynak/logolar/ham/bodrum-olive-house-1.svg"
+      },
+      {
+        "tur": "svg",
+        "puan": 8,
+        "src": null,
+        "renk": "rgb(115, 122, 54)",
+        "alt": "",
+        "kutu": [
+          555,
+          783,
+          26,
+          26
+        ],
+        "dogal": null,
+        "zemin": "rgb(255, 253, 248)",
+        "dosya": "gorsel-kaynak/logolar/ham/bodrum-olive-house-2.svg"
+      },
+      {
+        "tur": "svg",
+        "puan": 8,
+        "src": null,
+        "renk": "rgb(115, 122, 54)",
+        "alt": "",
+        "kutu": [
+          860,
+          783,
+          26,
+          26
+        ],
+        "dogal": null,
+        "zemin": "rgb(255, 253, 248)",
+        "dosya": "gorsel-kaynak/logolar/ham/bodrum-olive-house-3.svg"
+      }
+    ]
+  },
+  "tarum-havuz": {
+    "alan": "tarumhavuz.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://tarumhavuz.com/wp-content/uploads/2026/07/Tarum-Havuz-Logo-Yazili-Transparent.png",
+        "svg": null,
+        "renk": null,
+        "alt": "tarumhavuz.com",
+        "kutu": [
+          120,
+          16,
+          175,
+          86
+        ],
+        "dogal": [
+          1286,
+          630
+        ],
+        "zemin": "rgba(255, 255, 255, 0.96)",
+        "dosya": "gorsel-kaynak/logolar/ham/tarum-havuz-0.png",
+        "boyut": 181075
+      },
+      {
+        "tur": "svg",
+        "puan": 8,
+        "src": null,
+        "renk": "rgb(0, 25, 117)",
+        "alt": "",
+        "kutu": [
+          1370,
+          830,
+          32,
+          32
+        ],
+        "dogal": null,
+        "zemin": "rgb(37, 211, 102)",
+        "dosya": "gorsel-kaynak/logolar/ham/tarum-havuz-1.svg"
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "https://tarumhavuz.com/wp-content/uploads/2026/07/c90abb7b-7d02-4de7-b7eb-1c15c8c70960.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Havuz projesini müşteriyle yerinde değerlendiren Tarum Havuz uzmanı",
+        "kutu": [
+          815,
+          966,
+          473,
+          300
+        ],
+        "dogal": [
+          960,
+          1024
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/tarum-havuz-2.png",
+        "boyut": 2252388
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "https://tarumhavuz.com/wp-content/uploads/2026/07/3bfd464a-530b-484a-b4ea-36a3992e8bfb.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Villa bahçesinde taşmalı betonarme yüzme havuzu",
+        "kutu": [
+          160,
+          2235,
+          590,
+          393
+        ],
+        "dogal": [
+          1439,
+          959
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/tarum-havuz-3.png",
+        "boyut": 2557366
+      }
+    ]
+  },
+  "esvia": {
+    "alan": "esvia.com.tr",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://www.esvia.com.tr/images/brand/esvia-logo@2x.png?v=2",
+        "svg": null,
+        "renk": null,
+        "alt": "EsVia Suit Apart",
+        "kutu": [
+          120,
+          8,
+          93,
+          64
+        ],
+        "dogal": [
+          92,
+          64
+        ],
+        "zemin": "rgba(250, 248, 244, 0.82)",
+        "dosya": "gorsel-kaynak/logolar/ham/esvia-0.png",
+        "boyut": 3888
+      }
+    ]
+  },
+  "yurt-disi-egitim-rehberim": {
+    "alan": "yurtdisiegitimrehberim.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://www.yurtdisiegitimrehberim.com/wp-content/uploads/2026/07/Yurtdisi_Egitim_Rehberim_Logo_Multicolor_Transparent-1.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Yurtdışı Eğitim Rehberim",
+        "kutu": [
+          70,
+          19,
+          196,
+          42
+        ],
+        "dogal": [
+          1440,
+          305
+        ],
+        "zemin": "rgb(252, 252, 253)",
+        "dosya": "gorsel-kaynak/logolar/ham/yurt-disi-egitim-rehberim-0.png",
+        "boyut": 70727
+      },
+      {
+        "tur": "svg",
+        "puan": 8,
+        "src": null,
+        "renk": "rgb(221, 24, 59)",
+        "alt": "",
+        "kutu": [
+          1183,
+          305,
+          26,
+          26
+        ],
+        "dogal": null,
+        "zemin": "rgb(252, 252, 253)",
+        "dosya": "gorsel-kaynak/logolar/ham/yurt-disi-egitim-rehberim-1.svg"
+      },
+      {
+        "tur": "img",
+        "puan": 8,
+        "src": "https://www.yurtdisiegitimrehberim.com/wp-content/uploads/2026/07/hero1.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "Budapeşte'de Parlamento binası önünde mezuniyet coşkusu yaşayan uluslararası öğrenciler",
+        "kutu": [
+          668,
+          327,
+          620,
+          565
+        ],
+        "dogal": [
+          900,
+          820
+        ],
+        "zemin": "rgb(252, 252, 253)",
+        "dosya": "gorsel-kaynak/logolar/ham/yurt-disi-egitim-rehberim-2.webp",
+        "boyut": 73666
+      },
+      {
+        "tur": "svg",
+        "puan": 8,
+        "src": null,
+        "renk": "rgb(221, 24, 59)",
+        "alt": "",
+        "kutu": [
+          120,
+          433,
+          515,
+          14
+        ],
+        "dogal": null,
+        "zemin": "rgb(252, 252, 253)",
+        "dosya": "gorsel-kaynak/logolar/ham/yurt-disi-egitim-rehberim-3.svg"
+      }
+    ]
+  },
+  "eduregist": {
+    "alan": "eduregist.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://eduregist.com/brand/mark-dark.png",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          97,
+          17,
+          32,
+          32
+        ],
+        "dogal": [
+          512,
+          512
+        ],
+        "zemin": "rgb(20, 29, 54)",
+        "dosya": "gorsel-kaynak/logolar/ham/eduregist-0.png",
+        "boyut": 49641
+      }
+    ]
+  },
+  "suha-akyildiz": {
+    "alan": "suha.av.tr",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://suha.av.tr/_astro/logo.CVDs51qk_Z24tpxS.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          69,
+          17,
+          56,
+          50
+        ],
+        "dogal": [
+          56,
+          50
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/suha-akyildiz-0.webp",
+        "boyut": 3692
+      },
+      {
+        "tur": "img",
+        "puan": 6,
+        "src": "https://suha.av.tr/_astro/logo.CVDs51qk_Z1Wb71A.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          77,
+          7318,
+          72,
+          64
+        ],
+        "dogal": [
+          0,
+          0
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/suha-akyildiz-1.webp",
+        "boyut": 5146
+      }
+    ]
+  }
+}

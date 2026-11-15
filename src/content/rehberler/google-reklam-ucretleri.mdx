@@ -1,0 +1,233 @@
+---
+no: 38
+kapak: google-reklam-ucretleri
+kapakAlt: "İki direk üstünde duran kâğıttan dev bir arama kutusu; altında bir kefesinde mavi paralar, öbüründe alışveriş torbası duran bir terazi. Solda kutuya para atan esnaf, kırmızı kalem çizgisi kutudan teraziye, teraziden kapısı açık dükkâna uzanıyor"
+soru: Google reklam ücretleri nasıl belirlenir?
+baslik: Google Reklam Ücretleri Nasıl Belirlenir?
+aciklama: >-
+  Google reklam ücretlerinin tarifesi yoktur: bütçeyi siz koyarsınız, tıklamanın ücretini açık artırma belirler.
+  Maliyeti değiştiren etkenler ve birimsiz bütçe hesabı.
+aramalar:
+  - google reklam ücretleri
+  - google reklam verme ücreti
+  - google ads fiyatları
+  - google reklam fiyatları
+kisaCevap: >-
+  Google reklam ücretlerinin sabit bir tarifesi yoktur; Google Ads’te minimum harcama taahhüdü bulunmaz ve bütçeyi siz
+  belirlersiniz. Arama reklamlarında ücret çoğunlukla tıklama başına alınır ve bir tıklamanın ücretini her aramada
+  yapılan açık artırma belirler. Bu açık artırmada teklifin yanında reklamın ve açılış sayfasının kalitesi, rakiplerin
+  durumu ve aramanın yapıldığı yer, zaman ve cihaz hesaba katılır. Çoğu kampanyada bir günün harcaması ortalama günlük
+  bütçenin iki katına çıkabilir, ama bir ayın harcaması günlük bütçenin 30,4 katını geçmez. Ajansla çalışıyorsanız
+  yönetim ücreti reklam bütçesinden ayrı bir kalemdir.
+elinizeGecen: Tıklama ücretini değiştiren etkenler, birimsiz bütçe hesabı ve bütçe öncesi kontrol listesi
+hizmetler: [google-ads]
+hizmetBaglantisi:
+  etiket: Google Ads yönetimi
+  url: /hizmetler/google-ads-yonetimi/
+sonraki: roas-ctr-tbm-nedir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: "Google Ads Yardım, Google Ads: Tanım"
+    url: https://support.google.com/google-ads/answer/6319?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Ortalama günlük bütçeler hakkında
+    url: https://support.google.com/google-ads/answer/6385083?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Reklam sıralaması hakkında
+    url: https://support.google.com/google-ads/answer/1722122?hl=tr
+    tur: resmi
+  - ad: "Google Ads Yardım, Gerçek tıklama başı maliyet (TBM): Tanım"
+    url: https://support.google.com/google-ads/answer/6297?hl=tr
+    tur: resmi
+  - ad: Google Ads Reklam Politikaları Yardım, Google üçüncü taraf politikası
+    url: https://support.google.com/adspolicy/answer/6086450?hl=tr
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import Akis from '../../components/blog/Akis.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Ankara’da evden eve nakliyat yapan bir firmanın sahibi Google Ads hesabını açıyor. Kampanya kurulumunda karşısına tek bir soru çıkıyor: günde ortalama ne kadar harcamak istiyorsunuz? Ekranda bir tarife, paket ya da “şu kadardan başlar” yazısı yok. Komşu dükkândan duyduğu rakamı yazıyor ve bütçe ilk gün öğleden önce bitiyor.
+
+Google reklam ücretlerinin bir listesi yoktur, çünkü fiyat her aramada yeniden kurulur. Harcamanın sınırını siz koyarsınız; bir tıklamanın size kaça geleceğini o anki açık artırma ve reklamınızın kalitesi belirler.
+
+<SonucSayfasi
+  sorgu="evden eve nakliyat ankara"
+  vurgu="reklam"
+  aciklamalar={{
+    reklam: '“Sponsorlu” etiketli bu alan için her aramada açık artırma yapılır. Arama reklamlarında ücret çoğunlukla reklama tıklandığında doğar.',
+  }}
+>
+  Bu alanın sabit bir fiyatı yoktur. Reklamın sırası da ödenen ücret de her aramada, o anda yarışan reklamlara göre
+  değişir.
+</SonucSayfasi>
+
+## Google reklam ücretleri neye göre belirlenir?
+
+Google Ads’in yardım sayfası iki şeyi açık yazar: minimum harcama taahhüdü yoktur ve bütçenizi kendiniz belirler, kendiniz kontrol edersiniz. Bütçe toplam harcamayı sınırlar. Bir tıklamanın ücretini, yani tıklama başına maliyeti (TBM) ise reklam sıralaması belirler. Google bu sıralamayı teklifinizden, reklamınızın ve açılış sayfanızın kalitesinden, eşiklerden, rekabetten, aramanın bağlamından ve reklam öğelerinin beklenen etkisinden hesaplar.
+
+<Akis
+  asamalar={[
+    { ad: 'Arama', aciklama: 'Biri hizmetinizi Google’a yazar.', olcu: 'Açık artırma başlar' },
+    { ad: 'Sıralama', aciklama: 'Teklif, kalite ve aramanın bağlamı birlikte hesaplanır.', olcu: 'Reklam sıralaması' },
+    { ad: 'Yerleşim', aciklama: 'Reklam bir sıraya yerleşir ya da hiç gösterilmez.', olcu: 'Eşik ve rekabet' },
+    { ad: 'Tıklama', aciklama: 'Kişi reklama dokunur, ücret o anda doğar.', olcu: 'Gerçek TBM' },
+  ]}
+/>
+
+Teklif, bir tıklamaya ödemeye razı olduğunuz üst sınırdır ve hesapta maks. TBM diye geçer. Gerçekte ödediğiniz tutar, yani gerçek TBM, çoğunlukla bunun altında kalır. Google’ın tanımına göre ödediğiniz, reklam sıralaması eşiğini aşmaya ve hemen altınızdaki rakibin sıralamasını geçmeye yeten en düşük tutardır. Bazı otomatik teklif ayarları dışında maks. TBM’nizden fazlası alınmaz.
+
+## Google’da tıklama başına maliyet neden işletmeden işletmeye değişir?
+
+Aynı aramaya aynı teklifi veren iki işletme farklı ücret öder. Farkı dört etken açar:
+
+- **Reklamın ve sayfanın kalitesi.** Google, beklenen tıklama oranına, reklamın aramayla ilgisine ve açılış sayfası deneyimine bakar. Yardım sayfasındaki ifadeyle, genel olarak reklam kalitesi arttıkça maliyetler düşer.
+- **Rekabet.** Aynı aramaya teklif veren reklamveren çoksa ve sıralamaları birbirine yakınsa öne geçmenin bedeli artar. Arama sonuçlarının üstündeki yerlerde eşikler genellikle daha yüksektir; en üstte görünmek bu yüzden daha pahalıdır.
+- **Konum.** Aramanın yapıldığı yer, açık artırmadaki bağlamın parçasıdır. Aynı arama bir ilçede kalabalık, öbüründe sakin bir rekabetle karşılaşabilir.
+- **Zaman ve cihaz.** Aramanın saati ve kullanılan cihaz da bağlama girer. Reklamın hangi gün ve saatlerde, hangi bölgelerde gösterileceğini kampanya ayarlarından siz sınırlarsınız.
+
+<AraGorsel cizim="megafon" alt="Ağzından mavi ve krem renkli madeni paralar saçılan kâğıttan bir megafon">
+  Aynı tıklama ücretini ödeyen iki işletmeden biri telefon alır, öteki almaz. Fark aramanın ve açılan sayfanın işe
+  uygunluğundadır.
+</AraGorsel>
+
+Ucuz tıklama bu yüzden tek başına iyi haber sayılmaz. İş arayanların yazdığı “nakliyat şirketi iş ilanları” gibi bir arama da tıklama getirir, ama müşteri getirmez. Hangi aramaların bütçe harcayıp iş getirmediğini [tıklama var, telefon yok](/blog/google-ads-tiklama-var-telefon-yok/) yazısı adım adım anlatır.
+
+## Google reklam bütçesi nasıl belirlenir: günlük mü, aylık mı?
+
+Google Ads’te bütçe kampanya başına ortalama günlük tutar olarak girilir. Google, aramanın yoğun olduğu günlerde bu ortalamanın üstüne çıkar, sakin günlerde altında kalır. Yardım sayfasındaki iki sınır şunlardır: çoğu kampanyada bir günün harcaması ortalama günlük bütçenin iki katını, bir ayın harcaması ise 30,4 katını geçmez. 30,4, bir aydaki ortalama gün sayısıdır.
+
+Aylık bir tutar ayırdıysanız onu 30,4’e bölerek ortalama günlük bütçeyi bulursunuz. Asıl soru ise bu tutarın size kaç iş getireceğidir. Aşağıdaki hesap birimsiz ve temsilidir; kendi hesabınızın son ayıyla aynı satırları doldurabilirsiniz.
+
+<Ornek
+  baslik="Bütçeden işe: geriye doğru hesap"
+  not="Sayılar temsilidir ve birimsizdir. Kendi rakamlarınızı reklam hesabınızdan ve gelen telefon kayıtlarınızdan alın."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Satır</th>
+        <th scope="col">Hesap</th>
+        <th scope="col">Sonuç</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Satır"><strong>Aylık bütçe</strong></td>
+        <td data-baslik="Hesap">Ayırdığınız tutar</td>
+        <td data-baslik="Sonuç">304 birim</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>Ortalama günlük bütçe</strong></td>
+        <td data-baslik="Hesap">304 ÷ 30,4</td>
+        <td data-baslik="Sonuç">10 birim</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>Bir günde en çok</strong></td>
+        <td data-baslik="Hesap">10 × 2</td>
+        <td data-baslik="Sonuç">20 birim</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>Tıklama</strong></td>
+        <td data-baslik="Hesap">304 ÷ 4 birimlik ortalama gerçek TBM</td>
+        <td data-baslik="Sonuç">76 tıklama</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>Telefon ve form</strong></td>
+        <td data-baslik="Hesap">76 tıklamadan gelen</td>
+        <td data-baslik="Sonuç">8 talep</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>Talep başına maliyet</strong></td>
+        <td data-baslik="Hesap">304 ÷ 8</td>
+        <td data-baslik="Sonuç">38 birim</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>İşe dönen talep</strong></td>
+        <td data-baslik="Hesap">8 talepten</td>
+        <td data-baslik="Sonuç">2 iş</td>
+      </tr>
+      <tr>
+        <td data-baslik="Satır"><strong>İş başına reklam maliyeti</strong></td>
+        <td data-baslik="Hesap">304 ÷ 2</td>
+        <td data-baslik="Sonuç"><strong>152 birim</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Bütçenin pahalı mı ucuz mu olduğunu tablonun son satırı söyler. Bir taşıma işinden size kalan kazanç 152 birimden fazlaysa reklam kendini karşılıyordur. Kalmıyorsa tıklama ücretini düşürmeye çalışmadan önce tıklamadan talebe ve talepten işe geçişi inceleyin; kayıp bu iki satırda da olabilir. Bu oranların reklam raporundaki adlarını [ROAS, CTR ve TBM nedir](/blog/roas-ctr-tbm-nedir/) yazısında bulabilirsiniz.
+
+## Google Ads ajans ücreti ile reklam bütçesi aynı şey mi?
+
+Değildir. Bir ajansla ya da serbest çalışan bir uzmanla çalışıyorsanız iki ayrı ödeme yaparsınız ve Google bu ayrımı kendi politikasıyla da korur. Üçüncü taraf politikasına göre Google Ads maliyetinin dışında yönetim ücreti alan iş ortağı bunu müşterisine açıkça belirtmelidir.
+
+<Karsilastirma
+  ara="ve"
+  uygunEtiketi="Nerede görürsünüz"
+  sol={{
+    ust: 'Tıklamalara',
+    baslik: 'Reklam bütçesi',
+    maddeler: [
+      'Reklamlarınız tıklandıkça harcanır.',
+      'Ortalama günlük tutarını kampanyada siz girersiniz.',
+      'Reklam hesabına tanımlı ödeme yönteminden ödenir.',
+      'Dökümü Google Ads hesabının faturalandırma bölümünde durur.',
+    ],
+    uygun: 'Google Ads hesabınızda',
+  }}
+  sag={{
+    ust: 'Emeğe',
+    baslik: 'Yönetim ücreti',
+    maddeler: [
+      'Hesabın incelenmesi, kurulumu ve düzenli optimizasyonu için ödenir.',
+      'Sabit mi, harcamaya oranlı mı olduğu sözleşmede yazar.',
+      'Ajansın kestiği faturayla ödenir.',
+      'Teklifte reklam bütçesinden ayrı bir satırda durur.',
+    ],
+    uygun: 'Sözleşmede ve ajansın faturasında',
+  }}
+/>
+
+Aynı politika raporu da düzenler. İş ortağı aylık rapor sözü verdiyse raporda hesap düzeyinde maliyet, tıklama ve gösterim verisi bulunmalı; maliyet, iş ortağının kendi ücreti çıkarılarak Google’ın aldığı tam tutar olarak yazılmalıdır. Politika, Google’da en üst yerleşimi garanti etmeyi de yasaklanan iddialar arasında sayar.
+
+<Not baslik="Bütçe ajansın hesabından geçiyorsa" tur="dikkat">
+  Reklam hesabı ve ödeme yöntemi işletmenin adına olduğunda Google’ın ne kadar tahsil ettiğini faturadan kendiniz
+  görürsünüz. Bütçeyi ajansa ödüyor ve harcamayı onun hesabından yaptırıyorsanız raporda Google’ın aldığı tutarın ayrı
+  yazılmasını isteyin; yönetim ücreti bu tutarın içine karışmamalıdır.
+</Not>
+
+## Google reklamı için ne kadar bütçe ayırmalı?
+
+Bu sorunun herkese uyan bir cevabı yoktur. Komşu dükkânın rakamı, onun hizmet bölgesinin, rakiplerinin ve bir işten kazancının rakamıdır. Sizin rakamınızı dört şey belirler:
+
+- **Bir işin size bıraktığı kazanç.** Tablodaki son satırın karşılaştırılacağı sayı budur.
+- **Hizmet bölgesinin genişliği.** Bütün şehirde gösterilen reklam, iki ilçeyle sınırlanan reklamdan daha çok aramaya girer ve bütçeyi daha hızlı harcar.
+- **Kaç tıklamadan bir talep geldiği.** Bu oran açılış sayfanıza ve hangi aramalarda göründüğünüze bağlıdır; ilk haftalarda kendi hesabınızdan okunur.
+- **Yanıt kapasitesi.** Telefona bakacak kimse yoksa bütçeyi artırmak yalnız kaçan aramaları çoğaltır.
+
+Yeni başlıyorsanız ölçebileceğiniz bir bütçeyle açıp birkaç hafta sonra arama terimlerine ve gelen taleplere göre karar vermek, baştan yüksek bütçeyle başlamaktan daha az risk taşır. Kampanyayı adım adım kurmak için [Google’a reklam nasıl verilir](/blog/google-reklam-nasil-verilir/) yazısına bakabilirsiniz.
+
+<KontrolListesi
+  kimlik="google-reklam-butce-oncesi"
+  baslik="Bütçeyi girmeden önce"
+  adimlar={[
+    'Bir işin bana ne kazandırdığını ve bunun ne kadarını reklama ayırabileceğimi yazdım.',
+    'Aylık tutarı 30,4’e bölüp ortalama günlük bütçeyi buldum.',
+    'Reklamın gösterileceği ilçeleri ve saatleri, telefonu açabildiğim zamana göre sınırladım.',
+    'Dönüşüm takibi çalışıyor; tıklamadan sonra gelen aramaları ve formları sayabiliyorum.',
+    'Reklam hesabı ve ödeme yöntemi işletmemin adına.',
+    'Ajans teklifinde yönetim ücreti ile reklam bütçesi ayrı satırlarda yazıyor.',
+  ]}
+  not="İlk maddeyi yazamıyorsanız tutarı konuşmak için erken. Tablodaki hesabı önce kendi işinizle yapın."
+/>
+
+Bütçe kararından sonra hesabın her hafta okunması gerekir: hangi arama talep getirdi, hangisi yalnız bütçe harcadı? Aynı soruyu Instagram için soruyorsanız [Instagram reklam ücretleri](/blog/instagram-reklam-ucretleri/) yazısı Meta’nın ücretlendirmesini anlatıyor. Hesabınızın bugün nereye para harcadığını birlikte incelemek isterseniz [Google Ads yönetimi](/hizmetler/google-ads-yonetimi/) sayfasına bakabilirsiniz.

@@ -1,0 +1,27 @@
+---
+/**
+ * Phosphor ikonları (tek aile, regular ağırlık). Yeni ikon için araclar/ikon-uret.mjs listesine ekleyin.
+ * İkonlar dekoratiftir; anlam taşıyan düğmeler metin ya da aria-label ile adlandırılır.
+ */
+import ikonlar from '../data/ikonlar.json';
+
+interface Props {
+  ad: keyof typeof ikonlar;
+  boyut?: number | string;
+  class?: string;
+}
+const { ad, boyut = 20, class: sinif } = Astro.props;
+const govde = (ikonlar as Record<string, string>)[ad];
+if (!govde) throw new Error(`İkon bulunamadı: ${String(ad)}`);
+---
+
+<svg
+  class={sinif}
+  width={boyut}
+  height={boyut}
+  viewBox="0 0 256 256"
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  set:html={govde}
+/>

@@ -1,0 +1,140 @@
+---
+no: 4
+kapak: reklam-gosterilmiyor
+kapakAlt: "Kâğıttan arama sonuç panosunda en üst sıranın üstü örtülü; merdivendeki esnaf örtünün ucunu kaldırıp altına bakıyor"
+aramalar:
+  - google reklamım neden gösterilmiyor
+  - google reklamım görünmüyor
+soru: Google reklamım neden gösterilmiyor?
+baslik: Google Reklamım Neden Gösterilmiyor?
+aciklama: Kendi aramanızda reklamı görememek, yayınlanmadığını göstermez. Gerçek gösterim sayısına, yayın durumuna ve sorguya sırayla nasıl bakacağınızı görün.
+kisaCevap: Kendi aramanızda reklamı görememeniz, reklamın yayınlanmadığını göstermez. Önce hesapta gerçekten gösterim olup olmadığına bakın. Gösterim varsa reklam çalışıyordur, yalnızca siz o anda görmediniz. Gösterim sıfırsa yayın durumunu, fatura bilgisini, zaman planlamasını ve anahtar kelimeyi sırayla kontrol edin.
+elinizeGecen: Kendi araması, gerçek gösterim ve yayın durumu için üç kontrol
+hizmetler: [google-ads]
+hizmetBaglantisi:
+  etiket: Google Ads hesabınızı devraldığımızda neye bakıyoruz?
+  url: /hizmetler/google-ads-yonetimi/#hesap-inceleme
+sonraki: google-ads-mi-instagram-reklami-mi
+yayinTarihi: 2026-11-14
+sonKontrol: 2026-11-14
+durum: inceleme
+okumaDk: 6
+kaynaklar:
+  - ad: Google Ads Yardım, Reklamınızı görememenizin nedeni
+    url: https://support.google.com/google-ads/answer/7378077?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Reklam Önizleme ve Teşhis Aracı hakkında
+    url: https://support.google.com/google-ads/answer/148778?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Bir reklamın durumunu öğrenme
+    url: https://support.google.com/google-ads/answer/1722129?hl=tr
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+
+Kampanyayı açtınız, Google’a kendi hizmetinizi yazdınız ve reklamınız yok. İlk tepki çoğu zaman teklifi yükseltmek olur. Oysa o arama, reklamınızın durumu hakkında sandığınızdan az şey söyler. Aşağıdaki üç kontrol, “ben mi görmüyorum, kimse mi görmüyor” sorusunu sırayla ayırır.
+
+İlk kampanyanızı yeni açtıysanız bu durum daha da olağandır: reklam önce incelemeden geçer, hesap da geçerli bir fatura bilgisiyle etkinleşir. İkisi de aşağıdaki listede sırasıyla duruyor.
+
+<SonucSayfasi
+  sorgu="havuz yenileme"
+  vurgu="reklam"
+  bolgeler={['reklam', 'organik']}
+  aciklamalar={{ reklam: 'Reklamlar bu bölgede görünür ama her aramada gösterilmez. Bütçe, zaman planlaması ya da bölge ayarı o anki aramayı dışarıda bırakabilir.' }}
+>
+  Kırmızı çerçeveli bölgede kendi reklamınızı görememeniz, reklamın yayınlanmadığını göstermez.
+</SonucSayfasi>
+
+## Google’da kendi reklamımı neden göremiyorum?
+
+Reklamlar her aramada gösterilmez. Kampanya bütçeyle sınırlıysa gün içinde her aramaya yetişmeyebilir. Zaman planlaması dar tutulduysa o saatte yayında olmayabilir. Reklam belirli bir bölgeye ayarlandıysa ve siz o bölgenin dışındaysanız yine görmezsiniz.
+
+<AraGorsel cizim="soru" alt="Kâğıttan büyük bir soru işareti ve yanında yanan bir ampul">
+  Kendi aramanız yalnızca şunu söyler: o anda, o cihazda, o konumda ve o sözle yaptığınız tek bir aramada reklam
+  çıkmadı.
+</AraGorsel>
+
+Kendi reklamınızı aramak yerine Google’ın bu iş için verdiği aracı kullanın. **Reklam Önizleme ve Teşhis Aracı**, Google Ads’te **Araçlar** menüsünde, **Reklam Önizleme ve Teşhisi** adıyla durur. Kontrol etmek istediğiniz aramayı yazarsınız. Araç size arama sonuçları sayfasının bir önizlemesini ve reklam görünmüyorsa nedenine dair bir teşhis verir. Buradaki önizlemeler gösterim olarak sayılmaz, istatistiklerinizi etkilemez.
+
+Aracın bir sınırı var. Yalnızca tek bir aramayı canlandırır ve sonuçları zamanla değişebilir. Google’ın kendi yardım sayfası da araca tek başına güvenmemenizi, gösterim ve tıklama gibi gerçek kampanya verilerine de bakmanızı söyler. İkinci kontrol tam olarak budur.
+
+## Reklamım yayında mı, nasıl anlarım?
+
+Kampanyalar tablosunu açın, tarih aralığını son yedi güne getirin ve gösterim sütununa bakın. Bu tek sayı, sorunu üç ayrı duruma böler.
+
+<Ornek baslik="Son yedi günün gösterim sayısı size ne söyler?" etiket="Temsili tablo">
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Gördüğünüz</th>
+        <th scope="col">Anlamı</th>
+        <th scope="col">Sonraki adım</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Gördüğünüz"><span class="hukum hukum--evet">Gösterim ve tıklama var</span></td>
+        <td data-baslik="Anlamı">Reklam yayınlanıyor. Siz o aramada denk gelmediniz.</td>
+        <td data-baslik="Sonraki adım">Kendi aramanızı bırakın. Tıklamayı getiren arama terimlerini okuyun.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Gördüğünüz"><span class="hukum">Gösterim var ama seyrek</span></td>
+        <td data-baslik="Anlamı">Reklam yayınlanıyor ama aramaların çoğuna yetişmiyor.</td>
+        <td data-baslik="Sonraki adım">Bütçeye, zaman planlamasına ve anahtar kelime durumuna bakın.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Gördüğünüz"><span class="hukum hukum--hayir">Gösterim sıfır</span></td>
+        <td data-baslik="Anlamı">Reklam bu sürede hiç gösterilmedi.</td>
+        <td data-baslik="Sonraki adım">Aşağıdaki yayın durumu kontrolüne geçin.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+İlk satırdaysanız çözülecek bir gösterim sorunu yoktur. Asıl soru artık reklamın kime gösterildiği ve tıklayanın ne yaptığıdır. Bunu [tıklama var ama telefon gelmiyor](/blog/google-ads-tiklama-var-telefon-yok/) rehberindeki sırayla okuyabilirsiniz.
+
+## Gösterim sıfırsa sırayla neye bakmalısınız?
+
+Gösterim sıfırsa ya da çok seyrekse nedeni çoğunlukla hesabın içinde yazılıdır. Sırayı bozmadan ilerleyin. Üstteki maddeler daha sık görülür ve daha kolay düzelir.
+
+<KontrolListesi
+  kimlik="gosterim-sifir-kontrolu"
+  baslik="Gösterim yoksa sırayla bakın"
+  adimlar={[
+    'Durum sütunu: Kampanyalar menüsündeki Reklamlar sayfasını açın. Kampanya, reklam grubu ya da reklam duraklatılmış, kaldırılmış ya da sona ermiş mi?',
+    'İnceleme ve onay: Reklam “İnceleniyor” durumundaysa bekleyin. “Onaylanmadı” yazıyorsa Politika ayrıntıları sütununu açıp nedenini okuyun.',
+    'Fatura bilgisi: Faturalandırma özetinde geçerli bir ödeme yöntemi kayıtlı mı? Hesap geçerli fatura bilgisiyle etkinleşmeden reklam yayınlanmaz.',
+    'Bütçe: Kampanya “bütçeyle sınırlı” görünüyor mu? Bütçeyi sık sık değiştirmek de yayını dengesizleştirir.',
+    'Zaman planlaması ve bölge: Reklam yalnız birkaç saate ya da dar bir bölgeye mi ayarlı? Aramayı yaptığınız saat ve yer bu ayarın içinde mi?',
+    'Anahtar kelime: Durumu “düşük arama hacmi” mi? Yazdığınız arama, hesaptaki bir anahtar kelimeyle gerçekten eşleşiyor mu, negatif listede engellenmiş olabilir mi?',
+  ]}
+  not="İşaretler yalnız bu tarayıcıda saklanır. Akıllı teklif stratejisi yeni kurulduysa öğrenme aşamasını tamamlaması için zaman tanıyın."
+/>
+
+Durum sütununda görebileceğiniz ifadeler iki gruba ayrılır.
+
+<Karsilastirma
+  uygunEtiketi="Not"
+  sol={{
+    ust: 'Bu durumlardan biri yazıyorsa',
+    baslik: 'Reklam yayınlanabilir',
+    maddeler: ['Uygun', 'Uygun (sınırlı)', 'Yayınlanıyor', 'İnceleniyor'],
+  }}
+  sag={{
+    ust: 'Bu durumlardan biri yazıyorsa',
+    baslik: 'Reklam gösterim almaz',
+    maddeler: ['Onaylanmadı', 'Uygun değil'],
+    uygun: '“Uygun değil” çoğu zaman reklamın kendisiyle değil, bağlı olduğu kampanya ya da reklam grubuyla ilgilidir.',
+  }}
+/>
+
+Altı adımın hepsi temizse geriye [reklam sıralaması](/blog/google-ads-nedir/) kalır. Google bunu teklifle birlikte reklamın aramayla ilgisine, [açılış sayfasına](/blog/landing-page-nedir/) ve hedeflemeye bakarak belirler. Bu yüzden teklifi artırmak ilk hamle değildir. Önce reklam metninin ve tıklayınca açılan sayfanın, kişinin yazdığı sözü karşılayıp karşılamadığına bakın. “Havuz yenileme” arayan biri genel bir ana sayfaya iniyorsa daha yüksek teklif aynı uyumsuzluğu daha pahalı hâle getirir.
+
+Teklif en sonda, tek başına ve küçük adımlarla değişir. Değişiklikten sonra aynı yedi günlük gösterim sayısına yeniden bakın. Sayı kıpırdamıyorsa neden teklif değildir. Listenin başına dönün.
+
+Reklam gösterilmeye başlayınca iş bitmez, asıl çalışma o gün başlar: hangi aramanın talep getirdiğine düzenli bakmak, getirmeyeni kapatıp getireni güçlendirmek gerekir.

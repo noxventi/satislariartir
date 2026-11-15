@@ -1,0 +1,655 @@
+---
+/**
+ * Hizmetler dizini. Ana niyet: "dijital pazarlama hizmetleri", "dijital pazarlama ajansı", "dijital pazarlama nedir".
+ * Sahiplendiği soru: "Hangi hizmete ihtiyacım var?"
+ *
+ * Düzen (15 Kasım 2026): SayfaBasi (tanım + kâğıt kasaba) > BuSayfada > beş hizmetin görselli kartları >
+ * müşterinin kendi cümlesinden hizmete götüren soru kartları > hizmetlerin birbirini tamamlaması >
+ * iki durum (ilk kez / sonuç alamayanlar) > çalışma adımları > sık sorulan sorular > ilgili sayfalar > görüşme.
+ * Anlatım sırası: derinlemesine inceleme, bilinçli kurulum, düzenli optimizasyon, satış hedefi.
+ * Fiyat, paket ya da bütçe karşılaştırması yoktur. Örnek işletmeler temsilidir, müşteri değildir.
+ * Kart metinleri bu sayfada yazılıdır; adresler site.config.ts içindeki HIZMETLER kaydından gelir.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import Gorsel from '../../components/Gorsel.astro';
+import Cizim from '../../components/Cizim.astro';
+import Ikon from '../../components/Ikon.astro';
+import { HIZMETLER, SITE } from '../../site.config';
+
+import kapak from '../../assets/gorseller/kapak-masaustu.jpg';
+import yolArama from '../../assets/gorseller/yol-arama.jpg';
+import yolAkis from '../../assets/gorseller/yol-akis.jpg';
+import yolCevap from '../../assets/gorseller/yol-cevap.jpg';
+import yolYapayZeka from '../../assets/gorseller/yol-yapay-zeka.jpg';
+import yolSite from '../../assets/gorseller/yol-site.jpg';
+import celikvillamEkran from '../../assets/projeler/celikvillam-masaustu.jpg';
+
+import hedef from '../../assets/cizimler/hedef.png';
+import kreatif from '../../assets/cizimler/kreatif.png';
+import harita from '../../assets/cizimler/harita.png';
+import robot from '../../assets/cizimler/robot.png';
+import taslak from '../../assets/cizimler/taslak.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+import yapboz from '../../assets/cizimler/yapboz.png';
+import megafon from '../../assets/cizimler/megafon.png';
+import takvim from '../../assets/cizimler/takvim.png';
+import terazi from '../../assets/cizimler/terazi.png';
+import kitaplik from '../../assets/cizimler/kitaplik.png';
+import defter from '../../assets/cizimler/defter.png';
+
+const CAGRI = 'Görüşme isteyin';
+const kirintilar = [{ ad: 'Hizmetler', url: '/hizmetler/' }];
+const [googleAds, meta, seo, geo, web] = HIZMETLER;
+
+/** Beş hizmet: başlık hizmetin aranan adı, altında tek cümlelik tanım ve kimin için olduğu. */
+const hizmetler = [
+  {
+    hizmet: googleAds,
+    ad: 'Google Ads yönetimi',
+    tanim: 'Google Ads yönetimi, hizmetinizi Google’da arayan kişiye reklamınızı gösterme ve bütçeyi satış getiren aramalara yönlendirme işidir.',
+    kim: 'Müşterisi hizmeti adıyla arayan işletmeler: çilingir, kombi servisi, nakliye firması, oto servis.',
+    bag: 'Google Ads yönetimini inceleyin',
+    gorsel: yolArama,
+    alt: 'Kâğıttan dev bir arama kutusuna uzanan küçük bir müşteri; kutudan çıkan kırmızı kalem çizgisi ışıkları yanan dükkâna gidiyor',
+    sizes: '(max-width: 43.99rem) 100vw, (max-width: 61.99rem) 92vw, 56vw',
+  },
+  {
+    hizmet: meta,
+    ad: 'Instagram ve Facebook reklam yönetimi',
+    tanim: 'Meta reklam yönetimi, işinizi henüz aramayan ama ilgilenebilecek kişilere Instagram ve Facebook’ta gösterme, gelen mesaj ve formları satışa yaklaştırma işidir.',
+    kim: 'İşini göstererek satan işletmeler: güzellik salonu, mobilyacı, restoran, pilates stüdyosu.',
+    bag: 'Meta reklam yönetimini inceleyin',
+    gorsel: yolAkis,
+    alt: 'Kâğıttan dev bir telefonun ekranındaki fotoğraf kareleri; dükkânın olduğu kare kırmızı kalemle çembere alınmış, önünde bakan küçük insanlar',
+    sizes: '(max-width: 43.99rem) 100vw, (max-width: 61.99rem) 46vw, 40vw',
+  },
+  {
+    hizmet: seo,
+    ad: 'SEO danışmanlığı',
+    tanim: 'SEO danışmanlığı, web sitenizin Google’ın reklam dışı sonuçlarında, müşterinizin yazdığı aramalarda görünmesi için yapılan teknik ve içerik çalışmasıdır.',
+    kim: 'Sitesi olup aramalarda çıkmayan ya da müşterisinin tamamı reklamdan gelen işletmeler.',
+    bag: 'SEO danışmanlığını inceleyin',
+    gorsel: yolCevap,
+    alt: 'Elinde soru işaretiyle reklam panolarının yanından geçip açık duran dev bir kitaba yürüyen küçük bir müşteri; kitapta bir satır kırmızı kalemle çizilmiş',
+    sizes: '(max-width: 43.99rem) 100vw, (max-width: 61.99rem) 46vw, 32vw',
+  },
+  {
+    hizmet: geo,
+    ad: 'GEO ve AEO danışmanlığı',
+    tanim: 'GEO ve AEO danışmanlığı, ChatGPT, Gemini ve Google’ın yapay zekâ özetleri gibi araçların yanıtlarında markanızın doğru bilgiyle anılması için yapılan çalışmadır.',
+    kim: 'Müşterisi karar vermeden önce araştıran işletmeler: mimarlık ofisi, eğitim danışmanlığı, üretici firma.',
+    bag: 'GEO ve AEO danışmanlığını inceleyin',
+    gorsel: yolYapayZeka,
+    alt: 'Kâğıttan bir yardımcı robot ve konuşma balonu; balondaki üç dükkândan ortadaki kırmızı kalemle çembere alınmış, karşısında dinleyen bir müşteri',
+    sizes: '(max-width: 43.99rem) 100vw, (max-width: 61.99rem) 46vw, 32vw',
+  },
+  {
+    hizmet: web,
+    ad: 'Kurumsal web tasarım',
+    tanim: 'Kurumsal web tasarım, ziyaretçinin aradığı hizmeti ilk ekranda görüp tek adımda talep bırakabileceği bir web sitesi kurma işidir.',
+    kim: 'Sitesi olmayan, sitesi telefonda zor kullanılan ya da reklamı için açılış sayfası gereken işletmeler.',
+    bag: 'Web tasarım sürecini inceleyin',
+    gorsel: yolSite,
+    alt: 'Ekranı dükkân vitrini olan kâğıttan bir dizüstü bilgisayar; üç ayrı yönden gelen kırmızı çizgiler kapıda birleşiyor, küçük müşteriler içeri giriyor',
+    sizes: '(max-width: 43.99rem) 100vw, (max-width: 61.99rem) 46vw, 32vw',
+  },
+];
+
+/** Müşterinin kendi cümlesi başlıktır; kart o cümleden hizmete götürür. İşletmeler temsilidir. */
+const secim = [
+  {
+    soru: 'Müşterim ihtiyaç duyunca Google’a yazıyor. Orada nasıl çıkarım?',
+    ornek: 'Kombisi arızalanan kişi “kombi servisi” yazar ve ilk gördüğü birkaç firmadan birini arar. O anda görünmeyen işletme, o müşteri için yoktur.',
+    care: 'Hizmetinizi arayan kişiye reklamınızı gösteren Google Ads kampanyalarını kuruyor, arama terimlerini düzenli okuyarak geliştiriyoruz.',
+    bag: { etiket: 'Google Ads yönetimi', url: googleAds.url },
+    cizim: hedef,
+  },
+  {
+    soru: 'İşimi görünce istiyorlar ama kimse aramıyor. Ne yapmalıyım?',
+    ornek: 'El yapımı bir sehpa ya da yeni açılan bir pilates stüdyosu Google’da pek aranmaz. İnsanlar görünce ilgilenir, sonra yazar.',
+    care: 'Instagram ve Facebook’ta işinizi doğru kişilere gösteren reklamları kuruyor, görsel ve metinleri tek tek deniyoruz.',
+    bag: { etiket: 'Instagram reklam yönetimi', url: meta.url },
+    cizim: kreatif,
+  },
+  {
+    soru: 'Reklamı kesince telefon da susuyor. Reklamsız müşteri gelir mi?',
+    ornek: 'Bütün müşterisi reklamdan gelen bir oto servis, bütçeyi kıstığı hafta boş kalır. Google’ın reklam dışı sonuçlarında görünmüyordur.',
+    care: 'Sitenizin teknik eksiklerini gideriyor, hizmet sayfalarınızı müşterinizin yazdığı aramalara göre yeniden düzenliyoruz.',
+    bag: { etiket: 'SEO danışmanlığı', url: seo.url },
+    cizim: harita,
+  },
+  {
+    soru: 'Müşterilerim artık ChatGPT’ye soruyor. Beni öneriyor mu?',
+    ornek: '“İzmir’de hangi mimarlık ofisiyle çalışmalıyım?” sorusuna verilen yanıtta birkaç isim geçer. Kendi adının geçip geçmediğini çoğu işletme bilmez.',
+    care: 'Müşterilerinizin sorduğu soruları belirliyor, yanıtlardaki durumunuzu ölçüyor ve kaynak gösterilen sayfaları düzeltiyoruz.',
+    bag: { etiket: 'GEO ve AEO danışmanlığı', url: geo.url },
+    cizim: robot,
+  },
+  {
+    soru: 'Web sitem yok ya da çok eski. Önce site mi yaptırmalıyım?',
+    ornek: 'Her zaman değil. Instagram’da mesaj hedefiyle site olmadan reklam verilebilir. Google reklamında ise tıklayan kişinin ineceği bir sayfa gerekir.',
+    care: 'İhtiyaca göre tek sayfalık bir açılış sayfası ya da hizmetlerinizi ayrı ayrı anlatan kurumsal bir site kuruyoruz.',
+    bag: { etiket: 'Kurumsal web tasarım', url: web.url },
+    cizim: taslak,
+  },
+  {
+    soru: 'Hangisine ihtiyacım olduğunu bilmiyorum. Nereden başlamalıyım?',
+    ornek: 'Çoğu işletme bu noktadan başlar. Doğru ilk adım, müşterinizin sizi arayarak mı yoksa görerek mi bulduğuna bağlıdır.',
+    care: 'Görüşmede işletmenizi dinliyor, hangi hizmetin işinize yarayacağını ve hangisinin şimdilik gerekmediğini söylüyoruz.',
+    bag: { etiket: 'Google Ads mi, Instagram mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+    cizim: yolAyrimi,
+  },
+];
+
+/** Hizmetlerin birbirine nasıl bağlandığı: tek ekibin gerekçesi. */
+const baglar = [
+  {
+    ad: 'Reklam ve açılış sayfası',
+    aciklama: 'Reklama tıklayan kişi, aradığı hizmeti ilk ekranda gösteren bir sayfaya inmelidir. Reklamı ve sayfayı aynı ekip kurduğunda ikisi aynı sözü verir.',
+  },
+  {
+    ad: 'Google Ads ve SEO',
+    aciklama: 'Reklamda teklif getirdiği görülen aramalar, SEO’da önce hangi sayfaların ele alınacağını gösterir. Tahminle değil, görülmüş aramayla ilerleriz.',
+  },
+  {
+    ad: 'SEO ve yapay zekâ görünürlüğü',
+    aciklama: 'İkisi de aynı malzemeyle çalışır: müşterinin sorusuna açık cevap veren, düzenli sayfalar. Aynı içerik iki iş için birlikte hazırlanır.',
+  },
+  {
+    ad: 'Instagram reklamı ve mesaj düzeni',
+    aciklama: 'Reklam mesajı getirir; satış, ilk yanıtla randevu arasında olur. Reklamı kuran ekip mesajdan satışa giden adımları da sizinle birlikte düzenler.',
+  },
+];
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'İşletme, rakip ve arama analizi', aciklama: 'İşletmenizi, rakiplerinizi ve müşterinizin aramalarını inceliyor; varsa mevcut hesabınıza ve sitenize bakıyoruz.' },
+  { ad: 'Strateji', ozet: 'Kanal, mesaj ve hedef kararı', aciklama: 'Hangi hizmetle başlanacağını ve neyin şimdilik gerekmediğini gerekçesiyle birlikte kararlaştırıyoruz.' },
+  { ad: 'Kurulum', ozet: 'Bulguya dayanan kurulum', aciklama: 'Kampanyaları, sayfaları ve içerikleri incelemede çıkan bulgulara göre kuruyor, yayından önce deniyoruz.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Sonuç getirmeyen aramayı, reklamı ya da sayfayı kapatıyor; getireni güçlendiriyoruz.' },
+  { ad: 'Hedef', ozet: 'Satış ve müşteri hedefiniz', aciklama: 'Başarıyı tıklamayla değil, işletmenize gelen talep ve satışla değerlendiriyoruz.' },
+];
+
+/** Sorular Türkiye'de aranan ifadelerden seçildi ("dijital pazarlama nedir" 1.900, "dijital pazarlama ajansı" 2.400). */
+const sorular = [
+  {
+    soru: 'Dijital pazarlama nedir?',
+    cevap:
+      'Dijital pazarlama, bir işletmenin ürün ya da hizmetini internet üzerinden doğru kişilere ulaştırmak ve satışa dönüştürmek için yaptığı çalışmaların tümüdür. Arama motoru reklamları, sosyal medya reklamları, arama motoru optimizasyonu (SEO), yapay zekâ yanıtlarında görünürlük (GEO) ve web sitesi bu çalışmaların başlıca parçalarıdır.',
+  },
+  {
+    soru: 'Dijital pazarlama ajansı ne iş yapar?',
+    cevap:
+      'Dijital pazarlama ajansı, işletmenizin internette müşteri bulması için gereken işleri planlar, kurar ve düzenli olarak geliştirir. Reklam hesaplarını yönetir, web sitenizi ve içeriğinizi aramalara göre düzenler, hangi işin sonuç getirdiğine bakarak bir sonraki adımı belirler. Satışları Artır bu işleri tek bir satış hedefine göre yürütür.',
+  },
+  {
+    soru: 'Reklam ajansı, SEO ajansı ve web tasarım ajansı ayrı ayrı mı tutulmalı?',
+    cevap:
+      'Şart değil; üç iş birbirine bağlı olduğu için tek ekip çoğu zaman daha verimli çalışır. Reklamın açtığı sayfayı web tasarım, o sayfanın aramalarda görünmesini SEO belirler. İşler ayrı ajanslara dağıldığında sorunun hangi adımda olduğu ortada kalabilir. Bu işleri tek ekip olarak, aynı hedefle yürütüyoruz.',
+  },
+  {
+    soru: 'Hangi hizmetten başlamalıyım?',
+    cevap:
+      'Müşterinizin sizi nasıl bulduğuna göre değişir. Hizmetinizi adıyla arıyorsa Google Ads, işinizi görünce ilgileniyorsa Instagram ve Facebook reklamları çoğu zaman doğru ilk adımdır. Tıklayan kişinin ineceği sayfa yoksa ya da yetersizse önce onu konuşuruz. İlk görüşmede işletmenizi dinleyip başlangıç noktasını birlikte seçiyoruz.',
+    bag: { etiket: 'Google Ads mi, Instagram reklamı mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+  },
+  {
+    soru: 'Tek bir hizmet alabilir miyim?',
+    cevap:
+      'Evet, her hizmet tek başına alınabilir. Yalnız Google Ads yönetimi, yalnız SEO danışmanlığı ya da yalnız web tasarım için çalışabiliriz. İncelemede başka bir eksik görürsek söyleriz; karar sizindir.',
+  },
+  {
+    soru: 'İlk kez reklam vereceğim. Reklam hesabımın olması gerekiyor mu?',
+    cevap:
+      'Hayır, hesabınızın olması gerekmez. Reklam hesabını işletmenizin adına birlikte açıyoruz; ödeme yöntemi, fatura bilgisi ve hesabın sahipliği sizde kalır. Bize yalnız yönetici erişimi verirsiniz.',
+  },
+  {
+    soru: 'Daha önce ajansla çalıştım, sonuç alamadım. Neyi farklı yapıyorsunuz?',
+    cevap:
+      'Yeni bir şey kurmadan önce eskisini inceliyoruz. Hesabınızda bütçenin nereye gittiğine, tıklayan kişinin indiği sayfaya ve gelen başvurulara ne olduğuna bakıyor, neyin işlemediğini gösteriyoruz. Kurulumu bu bulgulara göre yapıyor, verdiğimiz her kararı gerekçesiyle anlatıyoruz.',
+  },
+  {
+    soru: 'Sonuç garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Sıra, tıklama ya da satış sayısı için söz vermiyoruz; böyle bir sözü dürüstçe veremeyiz. Söz verdiğimiz şey işletmenizi ayrıntılı incelemek, kararlarımızı gerekçesiyle anlatmak ve düzenli optimizasyon yapmaktır.',
+    bag: { etiket: 'Neye söz veriyoruz, neye vermiyoruz?', url: '/hakkimizda/#soz' },
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Satışları Artır dijital pazarlama hizmetleri',
+    itemListElement: hizmetler.map((h, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: h.ad,
+      description: h.tanim,
+      url: `${SITE.url}${h.hizmet.url}`,
+    })),
+  },
+];
+---
+
+<Temel
+  baslik="Dijital Pazarlama Hizmetleri: Reklam, SEO, Web | Satışları Artır"
+  aciklama="Dijital pazarlama hizmetleri: Google Ads, Instagram ve Facebook reklamları, SEO, GEO ve web tasarım. Hangi hizmetin size uygun olduğunu ve nasıl çalıştığımızı görün."
+  sayfaTuru="hizmetler"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik="Dijital pazarlama hizmetleri"
+    gorsel={kapak}
+    gorselAlt="Kâğıttan yapılmış mavi beyaz bir kasaba. Küçük kâğıt insanlar, masaya çizilmiş kırmızı kalem çizgisini izleyerek ışıkları yanan bir dükkâna yürüyor."
+    mobilOdak="88% 50%"
+    cagri={{ etiket: CAGRI, url: '#gorusme' }}
+    ikincil={{ etiket: 'Hangi hizmet bana uygun?', url: '#hangi-hizmet' }}
+  >
+    <p>
+      Dijital pazarlama hizmetleri, bir işletmenin internette müşteri bulması için yapılan işlerdir: Google ve Instagram
+      reklamları, arama motoru optimizasyonu (SEO), yapay zekâ yanıtlarında görünürlük (GEO) ve web tasarım.
+    </p>
+    <p>
+      Bu beş işi tek ekip olarak yürütüyoruz. Önce işletmenizi ayrıntılı inceliyor, kurulumu bulgulara göre yapıyor,
+      ardından düzenli optimizasyonla geliştiriyoruz.
+    </p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Beş hizmet', hedef: 'hizmetler' },
+      { etiket: 'Hangisi size uygun?', hedef: 'hangi-hizmet' },
+      { etiket: 'Birlikte nasıl çalışır?', hedef: 'birlikte' },
+      { etiket: 'İlk kez ya da yeniden', hedef: 'durum' },
+      { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Beş hizmet -->
+  <section class="bolum bolum--beyaz" id="hizmetler">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Hangi dijital pazarlama hizmetlerini veriyoruz?</h2>
+        <p class="giris">
+          Müşteriniz sizi Google’da arayarak, Instagram’da görerek, bir sorunun cevabını ararken ya da yapay zekâya
+          danışarak bulur; sonunda web sitenize gelir. Her yol için ayrı bir hizmet var.
+        </p>
+      </div>
+      <ul class="hz">
+        {
+          hizmetler.map((h, i) => (
+            <li class:list={['hz__oge', `hz__oge--${i + 1}`]} data-gir style={`--gecikme:${[0, 120, 0, 120, 240][i]}ms`}>
+              <article class="hz__kart">
+                <div class="hz__gorsel">
+                  <Gorsel src={h.gorsel} alt={h.alt} sizes={h.sizes} genislikler={[480, 720, 960, 1280, 1700]} kalite={66} />
+                </div>
+                <div class="hz__metin">
+                  <h3 class="hz__ad">
+                    <span>{h.ad}</span>
+                  </h3>
+                  <p class="hz__tanim">{h.tanim}</p>
+                  <p class="hz__kim">
+                    <strong>Kimler için?</strong> {h.kim}
+                  </p>
+                  <a class="ok-bag hz__bag" href={h.hizmet.url}>
+                    {h.bag}
+                    <Ikon ad="arrow-right" boyut={16} />
+                  </a>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Müşterinin cümlesinden hizmete -->
+  <section class="bolum" id="hangi-hizmet">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Hangi hizmet size uygun?</h2>
+        <p class="giris">
+          Hizmet adlarını bilmeniz gerekmez. İşletmelerden en sık duyduğumuz altı cümle ve her birinin götürdüğü hizmet:
+        </p>
+      </div>
+      <SoruKartlari kartlar={secim} />
+    </div>
+  </section>
+
+  <!-- Hizmetler birbirini nasıl tamamlar -->
+  <section class="bolum bolum--beyaz" id="birlikte">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Dijital pazarlama hizmetleri birbirini nasıl tamamlar?</h2>
+          <div class="metin">
+            <p>
+              Tek bir hizmet çoğu zaman tek başına yetmez: reklamın getirdiği ziyaretçi sayfada kaybolur, iyi bir siteyi
+              kimse bulamaz. Hizmetleri aynı ekip yürüttüğünde bir işte öğrenilen, diğerine taşınır.
+            </p>
+          </div>
+        </div>
+        <Cizim src={yapboz} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili baglar">
+          {
+            baglar.map((b) => (
+              <li>
+                <strong>{b.ad}</strong>
+                <span>{b.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- İki durum: ilk kez / sonuç alamayanlar -->
+  <IkiDurum
+    kimlik="durum"
+    baslik="İlk kez mi yaptıracaksınız, sonuç mu alamadınız?"
+    giris="İki durumda başlangıç noktası farklıdır. Hangisindeyseniz oradan başlıyoruz."
+    sol={{
+      ust: 'İlk kez dijital pazarlama yaptıracaksanız',
+      baslik: 'Her şeye birden değil, doğru yerden başlıyoruz',
+      metin: 'Beş hizmetin beşini birden almanız gerekmez. İlk adımda size en yakın müşteriyi getirecek tek bir kanalı seçip sağlam kuruyoruz.',
+      maddeler: [
+        { ad: 'Müşteriniz sizi nasıl buluyor?', aciklama: 'Hizmeti adıyla mı arıyor, işinizi görünce mi ilgileniyor? İlk kanal bu soruya göre seçilir.' },
+        { ad: 'Hesaplar sizin adınıza açılır', aciklama: 'Reklam hesabını ve gereken diğer hesapları işletmenizin adına birlikte açıyoruz; sahiplik sizde kalır.' },
+        { ad: 'Yaptığımız işi sade bir dille anlatıyoruz', aciklama: 'Terimleri bilmeniz gerekmez. Her adımda neyi, neden yaptığımızı açıklıyoruz.' },
+      ],
+      cagri: { etiket: 'İlk adımı birlikte planlayalım', kampanyaDurumu: 'new', yer: 'hizmetler-ilk' },
+      bag: { etiket: 'Reklam vermek için gerekenler', url: '/blog/meta-reklam-vermek-icin-gerekenler/' },
+      cizim: megafon,
+    }}
+    sag={{
+      ust: 'Yaptırdınız ama sonuç alamadıysanız',
+      baslik: 'Yeniden kurmadan önce neyin işlemediğini buluyoruz',
+      metin: 'Sorun çoğu zaman kanalda değil, kurulumdadır. Mevcut hesabınızı, sitenizi ve gelen başvuruları inceleyip kaybın nerede olduğunu gösteriyoruz.',
+      maddeler: [
+        { ad: 'Reklam hesabı', aciklama: 'Bütçe hangi aramalara ve hangi kitlelere gitmiş? Satış getirmeyenleri ayırıyoruz.' },
+        { ad: 'Açılış sayfası ve site', aciklama: 'Tıklayan kişi telefonda ne görüyor, talep bırakabiliyor mu?' },
+        { ad: 'Başvurudan satışa giden yol', aciklama: 'Gelen mesaj ve formlara ne oluyor? Kaybın reklamda mı, sonrasında mı olduğuna bakıyoruz.' },
+        { ad: 'Hesap sahipliği', aciklama: 'Hesaplar kimin adına açılmış? Gerekiyorsa sahipliğin size geçmesi için yapılacakları birlikte kontrol ediyoruz.' },
+      ],
+      cagri: { etiket: 'Mevcut durumu inceleyelim', kampanyaDurumu: 'existing', yer: 'hizmetler-mevcut' },
+    }}
+  />
+
+  <!-- Yöntem -->
+  <section class="bolum bolum--beyaz" id="yontem">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Dijital pazarlama çalışması nasıl ilerler?</h2>
+          <div class="metin">
+            <p>
+              Hangi hizmeti alırsanız alın yol aynıdır. Önce inceliyor, sonra kuruyor, ardından düzenli takip ve
+              optimizasyonla satış hedefinize yaklaştırıyoruz.
+            </p>
+          </div>
+        </div>
+        <Cizim src={takvim} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <Adimlar adimlar={adimlar} />
+      </div>
+    </div>
+  </section>
+
+  <Sss
+    baslik="Dijital pazarlama hizmetleri hakkında sık sorulan sorular"
+    giris="Dijital pazarlama, ajansla çalışma ve hizmet seçimi hakkında en çok sorulanlar."
+    sorular={sorular}
+  />
+
+  <IlgiliSayfalar
+    sayfalar={[
+      {
+        tur: 'Projeler',
+        baslik: 'Çalıştığımız markalar',
+        metin: 'Canlı sitelerini açıp inceleyebileceğiniz projeler.',
+        url: '/calismalarimiz/',
+        gorsel: celikvillamEkran,
+        gorselAlt: 'ÇelikVillam web sitesinin masaüstündeki ilk ekranı',
+      },
+      {
+        tur: 'Blog',
+        baslik: 'Google Ads mi, Instagram reklamı mı?',
+        metin: 'İlk kanalınızı seçmek için iki senaryo.',
+        url: '/blog/google-ads-mi-instagram-reklami-mi/',
+        cizim: terazi,
+      },
+      { tur: 'Blog', baslik: 'Reklam ve SEO yazıları', metin: 'Sık yaşanan sorunlar için adım adım kontroller.', url: '/blog/', cizim: kitaplik },
+      { tur: 'Hakkımızda', baslik: 'Neye söz veriyoruz, neye vermiyoruz?', metin: 'Çalışma ilkelerimiz ve sözümüz.', url: '/hakkimizda/', cizim: defter },
+    ]}
+  />
+
+  <GorusmeBandi
+    baslik="Durumunuzu anlatın, nereden başlayacağımızı birlikte seçelim."
+    metin="Hangi hizmete ihtiyacınız olduğunu bilmeniz gerekmiyor. İşletmenizi ve ulaşmak istediğiniz müşteriyi anlatın."
+    kanal="belirsiz"
+    cagri={CAGRI}
+    konum="hizmetler"
+  />
+</Temel>
+
+<style>
+  /* Üst alan: kasaba görselin sağında durur; geniş ekranda kadraj dükkâna kaydırılır. */
+  @media (min-width: 56rem) {
+    :global(body[data-sayfa-turu='hizmetler'] .sb__gorsel img) {
+      object-position: 88% 50%;
+    }
+  }
+
+  /* ---- Beş hizmet --------------------------------------------------------------
+     Ana sayfadaki galerinin kartlı hâli: üstte kâğıt işi sahne, altında hizmetin aranan adı, tanımı ve
+     kimin için olduğu. Geniş ekranda 7 + 5, altında üçlü sıra. Kartın tamamı tıklanır. */
+  .hz {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .hz__oge {
+    display: grid;
+    grid-column: span 4;
+  }
+  .hz__oge--1 {
+    grid-column: span 7;
+  }
+  .hz__oge--2 {
+    grid-column: span 5;
+  }
+  .hz__kart {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--yuzey);
+    border-radius: var(--kose);
+    transition:
+      transform 220ms var(--yumusak),
+      box-shadow 220ms var(--yumusak);
+  }
+  .hz__oge--2 .hz__kart,
+  .hz__oge--3 .hz__kart,
+  .hz__oge--5 .hz__kart {
+    background: var(--mavi-acik);
+  }
+  .hz__gorsel {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+  }
+  /* İlk sıradaki iki görsel aynı yükseklikte durur. */
+  .hz__oge--1 .hz__gorsel,
+  .hz__oge--2 .hz__gorsel {
+    aspect-ratio: auto;
+    height: clamp(18rem, 38vw, 34rem);
+  }
+  .hz__gorsel :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .hz__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 900ms var(--yumusak);
+  }
+  .hz__oge--2 .hz__gorsel :global(img) {
+    object-position: 50% 58%;
+  }
+  .hz__metin {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.75rem;
+    justify-items: start;
+    padding: clamp(1.2rem, 2.2vw, 2rem);
+  }
+  .hz__ad {
+    font-size: clamp(1.5rem, 1.15rem + 1.1vw, 2.05rem);
+    font-weight: 700;
+    font-stretch: 87%;
+    line-height: 1.06;
+    letter-spacing: -0.022em;
+  }
+  .hz__oge--1 .hz__ad {
+    font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.6rem);
+  }
+  /* Üzerine gelince hizmetin adı kırmızı kalemle çizilir. */
+  .hz__ad span {
+    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 96% / 0 0.08em;
+    transition: background-size 520ms cubic-bezier(0.6, 0.05, 0.25, 1);
+  }
+  .hz__kart:hover .hz__ad span,
+  .hz__kart:focus-within .hz__ad span {
+    background-size: 100% 0.08em;
+  }
+  .hz__tanim {
+    max-width: 36em;
+    color: var(--murekkep-2);
+  }
+  /* Öne çıkan ilk kartta tanım bir kademe büyük okunur. */
+  @media (min-width: 62rem) {
+    .hz__oge--1 .hz__tanim {
+      font-size: var(--b-giris);
+      line-height: 1.42;
+      max-width: 30em;
+    }
+  }
+  .hz__kim {
+    max-width: 40em;
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--ikincil);
+  }
+  .hz__kim strong {
+    font-family: var(--yazi-baslik);
+    font-weight: 640;
+    font-stretch: 96%;
+    color: var(--murekkep);
+  }
+  .hz__bag {
+    margin-block-start: 0.35rem;
+  }
+  .hz__bag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  @media (hover: hover) {
+    .hz__kart:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.35rem 0.35rem 0 rgb(23 61 166 / 0.2);
+    }
+    .hz__kart:hover .hz__gorsel :global(img) {
+      transform: scale(1.03);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hz__kart,
+    .hz__gorsel :global(img),
+    .hz__ad span {
+      transition: none;
+    }
+    .hz__kart:hover,
+    .hz__kart:hover .hz__gorsel :global(img) {
+      transform: none;
+    }
+  }
+  /* Tablet: ilk kart tam genişlik, diğerleri ikişerli. */
+  @media (max-width: 61.99rem) {
+    .hz__oge[class] {
+      grid-column: span 6;
+    }
+    .hz__oge--1[class] {
+      grid-column: 1 / -1;
+    }
+    .hz__oge--1 .hz__gorsel,
+    .hz__oge--2 .hz__gorsel {
+      height: auto;
+    }
+    .hz__oge--1 .hz__gorsel {
+      aspect-ratio: 16 / 9;
+    }
+    .hz__oge--2 .hz__gorsel {
+      aspect-ratio: 4 / 5;
+    }
+    .hz__oge--2 .hz__gorsel :global(img) {
+      object-position: 50% 50%;
+    }
+  }
+  /* Telefon: tek sütun. Dikey sahneler kare gösterilir, odak sahnenin anlatan kısmında kalır. */
+  @media (max-width: 43.99rem) {
+    .hz__oge[class] {
+      grid-column: 1 / -1;
+    }
+    .hz__oge--1 .hz__gorsel {
+      aspect-ratio: 3 / 2;
+    }
+    .hz__oge--2 .hz__gorsel,
+    .hz__oge--3 .hz__gorsel,
+    .hz__oge--4 .hz__gorsel,
+    .hz__oge--5 .hz__gorsel {
+      aspect-ratio: 1 / 1;
+    }
+    .hz__oge--2 .hz__gorsel :global(img) {
+      object-position: 50% 42%;
+    }
+    .hz__oge--3 .hz__gorsel :global(img) {
+      object-position: 50% 48%;
+    }
+    .hz__oge--5 .hz__gorsel :global(img) {
+      object-position: 50% 28%;
+    }
+    .hz__bag {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+
+  /* ---- Hizmetlerin birleşmesi: dört kart, yapbozun dört parçası gibi ikişerli durur. */
+  @media (min-width: 48rem) {
+    .baglar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

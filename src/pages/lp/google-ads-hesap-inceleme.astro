@@ -1,0 +1,432 @@
+---
+/**
+ * Reklam açılış sayfası: Google Arama, mevcut hesap.
+ * Reklam mesajı: "Tıklama var, teklif talebi az mı?"
+ * noindex,follow: taranabilir, site haritasında yok. Form kanal ve kampanya durumu dolu gelir.
+ *
+ * Düzen (15 Kasım 2026): üst alan (başlık, form, sahne) > neye bakıyoruz (görselli kartlar + temsili örnek) >
+ * inceleme adımları > iki kitle için kısa not (hesabı olanlar, ilk kez reklam verecekler) > sık sorulanlar > kapanış.
+ * Tek amaç görüşme talebidir: sayfada tek form vardır (#gorusme), bütün çağrılar ona iner.
+ * Anlatım sırası: inceleme, bulguya dayanan kurulum, düzenli optimizasyon. Fiyat, süre ve sonuç sözü yazılmaz.
+ * Korunan çapalar: #gorusme, #ornek.
+ */
+import Temel from '../../layouts/Temel.astro';
+import LpKapak from '../../components/lp/LpKapak.astro';
+import LpKapanis from '../../components/lp/LpKapanis.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import Sss from '../../components/Sss.astro';
+import Cizim from '../../components/Cizim.astro';
+import Isaret from '../../components/Isaret.astro';
+import Ikon from '../../components/Ikon.astro';
+
+import sahne from '../../assets/gorseller/yol-arama.jpg';
+import telefon from '../../assets/cizimler/telefon.png';
+import liste from '../../assets/cizimler/liste.png';
+import dukkan from '../../assets/cizimler/dukkan.png';
+import hedef from '../../assets/cizimler/hedef.png';
+import defter from '../../assets/cizimler/defter.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+import megafon from '../../assets/cizimler/megafon.png';
+
+const CAGRI = 'Google Ads hesabımı görüşelim';
+
+// İncelemede bakılan üç yer. Örnek işletmeler temsilidir.
+const bakilanlar = [
+  {
+    soru: 'Bütçeniz hangi aramalara gidiyor?',
+    ornek: 'Bir mobilyacının “koltuk takımı” reklamı, “ikinci el koltuk” ya da “koltuk yıkama” yazan kişiye de gösterilebilir. Tıklama sayılır, satış gelmez.',
+    is: 'Tıklamayı getiren aramaları satır satır okuyor, her biri için bir karar yazıyoruz.',
+    cizim: liste,
+  },
+  {
+    soru: 'Tıklayan kişi sayfada ne görüyor?',
+    ornek: 'Bir kombi servisinin reklamına tıklayan kişi, sayfa telefonda geç açılırsa ya da numaraya dokunamazsa bir sonraki sonuca tıklar.',
+    is: 'Reklamın açtığı sayfayı telefonda deniyor, talep bırakmayı zorlaştıran yerleri işaretliyoruz.',
+    cizim: dukkan,
+  },
+  {
+    soru: 'Telefon ve form doğru sayılıyor mu?',
+    ornek: 'Gelen aramalar ve formlar sayılmıyorsa hangi aramanın müşteri getirdiği görünmez; bütçe kararı tahmine kalır.',
+    is: 'Formu, telefon aramasını ve WhatsApp tıklamasını deneme başvurusuyla tek tek kontrol ediyoruz.',
+    cizim: hedef,
+  },
+];
+
+const adimlar = [
+  {
+    ad: 'İnceleme',
+    ozet: 'Aramalar, sayfa ve dönüşüm takibi',
+    aciklama: 'Arama terimlerini, reklamın açtığı sayfayı ve başvuruların nasıl sayıldığını tek tek kontrol ediyoruz.',
+  },
+  {
+    ad: 'Bulgular',
+    ozet: 'Neyin işlediği, neyin işlemediği',
+    aciklama: 'Satış getirmeyen aramaları, sayfadaki engelleri ve sayılmayan başvuruları gerekçesiyle gösteriyoruz.',
+  },
+  {
+    ad: 'Plan',
+    ozet: 'Neyin, hangi sırayla değişeceği',
+    aciklama: 'Kapatılacak aramaları, yeniden kurulacak kampanyaları ve düzeltilecek sayfayı öncelik sırasına koyuyoruz.',
+  },
+];
+
+const sorular = [
+  {
+    soru: 'Hesabımı size devretmem gerekiyor mu?',
+    cevap:
+      'Hayır. Hesap işletmenizin adına kalır; ödeme yöntemi, fatura bilgisi ve hesabın sahipliği sizde durur. Birlikte çalışırsak bize yönetici erişimi verirsiniz ve bu erişimi dilediğiniz zaman kaldırabilirsiniz.',
+  },
+  {
+    soru: 'Hesabımı başka bir ajans yönetiyor. Yine de görüşebilir miyiz?',
+    cevap:
+      'Evet. Hesabınız başka bir ajansın yönetici hesabı altında açıldıysa sahipliğin kimde olduğunu ve nasıl devralınacağını ilk görüşmede birlikte kontrol ederiz.',
+  },
+  {
+    soru: 'Hiç Google reklamı vermedim. Bu sayfa bana uygun mu?',
+    cevap:
+      'Bu sayfa Google’a reklam veren işletmeler için hazırlandı; yine de görüşme isteyebilirsiniz. İlk kez reklam verecekseniz incelenecek bir hesap olmadığı için işe hangi başvuruyu istediğinizi ve müşterinizin sizi hangi sözlerle aradığını netleştirerek başlıyoruz.',
+    bag: { etiket: 'İlk kez Google’a reklam verecekler için', url: '/hizmetler/google-ads-yonetimi/#ilk-kampanya' },
+  },
+  {
+    soru: 'Sonuç garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Sıra, tıklama ya da satış sayısı için söz vermiyoruz. Söz verdiğimiz şey hesabınızı ayrıntılı incelemek, verdiğimiz kararları gerekçesiyle anlatmak ve düzenli optimizasyon yapmaktır.',
+  },
+];
+---
+
+<Temel
+  baslik="Google Ads Hesap İncelemesi ve Görüşme | Satışları Artır"
+  aciklama="Google Ads hesabınızı birlikte inceleyelim: bütçenin gittiği aramalar, reklamın açtığı sayfa ve dönüşüm takibi. Bulguları ve planı görüşmek için talep bırakın."
+  sayfaTuru="lp"
+  hizmet="google-ads"
+  indeksle={false}
+  sade
+  sadeBaglantilar={[
+    { etiket: 'İnceleme', url: '#inceleme' },
+    { etiket: 'Sorular', url: '#sss' },
+  ]}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <LpKapak
+    baslik="Google Ads hesabınızda hangi aramalar talep getiriyor?"
+    vurgu="talep getiriyor?"
+    altMetin="Arama terimlerinizi, reklamın açtığı sayfayı ve dönüşüm takibini birlikte inceleyelim; neyin değişmesi gerektiğini gösterelim."
+    kanal="google-ads"
+    cagri={CAGRI}
+    konum="lp-google-ads"
+    kampanyaDurumu="existing"
+    formKimligi="lp-gads"
+    formBasligi="Hesabınızı anlatın"
+    formMetni="Ne sattığınızı ve reklamdan ne beklediğinizi yazın."
+    gorsel={sahne}
+    gorselAlt="Kâğıttan dev bir arama kutusuna uzanan küçük bir müşteri; kutudan çıkan kırmızı kalem çizgisi ışıkları yanan dükkâna gidiyor"
+    odak="58% 50%"
+    mobilOdak="50% 50%"
+    nesne={telefon}
+  />
+
+  <div class="lp-govde">
+    <!-- Neye bakıyoruz? -->
+    <section class="bolum bolum--beyaz" id="inceleme">
+      <div class="sarici">
+        <div class="bolum-ust">
+          <h2 class="baslik-2">Google Ads hesap incelemesinde neye bakıyoruz?</h2>
+          <p class="giris">
+            Yeni kampanya açmadan önce hesabın bugün neye para harcadığını ve neyi kaçırdığını görmemiz gerekir.
+            İncelemede üç yere bakıyoruz:
+          </p>
+        </div>
+
+        <ul class="bak">
+          {
+            bakilanlar.map((b, i) => (
+              <li class="bak__kart" data-gir style={`--gecikme:${i * 90}ms`}>
+                <div class="bak__cizim" aria-hidden="true">
+                  <Cizim src={b.cizim} sizes="(max-width: 55.99rem) 24vw, 14vw" genislikler={[200, 320, 480, 640]} />
+                </div>
+                <h3 class="bak__soru">{b.soru}</h3>
+                <p class="bak__ornek kucuk">{b.ornek}</p>
+                <p class="bak__is">{b.is}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Temsili örnek: arama terimi kararı -->
+        <div class="ornek niyet" id="ornek" data-gir>
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Aynı kelime, iki ayrı niyet</h3>
+            <span class="temsili">Temsili örnek: çelik villa firması</span>
+          </div>
+          <div class="niyet__ikili">
+            <div class="niyet__terim">
+              <p class="niyet__sorgu">“çelik villa modelleri”</p>
+              <p><span class="hukum">İzle</span></p>
+              <p class="niyet__gerekce">Model araştırıyor. Reklam model sayfasını açar; teklife dönüp dönmediğine göre karar verilir.</p>
+            </div>
+            <div class="niyet__terim niyet__terim--one">
+              <p class="niyet__sorgu">“arsama çelik villa <Isaret class="isaret--satir-ici">yaptırmak istiyorum</Isaret>”</p>
+              <p><span class="hukum hukum--evet">Öne al</span></p>
+              <p class="niyet__gerekce">Arsası hazır, yaptırmak istiyor. Bütçe bu aramaya toplanır, reklam teklif sayfasını açar.</p>
+            </div>
+          </div>
+          <p class="ornek__not">
+            Terimler gerçek bir hesaptan alınmadı; görüşmede bu ayrımı sizin arama terimlerinizle yapıyoruz. Bu alanda
+            yürüttüğümüz iş: <a href="/calismalarimiz/celikvillam/">ÇelikVillam projesi</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- İnceleme adımları -->
+    <section class="bolum" id="surec">
+      <div class="sarici konu konu--ust">
+        <div class="konu__baslik konu__baslik--cizimli">
+          <div>
+            <h2 class="baslik-2">İnceleme nasıl ilerliyor?</h2>
+            <div class="metin">
+              <p>Yeni kampanya açmakla başlamıyoruz: önce bakıyor, sonra gösteriyor, sonra planlıyoruz.</p>
+            </div>
+          </div>
+          <Cizim src={defter} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+        </div>
+        <div class="konu__icerik">
+          <Adimlar adimlar={adimlar} />
+        </div>
+      </div>
+    </section>
+
+    <!-- İki kitle için kısa not: sayfa hesabı olanlara yöneliktir; ilk kez reklam verecekler hizmet sayfasına yönlendirilir. -->
+    <section class="bolum bolum--beyaz bolum--siki" id="kimler-icin">
+      <div class="sarici">
+        <h2 class="baslik-2">Hesabınız mı var, ilk kez mi reklam vereceksiniz?</h2>
+        <div class="bak bak--ikili">
+          <article class="bak__kart">
+            <div class="bak__cizim" aria-hidden="true">
+              <Cizim src={buyutec} sizes="(max-width: 55.99rem) 24vw, 9vw" genislikler={[200, 320, 480]} />
+            </div>
+            <h3 class="bak__soru">Google’a reklam veriyorsanız</h3>
+            <p class="bak__ornek">
+              Bu sayfa sizin için. Tıklama geliyor ama telefon çalmıyorsa, bütçe gün bitmeden tükeniyorsa ya da hesap
+              kurulduktan sonra bir daha açılmadıysa önce nedenini buluyoruz.
+            </p>
+            <a
+              class="dugme dugme--murekkep dugme--kucuk bak__is"
+              href="#gorusme"
+              data-kampanya-durumu="existing"
+              data-kanal-sec="google-ads"
+              data-olay="cta_click"
+              data-yer="lp-mevcut-hesap"
+            >
+              {CAGRI}
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </article>
+          <article class="bak__kart">
+            <div class="bak__cizim" aria-hidden="true">
+              <Cizim src={yolAyrimi} sizes="(max-width: 55.99rem) 24vw, 9vw" genislikler={[200, 320, 480]} />
+            </div>
+            <h3 class="bak__soru">Hiç Google reklamı vermediyseniz</h3>
+            <p class="bak__ornek">
+              İncelenecek bir hesabınız yoksa başlangıç noktanız farklıdır: hesabı işletmenizin adına açıyor, ilk
+              kampanyayı müşterinizin aramalarına göre birlikte kuruyoruz.
+            </p>
+            <a class="ok-bag bak__is" href="/hizmetler/google-ads-yonetimi/#ilk-kampanya">
+              İlk kampanya nasıl kuruluyor?
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <Sss
+      baslik="Hesap incelemesi hakkında sık sorulanlar"
+      sorular={sorular}
+    />
+
+    <LpKapanis
+      baslik="Hesabınızdaki aramaları birlikte okuyalım."
+      metin="Formu doldurun; hesabınızı görüşmede birlikte açalım."
+      cagri={CAGRI}
+      kanal="google-ads"
+      yer="lp-kapanis"
+      cizim={megafon}
+    />
+  </div>
+</Temel>
+
+<style>
+  /* Açılış sayfası kısa kalır: bölüm boşlukları sitenin geri kalanından dardır. */
+  .lp-govde {
+    --bolum: clamp(3rem, 6.4vw, 6.25rem);
+  }
+
+  /* Neye bakıyoruz: görselli üç kart. Geniş ekranda görsel üstte; dar ekranda sorunun sağında, küçük. */
+  .bak {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .bak__kart {
+    display: grid;
+    grid-template-areas: 'cizim' 'soru' 'ornek' 'is';
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 2.2vw, 2rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .bak__kart:nth-child(2) {
+    background: var(--mavi-acik);
+  }
+  .bak__cizim {
+    grid-area: cizim;
+    width: min(56%, 11rem);
+    margin: -0.75rem 0 -0.25rem -0.75rem;
+  }
+  .bak__soru {
+    grid-area: soru;
+    font-size: clamp(1.3rem, 1.05rem + 0.95vw, 1.8rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+  }
+  .bak__ornek {
+    grid-area: ornek;
+    color: var(--ikincil);
+  }
+  .bak__is {
+    grid-area: is;
+    font-weight: 600;
+  }
+
+  /* İki kitle için kısa not: aynı kart dili, görsel solda. */
+  .bak--ikili {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-block-start: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .bak--ikili .bak__kart {
+    grid-template-columns: clamp(5.5rem, 9vw, 8rem) minmax(0, 1fr);
+    grid-template-areas:
+      'cizim soru'
+      'cizim ornek'
+      'cizim is';
+    grid-template-rows: auto auto 1fr;
+    column-gap: clamp(1rem, 2vw, 1.75rem);
+    align-items: start;
+  }
+  .bak--ikili .bak__kart:nth-child(1) {
+    background: var(--mavi-acik);
+  }
+  .bak--ikili .bak__kart:nth-child(2) {
+    background: var(--yuzey);
+  }
+  .bak--ikili .bak__cizim {
+    width: auto;
+    margin: -0.5rem 0 0 -0.5rem;
+  }
+  .bak--ikili .bak__ornek {
+    color: var(--murekkep-2);
+  }
+  .bak--ikili .bak__is {
+    justify-self: start;
+    margin-block-start: 0.35rem;
+  }
+
+  /* Temsili örnek: iki arama, iki karar. Öne alınan arama beyaz fişte durur. */
+  .niyet {
+    margin-block-start: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .niyet__ikili {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(0.5rem, 1.4vw, 1.25rem);
+    align-items: start;
+    margin-block-start: 1.1rem;
+  }
+  .niyet__terim {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+    justify-items: start;
+    padding: clamp(0.9rem, 2vw, 1.6rem);
+    border-radius: var(--kose);
+  }
+  .niyet__terim--one {
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    box-shadow: 0.35rem 0.35rem 0 var(--mavi-acik);
+  }
+  .niyet__sorgu {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.35rem, 1rem + 1.5vw, 2.15rem);
+    font-weight: 660;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.18;
+    /* Kalem halkası satırın üstüne ve altına taşar. */
+    padding-block: 0.12em;
+  }
+  .niyet__terim:not(.niyet__terim--one) .niyet__sorgu {
+    color: var(--murekkep-2);
+  }
+  .niyet__gerekce {
+    max-width: 30em;
+    color: var(--murekkep-2);
+  }
+
+  @media (max-width: 55.99rem) {
+    .bak {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .bak__kart {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'soru cizim'
+        'ornek ornek'
+        'is is';
+      grid-template-rows: auto;
+      column-gap: 0.75rem;
+      align-items: center;
+    }
+    .bak__cizim {
+      width: 5.75rem;
+      margin: -0.6rem -0.5rem -0.6rem 0;
+    }
+    .bak__ornek,
+    .bak__is {
+      max-width: 40em;
+    }
+    .bak--ikili .bak__kart {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'soru cizim'
+        'ornek ornek'
+        'is is';
+      grid-template-rows: auto;
+      column-gap: 0.75rem;
+      align-items: center;
+    }
+    .bak--ikili .bak__cizim {
+      width: 5.75rem;
+      margin: -0.6rem -0.5rem -0.6rem 0;
+    }
+    .bak--ikili a.bak__is {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .niyet__ikili {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .niyet__terim:not(.niyet__terim--one) {
+      padding-inline: 0;
+      padding-block-start: 0.25rem;
+    }
+  }
+</style>

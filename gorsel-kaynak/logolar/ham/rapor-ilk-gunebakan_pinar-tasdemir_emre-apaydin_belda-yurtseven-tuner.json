@@ -1,0 +1,189 @@
+{
+  "ilk-gunebakan": {
+    "alan": "ilkgunebakan.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://www.ilkgunebakan.com/media/brand/ilkgunebakan-logo-440.avif",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          108,
+          17,
+          220,
+          50
+        ],
+        "dogal": [
+          220,
+          49
+        ],
+        "zemin": "color(srgb 1 1 1 / 0.82)",
+        "dosya": "gorsel-kaynak/logolar/ham/ilk-gunebakan-0.avif",
+        "boyut": 10306
+      }
+    ]
+  },
+  "pinar-tasdemir": {
+    "alan": "kayseridermatolog.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://kayseridermatolog.com/assets/img/logo-mark.6b8666e528.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "",
+        "kutu": [
+          44,
+          25,
+          36,
+          24
+        ],
+        "dogal": [
+          420,
+          276
+        ],
+        "zemin": "rgb(244, 239, 232)",
+        "dosya": "gorsel-kaynak/logolar/ham/pinar-tasdemir-0.webp",
+        "boyut": 36844
+      }
+    ]
+  },
+  "emre-apaydin": {
+    "alan": "emreapaydin.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://emreapaydin.com/wp-content/uploads/2025/05/EMRE-LOGO-beyaz-768x131.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Op. Dr. Emre Apaydın",
+        "kutu": [
+          148,
+          20,
+          188,
+          32
+        ],
+        "dogal": [
+          768,
+          131
+        ],
+        "zemin": "rgba(255, 255, 255, 0)",
+        "dosya": "gorsel-kaynak/logolar/ham/emre-apaydin-0.png",
+        "boyut": 2822
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "data:",
+        "svg": null,
+        "renk": null,
+        "alt": "HealthTürkiye logosu",
+        "kutu": [
+          775,
+          11270,
+          132,
+          66
+        ],
+        "dogal": [
+          0,
+          0
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/emre-apaydin-1.svg"
+      }
+    ]
+  },
+  "belda-yurtseven-tuner": {
+    "alan": "drbeldayurtseventuner.com",
+    "adaylar": [
+      {
+        "tur": "img",
+        "puan": 14,
+        "src": "https://www.drbeldayurtseventuner.com/wp-content/uploads/2024/10/logo-4.png",
+        "svg": null,
+        "renk": null,
+        "alt": "Dr. Belda Yurtseven Tüner",
+        "kutu": [
+          95,
+          10,
+          325,
+          69
+        ],
+        "dogal": [
+          1440,
+          306
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/belda-yurtseven-tuner-0.png",
+        "boyut": 134051
+      },
+      {
+        "tur": "img",
+        "puan": 6,
+        "src": "https://www.drbeldayurtseventuner.com/wp-content/uploads/2026/08/obrandy-logo-beyaz.webp",
+        "svg": null,
+        "renk": null,
+        "alt": "Obrandy",
+        "kutu": [
+          1257,
+          10419,
+          88,
+          22
+        ],
+        "dogal": [
+          0,
+          0
+        ],
+        "zemin": "rgb(23, 23, 23)",
+        "dosya": "gorsel-kaynak/logolar/ham/belda-yurtseven-tuner-1.webp",
+        "boyut": 13632
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "https://www.drbeldayurtseventuner.com/wp-content/plugins/gtranslate/flags/svg/tr.svg",
+        "svg": null,
+        "renk": null,
+        "alt": "tr",
+        "kutu": [
+          35,
+          837,
+          33,
+          25
+        ],
+        "dogal": [
+          200,
+          150
+        ],
+        "zemin": "rgb(255, 255, 255)",
+        "dosya": "gorsel-kaynak/logolar/ham/belda-yurtseven-tuner-2.svg",
+        "boyut": 634
+      },
+      {
+        "tur": "img",
+        "puan": 5,
+        "src": "https://www.drbeldayurtseventuner.com/wp-content/uploads/2024/07/hakkinda-2-eskisehir-botoks-eskisehir-dudak-dolgusu-eskisehir-burun-dolgusu-eskisehir-sac-kok-hucre-tedavisi-eskisehir-leke-tedavisi-eskisehir-akne-tedavisi.jpg",
+        "svg": null,
+        "renk": null,
+        "alt": "Uzm. Dr. Belda Yurtseven Tüner beyaz önlüğüyle kliniğinde",
+        "kutu": [
+          865,
+          857,
+          436,
+          291
+        ],
+        "dogal": [
+          872,
+          581
+        ],
+        "zemin": "rgb(245, 245, 245)",
+        "dosya": "gorsel-kaynak/logolar/ham/belda-yurtseven-tuner-3.jpg",
+        "boyut": 433509
+      }
+    ]
+  }
+}

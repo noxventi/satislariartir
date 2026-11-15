@@ -1,0 +1,180 @@
+---
+no: 8
+kapak: google-reklam-verme
+kapakAlt: "Merdivene çıkıp kâğıttan arama sonuç panosunun en üst sırasına dükkân kartını yerleştiren önlüklü esnaf; o sıra kırmızı kalemle çemberlenmiş, aşağıda müşteriler bakıyor"
+soru: Google’a reklam nasıl verilir?
+baslik: Google’a Reklam Nasıl Verilir? Adım Adım
+aciklama: >-
+  Google’a reklam vermek için hesabı açmaktan ilk kampanyayı yayına almaya kadar yedi adım: hedef, kampanya türü,
+  anahtar kelime, reklam metni, bütçe ve dönüşüm takibi.
+aramalar:
+  - google reklam verme
+  - google ads reklam verme
+  - google reklam nasıl verilir
+kisaCevap: >-
+  Google’a reklam vermek için bir Google Ads hesabı açılır, kampanyanın hedefi ve türü seçilir, anahtar kelimeler ile
+  reklam metni yazılır, günlük bütçe ve teklif stratejisi belirlenir. Reklam, Google’ın incelemesinden geçince yayına
+  girer; Google çoğu reklamın bir iş günü içinde incelendiğini belirtir. Hesabı açmak kısa sürer. Sonucu yayından önce
+  verilen kararlar belirler: hangi aramada görüneceğiniz, tıklayan kişinin hangi sayfaya gideceği ve gelen talebin
+  nasıl sayılacağı.
+elinizeGecen: Yedi adımlık kurulum sırası, arama örnekleri ve yayın öncesi kontrol listesi
+hizmetler: [google-ads]
+hizmetBaglantisi:
+  etiket: İlk kez Google’a reklam verecekseniz
+  url: /hizmetler/google-ads-yonetimi/#ilk-kampanya
+sonraki: google-ads-tiklama-var-telefon-yok
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: "Google Ads Yardım, Google Ads hesabı oluşturma: Nasıl kaydolabilirim?"
+    url: https://support.google.com/google-ads/answer/6366720?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Google Ads’deki kampanya hedefleri hakkında
+    url: https://support.google.com/google-ads/answer/7450050?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Akıllı kampanyaları diğer Google Ads kampanya türleriyle karşılaştırma
+    url: https://support.google.com/google-ads/answer/7652853?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Ortalama günlük bütçeler hakkında
+    url: https://support.google.com/google-ads/answer/6385083?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Reklam inceleme süreci hakkında
+    url: https://support.google.com/google-ads/answer/1722120?hl=tr
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import AramaKutulari from '../../components/blog/AramaKutulari.astro';
+import Not from '../../components/blog/Not.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Bornova’da yeni açılmış bir halı yıkama atölyesi düşünün. Makineler kurulmuş, servis aracı kapıda bekliyor, telefon henüz çalmıyor. Aynı saatlerde birkaç sokak ötede biri Google’a “halı yıkama bornova” yazıyor.
+
+Google’a reklam vermek, o aramanın en üstündeki sonuçlar arasında yer almanın yoludur. Hesabı açmak kısa sürer. Zaman isteyen kısım yayından önce verilen kararlardır: hangi aramada görüneceksiniz, tıklayan kişi hangi sayfaya gidecek, gelen talep nasıl sayılacak?
+
+<SonucSayfasi sorgu="halı yıkama bornova" vurgu="reklam">
+  Kuracağınız kampanya sizi bu sayfanın en üstündeki bölgeye taşır. Harita ve organik sonuçların kuralları ayrıdır.
+</SonucSayfasi>
+
+## Google’a reklam vermek için ne gerekir?
+
+Üç şey yeterlidir: işletmenize ait bir Google hesabı, bir ödeme yöntemi ve reklamın açacağı bir sayfa. Platformun ne olduğunu ve reklam sırasına nasıl karar verildiğini [Google Ads nedir](/blog/google-ads-nedir/) yazısında anlattık. Bu yazı kurulumun kendisini anlatır.
+
+Kayıt sırasında Google işletmenizin adını ve site adresini, ardından fatura ülkesini, saat dilimini ve ödeme yöntemini ister. Kayıt akışında kampanya oluşturmadan hesap açma seçeneği de sunulur. Google’ın kendi önerisi de bu yöndedir: önce hesabı açın, kampanyayı sonra, acele etmeden kurun.
+
+Daha önce reklam verip sonuç alamadıysanız yeni bir hesap açmanız gerekmez. Aşağıdaki adımları mevcut hesabınız için bir kontrol sırası gibi okuyun: hangi adım atlanmış, hangisi Google’ın önerdiği varsayılan ayarla bırakılmış?
+
+<Not baslik="Akıllı kampanya ile Arama Ağı kampanyası farklıdır" tur="ipucu">
+  Akıllı kampanya, Google’ın küçük işletmeler için sunduğu kısa kurulumlu türdür. Anahtar kelime yerine anahtar kelime
+  teması verirsiniz, teklifleri sistem yönetir, rapor sade bir özet ekranıdır. Arama Ağı kampanyasında anahtar
+  kelimeleri, eşleme türlerini ve teklif stratejisini siz belirlersiniz; raporu arama terimi düzeyine kadar okursunuz.
+  Bu yazıdaki adımlar Arama Ağı kampanyası içindir.
+</Not>
+
+## Google Ads reklam verme adımları nelerdir?
+
+Google yeni bir kampanyanın kurulumunu şu sırayla tarif eder: hedef, kampanya türü, bütçe ve teklif stratejisi, reklam grupları ile reklamlar, hedefleme. Aşağıdaki yedi adım bu sırayı hesap açılışı ve yayın öncesi hazırlıkla tamamlar.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Hesabı açın',
+      aciklama: 'İşletmenizin kendi Google hesabıyla kaydolun. İşletme adını, site adresini, fatura ülkesini ve saat dilimini girin.',
+      not: 'Saat dilimi raporları ve faturalandırmayı etkiler; Google bu seçimde dikkatli olmanızı ister.',
+    },
+    {
+      ad: 'Hedefi seçin',
+      aciklama: 'Kampanyadan beklediğiniz asıl sonucu işaretleyin: satış, potansiyel müşteri ya da web sitesi trafiği. Google, seçiminize uyan ayarları önerir.',
+    },
+    {
+      ad: 'Kampanya türünü seçin',
+      aciklama: 'Hizmeti adıyla aranan işletmelerde başlangıç noktası Arama Ağı kampanyasıdır. Reklam, arama sonuçlarında yazı olarak görünür.',
+      not: 'Ağ ayarında reklamın Arama Ağı iş ortaklarında ve Görüntülü Reklam Ağı’nda da gösterilip gösterilmeyeceğini siz seçersiniz.',
+    },
+    {
+      ad: 'Konumu ve anahtar kelimeleri belirleyin',
+      aciklama: 'Hizmet verdiğiniz bölgeleri ekleyin, vermediklerinizi hariç tutun. Müşterinizin yazacağı ifadeleri konusuna göre reklam gruplarına ayırın.',
+    },
+    {
+      ad: 'Reklam metnini yazın',
+      aciklama: 'Birden çok başlık ve açıklama girin. Metin, arayan kişinin kelimeleriyle konuşmalı ve açılan sayfadaki sözle aynı olmalı.',
+    },
+    {
+      ad: 'Bütçeyi ve teklif stratejisini belirleyin',
+      aciklama: 'Ortalama günlük bütçeyi girin ve hedefinize uyan teklif stratejisini seçin.',
+    },
+    {
+      ad: 'Dönüşümü kurun ve yayına alın',
+      aciklama: 'Telefon aramasını ve formu dönüşüm olarak tanımlayın, bir denemeyle sayıldığını görün, sonra kampanyayı başlatın.',
+      not: 'Google çoğu reklamın bir iş günü içinde incelendiğini belirtir.',
+    },
+  ]}
+/>
+
+Arama Ağı’nda yazdığınız reklamın adı duyarlı arama ağı reklamıdır. Google, girdiğiniz başlık ve açıklamaları farklı birleşimlerle dener ve hangisinin daha iyi çalıştığını zamanla öğrenir. Başlıklar herhangi bir sırayla gösterilebildiği için her biri tek başına okunduğunda anlam taşımalıdır. Halı yıkama atölyesi için “Bornova’da Halı Yıkama”, “Kapıdan Alım, Kapıya Teslim” ve “Leke Çıkarma ve Kurutma” üç ayrı başlık olur.
+
+## Google reklamı hangi aramalarda görünmeli?
+
+Bütçenin nereye gideceğini anahtar kelimeler belirler. İçinde aynı kelime geçen aramalar aynı niyeti taşımaz; biri hizmet almak ister, diğeri işi kendi yapmanın yolunu arar. Listeyi yazarken her ifade için tek bir soru sorun: bunu yazan kişi bugün beni arar mı?
+
+Seçtiğiniz ifadeleri konusuna göre reklam gruplarına ayırın: halı yıkama bir grup, koltuk yıkama ayrı bir grup. Her grubun reklamı kendi aramasının kelimeleriyle konuşur ve kendi sayfasını açar. Bütün kelimeler tek grupta durursa “koltuk yıkama” yazan kişi halı yıkama reklamını görür. Hangi ifadelerin ne sıklıkla arandığına Google Ads’in içindeki Anahtar Kelime Planlayıcı’dan bakabilirsiniz.
+
+<AramaKutulari
+  aramalar={[
+    { ifade: 'halı yıkama bornova', not: 'Hizmeti hemen almak istiyor. Reklam verilir.', ton: 'evet' },
+    { ifade: 'koltuk yıkama bornova', not: 'Bu hizmeti de veriyorsanız ayrı reklam grubu açılır.', ton: 'evet' },
+    { ifade: 'halı yıkama fiyatları', not: 'Karşılaştırıyor. Fiyat sayfanız varsa reklam verilir.', ton: 'notr' },
+    { ifade: 'evde halı nasıl yıkanır', not: 'İşi kendi yapacak. Negatif anahtar kelimeye eklenir.', ton: 'hayir' },
+    { ifade: 'halı yıkama makinesi', not: 'Makine satın almak istiyor. Müşteriniz değil.', ton: 'hayir' },
+  ]}
+/>
+
+Bir anahtar kelimeyi eşleme türü belirtmeden eklerseniz Google onu geniş eşleme sayar ve ilgili gördüğü başka aramalarda da gösterebilir. Bu yüzden kampanyayı küçük bir negatif anahtar kelime listesiyle açın: “nasıl yapılır”, “iş ilanı”, “ikinci el” gibi. Konum ayarı da aynı işi görür: şehir, bölge ya da işletmenize belirli bir mesafedeki alan seçilir, hizmet vermediğiniz yerler hariç tutulur.
+
+## Google reklam bütçesi ve teklifi nasıl belirlenir?
+
+Google Ads’te bütçe günlük ortalama olarak girilir. Google, talebin yüksek olduğu günlerde bu ortalamanın üstüne çıkabilir, düşük olduğu günlerde altında kalır. Yardım sayfasına göre çoğu kampanyada bir günün harcaması ortalama günlük bütçenin iki katını, bir ayın harcaması günlük bütçenin 30,4 katını geçmez. Aylık bir tutar ayırdıysanız onu 30,4’e bölerek günlük bütçeyi bulursunuz.
+
+Teklif stratejisi, Google’a neyi çoğaltmasını istediğinizi söyler. Dönüşüm takibi çalışan bir hesapta dönüşüme odaklanan stratejiler seçilir. Yeni açılmış, henüz dönüşüm verisi birikmemiş kampanyalar için Google tıklamaları artırma stratejisinin işe yarayabileceğini belirtir. Veri biriktikçe strateji yeniden ele alınır.
+
+<AraGorsel cizim="hedef" alt="Ortasına ok saplanmış kâğıttan bir hedef tahtası">
+  Dönüşüm takibi kurulmadan açılan kampanyada Google neyi çoğaltacağını bilemez, siz de hangi aramanın telefon
+  getirdiğini göremezsiniz.
+</AraGorsel>
+
+Ne kadar bütçe ayrılacağının herkese uyan bir cevabı yoktur. Sektörünüzdeki rekabet, hizmet bölgenizin genişliği ve bir müşterinin işletmenize bıraktığı kazanç birlikte belirler. Size uyan bir bütçeyle başlayıp birkaç hafta sonra arama terimlerine göre karar vermek, baştan yüksek bütçeyle açmaktan daha az risk taşır.
+
+## Reklam yayına girmeden önce neyi kontrol etmelisiniz?
+
+Kampanyayı başlatmadan önce reklama tıklayan kişinin yolunu kendi telefonunuzda yürüyün. Reklam metnindeki söz ile açılan sayfanın ilk ekranı aynı şeyi söylemeli. Bu uyumun nasıl kurulduğunu [açılış sayfası (landing page) nedir](/blog/landing-page-nedir/) yazısı anlatır.
+
+<KontrolListesi
+  kimlik="google-reklam-yayin-oncesi"
+  baslik="Yayın öncesi kontrol"
+  adimlar={[
+    'Hesap işletmemin kendi Google hesabıyla açıldı; ödeme yöntemi işletmeye ait.',
+    'Konum ayarında yalnız hizmet verdiğim bölgeler var; vermediklerimi hariç tuttum.',
+    'Her reklam grubunda birbirine yakın anlamlı anahtar kelimeler duruyor.',
+    'Reklamın açtığı sayfayı telefonumda açtım; numaraya dokunulabiliyor, form gönderiliyor.',
+    'Telefon araması ve form dönüşüm olarak tanımlı; deneme başvurum hesapta göründü.',
+    'İlk negatif anahtar kelime listemi ekledim.',
+  ]}
+  not="İşaretleyemediğiniz maddeyi yayından önce tamamlayın. Sonradan düzeltmek, o güne kadar harcanan bütçeyi geri getirmez."
+/>
+
+## Google reklamı yayına girdikten sonra ilk hafta ne yapılır?
+
+Reklam önce incelemeye girer ve bu sırada durumu “İnceleniyor” görünür. İncelemeyi geçince “Uygun” olur, gösterilmeye başlar. Bir politikaya takılırsa “Onaylanmadı” durumuna geçer ve nedeni hesapta bildirilir. Durum uygun göründüğü hâlde reklam çıkmıyorsa [Google reklamım neden gösterilmiyor](/blog/google-reklamim-neden-gosterilmiyor/) yazısındaki sırayı izleyin.
+
+İlk haftayı ayar değiştirerek geçirmeyin; hesabı okuyun. Bakılacak dört yer var:
+
+- **Arama terimleri.** Reklamı hangi aramalar tetikledi? İşinizle ilgisi olmayanları negatif anahtar kelimeye ekleyin.
+- **Konum.** Tıklamalar hizmet verdiğiniz bölgeden mi geliyor?
+- **Dönüşümler.** Hesaptaki sayı ile telefonunuza ve e-postanıza düşen talep sayısı birbirini tutuyor mu?
+- **Reklam metni.** Hangi başlıklar daha sık gösteriliyor, hangileri hiç seçilmiyor?
+
+Tıklama gelip telefon çalmıyorsa sıradaki yazı, [tıklama var ama telefon yok](/blog/google-ads-tiklama-var-telefon-yok/), üç kontrolle sorunun yerini bulmanıza yardım eder. Kurulumu birlikte yapmak isterseniz [ilk Google Ads kampanyası](/hizmetler/google-ads-yonetimi/#ilk-kampanya) bölümünde işe nereden başladığımızı yazdık: yayından önce hangi başvuruyu istediğinizi, müşterinin sizi hangi sözlerle aradığını ve tıklayan kişinin ineceği sayfayı birlikte netleştiriyoruz.

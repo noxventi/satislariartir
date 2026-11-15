@@ -1,0 +1,245 @@
+---
+/**
+ * İki durum yan yana: çoğunlukla "ilk kez yapacaksanız" ve "zaten yapıyorsanız".
+ * İki kitle eşit ağırlıkta durur; her panelde kısa bir açıklama, yapılacak işlerin listesi ve bir çağrı vardır.
+ * Sol panel soluk mavi, sağ panel lacivert zemindedir.
+ */
+import type { ImageMetadata } from 'astro';
+import Cizim from './Cizim.astro';
+import Ikon from './Ikon.astro';
+
+export interface Durum {
+  /** Kimin için olduğu: "Hiç reklam vermediyseniz". */
+  ust: string;
+  baslik: string;
+  metin: string;
+  maddeler: { ad: string; aciklama?: string }[];
+  /** Görüşme formuna götüren düğme. kampanyaDurumu formda "yeni" ya da "mevcut" işaretler. */
+  cagri?: { etiket: string; url?: string; kampanyaDurumu?: 'new' | 'existing'; kanal?: string; yer?: string };
+  bag?: { etiket: string; url: string };
+  /** Yalnız açık zeminli (sol) panelde görünür. */
+  cizim?: ImageMetadata;
+  /** Panelin id'si: başka sayfalardan bu panele bağlantı verilecekse. */
+  kimlik?: string;
+}
+interface Props {
+  baslik: string;
+  giris?: string;
+  kimlik?: string;
+  sol: Durum;
+  sag: Durum;
+  zemin?: 'kagit' | 'beyaz';
+}
+const { baslik, giris, kimlik, sol, sag, zemin = 'kagit' } = Astro.props;
+const paneller = [
+  { ...sol, ton: 'acik' },
+  { ...sag, ton: 'koyu' },
+];
+---
+
+<section class:list={['bolum id', zemin === 'beyaz' && 'bolum--beyaz']} id={kimlik}>
+  <div class="sarici">
+    <div class="id__ust">
+      <h2 class="baslik-2">{baslik}</h2>
+      {giris && <p class="giris">{giris}</p>}
+    </div>
+    <div class="id__izgara">
+      {
+        paneller.map((p) => (
+          <article id={p.kimlik} class:list={['id__panel', `id__panel--${p.ton}`, p.ton === 'koyu' && 'koyu-zemin']}>
+            {p.cizim && p.ton === 'acik' && (
+              <div class="id__cizim" aria-hidden="true">
+                <Cizim src={p.cizim} sizes="(max-width: 47.99rem) 40vw, 14vw" genislikler={[240, 360, 520, 760]} />
+              </div>
+            )}
+            <p class="id__kim">{p.ust}</p>
+            <h3 class="id__baslik">{p.baslik}</h3>
+            <p class="id__metin">{p.metin}</p>
+            <ul class="id__liste">
+              {p.maddeler.map((m) => (
+                <li>
+                  <strong>{m.ad}</strong>
+                  {m.aciklama && <span>{m.aciklama}</span>}
+                </li>
+              ))}
+            </ul>
+            <div class="id__eylem">
+              {p.cagri && (
+                <a
+                  class:list={['dugme', p.ton === 'acik' && 'dugme--murekkep']}
+                  href={p.cagri.url ?? '#gorusme'}
+                  data-kampanya-durumu={p.cagri.kampanyaDurumu}
+                  data-kanal-sec={p.cagri.kanal}
+                  data-olay="cta_click"
+                  data-yer={p.cagri.yer ?? 'iki-durum'}
+                >
+                  {p.cagri.etiket}
+                  <Ikon ad="arrow-right" boyut={18} />
+                </a>
+              )}
+              {p.bag && (
+                <a class="ok-bag" href={p.bag.url}>
+                  {p.bag.etiket}
+                  <Ikon ad="arrow-right" boyut={16} />
+                </a>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .id__ust {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 46rem;
+    margin-block-end: clamp(2rem, 4vw, 3.25rem);
+  }
+  .id__izgara {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .id__panel {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 0.9rem;
+    align-content: start;
+    justify-items: start;
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+    border-radius: var(--kose);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .id__panel--acik {
+    background: var(--mavi-acik);
+  }
+  .id__panel--koyu {
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  /* Görsel sağ üst köşede durur. z-index verilmez: verilirse zemine karışmaz (ayrı katman olur). */
+  .id__cizim {
+    position: absolute;
+    top: clamp(0.4rem, 1.2vw, 1rem);
+    right: clamp(0.2rem, 1.2vw, 1rem);
+    width: clamp(6rem, 11vw, 9.5rem);
+  }
+  .id__panel > :not(.id__cizim) {
+    position: relative;
+  }
+  .id__kim {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .id__panel--koyu .id__kim {
+    color: #9fb6ff;
+  }
+  .id__panel--acik .id__kim,
+  .id__panel--acik .id__baslik,
+  .id__panel--acik .id__metin {
+    max-width: calc(100% - clamp(5.75rem, 10.5vw, 9.25rem));
+  }
+  .id__baslik {
+    font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.4rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.05;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .id__metin {
+    max-width: 34em;
+    color: var(--murekkep-2);
+  }
+  .id__panel--koyu .id__metin {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .id__liste {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    margin-block: 0.4rem 0.6rem;
+  }
+  .id__liste li {
+    position: relative;
+    display: grid;
+    gap: 0.15rem;
+    padding-inline-start: 1.9rem;
+  }
+  .id__liste li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.42em;
+    width: 0.9rem;
+    height: 0.48rem;
+    border-left: 2.5px solid var(--kirmizi);
+    border-bottom: 2.5px solid var(--kirmizi);
+    border-radius: 1px;
+    transform: rotate(-48deg);
+    transform-origin: left bottom;
+  }
+  .id__panel--koyu .id__liste li::before {
+    border-color: #ff6b7f;
+  }
+  .id__liste strong {
+    font-family: var(--yazi-baslik);
+    font-size: 1.0938rem;
+    font-weight: 640;
+    font-stretch: 94%;
+    line-height: 1.25;
+  }
+  .id__liste span {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  .id__panel--koyu .id__liste span {
+    color: rgb(255 255 255 / 0.72);
+  }
+  .id__eylem {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+  .id__panel--koyu :global(.ok-bag) {
+    color: var(--beyaz);
+    text-decoration-color: rgb(255 255 255 / 0.45);
+  }
+  @media (max-width: 55.99rem) {
+    .id__izgara {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .id__cizim {
+      width: 4.75rem;
+    }
+    .id__panel--acik .id__kim,
+    .id__panel--acik .id__baslik {
+      max-width: calc(100% - 4.75rem);
+    }
+    .id__panel--acik .id__metin {
+      max-width: none;
+    }
+    .id__eylem {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
+    .id__eylem :global(.ok-bag) {
+      align-self: flex-start;
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+</style>

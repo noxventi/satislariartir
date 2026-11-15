@@ -1,0 +1,86 @@
+---
+/**
+ * Örnek aramalar: insanların Google'a yazdığı ifadeler arama kutusu görünümünde, yanında kısa bir yorumla.
+ * Kullanım (MDX):
+ * <AramaKutulari aramalar={[
+ *   { ifade: 'kombi servisi kadıköy', not: 'Hemen hizmet almak istiyor', ton: 'evet' },
+ *   { ifade: 'kombi neden su akıtır', not: 'Bilgi arıyor', ton: 'notr' },
+ *   { ifade: 'kombi servisi iş ilanları', not: 'Müşteri değil', ton: 'hayir' },
+ * ]} />
+ * İfadeler temsilidir; gerçek hesap verisi gibi sunulmaz.
+ */
+import Ikon from '../Ikon.astro';
+
+interface Arama {
+  ifade: string;
+  not?: string;
+  ton?: 'evet' | 'hayir' | 'notr';
+}
+interface Props {
+  aramalar: Arama[];
+}
+const { aramalar } = Astro.props;
+---
+
+<ul class="aramalar">
+  {
+    aramalar.map((a, i) => (
+      <li data-gir style={`--gecikme:${i * 60}ms`}>
+        <span class="aramalar__kutu">
+          <Ikon ad="magnifying-glass" boyut={18} />
+          <span>{a.ifade}</span>
+        </span>
+        {a.not && <span class:list={['hukum', a.ton === 'evet' && 'hukum--evet', a.ton === 'hayir' && 'hukum--hayir']}>{a.not}</span>}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .aramalar {
+    display: grid;
+    gap: 0.6rem;
+    margin-inline: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .aramalar li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin: 0;
+  }
+  .aramalar__kutu {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 0 1 26rem;
+    min-height: 2.9rem;
+    padding: 0.45rem 1.15rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: 999px;
+    box-shadow: 0.2rem 0.2rem 0 var(--mavi-acik);
+    font-family: var(--yazi-baslik);
+    font-size: 1.0625rem;
+    font-weight: 560;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+  .aramalar__kutu :global(svg) {
+    flex: none;
+    color: var(--mavi);
+  }
+  /* Not uzunsa satır kırar; kutuyu sağa taşırmaz. */
+  .aramalar :global(.hukum) {
+    max-width: 100%;
+    line-height: 1.25;
+    white-space: normal;
+  }
+  @media (max-width: 35.99rem) {
+    .aramalar__kutu {
+      flex-basis: 100%;
+    }
+  }
+</style>

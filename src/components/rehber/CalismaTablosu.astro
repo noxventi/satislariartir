@@ -1,0 +1,881 @@
+---
+/**
+ * Başvuru kalitesi çalışma tablosu.
+ *
+ * Okur, isim ve telefon girmeden başvuruları "ulaşıldı / hizmete uygun / görüşme / teklif"
+ * aşamalarında sınıflar. Temsili sekiz satırla açılır; okur kendi satırını ekler, siler,
+ * tabloyu yazdırır ya da CSV olarak indirir.
+ *
+ * - Her şey yalnız tarayıcıda (localStorage) kalır. Sunucuya ya da ölçüm katmanına hiçbir şey gönderilmez.
+ * - Betik yokken tablo örnek satırları ve ilk özetiyle okunur.
+ * - Aşamalar sıralıdır: bir aşama işaretlenince öncekiler de işaretlenir.
+ * - Dar alanda (kapsayıcı 34rem altı) her başvuru etiketli bir satır bloğuna dönüşür.
+ */
+import Ikon from '../Ikon.astro';
+import { ASAMALAR, AZAMI_NOT, ORNEK_SATIRLAR, cumle, say, yorum } from './calisma-tablosu';
+
+interface Props {
+  baslik?: string;
+  /** Aynı sayfada birden çok tablo varsa alan kimlikleri çakışmasın. */
+  kimlik?: string;
+}
+const { baslik = 'Başvuru kalitesi çalışma tablosu', kimlik = 'ct' } = Astro.props;
+
+const sayim = say(ORNEK_SATIRLAR);
+const ilkYorum = yorum(sayim);
+const SAYIM_ETIKETLERI = ['başvuru', 'ulaşıldı', 'uygun', 'görüşme', 'teklif'];
+---
+
+<div class="ornek ctk" data-calisma-tablosu>
+  <div class="ct">
+    <div class="ornek__ust">
+      <h3 class="baslik-4 ct__baslik">{baslik}</h3>
+      <span class="temsili" data-temsili-etiketi>Temsili satırlar</span>
+    </div>
+
+    <p class="ct__giris">
+      Son mesajlarınızı kişi adı yazmadan, birer durum cümlesi olarak girin. Her başvurunun ulaştığı son aşamayı
+      işaretleyin. Öncesindeki aşamalar kendiliğinden işaretlenir.
+    </p>
+
+    <dl class="ct__tanim">
+      {
+        ASAMALAR.map((a) => (
+          <div>
+            <dt>{a.ad}</dt>
+            <dd>{a.tanim}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <table class="ct__tablo">
+      <caption class="gorunmez">Başvurular ve her birinin ulaştığı aşama</caption>
+      <thead>
+        <tr>
+          <th scope="col" class="ct__b-not">Başvuru</th>
+          {ASAMALAR.map((a) => <th scope="col" class="ct__b-asama">{a.ad}</th>)}
+          <th scope="col" class="ct__b-sil"><span class="gorunmez">Satırı sil</span></th>
+        </tr>
+      </thead>
+      <tbody data-govde>
+        {
+          ORNEK_SATIRLAR.map((s) => (
+            <tr data-satir={s.id} data-seviye={s.seviye}>
+              <th scope="row" class="ct__not">{s.not}</th>
+              {ASAMALAR.map((a, k) => (
+                <td class="ct__asama" data-asama={k + 1} data-acik={s.seviye >= k + 1 ? '' : undefined} data-sonraki={s.seviye >= k + 2 ? '' : undefined}>
+                  <label>
+                    <input type="checkbox" checked={s.seviye >= k + 1} data-kutu={k + 1} />
+                    <span class="ct__kutu" aria-hidden="true" />
+                    <span class="ct__asama-adi">{a.kisa}</span>
+                  </label>
+                </td>
+              ))}
+              <td class="ct__sil">
+                <button type="button" data-sil aria-label={`Satırı sil: ${s.not}`}>
+                  <Ikon ad="x" boyut={18} />
+                </button>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+
+    <template data-satir-sablonu>
+      <tr data-satir="" data-seviye="0">
+        <th scope="row" class="ct__not"></th>
+        {
+          ASAMALAR.map((a, k) => (
+            <td class="ct__asama" data-asama={k + 1}>
+              <label>
+                <input type="checkbox" data-kutu={k + 1} />
+                <span class="ct__kutu" aria-hidden="true" />
+                <span class="ct__asama-adi">{a.kisa}</span>
+              </label>
+            </td>
+          ))
+        }
+        <td class="ct__sil">
+          <button type="button" data-sil>
+            <Ikon ad="x" boyut={18} />
+          </button>
+        </td>
+      </tr>
+    </template>
+
+    <form class="ct__ekle" data-ekle novalidate>
+      <div class="alan">
+        <label for={`${kimlik}-yeni`}>Kendi başvurunuzu ekleyin</label>
+        <div class="ct__ekle-satir">
+          <input
+            class="girdi"
+            id={`${kimlik}-yeni`}
+            name="not"
+            type="text"
+            maxlength={AZAMI_NOT}
+            autocomplete="off"
+            enterkeyhint="done"
+            placeholder="Örn. Keşif istedi, arandı, açmadı"
+            aria-describedby={`${kimlik}-yardim ${kimlik}-hata`}
+          />
+          <button class="dugme dugme--murekkep dugme--kucuk" type="submit">
+            <Ikon ad="plus" boyut={16} />
+            Satır ekle
+          </button>
+        </div>
+        <p class="alan__yardim" id={`${kimlik}-yardim`}>İsim, telefon ya da e-posta yazmayın. Durumu anlatan kısa bir not yeter.</p>
+        <p class="alan__hata" id={`${kimlik}-hata`} data-ekle-hata role="alert" hidden></p>
+      </div>
+    </form>
+
+    <div class="ct__ozet">
+      <ol class="ct__sayim" data-sayim aria-hidden="true">
+        {
+          sayim.map((n, i) => (
+            <li data-dusus={i > 0 && i === ilkYorum.asama ? '' : undefined}>
+              <span class="ct__sayi rakam" data-sayi>{n}</span>
+              <span class="ct__etiket">{SAYIM_ETIKETLERI[i]}</span>
+              <span class="ct__kayip" data-kayip>{i === 0 ? '' : sayim[i - 1] - n > 0 ? `${sayim[i - 1] - n} kayıp` : 'kayıp yok'}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="ct__okuma" aria-live="polite" aria-atomic="true">
+        <p class="ct__cumle" data-cumle>{cumle(sayim)}</p>
+        <p class="ct__yorum" data-yorum>
+          <strong data-yorum-baslik>{ilkYorum.baslik}</strong>
+          <span data-yorum-metni>{ilkYorum.metin}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="ct__alt">
+      <div class="ct__eylem" data-yazdirma-gizle>
+        <button type="button" data-bosalt>
+          <Ikon ad="note-pencil" boyut={16} />
+          Örnekleri sil, kendi satırlarımla başla
+        </button>
+        <button type="button" data-sifirla hidden>
+          <Ikon ad="arrow-counter-clockwise" boyut={16} />
+          Örnek satırlara dön
+        </button>
+        <button type="button" data-yazdir>
+          <Ikon ad="file-text" boyut={16} />
+          Yazdır
+        </button>
+        <button type="button" data-csv>
+          <Ikon ad="download-simple" boyut={16} />
+          CSV indir
+        </button>
+      </div>
+      <p class="ct__gizlilik mikro">
+        <Ikon ad="lock-simple" boyut={14} />
+        <span>Bu tablo yalnız bu tarayıcıda saklanır. Yazdıklarınız hiçbir yere gönderilmez.</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { ASAMALAR, AZAMI_NOT, AZAMI_SATIR, ORNEK_SATIRLAR, csvUret, cumle, kisiselBilgiVar, say, yorum, type Satir } from './calisma-tablosu';
+
+  const ANAHTAR = 'sa_calisma_tablosu_v1';
+
+  document.querySelectorAll<HTMLElement>('[data-calisma-tablosu]').forEach((kok) => {
+    const govde = kok.querySelector<HTMLTableSectionElement>('[data-govde]')!;
+    const sablon = kok.querySelector<HTMLTemplateElement>('[data-satir-sablonu]')!;
+    const form = kok.querySelector<HTMLFormElement>('[data-ekle]')!;
+    const girdi = form.querySelector<HTMLInputElement>('input[name="not"]')!;
+    const hata = kok.querySelector<HTMLElement>('[data-ekle-hata]')!;
+    const temsili = kok.querySelector<HTMLElement>('[data-temsili-etiketi]')!;
+    const dugmeBosalt = kok.querySelector<HTMLButtonElement>('[data-bosalt]')!;
+    const dugmeSifirla = kok.querySelector<HTMLButtonElement>('[data-sifirla]')!;
+    const sayimOgeleri = [...kok.querySelectorAll<HTMLLIElement>('[data-sayim] li')];
+
+    const ornekler = () => ORNEK_SATIRLAR.map((s) => ({ ...s }));
+    let sayac = 0;
+    let satirlar: Satir[] = ornekler();
+
+    try {
+      const ham = localStorage.getItem(ANAHTAR);
+      if (ham) {
+        const veri = JSON.parse(ham) as Satir[];
+        if (Array.isArray(veri))
+          satirlar = veri
+            .filter((s) => s && typeof s.not === 'string' && typeof s.id === 'string')
+            .slice(0, AZAMI_SATIR)
+            .map((s) => ({ id: s.id, not: s.not.slice(0, AZAMI_NOT), seviye: Math.min(4, Math.max(0, Number(s.seviye) || 0)), ornek: Boolean(s.ornek) }));
+      }
+    } catch {
+      /* depolama kapalı ya da kayıt bozuk: örnek satırlarla devam */
+    }
+
+    const kaydet = () => {
+      try {
+        localStorage.setItem(ANAHTAR, JSON.stringify(satirlar));
+      } catch {
+        /* depolama kapalı: tablo bu sayfa açıkken çalışır */
+      }
+    };
+
+    function satirIsaretle(tr: HTMLTableRowElement, seviye: number) {
+      tr.dataset.seviye = String(seviye);
+      tr.querySelectorAll<HTMLTableCellElement>('.ct__asama').forEach((td) => {
+        const k = Number(td.dataset.asama);
+        td.toggleAttribute('data-acik', seviye >= k);
+        td.toggleAttribute('data-sonraki', seviye >= k + 1);
+        td.querySelector<HTMLInputElement>('input')!.checked = seviye >= k;
+      });
+    }
+
+    function satirOlustur(s: Satir) {
+      const tr = (sablon.content.firstElementChild as HTMLTableRowElement).cloneNode(true) as HTMLTableRowElement;
+      tr.dataset.satir = s.id;
+      tr.querySelector('.ct__not')!.textContent = s.not;
+      tr.querySelector('[data-sil]')!.setAttribute('aria-label', `Satırı sil: ${s.not}`);
+      satirIsaretle(tr, s.seviye);
+      return tr;
+    }
+
+    function ozetle() {
+      const sayim = say(satirlar);
+      const y = yorum(sayim);
+      sayimOgeleri.forEach((li, i) => {
+        li.querySelector('[data-sayi]')!.textContent = String(sayim[i]);
+        const kayip = i === 0 ? 0 : sayim[i - 1] - sayim[i];
+        if (i > 0) li.querySelector('[data-kayip]')!.textContent = sayim[0] === 0 ? '' : kayip > 0 ? `${kayip} kayıp` : 'kayıp yok';
+        li.toggleAttribute('data-dusus', i > 0 && i === y.asama);
+      });
+      kok.querySelector('[data-cumle]')!.textContent = cumle(sayim);
+      kok.querySelector('[data-yorum-baslik]')!.textContent = y.baslik;
+      kok.querySelector('[data-yorum-metni]')!.textContent = y.metin;
+      kok.querySelector<HTMLElement>('[data-yorum]')!.hidden = !y.baslik;
+
+      const ornekVar = satirlar.some((s) => s.ornek);
+      temsili.hidden = !ornekVar;
+      dugmeBosalt.hidden = !ornekVar;
+      // Örnekler duruyorsa ve hiçbir şey değişmediyse "örneklere dön" gereksizdir.
+      const degisti = JSON.stringify(satirlar) !== JSON.stringify(ornekler());
+      dugmeSifirla.hidden = !degisti;
+    }
+
+    function ciz() {
+      govde.replaceChildren(...satirlar.map(satirOlustur));
+      if (!satirlar.length) {
+        const tr = document.createElement('tr');
+        tr.className = 'ct__bos';
+        const td = document.createElement('td');
+        td.colSpan = ASAMALAR.length + 2;
+        td.textContent = 'Tabloda satır yok. Aşağıdan ilk başvurunuzu ekleyin.';
+        tr.append(td);
+        govde.append(tr);
+      }
+      ozetle();
+    }
+
+    function hataGoster(mesaj: string | null) {
+      hata.hidden = !mesaj;
+      hata.textContent = mesaj || '';
+      girdi.toggleAttribute('aria-invalid', Boolean(mesaj));
+      if (mesaj) girdi.setAttribute('aria-invalid', 'true');
+    }
+
+    // Aşama işaretleme: sıralı. k işaretlenirse 1..k açılır, k kaldırılırsa k ve sonrası kapanır.
+    govde.addEventListener('change', (e) => {
+      const kutu = e.target as HTMLInputElement;
+      if (!kutu.matches('input[data-kutu]')) return;
+      const tr = kutu.closest('tr') as HTMLTableRowElement;
+      const k = Number(kutu.dataset.kutu);
+      const seviye = kutu.checked ? k : k - 1;
+      const satir = satirlar.find((s) => s.id === tr.dataset.satir);
+      if (!satir) return;
+      satir.seviye = seviye;
+      satirIsaretle(tr, seviye);
+      kaydet();
+      ozetle();
+    });
+
+    govde.addEventListener('click', (e) => {
+      const dugme = (e.target as Element).closest<HTMLButtonElement>('[data-sil]');
+      if (!dugme) return;
+      const tr = dugme.closest('tr') as HTMLTableRowElement;
+      const sira = satirlar.findIndex((s) => s.id === tr.dataset.satir);
+      if (sira < 0) return;
+      satirlar.splice(sira, 1);
+      kaydet();
+      ciz();
+      // Odak kaybolmasın: sıradaki satırın sil düğmesine, yoksa ekleme alanına.
+      const sonraki = govde.querySelectorAll<HTMLButtonElement>('[data-sil]')[Math.min(sira, satirlar.length - 1)];
+      (sonraki ?? girdi).focus();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const not = girdi.value.replace(/\s+/g, ' ').trim().slice(0, AZAMI_NOT);
+      if (not.length < 3) return hataGoster('Başvuruyu anlatan kısa bir not yazın. Örnek: Keşif istedi, arandı, açmadı.');
+      if (kisiselBilgiVar(not)) return hataGoster('Bu notta telefon ya da e-posta var gibi görünüyor. Kişisel bilgi olmadan yeniden yazın.');
+      if (satirlar.length >= AZAMI_SATIR) return hataGoster(`Tabloya en çok ${AZAMI_SATIR} satır eklenebilir. Yeni dönem için tabloyu indirip sıfırlayın.`);
+      hataGoster(null);
+      satirlar.push({ id: `k-${Date.now().toString(36)}-${sayac++}`, not, seviye: 0 });
+      kaydet();
+      ciz();
+      girdi.value = '';
+      girdi.focus();
+    });
+    girdi.addEventListener('input', () => {
+      if (!hata.hidden) hataGoster(null);
+    });
+
+    dugmeBosalt.addEventListener('click', () => {
+      satirlar = satirlar.filter((s) => !s.ornek);
+      kaydet();
+      ciz();
+      girdi.focus();
+    });
+    dugmeSifirla.addEventListener('click', () => {
+      satirlar = ornekler();
+      try {
+        localStorage.removeItem(ANAHTAR);
+      } catch {
+        /* yok */
+      }
+      ciz();
+      dugmeBosalt.focus();
+    });
+
+    kok.querySelector('[data-yazdir]')!.addEventListener('click', () => {
+      // Yalnız bu tablo yazdırılır; sayfanın kendi yazdırma davranışına dokunulmaz.
+      kok.setAttribute('data-ct-yazdiriliyor', '');
+      document.documentElement.classList.add('ct-yazdir');
+      const temizle = () => {
+        kok.removeAttribute('data-ct-yazdiriliyor');
+        document.documentElement.classList.remove('ct-yazdir');
+        removeEventListener('afterprint', temizle);
+      };
+      addEventListener('afterprint', temizle);
+      print();
+    });
+
+    kok.querySelector('[data-csv]')!.addEventListener('click', () => {
+      const adres = URL.createObjectURL(new Blob([csvUret(satirlar)], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a');
+      a.href = adres;
+      a.download = 'basvuru-kalitesi-tablosu.csv';
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(adres), 1000);
+    });
+
+    ciz();
+  });
+</script>
+
+<style>
+  .ctk {
+    padding: 0;
+  }
+  .ct {
+    container: ct / inline-size;
+    padding: clamp(1.1rem, 2.4vw, 2rem);
+  }
+  /* Rehber gövdesindeki h3 kuralı fişin başlığını büyütmesin. */
+  .ct .ct__baslik {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 660;
+    font-stretch: 94%;
+    line-height: 1.25;
+  }
+  .ct__giris {
+    margin-block: 0.6rem 0;
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+    max-width: 44em;
+  }
+
+  /* Aşama tanımları: dört küçük not kâğıdı, sıra numarasıyla. */
+  .ct__tanim {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 1.1rem 0 0;
+    counter-reset: asama;
+  }
+  .ct__tanim > div {
+    counter-increment: asama;
+    padding: 0.7rem 0.8rem 0.8rem;
+    border-radius: var(--kose);
+    background: var(--kagit);
+  }
+  .ct__tanim dt {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 650;
+    line-height: 1.3;
+    color: var(--murekkep);
+  }
+  .ct__tanim dt::before {
+    content: counter(asama);
+    margin-inline-end: 0.4em;
+    font-weight: 700;
+    color: var(--kirmizi);
+  }
+  .ct__tanim dd {
+    margin: 0.15rem 0 0;
+    font-size: var(--b-mikro);
+    line-height: 1.42;
+    color: var(--ikincil);
+  }
+
+  /* Tablo */
+  .ct__tablo {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block-start: 1.25rem;
+  }
+  .ct__tablo thead th {
+    padding: 0 0 0.65rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    line-height: 1.2;
+    color: var(--ikincil);
+    text-align: left;
+    vertical-align: bottom;
+    border-block-end: 1px solid var(--cizgi-koyu);
+  }
+  .ct__tablo thead .ct__b-asama {
+    width: 4.6rem;
+    text-align: center;
+  }
+  .ct__tablo thead .ct__b-sil {
+    width: 2.75rem;
+  }
+  .ct__tablo tbody tr {
+    border-block-end: 1px solid var(--cizgi);
+  }
+  .ct__not {
+    padding: 0.7rem 1rem 0.7rem 0;
+    font-family: var(--yazi-govde);
+    font-size: var(--b-kucuk);
+    font-weight: 400;
+    line-height: 1.42;
+    text-align: left;
+    color: var(--murekkep);
+    overflow-wrap: anywhere;
+  }
+  .ct__tablo tbody tr[data-seviye='4'] .ct__not {
+    font-weight: 600;
+  }
+
+  .ct__asama {
+    --orta: 50%;
+    position: relative;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
+  /* İz çizgisi: işaretli aşamalar kırmızı kalemle birbirine bağlanır. */
+  .ct__asama::before,
+  .ct__asama::after {
+    content: '';
+    position: absolute;
+    top: var(--orta);
+    width: 50%;
+    height: 2px;
+    margin-block-start: -1px;
+    background: var(--cizgi);
+    transition: background-color 220ms var(--yumusak);
+  }
+  .ct__asama::before {
+    left: 0;
+  }
+  .ct__asama::after {
+    right: 0;
+  }
+  .ct__asama[data-asama='1']::before,
+  .ct__asama[data-asama='4']::after {
+    display: none;
+  }
+  .ct__asama[data-acik]::before,
+  .ct__asama[data-sonraki]::after {
+    background: var(--kirmizi);
+  }
+  .ct__asama label {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    min-height: 3rem;
+    min-width: 2.75rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ct__asama input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .ct__kutu {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    background: var(--beyaz);
+    transition:
+      border-color var(--hizli),
+      background-color var(--hizli),
+      transform var(--hizli);
+  }
+  .ct__kutu::after {
+    content: '';
+    width: 0.82rem;
+    height: 0.44rem;
+    border-left: 2.5px solid var(--beyaz);
+    border-bottom: 2.5px solid var(--beyaz);
+    transform: translateY(-0.08rem) rotate(-48deg) scale(0);
+    transition: transform 200ms var(--yumusak);
+  }
+  .ct__asama label:hover .ct__kutu {
+    border-color: var(--murekkep);
+  }
+  .ct__asama input:checked + .ct__kutu {
+    background: var(--kirmizi);
+    border-color: var(--kirmizi);
+  }
+  .ct__asama input:checked + .ct__kutu::after {
+    transform: translateY(-0.08rem) rotate(-48deg) scale(1);
+  }
+  .ct__asama input:active + .ct__kutu {
+    transform: scale(0.92);
+  }
+  .ct__asama input:focus-visible + .ct__kutu {
+    outline: 2px solid var(--mavi);
+    outline-offset: 3px;
+  }
+  /* Masaüstünde aşama adı sütun başlığında durur; etiket ekran okuyucu için kalır. */
+  .ct__asama-adi {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ct__sil {
+    padding: 0;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .ct__sil button {
+    display: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-inline-start: auto;
+    border-radius: var(--kose);
+    color: var(--ikincil);
+    transition:
+      color var(--hizli),
+      background-color var(--hizli);
+  }
+  :global(.js) .ct__sil button {
+    display: grid;
+  }
+  .ct__sil button:hover {
+    color: var(--kirmizi-koyu);
+    background: #f9e9ec;
+  }
+  .ct__tablo :global(.ct__bos td) {
+    padding: 1.5rem 0;
+    font-size: var(--b-kucuk);
+    color: var(--ikincil);
+  }
+
+  /* Satır ekleme */
+  .ct__ekle {
+    display: none;
+    margin-block-start: 1.25rem;
+  }
+  :global(.js) .ct__ekle {
+    display: block;
+  }
+  .ct__ekle-satir {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+  .ct__ekle-satir .girdi {
+    min-height: 2.875rem;
+    padding-block: 0.5rem;
+    font-size: 1rem;
+  }
+  .ct__ekle-satir .dugme {
+    min-height: 2.875rem;
+    white-space: nowrap;
+  }
+
+  /* Özet */
+  .ct__ozet {
+    margin-block-start: 1.75rem;
+  }
+  .ct__sayim {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ct__sayim li {
+    display: grid;
+    align-content: start;
+    gap: 0.1rem;
+    margin: 0;
+    padding-block-start: 0.7rem;
+    border-block-start: 2px solid var(--murekkep);
+    min-width: 0;
+  }
+  .ct__sayim li[data-dusus] {
+    border-block-start-color: var(--kirmizi);
+  }
+  .ct__sayi {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.9rem, 9cqi, 3.1rem);
+    font-weight: 720;
+    font-stretch: 82%;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    color: var(--murekkep);
+  }
+  .ct__etiket {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    line-height: 1.25;
+    color: var(--murekkep);
+  }
+  .ct__kayip {
+    min-height: 1.2em;
+    font-size: var(--b-mikro);
+    line-height: 1.2;
+    color: var(--ikincil);
+  }
+  .ct__sayim li[data-dusus] .ct__kayip {
+    color: var(--kirmizi-koyu);
+    font-weight: 650;
+  }
+  .ct__okuma {
+    margin-block-start: 1.1rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .ct__cumle {
+    margin: 0;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.0625rem, 0.98rem + 0.9cqi, 1.3rem);
+    font-weight: 620;
+    font-stretch: 92%;
+    letter-spacing: -0.012em;
+    line-height: 1.25;
+    color: var(--murekkep);
+    text-wrap: balance;
+  }
+  .ct__yorum {
+    margin: 0;
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+    max-width: 46em;
+  }
+  .ct__yorum strong {
+    color: var(--kirmizi-koyu);
+    margin-inline-end: 0.3em;
+  }
+
+  /* Eylemler */
+  .ct__alt {
+    margin-block-start: 1.4rem;
+    padding-block-start: 0.6rem;
+    border-block-start: 1px solid var(--cizgi);
+  }
+  .ct__eylem {
+    display: none;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+  }
+  :global(.js) .ct__eylem {
+    display: flex;
+  }
+  .ct__eylem button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 620;
+    font-stretch: 96%;
+    color: var(--murekkep);
+    text-decoration: underline;
+    text-decoration-color: var(--cizgi-koyu);
+    text-decoration-thickness: 0.07em;
+    text-underline-offset: 0.28em;
+    transition: text-decoration-color var(--hizli);
+  }
+  .ct__eylem button:hover {
+    text-decoration-color: var(--kirmizi);
+  }
+  .ct__eylem button :global(svg) {
+    flex: none;
+  }
+  .ct__gizlilik {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0.35rem 0 0;
+    color: var(--ikincil);
+  }
+  .ct__gizlilik :global(svg) {
+    flex: none;
+    margin-block-start: 0.12em;
+  }
+
+  /* Dar alan: her başvuru etiketli bir satır bloğu. */
+  @container ct (max-width: 34rem) {
+    .ct__tanim {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ct__tablo thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    .ct__tablo,
+    .ct__tablo tbody {
+      display: block;
+    }
+    .ct__tablo tbody tr {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding-block: 0.85rem 0.6rem;
+    }
+    .ct__tablo tbody tr:first-child {
+      border-block-start: 1px solid var(--cizgi-koyu);
+    }
+    .ct__not {
+      grid-column: 1 / -1;
+      padding: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+    :global(.js) .ct__not {
+      padding-inline-end: 2.75rem;
+    }
+    .ct__asama {
+      --orta: 1.375rem;
+      display: block;
+    }
+    .ct__asama label {
+      align-content: start;
+      gap: 0.3rem;
+      min-height: 3.6rem;
+      padding-block-start: 0.5rem;
+    }
+    .ct__asama-adi {
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip-path: none;
+      font-family: var(--yazi-baslik);
+      font-size: var(--b-mikro);
+      font-weight: 620;
+      line-height: 1.2;
+      color: var(--ikincil);
+    }
+    .ct__asama[data-acik] .ct__asama-adi {
+      color: var(--murekkep);
+    }
+    .ct__sil {
+      position: absolute;
+      top: 0.2rem;
+      right: -0.6rem;
+    }
+    .ct__tablo :global(.ct__bos) {
+      display: block;
+    }
+    .ct__tablo :global(.ct__bos td) {
+      display: block;
+    }
+    .ct__ekle-satir {
+      grid-template-columns: 1fr;
+    }
+    .ct__sayim {
+      gap: 0.35rem;
+    }
+    .ct__eylem {
+      gap: 0 1.1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ct__kutu,
+    .ct__kutu::after,
+    .ct__asama::before,
+    .ct__asama::after {
+      transition: none;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Yazdırma: yalnız "Yazdır" düğmesine basılan tablo çıkar. Sayfanın olağan yazdırması etkilenmez. */
+  @media print {
+    html.ct-yazdir body *:not(:has([data-ct-yazdiriliyor])):not([data-ct-yazdiriliyor]):not([data-ct-yazdiriliyor] *) {
+      display: none !important;
+    }
+    html.ct-yazdir,
+    html.ct-yazdir body {
+      background: #fff !important;
+    }
+    html.ct-yazdir body *:has([data-ct-yazdiriliyor]) {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      max-width: none !important;
+      width: auto !important;
+      position: static !important;
+    }
+    html.ct-yazdir [data-ct-yazdiriliyor] {
+      box-shadow: none !important;
+      margin: 0 !important;
+    }
+    html.ct-yazdir [data-ct-yazdiriliyor] [data-yazdirma-gizle],
+    html.ct-yazdir [data-ct-yazdiriliyor] [data-ekle],
+    html.ct-yazdir [data-ct-yazdiriliyor] [data-sil] {
+      display: none !important;
+    }
+    html.ct-yazdir [data-ct-yazdiriliyor] * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    html.ct-yazdir [data-ct-yazdiriliyor] tr {
+      break-inside: avoid;
+    }
+  }
+</style>

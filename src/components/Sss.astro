@@ -1,0 +1,206 @@
+---
+/**
+ * Sık sorulan sorular. Her soru üst alandaki arama kutusunun küçüğüdür: büyüteç, soru, açınca altında yanıt.
+ * Yanıtlar sayfanın HTML'inde durur (kapalıyken de okunur) ve FAQPage yapısal verisi olarak da yazılır.
+ * Yanıt düz metindir; ilk cümle sorunun doğrudan cevabı olmalı (arama ve yapay zekâ yanıtları için).
+ * Fiyat, süre ve sıralama sözü yazılmaz.
+ */
+import Ikon from './Ikon.astro';
+
+export interface Soru {
+  soru: string;
+  cevap: string;
+  bag?: { etiket: string; url: string };
+}
+interface Props {
+  sorular: Soru[];
+  baslik?: string;
+  giris?: string;
+  /** Bölümün id'si ve akordeon grubunun adı. Sayfada birden çok Sss varsa farklı verilir. */
+  kimlik?: string;
+  zemin?: 'kagit' | 'beyaz' | 'acik';
+  /** Girişin altındaki bağlantı. Varsayılan: görüşme formu. */
+  bag?: { etiket: string; url: string } | false;
+}
+const {
+  sorular,
+  baslik = 'Sık sorulan sorular',
+  giris,
+  kimlik = 'sss',
+  zemin = 'kagit',
+  bag = { etiket: 'Sorunuz burada yoksa bize yazın', url: '#gorusme' },
+} = Astro.props;
+
+const yapisalVeri = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: sorular.map((s) => ({ '@type': 'Question', name: s.soru, acceptedAnswer: { '@type': 'Answer', text: s.cevap } })),
+};
+---
+
+<section class:list={['bolum sss', zemin === 'beyaz' && 'bolum--beyaz', zemin === 'acik' && 'bolum--acik']} id={kimlik}>
+  <div class="sarici sss__ic">
+    <div class="sss__giris">
+      <h2 class="baslik-2">{baslik}</h2>
+      {giris && <p class="giris">{giris}</p>}
+      {
+        bag && (
+          <a class="ok-bag" href={bag.url}>
+            {bag.etiket}
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+        )
+      }
+    </div>
+    <div class="sss__liste">
+      {
+        sorular.map((s) => (
+          <details class="sss__oge" name={kimlik}>
+            <summary class="sss__soru">
+              <Ikon ad="magnifying-glass" boyut={20} class="sss__ikon" />
+              <h3>{s.soru}</h3>
+              <Ikon ad="plus" boyut={20} class="sss__arti" />
+            </summary>
+            <div class="sss__cevap">
+              <p>{s.cevap}</p>
+              {s.bag && (
+                <a class="ok-bag" href={s.bag.url}>
+                  {s.bag.etiket}
+                  <Ikon ad="arrow-right" boyut={16} />
+                </a>
+              )}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(yapisalVeri)} />
+</section>
+
+<style>
+  .sss__ic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 2rem;
+    align-items: start;
+  }
+  .sss__giris {
+    grid-column: 1 / span 4;
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+  .sss__liste {
+    grid-column: 6 / -1;
+    display: grid;
+    gap: 0.8rem;
+  }
+  .sss__oge {
+    background: var(--beyaz);
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    transition:
+      border-color 200ms,
+      box-shadow 240ms var(--yumusak),
+      transform 240ms var(--yumusak);
+  }
+  .sss__oge[open] {
+    border-color: var(--murekkep);
+    box-shadow: 0.35rem 0.35rem 0 var(--golge-renk, var(--mavi-acik));
+  }
+  .bolum--acik .sss__oge,
+  .bolum--beyaz .sss__oge {
+    --golge-renk: rgb(23 61 166 / 0.16);
+  }
+  .sss__soru {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.9rem;
+    min-height: 3.75rem;
+    padding: 0.8rem 1.15rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .sss__soru::-webkit-details-marker {
+    display: none;
+  }
+  .sss__soru h3 {
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3rem);
+    font-weight: 620;
+    font-stretch: 93%;
+    letter-spacing: -0.01em;
+    line-height: 1.22;
+  }
+  .sss__soru :global(.sss__ikon) {
+    color: var(--ikincil);
+  }
+  .sss__soru :global(.sss__arti) {
+    color: var(--murekkep);
+    transition: transform 280ms var(--yumusak);
+  }
+  .sss__oge[open] .sss__soru :global(.sss__arti) {
+    transform: rotate(45deg);
+    color: var(--kirmizi);
+  }
+  .sss__cevap {
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+    max-width: 46rem;
+    padding: 0.15rem 1.15rem 1.35rem calc(1.15rem + 20px + 0.9rem);
+    color: var(--murekkep-2);
+  }
+  @media (hover: hover) {
+    .sss__oge:not([open]):hover {
+      border-color: var(--murekkep);
+      transform: translate(-1px, -1px);
+      box-shadow: 0.2rem 0.2rem 0 var(--golge-renk, var(--mavi-acik));
+    }
+  }
+  /* Destekleyen tarayıcıda yanıt yumuşak açılır; desteklemeyende doğrudan açılır. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (interpolate-size: allow-keywords) {
+      .sss__oge {
+        interpolate-size: allow-keywords;
+      }
+      .sss__oge::details-content {
+        block-size: 0;
+        overflow: clip;
+        transition:
+          block-size 340ms var(--yumusak),
+          content-visibility 340ms allow-discrete;
+      }
+      .sss__oge[open]::details-content {
+        block-size: auto;
+      }
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .sss__giris,
+    .sss__liste {
+      grid-column: 1 / -1;
+    }
+    .sss__giris {
+      position: static;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .sss__soru {
+      column-gap: 0.7rem;
+      padding-inline: 0.9rem;
+    }
+    .sss__cevap {
+      padding-inline: 0.9rem;
+    }
+    /* Dokunma hedefi en az 44 px. */
+    .sss :global(.ok-bag) {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+</style>

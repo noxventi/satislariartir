@@ -1,0 +1,113 @@
+---
+/**
+ * Sıralı adımlar: kırmızı kalem çizgisi üstünde numaralı halkalar. "Nasıl yapılır?" yazılarının ana kalıbı.
+ * Kullanım (MDX):
+ * <AdimListesi adimlar={[{ ad: 'Hesabı açın', aciklama: '...', not: 'İsteğe bağlı küçük not.' }]} />
+ */
+interface Adim {
+  ad: string;
+  aciklama: string;
+  not?: string;
+}
+interface Props {
+  adimlar: Adim[];
+}
+const { adimlar } = Astro.props;
+---
+
+<ol class="adim-listesi">
+  {
+    adimlar.map((a) => (
+      <li data-gir>
+        <p class="adim-listesi__ad">{a.ad}</p>
+        <p class="adim-listesi__aciklama">{a.aciklama}</p>
+        {a.not && <p class="adim-listesi__not">{a.not}</p>}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .adim-listesi {
+    position: relative;
+    display: grid;
+    gap: clamp(1.3rem, 2.2vw, 1.8rem);
+    margin-inline: 0;
+    padding: clamp(1.25rem, 2.4vw, 2rem);
+    list-style: none;
+    counter-reset: adim;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+  }
+  .adim-listesi li {
+    counter-increment: adim;
+    position: relative;
+    display: grid;
+    gap: 0.3rem;
+    margin: 0;
+    padding-inline-start: 3.5rem;
+  }
+  /* Çizgi her halkadan bir sonrakine iner; son halkada biter. */
+  .adim-listesi li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: calc(1.15rem - 1.5px);
+    top: 2.1rem;
+    bottom: calc(-1 * clamp(1.3rem, 2.2vw, 1.8rem) + 0.2rem);
+    width: 3px;
+    background: var(--kirmizi);
+    filter: url(#kalem-dokusu);
+  }
+  .adim-listesi li::before {
+    content: counter(adim);
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border: 3px solid var(--kirmizi);
+    border-radius: 50%;
+    background: var(--beyaz);
+    font-family: var(--yazi-baslik);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--kirmizi);
+    font-variant-numeric: lining-nums;
+  }
+  .adim-listesi li:last-child::before {
+    background: var(--kirmizi);
+    color: var(--beyaz);
+    box-shadow: 0 0 0 4px rgb(185 35 56 / 0.16);
+  }
+  .adim-listesi p {
+    margin: 0;
+  }
+  .adim-listesi__ad {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.06rem + 0.4vw, 1.35rem);
+    font-weight: 670;
+    font-stretch: 91%;
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+  .adim-listesi__aciklama {
+    max-width: 40em;
+    font-size: 1.0625rem;
+    line-height: 1.52;
+    color: var(--murekkep-2);
+  }
+  .adim-listesi__not {
+    justify-self: start;
+    margin-block-start: 0.3rem;
+    padding: 0.35em 0.7em 0.4em;
+    border-radius: 2px;
+    background: var(--mavi-acik);
+    font-size: var(--b-kucuk);
+    line-height: 1.4;
+    color: var(--mavi-koyu);
+  }
+</style>

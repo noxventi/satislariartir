@@ -1,0 +1,216 @@
+---
+no: 18
+kapak: backlink
+kapakAlt: "Ortadaki adada kapısı açık bir kâğıt dükkân; çevredeki adalarda kütüphane, gazete büfesi ve okul var, adaları dükkâna bağlayan kemerli köprülerden insanlar geçiyor; dördüncü köprü yalnız kırmızı kalemle çizilmiş, önde üç halkalı bir zincir duruyor"
+soru: Backlink nedir, nasıl alınır?
+baslik: Backlink Nedir, Nasıl Alınır?
+aciklama: >-
+  Backlink nedir, Google bağlantıları neden dikkate alır? Kazanılan ve satın alınan bağlantının farkı, spam
+  politikaları ve bağlantı kazanmanın yolları.
+aramalar:
+  - backlink nedir
+  - backlink nasıl alınır
+  - backlink satın almak
+kisaCevap: >-
+  Backlink (geri bağlantı), başka bir sitedeki sayfadan sizin sitenizdeki bir sayfaya verilen bağlantıdır. Google
+  bağlantıları, sayfaların alaka düzeyini belirlerken ve taranacak yeni sayfaları bulurken bir sinyal olarak kullanır.
+  Sıralamayı etkilemek için bağlantı satın almak ya da aşırı bağlantı takası yapmak, Google’ın spam politikalarında
+  bağlantı spam’i sayılır ve siteyi sonuçlarda geriye düşürebilir. İşe yarayan bağlantı, sizi tanıyan bir sitenin
+  kendi okuruna yararlı olduğu için verdiği bağlantıdır.
+elinizeGecen: Kazanılan ve satın alınan bağlantının farkı, rel işaretleri ve bağlantı kazanma adımları
+hizmetler: [seo]
+hizmetBaglantisi:
+  etiket: SEO danışmanlığı
+  url: /hizmetler/seo-danismanligi/
+sonraki: seo-analizi-nasil-yapilir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Arama Merkezi, Google için bağlantı en iyi uygulamaları
+    url: https://developers.google.com/search/docs/crawling-indexing/links-crawlable?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Google Web Arama için spam politikaları
+    url: https://developers.google.com/search/docs/essentials/spam-policies?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Giden bağlantılarınızın niteliğini Google’a tanıtın
+    url: https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links?hl=tr
+    tur: resmi
+  - ad: Search Console Yardımı, Bağlantı raporu
+    url: https://support.google.com/webmasters/answer/9049606?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Arama Motoru Optimizasyonu (SEO) Başlangıç Kılavuzu
+    url: https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=tr
+    tur: resmi
+---
+
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Not from '../../components/blog/Not.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Eskişehir’de cam balkon yapan bir firma düşünün. Profilini aldığı üretici, sitesindeki “uygulayıcı bayilerimiz” sayfasına firmanın adını ve site adresini yazmıştır. O satır, firmanın sitesine verilmiş bir backlink’tir.
+
+Firma bunun için kimseye para ödememiştir. Bağlantı, iki işletme arasında gerçek bir iş ilişkisi olduğu için oradadır. Bir de e-postayla gelen “uygun fiyata yüz backlink” teklifleri vardır. İkisinin adı aynıdır; Google’ın gözündeki yerleri aynı değildir.
+
+<AraGorsel cizim="yol-ayrimi" alt="Yol ayrımında iki yönü gösteren kâğıttan bir tabela ve önünde bir pusula">
+  Backlink, başka bir sitenin kendi okuruna sizi gösterdiği tabeladır. Değeri, tabelayı kimin, neden diktiğine bağlıdır.
+</AraGorsel>
+
+## Backlink nedir?
+
+Backlink, Türkçesiyle geri bağlantı, başka bir sitedeki sayfadan sizin sitenizdeki bir sayfaya verilen bağlantıdır. Search Console’un yardım sayfası da terimi böyle tanımlar. İki ad aynı şeyi anlatır; bu yazıda, arandığı biçimiyle backlink diyoruz. Kendi sitenizdeki sayfaların birbirine verdiği bağlantılara iç bağlantı denir; onlar backlink sayılmaz.
+
+Bir bağlantının iki parçası vardır: gittiği adres ve okurun tıkladığı yazı. Bu yazıya bağlantı metni denir. Bağlantıyı veren site, bağlantının türünü Google’a bildiren küçük bir işaret de ekleyebilir.
+
+Aşağıdaki kartlarda üç işaret göreceksiniz. Google’ın belgesine göre bunlardan birini taşıyan bağlantılar genellikle izlenmez. Yani işaretli bir bağlantı okuru size getirir, ama ondan sıralama katkısı beklenmez.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Bağlantı metni',
+      acilim: 'Anchor text',
+      tanim: 'Bağlantının görünen, tıklanan yazısı; okura ve Google’a gidilecek sayfa hakkında bilgi verir.',
+      ornek: '“Eskişehir cam balkon uygulayıcısı” yazısı, “tıklayın” yazısından daha çok şey söyler.',
+    },
+    {
+      ad: 'sponsored',
+      acilim: 'rel="sponsored"',
+      tanim: 'Reklam ya da ücretli yerleşim olan bağlantılar için kullanılan işaret.',
+      ornek: 'Bir haber sitesindeki ücretli tanıtım yazısının içindeki bağlantı.',
+    },
+    {
+      ad: 'nofollow',
+      acilim: 'rel="nofollow"',
+      tanim: 'Site sahibinin, bağlantı verdiği sayfayla kendi sitesinin ilişkilendirilmesini istemediğini bildirdiği işaret.',
+      ornek: 'Yazar, güvenmediği bir kaynağı göstermek zorunda kalmıştır.',
+    },
+    {
+      ad: 'ugc',
+      acilim: 'rel="ugc"',
+      tanim: 'Yorum ve forum yazısı gibi, kullanıcıların eklediği içerikteki bağlantılar için kullanılan işaret.',
+      ornek: 'Bir forum üyesinin mesajına yazdığı site adresi.',
+    },
+  ]}
+/>
+
+## Google backlinkleri neden dikkate alır?
+
+Google, bağlantıları iki iş için kullandığını yazar: sayfaların alaka düzeyini belirlemek ve taranacak yeni sayfaları bulmak. Başlangıç kılavuzunda, her gün yeni sayfaların büyük çoğunluğunu bağlantılardan bulduğunu da belirtir.
+
+Mantığı gündelik hayattan tanırsınız. Bir ustayı komşunuz önerdiyse ona, kapınıza bırakılan broşürdeki ustadan daha çok güvenirsiniz. Bağlantı da bir sitenin kendi okuruna “şuraya bakın” demesidir.
+
+Bağlantı tek ölçü değildir. Aynı kılavuz, bağlantılara dayanan PageRank’in Google’ın temel algoritmalarından biri olduğunu, ama birçok sıralama sinyalinden yalnızca biri olduğunu söyler. Bu yüzden “kaç backlink’im var” sorusu tek başına bir şey anlatmaz. Sorulacak soru, bağlantının nasıl bir bağlantı olduğudur:
+
+- **İlgili mi?** Bağlantıyı veren sayfanın konusu sizin işinizle ilgilidir. Cam balkon firmasına profil üreticisinin bağlantı vermesi anlamlıdır.
+- **Gerçek mi?** Arkasında bir iş ilişkisi, bir haber ya da içeriğinizi yararlı bulan biri vardır.
+- **Okura yararlı mı?** Bağlantıya tıklayan kişi, bağlantı metninin söz verdiği şeyi sayfanızda bulur.
+
+## Backlink satın almak doğru mu?
+
+Google’ın spam politikalarında “bağlantı spam’i” diye bir başlık vardır. Tanımı şöyledir: temel olarak arama sıralamalarını etkilemek için bir siteye ya da siteden bağlantı verilmesi. Politikanın saydığı örneklerden bazıları:
+
+- Para karşılığında sağlanan bağlantılar ya da bağlantı içeren yazılar
+- Ürün ya da hizmet karşılığında sağlanan bağlantılar
+- Aşırı miktarda bağlantı takası ve yalnız karşılıklı bağlantı için açılmış iş ortağı sayfaları
+- Bağlantı oluşturmak için otomatik program ya da hizmet kullanmak
+- Düşük kaliteli dizin siteleri ve çeşitli sitelerin alt bilgilerine dağıtılmış bağlantılar
+
+<Karsilastirma
+  ara="ya da"
+  uygunEtiketi="Örnek"
+  sol={{
+    ust: 'Kazanılan',
+    baslik: 'Doğal bağlantı',
+    maddeler: [
+      'Bağlantıyı veren site sizi tanır ya da içeriğinizi yararlı bulmuştur.',
+      'Bağlantı, konusu işinizle ilgili bir sayfada durur.',
+      'Karşılığında para ya da ürün verilmemiştir.',
+    ],
+    uygun: 'Üreticinin bayi sayfası, yerel gazetedeki haber, oda üye rehberi',
+  }}
+  sag={{
+    ust: 'Satın alınan',
+    baslik: 'Paket backlink',
+    maddeler: [
+      'Bağlantıyı veren sitenin işinizle bir ilgisi yoktur.',
+      'Hangi sitede, hangi sayfada duracağını çoğu zaman bilmezsiniz.',
+      'Google’ın politikasında bağlantı spam’i sayılır.',
+    ],
+    uygun: 'Toplu tanıtım yazısı paketleri, dizin kayıtları, alt bilgi bağlantıları',
+  }}
+/>
+
+Burada bir ayrım var. Google, reklam ve sponsorluk amacıyla bağlantı alıp satmanın web ekonomisinin sıradan bir parçası olduğunu kabul eder. Bu bağlantılar `rel="sponsored"` ya da `rel="nofollow"` ile işaretlendiği sürece politikayı ihlal etmez. Bir haber sitesinde ücretli tanıtım yazısı yayımlatabilirsiniz. Yazıdaki bağlantı işaretli olur ve size o yazının okurlarını getirir; sıralama için alınmış bir bağlantı gibi çalışmaz.
+
+<Not baslik="Sayıyla satılan backlink paketlerine dikkat" tur="dikkat">
+  Google, bilinen spam sitelerinden gelen bağlantıları genellikle göz ardı ettiğini söyler; yani ödediğiniz bağlantı hiçbir
+  şey değiştirmeyebilir. İhlal tespit edilirse siteye manuel işlem uygulanabilir ve site sonuçlarda daha alt sıralara
+  düşebilir ya da hiç görünmeyebilir. Bağlantıları sonradan kaldırtmak da ayrı bir iştir.
+</Not>
+
+Daha önce böyle bir paket aldıysanız önce Search Console’daki Manuel işlemler raporuna bakın. Rapor boşsa sitenize uygulanmış bir işlem yoktur. Yapılacak şey yeni paket almayı bırakmak ve emeği aşağıdaki adımlara vermektir.
+
+## Backlink nasıl alınır?
+
+Küçük bir işletme için bağlantı kazanmanın yolu, zaten var olan ilişkilerini internete taşımaktır. Bunun için bir araca gerek yoktur; kiminle iş yaptığınızı gösteren bir liste ve birkaç telefon görüşmesi yeter. Google da başka sitelerin size bağlantı vermesinin zaman içinde kendiliğinden gerçekleştiğini, sitenizi tanıtarak insanları içeriğinizi keşfetmeye yöneltebileceğinizi söyler.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Tedarikçi ve bayi sayfalarına bakın',
+      aciklama:
+        'Ürününü sattığınız ya da uyguladığınız markaların “bayilerimiz” ya da “uygulayıcılarımız” sayfası varsa adınızın ve site adresinizin doğru yazıldığını kontrol edin. Listede yoksanız eklenmeyi isteyin.',
+    },
+    {
+      ad: 'Üye olduğunuz kurumları tarayın',
+      aciklama:
+        'Meslek odası, esnaf odası, sanayi sitesi yönetimi ya da sektör derneği üye rehberi yayımlıyorsa kaydınızdaki site adresini güncelleyin.',
+    },
+    {
+      ad: 'Yerel basına haber değeri olan bir şey verin',
+      aciklama:
+        'Yeni atölye, sıra dışı bir iş, bir meslek lisesiyle yapılan staj anlaşması. Haber sizi anlatıyorsa sitenizin adresini vermesi doğaldır.',
+    },
+    {
+      ad: 'Başkasının göstermek isteyeceği bir sayfa yazın',
+      aciklama:
+        'Ölçü alma rehberi, malzeme karşılaştırması ya da bakım takvimi gibi müşterinizin sorusunu cevaplayan bir sayfa, başka sitelerin kaynak gösterebileceği türden içeriktir.',
+    },
+    {
+      ad: 'Ortak işleri görünür kılın',
+      aciklama:
+        'Birlikte çalıştığınız mimar ya da müteahhit, tamamlanan projeyi kendi sitesinde anlatıyorsa orada adınızın geçmesi yerindedir.',
+      not: 'Yalnız karşılıklı bağlantı vermek için açılmış “dostlarımız” sayfaları politikanın saydığı örneklerdendir.',
+    },
+  ]}
+/>
+
+Bağlantıyı veren siteye bağlantı metnini dikte etmeyin. Google’ın saydığı spam örnekleri arasında, optimize edilmiş bağlantı metni taşıyan tanıtım yazıları ve forum imzaları da vardır. Firma adınız ya da yaptığınız işi anlatan sade bir ifade yeter.
+
+Bu adımların hiçbiri bir haftada onlarca bağlantı getirmez. Getirdiği bağlantılar ise yerinde kalır, çünkü arkalarında bir neden vardır. Harita sonuçlarında görünmek istiyorsanız bağlantılardan önce [Google İşletme Profili](/blog/google-isletme-profili-nasil-acilir/) bilgilerinizi tamamlayın. Google, harita sonuçlarında işletmenin ne kadar bilindiğine bakarken sitenizin bağlantısını paylaşan web sitelerini de hesaba katar.
+
+## Sitenize verilen backlinkler nereden görülür?
+
+Search Console’daki Bağlantılar raporu, sitenize en çok bağlantı veren siteleri, en çok bağlantı alan sayfalarınızı ve bağlantılarda en çok kullanılan metni gösterir. İki sınırını bilin: rapor bütün bağlantıları değil bir örneği gösterir ve bir bağlantının nofollow olarak işaretlenip işaretlenmediğini belirtmez.
+
+<KontrolListesi
+  kimlik="backlink-nedir-rapor"
+  baslik="Bağlantılar raporunu okurken"
+  adimlar={[
+    'En çok bağlantı veren siteler listesindeki siteleri tanıyorum.',
+    'En çok bağlantı alan sayfalarım, öne çıkmasını istediğim sayfalar.',
+    'Bağlantı metinleri işimi doğru anlatıyor.',
+    'Birlikte çalıştığım üretici, oda ve iş ortaklarının siteleri listede var.',
+  ]}
+  not="Dördüncü maddeyi işaretleyemiyorsanız yukarıdaki adımların ilk ikisinden başlayın."
+/>
+
+Listede tanımadığınız, spam görünümlü siteler çıkabilir. Google, hangi bağlantılara güveneceğini çoğu zaman ek yardım olmadan değerlendirebildiğini ve çoğu sitenin [bağlantıları reddetme aracını](https://support.google.com/webmasters/answer/2648487?hl=tr) kullanmasının gerekmediğini yazar. Araç, yapay bağlantılar yüzünden manuel işlem almış ya da alma ihtimali olan siteler içindir.
+
+Bağlantı, SEO’nun (arama motoru optimizasyonu) yalnız bir koludur ve tek başına ele alındığında yanıltır. Sitenizin taranmasında ya da sayfalarınızda bir sorun varsa önce o çözülür; sırayı [SEO analizi nasıl yapılır](/blog/seo-analizi-nasil-yapilir/) yazısı verir, işin bütününü [SEO nedir](/blog/seo-nedir/) yazısı anlatır.
+
+Daha önce backlink paketi aldıysanız ve sitenizin durumundan emin değilseniz sıradaki adım Bağlantılar raporuna birlikte bakmaktır. [SEO danışmanlığı](/hizmetler/seo-danismanligi/) çalışmasına sitenin incelenmesiyle başlıyor, bağlantıları da bu incelemenin içinde ele alıyoruz.

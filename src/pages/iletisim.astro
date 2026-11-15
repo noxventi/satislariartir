@@ -1,0 +1,564 @@
+---
+/**
+ * İletişim sayfası. Ana niyet tek: görüşme istemek.
+ *
+ * Düzen (15 Kasım 2026, ikinci yenileme): marka sahibi sayfada ilk görünen şeyin form olmasını istedi.
+ * - Üst alan mavi bir bölümdür ve sayfanın ilk öğesi form fişidir: H1 fişin başlığıdır ("Görüşme isteyin").
+ *   Geniş ekranda fiş solda, sağında doğrudan iletişim yolları (telefon, WhatsApp, e-posta) ve bölümün mavisine
+ *   karışan görüşme sahnesi durur. Telefonda sıra: form, iletişim yolları, sahne.
+ * - Altında: "Yazmadan önce" (iki kitleye kısa not) > "Görüşmede ne olur?" (üç adım, #gorusmede) > ilgili sayfalar.
+ * - İletişim bilgileri site.config.ts içinden gelir; boş olan satır gösterilmez.
+ * - Yanıt süresi, ücret ya da sonuç sözü yazılmaz. Sayfanın sonunda ikinci bir form yoktur.
+ * - Başka sayfalardan bağlanan çapa: #gorusmede.
+ */
+import Temel from '../layouts/Temel.astro';
+import TalepFormu from '../components/TalepFormu.astro';
+import Adimlar from '../components/Adimlar.astro';
+import IlgiliSayfalar from '../components/IlgiliSayfalar.astro';
+import Cizim from '../components/Cizim.astro';
+import Gorsel from '../components/Gorsel.astro';
+import Ikon from '../components/Ikon.astro';
+import { SITE } from '../site.config';
+import { whatsappBaglantisi } from '../lib/iletisim';
+
+import sahne from '../assets/gorseller/gorusme.jpg';
+import zarf from '../assets/cizimler/zarf.png';
+import telefonCizim from '../assets/cizimler/telefon.png';
+import megafon from '../assets/cizimler/megafon.png';
+import liste from '../assets/cizimler/liste.png';
+import yapboz from '../assets/cizimler/yapboz.png';
+import kitaplik from '../assets/cizimler/kitaplik.png';
+import celikvillamEkran from '../assets/projeler/celikvillam-masaustu.jpg';
+
+const kirintilar = [{ ad: 'İletişim', url: '/iletisim/' }];
+const { telefon, whatsapp, eposta, adres, calismaSaatleri } = SITE.iletisim;
+const telefonAdresi = telefon ? `tel:${telefon.replace(/\s/g, '')}` : '';
+
+/** Doğrudan iletişim yolları. Bilgisi boş olan satır listeye girmez. */
+const yollar = [
+  telefon && { ikon: 'phone', ad: 'Telefon', deger: telefon, eylem: 'Arayın', url: telefonAdresi, dis: false },
+  whatsapp && { ikon: 'whatsapp-logo', ad: 'WhatsApp', deger: telefon || `+${whatsapp}`, eylem: 'Yazın', url: whatsappBaglantisi(), dis: true },
+  eposta && { ikon: 'envelope-simple', ad: 'E-posta', deger: eposta, eylem: 'Gönderin', url: `mailto:${eposta}`, dis: false },
+].filter(Boolean) as { ikon: 'phone' | 'whatsapp-logo' | 'envelope-simple'; ad: string; deger: string; eylem: string; url: string; dis: boolean }[];
+
+/** İki kitleye, formu doldurmadan önce bilmeleri gereken tek şey. */
+const notlar = [
+  {
+    kim: 'İlk kez reklam verecekseniz',
+    metin: 'Reklam hesabınızın ya da web sitenizin olması gerekmez. Ne sattığınızı ve kime ulaşmak istediğinizi yazmanız yeterli; gerisini görüşmede birlikte çıkarırız.',
+    cizim: megafon,
+  },
+  {
+    kim: 'Reklam hesabınız ya da siteniz varsa',
+    metin: 'Nota site ya da Instagram adresinizi ekleyin. Bugün neyin işlemediğini bir cümleyle yazarsanız görüşmeye hazırlıklı geliriz.',
+    cizim: liste,
+  },
+];
+
+const adimlar = [
+  { ad: 'Dinliyoruz', ozet: 'İşletmeniz ve müşteriniz', aciklama: 'Ne sattığınızı, müşterinizin kim olduğunu ve sizi bugün nasıl bulduğunu sizden dinliyoruz.' },
+  { ad: 'Bakıyoruz', ozet: 'Hesabınız, siteniz ya da pazarınız', aciklama: 'Reklam hesabınız ya da siteniz varsa birlikte bakıyoruz. Yoksa müşterinizin aramalarını ve rakiplerinizi konuşuyoruz.' },
+  { ad: 'Öneriyoruz', ozet: 'Nereden başlanacağı', aciklama: 'Hangi hizmetin işinize yarayacağını ve hangisinin şimdilik gerekmediğini açıkça söylüyoruz. Karar sizindir.' },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Satışları Artır iletişim',
+    url: `${SITE.url}/iletisim/`,
+    inLanguage: 'tr-TR',
+    about: {
+      '@type': 'Organization',
+      '@id': `${SITE.url}/#kurum`,
+      name: SITE.ad,
+      url: `${SITE.url}/`,
+      ...(telefon && { telephone: telefon.replace(/\s/g, '') }),
+      ...(eposta && { email: eposta }),
+      ...(telefon && {
+        contactPoint: [{ '@type': 'ContactPoint', telephone: telefon.replace(/\s/g, ''), ...(eposta && { email: eposta }), contactType: 'customer service', availableLanguage: 'Turkish', areaServed: 'TR' }],
+      }),
+    },
+  },
+];
+---
+
+<Temel
+  baslik="İletişim: Görüşme İsteyin | Satışları Artır"
+  aciklama="Satışları Artır ile iletişime geçin: formu doldurun, arayın ya da WhatsApp’tan yazın. İşletmenizi anlatın, hangi hizmetin işinize yarayacağını birlikte bulalım."
+  sayfaTuru="kurumsal"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={false}
+>
+  <!-- Üst alan: form fişi, doğrudan iletişim yolları ve görüşme sahnesi -->
+  <section class="it koyu-zemin">
+    <div class="sarici it__ic">
+      <nav class="it__kirinti" aria-label="Sayfa konumu">
+        <ol class="kirinti">
+          <li><a href="/">Ana sayfa</a></li>
+          <li><span aria-current="page">İletişim</span></li>
+        </ol>
+      </nav>
+
+      <div class="it__form">
+        <TalepFormu konum="iletisim" cagri="Talebimi gönder" kimlik="iletisim">
+          <div slot="baslik" class="it__form-ust">
+            <div>
+              <h1 class="it__baslik">Görüşme isteyin</h1>
+              <p>Üç bilgi yeterli. Gerisini görüşmede konuşuruz.</p>
+            </div>
+            <Cizim src={zarf} class="it__form-cizim" sizes="7rem" genislikler={[160, 240, 320]} oncelik />
+          </div>
+        </TalepFormu>
+      </div>
+
+      <div class="it__yan">
+        <h2 class="baslik-1 it__soz" data-gir>
+          Nasıl isterseniz öyle <span class="it__vurgu">ulaşın.</span>
+        </h2>
+        <p class="giris">
+          Formu doldurun, arayın ya da yazın. İşletmenizi ve ulaşmak istediğiniz müşteriyi anlatmanız yeterli; hangi
+          hizmete ihtiyacınız olduğunu görüşmede birlikte buluruz.
+        </p>
+
+        {
+          yollar.length > 0 && (
+            <ul class="it__yollar">
+              {yollar.map((y, i) => (
+                <li data-gir style={`--gecikme:${i * 90}ms`}>
+                  <a class="it__yol" href={y.url} rel={y.dis ? 'noopener' : undefined} data-yer="iletisim">
+                    <span class="it__ikon" aria-hidden="true">
+                      <Ikon ad={y.ikon} boyut={24} />
+                    </span>
+                    <span class="it__yol-metin">
+                      <span class="it__yol-ad">{y.ad}</span>
+                      <span class="it__yol-deger">{y.deger}</span>
+                    </span>
+                    <span class="it__yol-eylem">
+                      {y.eylem}
+                      <Ikon ad="arrow-right" boyut={18} />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {(calismaSaatleri || adres) && (
+          <p class="it__ek kucuk">
+            {calismaSaatleri}
+            {calismaSaatleri && adres && <br />}
+            {adres}
+          </p>
+        )}
+      </div>
+
+      <div class="it__sahne" aria-hidden="true">
+        <Gorsel src={sahne} alt="" sizes="(max-width: 61.99rem) 100vw, 52vw" genislikler={[480, 720, 960, 1280, 1700]} kalite={66} oncelik />
+      </div>
+    </div>
+  </section>
+
+  <!-- Yazmadan önce: iki kitleye kısa not -->
+  <section class="bolum" id="yazmadan-once">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Yazmadan önce</h2>
+        <p class="giris">Hazırlık gerekmez. Durumunuza göre şunu bilmeniz yeterli:</p>
+      </div>
+      <ul class="once">
+        {
+          notlar.map((n, i) => (
+            <li class:list={['once__kart', i === 1 && 'once__kart--mavi']} data-gir style={`--gecikme:${i * 100}ms`}>
+              <div class="once__metin">
+                <h3>{n.kim}</h3>
+                <p>{n.metin}</p>
+              </div>
+              <div class="once__cizim" aria-hidden="true">
+                <Cizim src={n.cizim} sizes="(max-width: 47.99rem) 34vw, 13vw" genislikler={[240, 360, 520]} />
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Görüşmede ne olur -->
+  <section class="bolum bolum--beyaz" id="gorusmede">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Görüşmede ne olur?</h2>
+          <div class="metin">
+            <p>
+              Formu gönderdiğinizde bir kayıt numarası görürsünüz; seçtiğiniz yoldan, telefonla ya da e-postayla size
+              döneriz. Görüşme bir satış sunumu değildir, üç adımdan oluşur.
+            </p>
+          </div>
+        </div>
+        <Cizim src={telefonCizim} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <Adimlar adimlar={adimlar} />
+      </div>
+    </div>
+  </section>
+
+  <IlgiliSayfalar
+    baslik="Görüşmeden önce göz atmak isterseniz"
+    zemin="kagit"
+    sayfalar={[
+      { tur: 'Hizmetler', baslik: 'Dijital pazarlama hizmetleri', metin: 'Beş hizmet ve hangisinin size uygun olduğu.', url: '/hizmetler/', cizim: yapboz },
+      {
+        tur: 'Projeler',
+        baslik: 'Çalıştığımız markalar',
+        metin: 'Canlı sitelerini açıp inceleyebileceğiniz projeler.',
+        url: '/calismalarimiz/',
+        gorsel: celikvillamEkran,
+        gorselAlt: 'ÇelikVillam web sitesinin masaüstündeki ilk ekranı',
+      },
+      { tur: 'Blog', baslik: 'Reklam ve SEO yazıları', metin: 'Sık yaşanan sorunlar için adım adım kontroller.', url: '/blog/', cizim: kitaplik },
+    ]}
+  />
+</Temel>
+
+<style>
+  /* ---- Üst alan ------------------------------------------------------------------
+     Mavi bölüm. İlk öğe form fişidir; yanında iletişim yolları, altında bölüme karışan sahne. */
+  .it {
+    --kalem-cizgisi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1.5 5.2C14 2.7 27 6.3 41 4.4S69 2.5 82 4.6 95 4.1 98.5 3.4' fill='none' stroke='%23000' stroke-width='3.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    padding-block-start: clamp(1.25rem, 2.4vw, 2rem);
+    background: var(--mavi);
+    color: var(--beyaz);
+    overflow: clip;
+  }
+  .it__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: clamp(2.25rem, 5.5vw, 5.5rem);
+    row-gap: clamp(1rem, 2vw, 1.6rem);
+  }
+  .it__kirinti {
+    grid-column: 1 / -1;
+  }
+  .it__kirinti :global(.kirinti) {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .it__kirinti :global(.kirinti a:hover) {
+    color: var(--beyaz);
+  }
+
+  /* Form fişi: sayfanın ilk öğesi. Beyaz kâğıt, lacivert sert gölge. */
+  .it__form {
+    grid-column: 1;
+    grid-row: 2 / -1;
+    align-self: start;
+    margin-block-end: var(--bolum);
+    padding: clamp(1.4rem, 2.6vw, 2.25rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0.6rem 0.6rem 0 var(--murekkep);
+    color: var(--murekkep);
+  }
+  .it__form-ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(5rem, 8vw, 7rem);
+    gap: 1rem;
+    align-items: center;
+    padding-block-end: 1rem;
+    border-block-end: 1.5px solid var(--murekkep);
+  }
+  .it__form-ust > div {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .it__baslik {
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    letter-spacing: -0.028em;
+    line-height: 1;
+    color: var(--murekkep);
+  }
+  .it__form-ust p {
+    font-size: var(--b-govde);
+    line-height: 1.4;
+    color: var(--ikincil);
+  }
+  .it__form-ust :global(.it__form-cizim) {
+    margin: -1rem -0.75rem -1rem 0;
+  }
+  .it__form :global(a) {
+    color: var(--mavi);
+    text-decoration-color: rgb(23 61 166 / 0.38);
+  }
+  .it__form :global(:focus-visible) {
+    outline-color: var(--mavi);
+  }
+  .it__form :global(.dugme) {
+    --dg: var(--murekkep);
+    --dk: var(--kirmizi);
+  }
+
+  /* Yan sütun: büyük söz, kısa açıklama ve iletişim yolları. */
+  .it__yan {
+    grid-column: 2;
+    grid-row: 2;
+    display: grid;
+    justify-items: start;
+    align-content: start;
+    padding-block-start: clamp(0.5rem, 2vw, 2rem);
+  }
+  .it__soz {
+    max-width: 9.5em;
+  }
+  .it__vurgu {
+    position: relative;
+    display: inline-block;
+  }
+  .it__vurgu::after {
+    content: '';
+    position: absolute;
+    inset: auto -0.04em -0.1em;
+    height: 0.2em;
+    background: var(--kagit);
+    -webkit-mask: var(--kalem-cizgisi) center / 100% 100% no-repeat;
+    mask: var(--kalem-cizgisi) center / 100% 100% no-repeat;
+    transition: clip-path 900ms cubic-bezier(0.6, 0.05, 0.25, 1) 350ms;
+  }
+  :global(.js) .it__soz[data-gir]:not(.girdi-goruldu) .it__vurgu::after {
+    clip-path: inset(0 100% 0 0);
+  }
+  .it__soz.girdi-goruldu .it__vurgu::after {
+    clip-path: inset(0 0 0 0);
+  }
+  :global(.js) .it__soz[data-gir] {
+    opacity: 1;
+    transform: none;
+  }
+  .it__yan .giris {
+    margin-block-start: 1.3rem;
+    max-width: 30em;
+    color: rgb(255 255 255 / 0.88);
+  }
+
+  /* İletişim yolları: mavi zeminde çerçeveli satırlar; üzerine gelince beyaz kâğıda döner. */
+  .it__yollar {
+    display: grid;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 34rem;
+    margin-block-start: clamp(1.6rem, 3vw, 2.4rem);
+  }
+  .it__yol {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.75rem;
+    padding: 0.7rem 1.15rem 0.7rem 0.8rem;
+    border: 1.5px solid rgb(255 255 255 / 0.55);
+    border-radius: var(--kose);
+    color: var(--beyaz);
+    text-decoration: none;
+    transition:
+      background-color 200ms,
+      color 200ms,
+      border-color 200ms,
+      transform 220ms var(--yumusak),
+      box-shadow 220ms var(--yumusak);
+  }
+  .it__ikon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--beyaz);
+    color: var(--mavi);
+    transition:
+      background-color 200ms,
+      color 200ms;
+  }
+  .it__yol-metin {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  .it__yol-ad {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    line-height: 1.2;
+    opacity: 0.82;
+  }
+  .it__yol-deger {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1rem + 0.75vw, 1.5rem);
+    font-weight: 690;
+    font-stretch: 90%;
+    letter-spacing: -0.012em;
+    line-height: 1.12;
+    font-variant-numeric: lining-nums;
+    overflow-wrap: anywhere;
+  }
+  .it__yol-eylem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    white-space: nowrap;
+  }
+  @media (hover: hover) {
+    .it__yol:hover {
+      background: var(--beyaz);
+      border-color: var(--beyaz);
+      color: var(--murekkep);
+      transform: translate(-3px, -3px);
+      box-shadow: 0.4rem 0.4rem 0 var(--murekkep);
+    }
+    .it__yol:hover .it__ikon {
+      background: var(--kirmizi);
+      color: var(--beyaz);
+    }
+    .it__yol:hover .it__yol-eylem :global(svg) {
+      animation: ok-gec 460ms var(--yumusak);
+    }
+  }
+  .it__yol:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+  .it__ek {
+    margin-block-start: 1rem;
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  /* Sahne: fonu bölümün mavisiyle aynı; üst ve yan kenarları erir, alt kenarı bölümün sonuna oturur. */
+  .it__sahne {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: end;
+    margin-inline-end: calc(-1 * clamp(0rem, 3vw, 3rem));
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%), linear-gradient(to right, transparent 0, #000 12%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 26%), linear-gradient(to right, transparent 0, #000 12%, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .it__sahne :global(picture),
+  .it__sahne :global(img) {
+    display: block;
+    width: 100%;
+  }
+  .it__sahne :global(img) {
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .it__vurgu::after,
+    .it__yol {
+      transition: none;
+    }
+    .it__yol:hover {
+      transform: none;
+    }
+  }
+
+  /* Dar ekran: önce form, sonra iletişim yolları, en altta sahne. */
+  @media (max-width: 61.99rem) {
+    .it__ic {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      row-gap: clamp(1rem, 3vw, 1.5rem);
+    }
+    .it__kirinti,
+    .it__form,
+    .it__yan,
+    .it__sahne {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .it__form {
+      margin: 0 0.6rem 0 0;
+    }
+    .it__yan {
+      padding-block-start: clamp(1.5rem, 5vw, 2.5rem);
+    }
+    .it__yollar {
+      max-width: none;
+    }
+    .it__sahne {
+      margin: 0 calc(-1 * var(--kenar));
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%);
+      mask-image: linear-gradient(to bottom, transparent 0, #000 30%);
+    }
+    .it__sahne :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+  @media (max-width: 29.99rem) {
+    .it__yol {
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.85rem;
+    }
+    /* Dar telefonda eylem yazısı gizlenir, ok kalır: satırın tamamı zaten bağlantıdır. */
+    .it__yol-eylem {
+      grid-column: 2;
+      justify-self: start;
+      margin-block-start: -0.35rem;
+      font-size: var(--b-mikro);
+      opacity: 0.86;
+    }
+  }
+
+  /* ---- Yazmadan önce: iki kart, görsel sağda -------------------------------------- */
+  .once {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .once__kart {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(6.5rem, 11vw, 10rem);
+    gap: clamp(0.75rem, 2vw, 1.75rem);
+    align-items: center;
+    padding: clamp(1.25rem, 2.4vw, 2.25rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .once__kart--mavi {
+    background: var(--mavi-acik);
+  }
+  .once__metin {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .once__metin h3 {
+    font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.8rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  .once__metin p {
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  .once__cizim {
+    margin: -0.75rem -0.75rem -0.75rem 0;
+  }
+  @media (max-width: 55.99rem) {
+    .once {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

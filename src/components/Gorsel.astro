@@ -1,0 +1,71 @@
+---
+/**
+ * Duyarlı görsel: AVIF + WebP, belirtilmiş boyutlar, isteğe bağlı mobil kadraj.
+ * LCP görselinde `oncelik` verilir (lazy-load yok, fetchpriority=high).
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  /** 48rem altında kullanılacak ayrı kadraj (ör. 4:5). */
+  mobil?: ImageMetadata;
+  alt: string;
+  sizes?: string;
+  mobilSizes?: string;
+  genislikler?: number[];
+  mobilGenislikler?: number[];
+  oncelik?: boolean;
+  kalite?: number;
+  class?: string;
+}
+
+const {
+  src,
+  mobil,
+  alt,
+  sizes = '100vw',
+  mobilSizes = '100vw',
+  genislikler = [640, 960, 1280, 1600, 2000],
+  mobilGenislikler = [480, 720, 960, 1200],
+  oncelik = false,
+  kalite = 62,
+  class: sinif,
+} = Astro.props;
+
+const uret = async (kaynak: ImageMetadata, liste: number[], format: 'avif' | 'webp') => {
+  const widths = liste.filter((w) => w <= kaynak.width);
+  if (!widths.length) widths.push(kaynak.width);
+  const g = await getImage({ src: kaynak, widths, format, quality: format === 'avif' ? Math.round(kalite * 0.82) : kalite });
+  return g.srcSet.attribute;
+};
+
+const [avif, webp] = await Promise.all([uret(src, genislikler, 'avif'), uret(src, genislikler, 'webp')]);
+const [mAvif, mWebp] = mobil
+  ? await Promise.all([uret(mobil, mobilGenislikler, 'avif'), uret(mobil, mobilGenislikler, 'webp')])
+  : [null, null];
+const yedek = await getImage({ src, width: Math.min(1280, src.width), format: 'jpg', quality: 74 });
+const MOBIL = '(max-width: 47.99rem)';
+---
+
+<picture class={sinif}>
+  {
+    mobil && (
+      <>
+        <source media={MOBIL} type="image/avif" srcset={mAvif} sizes={mobilSizes} width={mobil.width} height={mobil.height} />
+        <source media={MOBIL} type="image/webp" srcset={mWebp} sizes={mobilSizes} width={mobil.width} height={mobil.height} />
+      </>
+    )
+  }
+  <source type="image/avif" srcset={avif} sizes={sizes} width={src.width} height={src.height} />
+  <source type="image/webp" srcset={webp} sizes={sizes} width={src.width} height={src.height} />
+  <img
+    src={yedek.src}
+    alt={alt}
+    width={src.width}
+    height={src.height}
+    loading={oncelik ? 'eager' : 'lazy'}
+    decoding={oncelik ? 'sync' : 'async'}
+    fetchpriority={oncelik ? 'high' : undefined}
+  />
+</picture>

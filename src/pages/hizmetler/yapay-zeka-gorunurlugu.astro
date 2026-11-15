@@ -1,0 +1,591 @@
+---
+/**
+ * GEO ve AEO danışmanlığı hizmet sayfası.
+ * H1 arama verisine göre seçildi (arastirma/openseo-2026-11-14.md): "geo danışmanlığı" ve "geo ajansı" talebi
+ * 2026 yazından itibaren ölçülüyor; "geo nedir", "aeo nedir", "yapay zeka seo" ve "chatgpt seo" sayfa içinde karşılanır.
+ *
+ * Düzen google-ads-yonetimi.astro kalıbını izler (15 Kasım 2026):
+ * SayfaBasi (tanım cümlesi + kâğıt işi sahne) > BuSayfada > kapsam kartları > soru kartları > çalışma adımları >
+ * çalışma örneği (soru seti ve yanıt kontrolü) > iki durum (hiç geçmeyen / yanlış anlatılan) > sık sorulan sorular >
+ * ilgili sayfalar > görüşme.
+ * Anlatım sırası: inceleme, bulguya dayanan düzeltme, düzenli kontrol, hedef. Anılma, önerilme ya da süre sözü verilmez;
+ * yapay zekâ araçlarının nasıl çalıştığı hakkında kesin iddia kurulmaz.
+ * Sayfa içi çapalar: #olcum-kaydi (çalışma örneği), #durum, #yanlis-bilgi.
+ *
+ * Google'ın AI özellikleriyle ilgili ifade, 14 Kasım 2026'da Google Search Central belgesinden doğrulandı:
+ * https://developers.google.com/search/docs/appearance/ai-features
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import Cizim from '../../components/Cizim.astro';
+import { hizmetBul, SITE } from '../../site.config';
+
+import gorsel from '../../assets/gorseller/yol-yapay-zeka.jpg';
+import yolCevap from '../../assets/gorseller/yol-cevap.jpg';
+import yolSite from '../../assets/gorseller/yol-site.jpg';
+import yolArama from '../../assets/gorseller/yol-arama.jpg';
+import robot from '../../assets/cizimler/robot.png';
+import soru from '../../assets/cizimler/soru.png';
+import kitaplik from '../../assets/cizimler/kitaplik.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import harita from '../../assets/cizimler/harita.png';
+import liste from '../../assets/cizimler/liste.png';
+import yapboz from '../../assets/cizimler/yapboz.png';
+import takvim from '../../assets/cizimler/takvim.png';
+
+const hizmet = hizmetBul('geo');
+const kirintilar = [
+  { ad: 'Hizmetler', url: '/hizmetler/' },
+  { ad: 'GEO ve AEO danışmanlığı', url: hizmet.url },
+];
+
+const kapsam = [
+  {
+    ad: 'Müşteri sorularının çıkarılması',
+    aciklama: 'Satış görüşmelerinde duyduğunuz soruları, teklif isteyenlerin yazdıklarını ve arama verisini tek listede topluyoruz. Soru setini tahminle kurmuyoruz.',
+  },
+  {
+    ad: 'Yanıtların incelenmesi',
+    aciklama: 'Bu soruları ChatGPT, Gemini ve Google’ın yapay zekâ özetlerinde soruyoruz. Markanız anılıyor mu, anlatılan bilgi doğru mu, tek tek okuyoruz.',
+  },
+  {
+    ad: 'Kaynak sayfaların incelenmesi',
+    aciklama: 'Yanıtın gösterdiği kaynaklara bakıyoruz: sizin siteniz mi, bir dizin mi, bir haber mi? Orada sizinle ilgili ne yazıyor?',
+  },
+  {
+    ad: 'Soruyu yanıtlayan sayfalar',
+    aciklama: 'Hizmetinizi, çalıştığınız bölgeyi ve sık sorulan soruların cevabını açıkça yazan sayfaları hazırlıyor ya da var olanları düzeltiyoruz.',
+  },
+  {
+    ad: 'Tutarlı kurum bilgisi',
+    aciklama: 'Adres, telefon ve hizmet listesi sitenizde ve site dışındaki işletme profillerinde aynı olmalı. Çelişen eski bilgileri bulup düzeltiyoruz.',
+  },
+  {
+    ad: 'Düzenli kontrol',
+    aciklama: 'Aynı soruları belirli aralıklarla, aynı sözlerle yeniden soruyoruz. Yanıt değiştiyse hangi sayfaya bakılacağını çıkarıyoruz.',
+  },
+];
+
+const sorunlar = [
+  {
+    soru: 'ChatGPT’ye sorulduğunda markam neden önerilmiyor?',
+    ornek:
+      'Bir pilates stüdyosunun sahibi ChatGPT’ye semtindeki stüdyoları soruyor; kendi stüdyosu sayılanlar arasında yok. İlk sorduğumuz şey şudur: stüdyonun verdiği dersler ve bulunduğu semt, herhangi bir sayfada açık bir cümleyle yazıyor mu?',
+    care: 'Aynı soruyu birkaç araçta sorup yanıtın dayandığı kaynaklara bakıyor, eksik bilginin hangi sayfada tamamlanacağını çıkarıyoruz.',
+    bag: { etiket: 'Geçmiyorsanız nereye bakıyoruz?', url: '#durum' },
+    cizim: soru,
+  },
+  {
+    soru: 'Yapay zekâ markam hakkında yanlış bilgi veriyor, ne yapmalıyım?',
+    ornek:
+      'Bir mimarlık ofisi, yıllar önce bıraktığı bir işle anılıyor. Bir güzellik salonunun taşınmadan önceki adresi veriliyor. Yanlış bilgi çoğu zaman bir yerde hâlâ yazıyordur.',
+    care: 'Yanıtı doğrudan düzeltemeyiz. Yanlış bilginin durduğu sayfayı bulup orada düzeltiyoruz.',
+    bag: { etiket: 'Yanlış bilgiyi nerede düzeltiyoruz?', url: '#yanlis-bilgi' },
+    cizim: kitaplik,
+  },
+  {
+    soru: 'Google’ın yapay zekâ özetinde neden rakibim çıkıyor?',
+    ornek:
+      '“Kombi bakımı ne zaman yaptırılır?” diye arayan kişi, sonuçların üstünde bir yapay zekâ özeti görüyor. Özetin gösterdiği kaynak, bu soruya ayrı bir sayfa yazmış rakip servis olabilir.',
+    care: 'Özetin gösterdiği kaynak sayfaları okuyor, aynı soruyu sizin sitenizde hangi sayfanın yanıtlayacağına karar veriyoruz.',
+    bag: { etiket: 'Örnek yanıt kontrolünü görün', url: '#olcum-kaydi' },
+    cizim: buyutec,
+  },
+  {
+    soru: 'SEO yaptırıyorum, GEO ayrıca gerekir mi?',
+    ornek:
+      'Bir mobilyacının sitesi “yemek odası takımı” aramasında bulunuyor ama “küçük salona hangi yemek masası uyar?” sorusuna verilen yanıtta adı geçmiyor. Kimi bu işe yapay zekâ SEO, kimi ChatGPT SEO diyor.',
+    care: 'İkisinin temeli aynıdır. GEO çalışması, SEO’nun üstüne müşterinin sorularını ve yanıtlarda markanın nasıl anlatıldığını ekler.',
+    bag: { etiket: 'SEO danışmanlığı neleri kapsar?', url: '/hizmetler/seo-danismanligi/' },
+    cizim: harita,
+    genis: true,
+  },
+];
+
+const adimlar = [
+  { ad: 'Sorular', ozet: 'Müşterinizin sorduğu sorular', aciklama: 'Satış görüşmelerinden, teklif taleplerinden ve arama verisinden bir soru seti çıkarıyoruz.' },
+  { ad: 'İnceleme', ozet: 'Yanıtlar ve kaynak sayfalar', aciklama: 'Bu sorulara bugün verilen yanıtları ve yanıtların dayandığı sayfaları okuyoruz.' },
+  { ad: 'Düzeltme', ozet: 'Bulguya dayanan sayfa işleri', aciklama: 'Eksik ya da yanlış bilgiyi durduğu sayfada düzeltiyor, cevabı olmayan sorulara sayfa hazırlıyoruz.' },
+  { ad: 'Düzenli kontrol', ozet: 'Aynı sorular, aynı sözlerle', aciklama: 'Soruları belirli aralıklarla yeniden soruyor, yanıt değiştiyse nedenine bakıyoruz.' },
+  { ad: 'Hedef', ozet: 'Doğru anlatılan bir marka', aciklama: 'Amaç, sizi soran müşterinin markanız hakkında doğru bilgiye ulaşıp size başvurmasıdır.' },
+];
+
+// Temsili sorular: üç ayrı soru türünü gösterir.
+const soruSeti = [
+  { tur: 'Firma arayan', soru: 'Ankara’da çelik villa yapan firmalar hangileri?', bakilan: 'Markanız sayılan firmalar arasında mı?' },
+  { tur: 'Karşılaştıran', soru: 'Çelik villa firması seçerken neye bakmalıyım?', bakilan: 'Yanıt, sizin de karşıladığınız ölçütleri sayıyor mu?' },
+  { tur: 'Markayı adıyla soran', soru: 'Örnek firma hangi hizmetleri veriyor?', bakilan: 'Anlatılan hizmetler gerçekten verdiğiniz hizmetler mi?' },
+];
+
+// Temsili yanıt kontrolü. Gerçek bir kontrolden alınmadı; alanların nasıl doldurulduğunu gösterir.
+const E = { deger: 'Evet', tur: 'evet' };
+const H = { deger: 'Hayır', tur: 'hayir' };
+const K = { deger: 'Kısmen', tur: '' };
+const kayit = [
+  { tarih: '3 Kasım 2026', arac: 'ChatGPT', soru: soruSeti[0].soru, anilma: H, dogruluk: null, kaynak: 'Bir sektör dizini', kendi: false },
+  { tarih: '3 Kasım 2026', arac: 'Gemini', soru: soruSeti[0].soru, anilma: E, dogruluk: K, kaynak: 'Bir haber sitesi', kendi: false },
+  { tarih: '3 Kasım 2026', arac: 'Google AI Overviews', soru: soruSeti[2].soru, anilma: E, dogruluk: E, kaynak: 'Kendi hizmet sayfası', kendi: true },
+  { tarih: '10 Kasım 2026', arac: 'ChatGPT', soru: soruSeti[0].soru, anilma: E, dogruluk: K, kaynak: 'Bir sektör dizini', kendi: false },
+];
+
+const sorular = [
+  {
+    soru: 'GEO nedir?',
+    cevap:
+      'GEO (üretken yapay zekâ optimizasyonu, İngilizce adıyla Generative Engine Optimization), ChatGPT, Gemini ve Google’ın yapay zekâ özetleri gibi araçların yanıtlarında markanızın doğru bilgiyle anılması için yapılan çalışmadır. Müşterinin sorduğu soruları çıkarmayı, yanıtların dayandığı kaynak sayfaları incelemeyi ve eksik ya da yanlış bilgiyi bu sayfalarda düzeltmeyi kapsar.',
+  },
+  {
+    soru: 'AEO nedir?',
+    cevap:
+      'AEO (yanıt motoru optimizasyonu, İngilizce adıyla Answer Engine Optimization), bir soruya doğrudan verilen yanıtta sayfanızın ya da markanızın yer alması için yapılan çalışmadır. Soruyu ilk cümlede açıkça yanıtlayan, bilgisi tutarlı sayfalar hazırlamaya dayanır ve GEO ile aynı sayfalar üzerinde yürür.',
+  },
+  {
+    soru: 'GEO, AEO ve SEO arasındaki fark nedir?',
+    cevap:
+      'SEO sayfanızın arama sonuçlarında bulunmasını, AEO bir soruya doğrudan verilen yanıtta yer almayı, GEO ise üretken yapay zekâ araçlarının yanıtlarında anılmayı ve kaynak gösterilmeyi konu alır. Üçü de aynı temele dayanır: soruyu açıkça yanıtlayan, arama motorunun erişebildiği, bilgisi tutarlı sayfalar. Bu yüzden çoğu işletmede bu çalışma SEO danışmanlığıyla birlikte yürür. Yapay zekâ SEO ya da ChatGPT SEO diye aranan iş de budur.',
+    bag: { etiket: 'SEO danışmanlığında neye bakıyoruz?', url: '/hizmetler/seo-danismanligi/' },
+  },
+  {
+    soru: 'ChatGPT bizi önerir mi?',
+    cevap:
+      'Bunun sözünü kimse veremez. Bir yapay zekâ aracının yanıtı aynı soruda bile değişebilir ve hangi kaynağı kullanacağına araç kendisi karar verir. Bizim yaptığımız iş bellidir: müşterinizin sorularını çıkarmak, yanıtların dayandığı sayfaları incelemek, markanızı doğru ve açık anlatan sayfaları hazırlamak ve aynı soruları düzenli olarak yeniden kontrol etmek.',
+  },
+  {
+    soru: 'Özel bir dosya ya da işaretleme gerekir mi?',
+    cevap:
+      'Google için gerekmiyor. Google’ın kendi belgesine göre AI Overviews ve AI Mode’da görünmek için ek bir koşul, özel bir optimizasyon, yeni bir dosya ya da özel yapısal veri gerekmiyor. Sayfanın dizinde olması ve arama sonuçlarında özet metinle gösterilmeye uygun olması yeterli. Belge 14 Kasım 2026’da kontrol edildi. Diğer araçlar kendi kurallarını uygular.',
+    bag: { etiket: 'Kaynak: Google Search Central, AI features and your website', url: 'https://developers.google.com/search/docs/appearance/ai-features' },
+  },
+  {
+    soru: 'Hangi yapay zekâ araçlarına bakıyorsunuz?',
+    cevap:
+      'ChatGPT, Gemini ve Google’ın arama sonuçlarında gösterdiği yapay zekâ özetlerine (AI Overviews) bakıyoruz. Aynı soruyu her birine aynı sözlerle soruyor, yanıtları yan yana okuyoruz; çünkü aynı soruya farklı araçlar farklı yanıt verebilir. Müşterilerinizin kullandığını bildiğiniz başka bir araç varsa görüşmede söyleyin.',
+  },
+  {
+    soru: 'GEO ajansı ile çalışırken ne beklemeliyim?',
+    cevap:
+      'Bir GEO ajansından bekleyeceğiniz ilk iş incelemedir: müşterileriniz hangi soruları soruyor, yanıtlarda markanız geçiyor mu, geçiyorsa doğru mu anlatılıyor? Bu inceleme yapılmadan içerik üretmek tahminle çalışmaktır. GEO danışmanlığına bu incelemeyle başlıyor, düzeltilecek sayfaları gerekçesiyle sıralıyoruz. Düzeltmeyi bizim mi yoksa sizin ekibinizin mi uygulayacağı ilk görüşmede netleşir.',
+  },
+  {
+    soru: 'Sonuç garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Bir yapay zekâ aracının markanızı anacağına, önereceğine ya da bunun ne zaman olacağına dair söz vermiyoruz. Söz verdiğimiz şey ayrıntılı bir inceleme yapmak, düzeltmeleri gerekçesiyle anlatmak ve aynı soruları düzenli olarak yeniden kontrol etmektir.',
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'GEO ve AEO danışmanlığı',
+    serviceType: 'Yapay zekâ aramalarında görünürlük (GEO ve AEO) danışmanlığı',
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    url: `${SITE.url}${hizmet.url}`,
+    description:
+      'ChatGPT, Gemini ve Google’ın yapay zekâ özetlerinde markanın doğru bilgiyle anılması için müşteri sorularının çıkarılması, yanıtların dayandığı kaynak sayfaların incelenmesi, düzeltilmesi ve düzenli kontrolü.',
+  },
+];
+---
+
+<Temel
+  baslik="GEO ve AEO Danışmanlığı: Yapay Zekâ SEO | Satışları Artır"
+  aciklama="GEO ve AEO danışmanlığı: ChatGPT, Gemini ve Google’ın yapay zekâ özetlerinde markanız nasıl anlatılıyor? Yanıtları inceliyor, kaynak sayfaları düzeltiyoruz."
+  sayfaTuru="hizmet"
+  hizmet="geo"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: hizmet.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    uzunBaslik
+    kirintilar={kirintilar}
+    baslik="GEO ve AEO danışmanlığı: yapay zekâ aramalarında görünürlük"
+    gorsel={gorsel}
+    gorselBicimi="dikey"
+    gorselAlt="Kâğıttan bir robot, tezgâhının önünde duran müşteriye konuşma balonunda üç dükkân gösteriyor; ışıkları yanan ortadaki dükkân kırmızı kalemle halkaya alınmış"
+    cagri={{ etiket: hizmet.cagri, url: '#gorusme', kanal: 'geo' }}
+    ikincil={{ etiket: 'Örnek yanıt kontrolünü görün', url: '#olcum-kaydi' }}
+  >
+    <p>
+      GEO (üretken yapay zekâ optimizasyonu), ChatGPT, Gemini ve Google’ın yapay zekâ özetleri gibi araçların
+      yanıtlarında markanızın doğru bilgiyle anılması için yapılan çalışmadır.
+    </p>
+    <p>
+      Markanız bu yanıtlarda hiç geçmiyorsa eksik olan sayfayı, yanlış anlatılıyorsa bilginin durduğu yeri bulup
+      düzeltiyoruz.
+    </p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'GEO ve AEO nedir?', hedef: 'kapsam' },
+      { etiket: 'Sık duyduğumuz sorular', hedef: 'sorunlar' },
+      { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+      { etiket: 'Örnek kontrol', hedef: 'olcum-kaydi' },
+      { etiket: 'Geçmiyor mu, yanlış mı?', hedef: 'durum' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Kapsam -->
+  <section class="bolum bolum--beyaz" id="kapsam">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">GEO ve AEO nedir, neleri kapsar?</h2>
+          <div class="metin">
+            <p>
+              GEO, üretken yapay zekâ araçlarına bir soru sorulduğunda verilen yanıtta markanızın doğru bilgiyle
+              anılmasını konu alır. AEO (yanıt motoru optimizasyonu) ise bir soruya doğrudan verilen yanıtta sayfanızın
+              yer almasını.
+            </p>
+            <p>
+              İkisi de aynı yerden başlar: müşterinizin sorduğu sorular ve bu soruların cevabını taşıyan sayfalar. GEO
+              danışmanlığında yaptığımız işler şunlardır.
+            </p>
+          </div>
+        </div>
+        <Cizim src={robot} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili">
+          {
+            kapsam.map((k, i) => (
+              <li data-gir style={`--gecikme:${(i % 3) * 80}ms`}>
+                <strong>{k.ad}</strong>
+                <span>{k.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık duyduğumuz sorular -->
+  <section class="bolum" id="sorunlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Yapay zekâ yanıtları hakkında en sık duyduğumuz sorular</h2>
+        <p class="giris">İşletme sahipleri bu konuya çoğu zaman şu dört sorudan biriyle geliyor. Her birinde ilk baktığımız yer:</p>
+      </div>
+      <SoruKartlari kartlar={sorunlar} />
+    </div>
+  </section>
+
+  <!-- Yöntem -->
+  <section class="bolum bolum--beyaz" id="yontem">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">GEO danışmanlığında nasıl çalışıyoruz?</h2>
+          <p class="giris">
+            İçerik üretmeye tahminle başlamıyoruz. Önce inceliyor, bulguya göre sayfaları düzeltiyor, sonra aynı soruları
+            düzenli olarak yeniden kontrol ediyoruz.
+          </p>
+        </div>
+        <Cizim src={takvim} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <Adimlar adimlar={adimlar} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Çalışma örneği: soru seti ve yanıt kontrolü -->
+  <section class="bolum bolum--acik" id="olcum-kaydi">
+    <div class="sarici konu ornek-konu">
+      <div class="konu__baslik konu__baslik--yapiskan">
+        <h2 class="baslik-2">Yanıtta markanın adı ve kaynağı nasıl kontrol edilir?</h2>
+        <div class="metin">
+          <p>
+            Bir yanıtı “iyi” ya da “kötü” diye okumuyoruz. Her yanıtta üç ayrı şeye bakıyoruz: marka anıldı mı, hizmet
+            bilgisi doğru mu, hangi kaynak gösterildi?
+          </p>
+          <p>
+            Üçü birbirinden bağımsızdır. Adınız geçer ama yapmadığınız bir iş anlatılabilir. Bilgi doğrudur ama kaynak
+            başka bir sitedir. Düzeltilecek sayfayı bu üç cevap belirler.
+          </p>
+        </div>
+        <Cizim src={liste} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik konu__icerik--genis">
+        <div class="ornek" data-gir>
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Bir çelik villa firması için soru seti ve yanıt kontrolü</h3>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+
+          <h4 class="ornek__ara">Markanız hakkında hangi sorular soruluyor?</h4>
+          <ul class="soru-seti">
+            {
+              soruSeti.map((s) => (
+                <li>
+                  <span class="soru-seti__tur">{s.tur}</span>
+                  <span class="sorgu soru-seti__soru">“{s.soru}”</span>
+                  <span class="soru-seti__bakilan">{s.bakilan}</span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <h4 class="ornek__ara">Yanıtlarda ne gördük?</h4>
+          <table class="tablo tablo--yigin kontrol">
+            <thead>
+              <tr>
+                <th scope="col">Araç ve tarih</th>
+                <th scope="col">Soru</th>
+                <th scope="col">Marka anıldı mı?</th>
+                <th scope="col">Bilgi doğru mu?</th>
+                <th scope="col">Gösterilen kaynak</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                kayit.map((k) => (
+                  <tr>
+                    <td data-baslik="Araç ve tarih">
+                      <span class="kontrol__arac">
+                        <strong>{k.arac}</strong>
+                        <span class="rakam">{k.tarih}</span>
+                      </span>
+                    </td>
+                    <td data-baslik="Soru">
+                      <span class="sorgu">“{k.soru}”</span>
+                    </td>
+                    <td data-baslik="Marka anıldı mı?">
+                      <span class:list={['hukum', k.anilma.tur && `hukum--${k.anilma.tur}`]}>{k.anilma.deger}</span>
+                    </td>
+                    <td data-baslik="Bilgi doğru mu?">
+                      {k.dogruluk ? (
+                        <span class:list={['hukum', k.dogruluk.tur && `hukum--${k.dogruluk.tur}`]}>{k.dogruluk.deger}</span>
+                      ) : (
+                        <span class="ikincil">Anılmadı</span>
+                      )}
+                    </td>
+                    <td data-baslik="Gösterilen kaynak">{k.kendi ? <span class="hukum hukum--evet">{k.kaynak}</span> : <span>{k.kaynak}</span>}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <p class="ornek__not">
+            Kayıt gerçek bir kontrolden alınmadı; firma adı ve değerler, alanların nasıl doldurulduğunu göstermek için
+            yazıldı. İlk ve son satırda aynı soru aynı araca bir hafta arayla soruluyor ve yanıt değişiyor. Bu yüzden tek
+            yanıta bakıp karar vermiyoruz.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- İki durum: hiç geçmeyenler / yanlış ya da eksik anlatılanlar -->
+  <IkiDurum
+    kimlik="durum"
+    zemin="beyaz"
+    baslik="Markanız yanıtlarda hiç geçmiyor mu, yanlış mı anlatılıyor?"
+    giris="İki durumda bakılacak yer farklıdır. Hangisindeyseniz oradan başlıyoruz."
+    sol={{
+      ust: 'Markanız yapay zekâ yanıtlarında hiç geçmiyorsa',
+      baslik: 'Önce cevabı taşıyan sayfaya bakıyoruz',
+      metin: 'Çoğu zaman eksik olan, sorunun cevabını açıkça yazan sayfanın kendisidir. Üç şeyi birlikte kontrol ediyoruz.',
+      maddeler: [
+        { ad: 'Soruyu yanıtlayan bir sayfanız var mı?', aciklama: 'Hizmeti, çalıştığınız bölgeyi ve kimin için olduğunu açıkça söyleyen bir sayfa. Yoksa önce onu hazırlıyoruz.' },
+        { ad: 'Sayfalarınız arama motorlarına açık mı?', aciklama: 'Google’ın yapay zekâ özetlerinde kaynak olabilmesi için sayfanın dizinde olması gerekir. Erişimi ve dizin durumunu kontrol ediyoruz.' },
+        { ad: 'Site dışında adınız nerede geçiyor?', aciklama: 'Sektör dizinleri, haberler, işletme profilleri. Buralarda adınız ve yaptığınız iş doğru yazıyor mu?' },
+      ],
+      cagri: { etiket: 'Sorularımı birlikte çıkaralım', kanal: 'geo', yer: 'hic-gecmiyor' },
+      bag: { etiket: 'Kurumsal web tasarım hizmeti', url: '/hizmetler/web-tasarim/' },
+      cizim: yapboz,
+    }}
+    sag={{
+      kimlik: 'yanlis-bilgi',
+      ust: 'Geçiyor ama yanlış ya da eksik anlatılıyorsa',
+      baslik: 'Yanlış bilginin durduğu sayfayı buluyoruz',
+      metin: 'Bir yapay zekâ aracının yanıtını doğrudan düzeltemeyiz. Düzeltebileceğimiz şey, yanıtın dayandığı sayfalardır.',
+      maddeler: [
+        { ad: 'Hizmet yanlış ya da eksik anlatılıyorsa', aciklama: 'Hizmet sayfasındaki kapsam cümlesine ve sitede çelişen eski sayfalara bakıyoruz. Yapmadığınız iş hâlâ bir yerde yazıyor olabilir.' },
+        { ad: 'Eski adres ya da eski telefon veriliyorsa', aciklama: 'İletişim sayfasına ve site dışındaki işletme profillerine bakıyoruz. Hepsinde aynı kurum bilgisi durmalı.' },
+        { ad: 'Kaynak olarak başka bir site gösteriliyorsa', aciklama: 'O sitede sizinle ilgili yazan bilginin doğruluğuna ve kendi sayfanızda aynı sorunun açık bir cevabı olup olmadığına bakıyoruz.' },
+      ],
+      cagri: { etiket: hizmet.cagri, kanal: 'geo', yer: 'yanlis-bilgi' },
+    }}
+  />
+
+  <Sss
+    baslik="GEO ve AEO hakkında sık sorulan sorular"
+    giris="GEO ve AEO’nun ne olduğu, SEO’dan farkı ve neyin sözünü verip vermediğimiz hakkında en çok sorulanlar."
+    sorular={sorular}
+  />
+
+  <IlgiliSayfalar
+    baslik="GEO çalışmasıyla birlikte yürüyen hizmetler"
+    giris="Bu çalışma çoğu işletmede sitenin kendisiyle ve arama görünürlüğüyle birlikte ele alınır."
+    sayfalar={[
+      {
+        tur: 'Hizmet',
+        baslik: 'SEO danışmanlığı',
+        metin: 'Sayfalarınız arama motorlarına açık mı, doğru aramada bulunuyor mu?',
+        url: '/hizmetler/seo-danismanligi/',
+        gorsel: yolCevap,
+        gorselAlt: 'Kâğıttan dev bir açık kitaba doğru yürüyen müşteri',
+      },
+      {
+        tur: 'Hizmet',
+        baslik: 'Kurumsal web tasarım',
+        metin: 'Sorulan soruyu ilk ekranda yanıtlayan hizmet sayfaları.',
+        url: '/hizmetler/web-tasarim/',
+        gorsel: yolSite,
+        gorselAlt: 'Ekranı dükkân vitrini olan kâğıttan bir dizüstü bilgisayar',
+      },
+      {
+        tur: 'Hizmet',
+        baslik: 'Google Ads yönetimi',
+        metin: 'Hizmetinizi bugün Google’da arayan müşteriye reklamla ulaşmak.',
+        url: '/hizmetler/google-ads-yonetimi/',
+        gorsel: yolArama,
+        gorselAlt: 'Kâğıttan dev bir arama kutusuna uzanan müşteri',
+      },
+    ]}
+  />
+
+  <GorusmeBandi
+    baslik="Markanızın nasıl anlatıldığına birlikte bakalım."
+    metin="Müşterilerinizin size en sık sorduğu iki soruyu yazın. Görüşmeye buradan başlayalım."
+    kanal="geo"
+    cagri={hizmet.cagri}
+    konum="hizmet-geo"
+  />
+</Temel>
+
+<style>
+  /* ---- Üst alan: 1:1 sahne geniş ekranda kırpılmadan görünsün (balondaki üçüncü dükkân kadrajda kalsın) ---- */
+  @media (min-width: 56rem) {
+    :global(body[data-hizmet='geo'][data-sayfa-turu='hizmet'] .sb.sb--dikey .sb__gorsel) {
+      grid-column: 8 / -1;
+    }
+    :global(body[data-hizmet='geo'][data-sayfa-turu='hizmet'] .sb.sb--dikey .sb__gorsel img) {
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  /* Yapışkan başlık kendi katmanını açar; çizimin beyaz zemini bölüm rengine karışsın diye zemin burada da verilir. */
+  .ornek-konu > .konu__baslik--yapiskan {
+    background: var(--zemin);
+  }
+
+  /* ---- Çalışma örneği: kâğıdın içindeki iki parça ------------------------------ */
+  .ornek__ara {
+    margin-block: 1.1rem 0.7rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    font-stretch: 96%;
+    line-height: 1.3;
+    color: var(--murekkep);
+  }
+  .soru-seti + .ornek__ara {
+    margin-block-start: clamp(1.5rem, 2.6vw, 2rem);
+  }
+  .soru-seti {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+  .soru-seti li {
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+    padding: 0.95rem 1rem 1.05rem;
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+  }
+  .soru-seti__tur {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .soru-seti__soru {
+    font-size: 1.0625rem;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .soru-seti__bakilan {
+    font-size: var(--b-kucuk);
+    line-height: 1.4;
+    color: var(--murekkep-2);
+  }
+
+  .kontrol td {
+    color: var(--murekkep-2);
+  }
+  .kontrol__arac {
+    display: grid;
+    gap: 0.1rem;
+  }
+  .kontrol__arac strong {
+    font-weight: 600;
+    color: var(--murekkep);
+  }
+  .kontrol__arac .rakam {
+    font-size: var(--b-mikro);
+    color: var(--ikincil);
+    white-space: nowrap;
+  }
+  .kontrol .sorgu {
+    color: var(--murekkep);
+  }
+  @media (min-width: 44rem) {
+    .kontrol {
+      width: 100%;
+    }
+    .kontrol th:nth-child(1) {
+      width: 19%;
+    }
+    .kontrol th:nth-child(2) {
+      width: 31%;
+    }
+    .kontrol th:nth-child(3),
+    .kontrol th:nth-child(4) {
+      width: 14%;
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .soru-seti {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Orta genişlikte beş sütunlu tablo dar sütuna sığmaz: başlık üste, kâğıt tam genişliğe alınır; çizim yazının sağında durur. */
+  @media (min-width: 44rem) and (max-width: 74.99rem) {
+    .ornek-konu > .konu__baslik,
+    .ornek-konu > .konu__icerik {
+      grid-column: 1 / -1;
+    }
+    .ornek-konu > .konu__baslik {
+      position: static;
+      grid-template-columns: minmax(0, 1fr) clamp(9rem, 18vw, 12rem);
+      column-gap: 2rem;
+      align-items: end;
+    }
+    .ornek-konu > .konu__baslik > h2,
+    .ornek-konu > .konu__baslik > .metin {
+      grid-column: 1;
+    }
+    .ornek-konu > .konu__baslik > :global(.konu__cizim) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      width: 100%;
+      margin: 0;
+    }
+  }
+</style>

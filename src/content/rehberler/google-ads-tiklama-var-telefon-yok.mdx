@@ -1,0 +1,158 @@
+---
+no: 1
+kapak: tiklama-var-telefon-yok
+kapakAlt: "Kâğıttan bir tezgâhta sessiz duran telefonun başında bekleyen esnaf; önünden geçen insanlar bir düğmeye basıp başka yöne gidiyor"
+aramalar:
+  - google ads tıklama var telefon yok
+  - reklam veriyorum müşteri gelmiyor
+soru: Google Ads’te tıklama var ama neden telefon gelmiyor?
+baslik: Google Ads’te Tıklama Var, Telefon Yok
+aciklama: Google reklamınız tıklanıyor ama telefon çalmıyorsa önce mobil sayfayı, sonra arama terimlerini, sonra telefon aramasının nasıl sayıldığını inceleyin.
+kisaCevap: Çoğu zaman sorun üç yerden birindedir. Reklamın açtığı sayfada numara telefondan aranamıyordur, tıklamalar iş arayanlardan ya da hizmet bölgeniz dışından geliyordur ya da panel gerçek aramayı değil düğmeye dokunulmasını sayıyordur. Aşağıdaki üç kontrol hangisi olduğunu gösterir.
+elinizeGecen: Mobil arama testi, arama terimleri örneği ve telefon sayımı kontrolü
+hizmetler: [google-ads]
+hizmetBaglantisi:
+  etiket: Google Ads hesabınızı devraldığımızda neye bakıyoruz?
+  url: /hizmetler/google-ads-yonetimi/#hesap-inceleme
+sonraki: google-reklamim-neden-gosterilmiyor
+proje: celikvillam
+yayinTarihi: 2026-11-14
+sonKontrol: 2026-11-14
+durum: inceleme
+okumaDk: 6
+kaynaklar:
+  - ad: Google Ads Yardım, Arama terimleri raporu hakkında
+    url: https://support.google.com/google-ads/answer/2472708?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Telefon araması dönüşümü izleme hakkında
+    url: https://support.google.com/google-ads/answer/6100664?hl=tr
+    tur: resmi
+  - ad: Google Ads Topluluğu, gösterim ve tıklama var ama arama alamıyorum sorusu
+    url: https://support.google.com/google-ads/thread/457816885?hl=tr
+    tur: topluluk
+---
+
+import Akis from '../../components/blog/Akis.astro';
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Not from '../../components/blog/Not.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+
+Telefonunuzun çalmaması, tek başına reklamın yanlış kişiye gösterildiğini söylemez. Önce ilanınızın açtığı sayfayı telefondan ziyaret edin. Numaraya dokunduğunuzda doğru hat aranıyor mu? Bu küçük test çalışıyorsa ikinci adım, tıklamayı getiren aramaları okumak.
+
+İlk kampanyanızı yeni açtıysanız da sıra aynıdır: önce sayfa, sonra aramalar, en son sayım. Yayından önce yapılan aynı inceleme, bu soruyu hiç sormamanızı sağlar.
+
+<Akis
+  asamalar={[
+    { ad: 'Tıklama', aciklama: 'Tıklamayı hangi arama getirdi?', olcu: 'Arama terimleri' },
+    { ad: 'Sayfa', aciklama: 'Numaraya telefondan dokunulabiliyor mu?', olcu: 'Mobil arama testi' },
+    { ad: 'Telefon', aciklama: 'Panel aramayı mı sayıyor, dokunmayı mı?', olcu: 'Telefon sayımı' },
+    { ad: 'Görüşme', aciklama: 'Arayanların kaçıyla konuşuldu?', olcu: 'Hat geçmişi' },
+  ]}
+/>
+
+## Reklama tıklayan kişi telefonda numarayı arayabiliyor mu?
+
+Reklama tıklayan kişinin büyük ihtimalle elinde telefon var. Sayfanızı bilgisayarda açıp “numara orada yazıyor” demek yetmez. Aynı yolu siz de telefondan yürüyün.
+
+<KontrolListesi
+  kimlik="mobil-arama-testi"
+  baslik="Kendi telefonunuzda mobil arama testi"
+  adimlar={[
+    'Wi-Fi’yi kapatın. Reklamınızın açtığı sayfayı mobil veriyle açın ve ilk ekranda telefon numarasını arayın.',
+    'Numaraya dokunun. Arama ekranı açılıyor mu, ekrandaki numara doğru hat mı?',
+    'Hattı bir kez mesai içinde, bir kez mesai dışında arayın. Kim açıyor, açılmazsa arayan ne duyuyor?',
+    'Formu boş gönderin. Hata mesajı neyi düzeltmeniz gerektiğini söylüyor mu?',
+    'Formu doldurup gönderin. Başvuru size ya da ekibinize ulaştı mı?',
+  ]}
+  not="İşaretler yalnız bu telefonda saklanır. Bir adım takılıyorsa sorun reklamda olmayabilir, düzeltme sayfada ya da hatta başlar."
+/>
+
+Beş adımın hepsi çalışıyorsa sayfanız aramayı engellemiyor demektir. Biri takılıyorsa reklam ayarlarına dokunmadan önce onu düzeltin. Numara metin olarak yazılmış ama dokunulamıyorsa, mesai dışında hat meşgul çalıyorsa ya da form telefonda gönderilemiyorsa hiçbir kampanya değişikliği bu açığı kapatmaz.
+
+Sayfanın ilk ekranında neyin durması gerektiğini [açılış sayfası (landing page) nedir](/blog/landing-page-nedir/) yazısı anlatır.
+
+## Arama terimleri raporu: tıklamayı hangi aramalar getiriyor?
+
+Diyelim ki Ankara’da havuz yenileme işi yapıyorsunuz. “Havuz bakım işi arıyorum” ile “havuz seramiği yenileme firması” aynı raporda görünebilir. İlk aramayı yapan kişi iş arıyor. İkincisi potansiyel müşteri. Raporunuzda bu ayrımı işaretlediğinizde hangi aramayı daha yakından inceleyeceğinizi görürsünüz.
+
+<SonucSayfasi
+  sorgu="havuz bakım işi arıyorum"
+  vurgu="reklam"
+  bolgeler={['reklam', 'organik']}
+  aciklamalar={{ reklam: 'Reklamınızı tetikleyen, kişinin arama kutusuna yazdığı sözdür. Tıklama da buradan gelir.' }}
+>
+  Arama kutusuna yazılan söz arama terimidir. Bu aramayı yapan kişi iş arıyor; yine de reklamınızı görüp tıklayabilir.
+</SonucSayfasi>
+
+Bu listeyi Google Ads’te **Kampanyalar › Analizler ve raporlar › Arama terimleri** yolundan açarsınız. Anahtar kelime sizin hesaba yazdığınız sözdür. Arama terimi ise insanların Google’a gerçekten yazdığı ve reklamınızı tetikleyen sözdür. Tıklamayı ikincisi getirir.
+
+<Ornek baslik="Ankara’da havuz yenileme yapan bir firma için üç arama">
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Arama terimi</th>
+        <th scope="col">Arayan kim?</th>
+        <th scope="col">Ne yaparsınız?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Arama terimi"><span class="sorgu">“havuz bakım işi arıyorum”</span></td>
+        <td data-baslik="Arayan kim?"><span class="hukum hukum--hayir">İş arıyor</span></td>
+        <td data-baslik="Ne yaparsınız?">Negatif anahtar kelime olarak ekleyin. Reklam bu aramada gösterilmesin.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Arama terimi"><span class="sorgu">“izmir havuz yenileme”</span></td>
+        <td data-baslik="Arayan kim?"><span class="hukum hukum--hayir">Hizmet bölgeniz dışında</span></td>
+        <td data-baslik="Ne yaparsınız?">Kampanyanın konum ayarını açın. Reklam yalnız hizmet verdiğiniz bölgede mi gösteriliyor?</td>
+      </tr>
+      <tr>
+        <td data-baslik="Arama terimi"><span class="sorgu">“havuz seramiği yenileme firması”</span></td>
+        <td data-baslik="Arayan kim?"><span class="hukum hukum--evet">Potansiyel müşteri</span></td>
+        <td data-baslik="Ne yaparsınız?">Bu aramadan gelen kişi yenileme sayfanızı mı açıyor, ana sayfayı mı? Aradığı işi ilk ekranda görmeli.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Raporunuzda tıklamaların çoğu ilk iki satır gibiyse telefonunuzun çalmamasının nedeni büyük ölçüde budur. Çoğu üçüncü satır gibiyse sorun aramada değil, tıklamadan sonra olanlardadır.
+
+## Google Ads telefon aramasını nasıl sayıyor?
+
+Son olarak reklam panelindeki “telefon” sayısının neyi saydığına bakın. Düğmeye dokunulması, görüşmenin gerçekleşmesi ve keşif randevusu alınması üç ayrı olaydır. İlk aşamadaki sayı yükselirken son aşama yerinde sayıyorsa bir sonraki incelemeyi telefonu açan kişiyle birlikte yapın: arayanlar ne sordu, kaçı hizmetinize uygundu?
+
+Google Ads telefon dönüşümlerini üç ayrı biçimde sayabilir:
+
+- **Reklamdan yapılan arama.** Kişi, arama reklamındaki ya da reklamdaki telefon öğesindeki numarayı arar.
+- **Sitedeki numaraya yapılan arama.** Kişi reklama tıklar, sitenizde gösterilen yönlendirme numarasını arar.
+- **Mobil sitede numaraya dokunma.** Burada sayılan şey aramanın kendisi değil, dokunmadır.
+
+<Not baslik="Paneldeki sayı neyi sayıyor?" tur="dikkat">
+  Hesabınız üçüncüsünü sayıyorsa panelde gördüğünüz rakam çalan telefon sayısı değildir. Arama dönüşümlerinde ayrıca bir
+  süre eşiği bulunur. Belirlediğiniz süreden kısa aramalar dönüşüm sayılmaz. Eşik çok kısaysa yanlış numara çevirenler de
+  sayıya girer.
+</Not>
+
+Hattınızın arama geçmişiyle karşılaştırın. Geçen hafta panel kaç “telefon” gösterdi, hattınıza kaç arama geldi, bunların kaçıyla konuşuldu? Üç sayı birbirinden çok farklıysa önce sayımı düzeltin. Kampanyada vereceğiniz her karar bu sayıya dayanır; sayı yanlışsa karar da yanlış yöne gider.
+
+Paneldeki diğer sayıların ne anlattığını [ROAS, CTR ve TBM nedir](/blog/roas-ctr-tbm-nedir/) yazısında bulursunuz.
+
+## Tıklama var, telefon yoksa önce neyi değiştirmelisiniz?
+
+Zincirin koptuğu yere göre tek bir değişiklik seçin. Aynı anda üç şeyi değiştirirseniz hangisinin işe yaradığını göremezsiniz.
+
+- **Mobil test takıldıysa** sayfayı ya da hattı düzeltin. Kampanyaya dokunmayın.
+- **Tıklamalar iş arayanlardan ya da bölge dışından geliyorsa** [negatif anahtar kelimeleri](/blog/google-ads-nedir/) ve konum ayarını düzeltin.
+- **Panel dokunmayı sayıyorsa** gerçek aramayı sayan bir dönüşüm kurun ve süre eşiğini gözden geçirin.
+- **Arama geliyor ama iş çıkmıyorsa** telefonu açan kişiyle son on aramayı konuşun. Kaçı hizmetinize uygundu, kaçına teklif verildi?
+
+<AraGorsel cizim="megafon" alt="Ağzından madeni paralar saçılan kâğıttan bir megafon">
+  Bütçeyi ya da teklifi artırmak bu listede yok. Zincirin koptuğu yeri bulmadan harcamayı büyütmek, aynı sorunu daha
+  pahalı yaşatır.
+</AraGorsel>
+
+Düzeltmeden sonra iş bitmez. Arama terimlerini düzenli okumak, sonuç getirmeyen aramayı kapatıp getireni güçlendirmek kampanyanın olağan bakımıdır.
+
+Bu senaryo temsili bir işletme örneğidir. Kendi hesabınızda aynı sırayı izleyebilir ya da kontrolleri birlikte yapmak için [bize yazabilirsiniz](/iletisim/).

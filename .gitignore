@@ -1,0 +1,29 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+# Talep kayıtları: kişisel veri içerir, depoya girmez, ayrıca yedeklenir.
+veri/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Geliştirme sırasında alınan ekran görüntüleri
+onizleme/
+
+# Ham görsel kaynakları (büyük dosyalar). Sitenin kullandığı kopyalar src/assets/ altında depodadır;
+# üretim kayıtları ve ayarlar gorsel-kaynak/KAYIT.md dosyasındadır.
+gorsel-kaynak/**/*.png
+gorsel-kaynak/**/*.jpg
+gorsel-kaynak/**/*.webp
+gorsel-kaynak/**/*.avif
+
+# Yerel araç ve editör ayarları
+.claude/
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,955 @@
+---
+/**
+ * Sektör sayfası (/sektorler/<kimlik>/). İçerik src/data/sektorler/<kimlik>.ts dosyasından gelir; veri modeli tip.ts içindedir.
+ *
+ * Düzen: üst alan (tanım + sektörün kâğıt işi sahnesi) > BuSayfada > müşteri ne arıyor (arama panosu) > sık yaşanan sorunlar
+ * (soru kartları) > kanallar (hangi hizmet bu sektörde ne işe yarar; hukuk ve sağlıkta meslek kuralı notuyla) > çalışma adımları
+ * > bu sektörde çalıştığımız markalar (gerçek ekran görüntüleri ve müşteri sözleri) > iki durum (sıfırdan / mevcut) >
+ * temsili çalışma örneği > sık sorulan sorular > ilgili sayfalar > görüşme.
+ *
+ * - Arama panosundaki sayılar ölçülmüş aylık arama hacimleridir (Türkiye). Kutunun mavi dolgusu hacmin kareköküyle orantılıdır:
+ *   büyük ve küçük aramalar aynı panoda okunabilsin diye.
+ * - Referans kartları yalnız src/data/projeler.ts kayıtlarını kullanır. Kişi portresi içeren ya da tasarımı ekibe ait olmayan
+ *   sitelerin ekran görüntüsü gösterilmez; yerinde markanın logosu durur. Reklam referansı gösterilmeyen markalarda
+ *   "reklam yönetimi" işi listelenmez.
+ */
+import type { ImageMetadata } from 'astro';
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar, { type IlgiliSayfa } from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import Cizim from '../../components/Cizim.astro';
+import Gorsel from '../../components/Gorsel.astro';
+import Ikon from '../../components/Ikon.astro';
+import { SITE } from '../../site.config';
+import { MUSTERI_YORUMLARI, PROJELER } from '../../data/projeler';
+import { SEKTORLER, sektorGorseli, sektorUrl, type Sektor } from '../../data/sektorler';
+import type { KanalTuru } from '../../data/sektorler/tip';
+import { rehberKapagi, rehberleriGetir, rehberUrl, type Rehber } from '../../lib/rehberler';
+
+import yolArama from '../../assets/gorseller/yol-arama.jpg';
+import yolAkis from '../../assets/gorseller/yol-akis.jpg';
+import yolCevap from '../../assets/gorseller/yol-cevap.jpg';
+import yolYapayZeka from '../../assets/gorseller/yol-yapay-zeka.jpg';
+import yolSite from '../../assets/gorseller/yol-site.jpg';
+import haritaSahnesi from '../../assets/blog/google-isletme-profili.jpg';
+
+export async function getStaticPaths() {
+  const yazilar = await rehberleriGetir();
+  return SEKTORLER.map((sektor) => ({ params: { sektor: sektor.kimlik }, props: { sektor, yazilar } }));
+}
+
+interface Props {
+  sektor: Sektor;
+  yazilar: Rehber[];
+}
+const { sektor: s, yazilar } = Astro.props;
+const url = sektorUrl(s);
+const gorsel = sektorGorseli(s.kimlik);
+/** Meslek kuralı olan alanlar (hukuk, sağlık): "müşteri" ve "marka" yerine yansız bir dil kullanılır, müşteri sözü gösterilmez. */
+// reklamsiz: kural notu olmadan reklam önerilmeyen sayfalar (mimarlık). Aynı yansız dil kullanılır.
+const kuralli = Boolean(s.kuralNotu) || Boolean(s.reklamsiz);
+const kirintilar = [
+  { ad: 'Sektörler', url: '/sektorler/' },
+  { ad: s.ad, url },
+];
+
+// Kâğıt işi nesneler adıyla çağrılır.
+const cizimler = import.meta.glob<{ default: ImageMetadata }>('../../assets/cizimler/*.png', { eager: true });
+const cizimBul = (ad: string) => {
+  const kayit = cizimler[`../../assets/cizimler/${ad}.png`];
+  if (!kayit) throw new Error(`Sektör sayfası (${s.kimlik}): src/assets/cizimler/${ad}.png bulunamadı.`);
+  return kayit.default;
+};
+
+// ---- Arama panosu
+const sayiYaz = (n: number) => new Intl.NumberFormat('tr-TR').format(n);
+const enBuyuk = Math.max(0, ...s.aramalar.liste.map((a) => a.hacim ?? 0));
+const hacimVar = enBuyuk > 0;
+const aramalar = s.aramalar.liste.map((a) => ({
+  ...a,
+  // Karekök ölçeği: en büyük arama kutuyu doldurur, küçükler de görünür kalır.
+  oran: a.hacim ? Math.max(9, Math.round(Math.sqrt(a.hacim / enBuyuk) * 100)) : 0,
+}));
+
+// ---- Kanallar
+const KANAL_GORSELI: Record<KanalTuru, { gorsel: ImageMetadata; odak: string }> = {
+  'google-ads': { gorsel: yolArama, odak: '50% 50%' },
+  meta: { gorsel: yolAkis, odak: '50% 38%' },
+  seo: { gorsel: yolCevap, odak: '50% 62%' },
+  geo: { gorsel: yolYapayZeka, odak: '50% 50%' },
+  web: { gorsel: yolSite, odak: '50% 42%' },
+  harita: { gorsel: haritaSahnesi, odak: '50% 50%' },
+};
+
+// ---- Referanslar
+const ekranlar = import.meta.glob<{ default: ImageMetadata }>('../../assets/projeler/*-masaustu.jpg', { eager: true });
+const logolar = import.meta.glob<{ default: ImageMetadata }>('../../assets/logolar/*.png', { eager: true });
+/** Kişi portresi içeren siteler: ekran görüntüsü yerine logo gösterilir. */
+const EKRAN_GOSTERILMEZ = new Set(['suha-akyildiz', 'pinar-tasdemir']);
+const IS_ADLARI: Record<string, string> = {
+  'Web sitesi tasarımı': 'Web tasarım',
+  'SEO ve GEO': 'SEO ve GEO',
+  SEO: 'SEO',
+  'Dijital reklam yönetimi': 'Reklam yönetimi',
+  'Sosyal medya yönetimi': 'Sosyal medya',
+  'CRM yapısı': 'CRM',
+};
+const referanslar = (s.referanslar?.liste ?? []).map((r) => {
+  const p = PROJELER.find((x) => x.kimlik === r.kimlik);
+  if (!p) throw new Error(`Sektör sayfası (${s.kimlik}): "${r.kimlik}" projeler.ts içinde yok.`);
+  const ekran = !p.tasarimNotu && !EKRAN_GOSTERILMEZ.has(p.kimlik) ? ekranlar[`../../assets/projeler/${p.alanAdi.split('.')[0]}-masaustu.jpg`]?.default : undefined;
+  // İlk iş adı büyük harfle başlar; sonrakiler cümle içinde olduğu için küçük harfle yazılır (kısaltmalar hariç).
+  const isler = p.obrandyKapsami
+    .filter((k) => p.reklamYonetimi === 'beyan' || k !== 'Dijital reklam yönetimi')
+    .map((k) => IS_ADLARI[k] ?? k)
+    .map((k, i) => (i === 0 || /^(SEO|CRM|GEO)/.test(k) ? k : k.charAt(0).toLocaleLowerCase('tr') + k.slice(1)));
+  const yorum = (s.musteriSozu ?? !kuralli) ? MUSTERI_YORUMLARI.find((y) => y.kimlik === p.kimlik) : undefined;
+  return {
+    ad: p.siteAdi ?? p.marka,
+    alanAdi: p.alanAdi,
+    dosya: p.dosya,
+    /** Projenin yanıtladığı soru (projeler.ts). Tek referanslı düzende büyük puntoyla gösterilir. */
+    karar: p.karar,
+    not: r.not,
+    isler: isler.join(', '),
+    ekran,
+    logo: logolar[`../../assets/logolar/${p.kimlik}.png`]?.default,
+    yorum,
+  };
+});
+
+// ---- Sayfa sonu: ilgili yazılar ve diğer sektörler
+const ilgiliYazilar = s.ilgili.blog.flatMap((slug) => {
+  const y = yazilar.find((r) => r.id === slug);
+  if (!y) return [];
+  const k = rehberKapagi(y);
+  return [{ tur: 'Blog', baslik: y.data.soru, url: rehberUrl(y), ...(k ? { gorsel: k.gorsel, gorselAlt: k.alt } : { cizim: cizimBul('defter') }) } as IlgiliSayfa];
+});
+const ilgiliSektorler = s.ilgili.sektorler.flatMap((kimlik) => {
+  const d = SEKTORLER.find((x) => x.kimlik === kimlik);
+  return d ? [{ tur: 'Sektör', baslik: d.baslik, url: sektorUrl(d), gorsel: sektorGorseli(d.kimlik), gorselAlt: d.gorselAlt } as IlgiliSayfa] : [];
+});
+const ilgili = [...ilgiliYazilar.slice(0, 2), ...ilgiliSektorler].slice(0, 4);
+
+const bolumler = [
+  { etiket: kuralli ? 'İnsanlar ne arıyor?' : 'Müşteriniz ne arıyor?', hedef: 'aramalar' },
+  { etiket: 'Sık yaşanan sorunlar', hedef: 'sorunlar' },
+  { etiket: kuralli ? 'Hangi çalışma?' : 'Hangi kanal?', hedef: 'kanallar' },
+  { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+  ...(referanslar.length ? [{ etiket: kuralli ? 'Çalıştıklarımız' : 'Çalıştığımız markalar', hedef: 'referanslar' }] : [{ etiket: 'Nereden başlamalı?', hedef: 'baslangic' }]),
+  { etiket: 'Sık sorulanlar', hedef: 'sss' },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.baslik,
+    serviceType: kuralli ? 'Web sitesi ve arama görünürlüğü' : 'Dijital pazarlama',
+    category: s.ad,
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    audience: { '@type': 'BusinessAudience', audienceType: s.kimler },
+    url: `${SITE.url}${url}`,
+    description: s.metaAciklama,
+  },
+];
+const durumCagrisi = (etiket: string, durum: 'new' | 'existing', yer: string) => ({ etiket, kampanyaDurumu: durum, kanal: s.kanal, yer: `sektor-${s.kimlik}-${yer}` });
+---
+
+<Temel
+  baslik={`${s.metaBaslik} | Satışları Artır`}
+  aciklama={s.metaAciklama}
+  sayfaTuru="hizmet"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: s.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik={s.baslik}
+    uzunBaslik
+    gorsel={gorsel}
+    gorselAlt={s.gorselAlt}
+    cagri={{ etiket: s.cagri, url: '#gorusme', kanal: s.kanal, yer: `sektor-${s.kimlik}-ust` }}
+    ikincil={referanslar.length ? { etiket: kuralli ? 'Bu alanda çalıştıklarımız' : 'Bu sektörde çalıştığımız markalar', url: '#referanslar' } : { etiket: 'Hangi kanal ne işe yarar?', url: '#kanallar' }}
+  >
+    {s.tanim.map((p) => <p>{p}</p>)}
+  </SayfaBasi>
+
+  <BuSayfada bolumler={bolumler} />
+
+  <!-- Müşteri ne arıyor: arama panosu -->
+  <section class="bolum bolum--beyaz" id="aramalar">
+    <div class="sarici ara">
+      <div class="ara__metin">
+        <h2 class="baslik-2">{s.aramalar.baslik}</h2>
+        <p class="giris">{s.aramalar.giris}</p>
+        <div class="metin">
+          {s.aramalar.yorum.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+      <div class:list={['ara__pano', !hacimVar && 'ara__pano--hacimsiz']}>
+        <p class="ara__ust">
+          <span>Google’a yazılan arama</span>
+          {hacimVar && <span>Aylık yaklaşık arama, Türkiye</span>}
+        </p>
+        <ol class="ara__liste">
+          {
+            aramalar.map((a, i) => (
+              <li data-gir style={`--oran:${a.oran}%;--gecikme:${i * 55}ms`}>
+                <span class="ara__ifade">
+                  <Ikon ad="magnifying-glass" boyut={18} />
+                  <span>{a.ifade}</span>
+                </span>
+                {a.hacim && <span class="ara__hacim rakam">{sayiYaz(a.hacim)}</span>}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık yaşanan sorunlar -->
+  <section class="bolum" id="sorunlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">{s.sorunlar.baslik}</h2>
+        <p class="giris">{s.sorunlar.giris}</p>
+      </div>
+      <SoruKartlari kartlar={s.sorunlar.kartlar.map((k) => ({ ...k, cizim: cizimBul(k.cizim) }))} />
+    </div>
+  </section>
+
+  <!-- Kanallar -->
+  <section class="bolum bolum--beyaz" id="kanallar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">{s.kanallar.baslik}</h2>
+        <p class="giris">{s.kanallar.giris}</p>
+      </div>
+      {
+        s.kuralNotu && (
+          <aside class="kural" data-gir>
+            <span class="kural__ikon" aria-hidden="true">
+              <Ikon ad="info" boyut={24} />
+            </span>
+            <div>
+              <h3 class="kural__baslik">{s.kuralNotu.baslik}</h3>
+              {s.kuralNotu.metin.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+          </aside>
+        )
+      }
+      <ul class="kn" style={`--adet:${s.kanallar.liste.length}`}>
+        {
+          s.kanallar.liste.map((k, i) => (
+            <li class="kn__kart" data-gir style={`--gecikme:${i * 80}ms`}>
+              <div class="kn__gorsel" aria-hidden="true" style={`--odak:${KANAL_GORSELI[k.tur].odak}`}>
+                <Gorsel src={KANAL_GORSELI[k.tur].gorsel} alt="" sizes="(max-width: 43.99rem) 92vw, (max-width: 74.99rem) 46vw, 23vw" genislikler={[360, 520, 720, 960]} kalite={62} />
+              </div>
+              <h3 class="kn__ad">{k.baslik}</h3>
+              <p class="kn__metin">{k.metin}</p>
+              <ul class="kn__maddeler">
+                {k.maddeler.map((m) => (
+                  <li>{m}</li>
+                ))}
+              </ul>
+              <a class="ok-bag kn__bag" href={k.bag.url}>
+                {k.bag.etiket}
+                <Ikon ad="arrow-right" boyut={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Çalışma adımları -->
+  <section class="bolum" id="yontem">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">{s.yontem.baslik}</h2>
+        <p class="giris">{s.yontem.giris}</p>
+      </div>
+      <Adimlar adimlar={s.yontem.adimlar} />
+    </div>
+  </section>
+
+  <!-- Bu sektörde çalıştığımız markalar -->
+  {
+    s.referanslar && referanslar.length > 0 && (
+      <section class="bolum bolum--beyaz" id="referanslar">
+        <div class="sarici">
+          <div class="rf__ust">
+            <div class="bolum-ust">
+              <h2 class="baslik-2">{s.referanslar.baslik}</h2>
+              <p class="giris">{s.referanslar.giris}</p>
+            </div>
+            <a class="dugme dugme--cizgi" href="/calismalarimiz/">
+              Bütün çalışmalar
+              <Ikon ad="arrow-right" boyut={18} />
+            </a>
+          </div>
+          <ul class:list={['rf', `rf--${Math.min(referanslar.length, 4)}`]}>
+            {referanslar.map((r, i) => (
+              <li class="rf__kart" data-gir style={`--gecikme:${(i % 3) * 90}ms`}>
+                {r.ekran ? (
+                  <a class="rf__ekran" href={r.dosya ?? `https://${r.alanAdi}/`} rel={r.dosya ? undefined : 'noopener'} aria-label={r.dosya ? `${r.ad} projesini inceleyin` : `${r.ad} sitesini açın`}>
+                    <span class="rf__cubuk" aria-hidden="true">
+                      <i />
+                      <i />
+                      <i />
+                      <b>{r.alanAdi}</b>
+                    </span>
+                    <Gorsel
+                      src={r.ekran}
+                      alt={`${r.ad} web sitesinin ilk ekranı`}
+                      sizes="(max-width: 47.99rem) 92vw, (max-width: 74.99rem) 46vw, 40vw"
+                      genislikler={[480, 720, 960, 1280]}
+                      kalite={68}
+                    />
+                  </a>
+                ) : (
+                  <div class="rf__karo">
+                    {r.logo ? <img src={r.logo.src} width={r.logo.width} height={r.logo.height} alt={r.ad} loading="lazy" decoding="async" /> : <strong>{r.ad}</strong>}
+                  </div>
+                )}
+                <div class="rf__ad">
+                  {r.ekran && r.logo ? <img src={r.logo.src} width={r.logo.width} height={r.logo.height} alt={r.ad} loading="lazy" decoding="async" /> : <strong>{r.ad}</strong>}
+                </div>
+                <p class="rf__is">{r.isler}</p>
+                {referanslar.length === 1 && <p class="rf__soru">{r.karar}</p>}
+                <p class="rf__not">{r.not}</p>
+                <div class="rf__alt">
+                  {r.yorum && (
+                    <blockquote class="rf__soz">
+                      <p>“{r.yorum.soz}”</p>
+                      <footer>
+                        {r.yorum.kisi}, {r.yorum.kurum}
+                      </footer>
+                    </blockquote>
+                  )}
+                  {r.dosya ? (
+                    <a class="ok-bag" href={r.dosya}>
+                      Projeyi inceleyin
+                      <Ikon ad="arrow-right" boyut={16} />
+                    </a>
+                  ) : (
+                    <a class="ok-bag" href={`https://${r.alanAdi}/`} rel="noopener">
+                      {r.alanAdi}
+                      <Ikon ad="arrow-up-right" boyut={16} />
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- İki durum -->
+  <IkiDurum
+    kimlik="baslangic"
+    baslik={s.durumlar.baslik}
+    giris={s.durumlar.giris}
+    sol={{
+      ust: s.durumlar.sol.ust,
+      baslik: s.durumlar.sol.baslik,
+      metin: s.durumlar.sol.metin,
+      maddeler: s.durumlar.sol.maddeler,
+      cagri: durumCagrisi(s.durumlar.sol.cagri, 'new', 'ilk'),
+      bag: s.durumlar.sol.bag,
+      cizim: s.durumlar.sol.cizim ? cizimBul(s.durumlar.sol.cizim) : undefined,
+    }}
+    sag={{
+      ust: s.durumlar.sag.ust,
+      baslik: s.durumlar.sag.baslik,
+      metin: s.durumlar.sag.metin,
+      maddeler: s.durumlar.sag.maddeler,
+      cagri: durumCagrisi(s.durumlar.sag.cagri, 'existing', 'mevcut'),
+      bag: s.durumlar.sag.bag,
+    }}
+  />
+
+  <!-- Temsili çalışma örneği -->
+  {
+    s.ornek && (
+      <section class="bolum bolum--beyaz" id="ornek">
+        <div class="sarici konu">
+          <div class="konu__baslik konu__baslik--yapiskan">
+            <h2 class="baslik-2">{s.ornek.baslik}</h2>
+            <div class="metin">
+              {s.ornek.metin.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+            <Cizim src={cizimBul(s.ornek.cizim)} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+          </div>
+          <div class="konu__icerik konu__icerik--genis">
+            <div class="ornek">
+              <div class="ornek__ust">
+                <h3 class="baslik-4">{s.ornek.tabloBasligi}</h3>
+                <span class="temsili">Temsili örnek</span>
+              </div>
+              <table class="tablo tablo--yigin">
+                <thead>
+                  <tr>
+                    {s.ornek.sutunlar.map((b) => (
+                      <th scope="col">{b}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {s.ornek.satirlar.map((t) => (
+                    <tr>
+                      <td data-baslik={s.ornek!.sutunlar[0]}>{t.sorgu ? <span class="sorgu">“{t.ilk}”</span> : <strong>{t.ilk}</strong>}</td>
+                      <td data-baslik={s.ornek!.sutunlar[1]}>
+                        <span class:list={['hukum', t.tur && `hukum--${t.tur}`]}>{t.karar}</span>
+                      </td>
+                      <td data-baslik={s.ornek!.sutunlar[2]}>{t.gerekce}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p class="ornek__not">{s.ornek.not}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <Sss baslik={s.sss.baslik} giris={s.sss.giris} sorular={s.sss.sorular} />
+
+  {ilgili.length >= 2 && <IlgiliSayfalar baslik="İlgili yazılar ve diğer sektörler" sayfalar={ilgili} />}
+
+  <GorusmeBandi kanit={false} baslik={`${s.ad} için birlikte bakalım.`} metin={kuralli ? 'Bugünkü sitenizi ve sizi arayan kişinin hangi bilgiye ulaşmasını istediğinizi anlatın. Görüşmeye buradan başlayalım.' : 'İşletmenizi, müşterinizin sizi nasıl bulduğunu ve hedefinizi anlatın. Görüşmeye buradan başlayalım.'} kanal={s.kanal} cagri={s.cagri} konum={`sektor-${s.kimlik}`} />
+</Temel>
+
+<style>
+  /* ---- Arama panosu -------------------------------------------------------------
+     Solda başlık ve yorum, sağda arama kutuları. Kutunun soluk mavi dolgusu aramanın hacmini gösterir;
+     sayı kutunun sağ ucunda durur. */
+  .ara {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .ara__metin {
+    display: grid;
+    gap: 1.2rem;
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+    background: var(--zemin);
+  }
+  .ara__pano {
+    padding: clamp(1rem, 2vw, 1.6rem);
+    background: var(--kagit);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.5rem 0.5rem 0 var(--mavi-acik);
+  }
+  .ara__ust {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.4rem 0.85rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    line-height: 1.25;
+    color: var(--ikincil);
+  }
+  .ara__ust span:last-child:not(:first-child) {
+    text-align: end;
+  }
+  .ara__liste {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .ara__liste li {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 3.1rem;
+    padding: 0.5rem 1.1rem 0.5rem 1rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: 999px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  /* Hacim dolgusu: görünüme girince soldan sağa uzar. */
+  .ara__liste li::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: -1;
+    width: var(--oran);
+    background: var(--mavi-acik);
+    transform-origin: left;
+    transition: transform 900ms var(--yumusak) var(--gecikme, 0ms);
+  }
+  :global(.js) .ara__liste li[data-gir]:not(.girdi-goruldu)::before {
+    transform: scaleX(0);
+  }
+  .ara__ifade {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-weight: 580;
+    font-stretch: 96%;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+  .ara__ifade :global(svg) {
+    flex: none;
+    color: var(--mavi);
+  }
+  .ara__hacim {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-weight: 700;
+    color: var(--murekkep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ara__liste li::before {
+      transition: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .ara {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ara__metin {
+      position: static;
+    }
+    .ara__pano {
+      margin-inline-end: 0.5rem;
+    }
+  }
+
+  /* ---- Meslek kuralı notu ------------------------------------------------------- */
+  .kural {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    max-width: 62rem;
+    margin-block-end: clamp(1.75rem, 3.5vw, 2.75rem);
+    padding: clamp(1.1rem, 2.2vw, 1.75rem);
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+    box-shadow: inset 4px 0 0 var(--mavi);
+  }
+  .kural__ikon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--beyaz);
+    color: var(--mavi);
+  }
+  .kural > div {
+    display: grid;
+    gap: 0.55rem;
+    color: var(--murekkep-2);
+  }
+  .kural__baslik {
+    font-size: clamp(1.15rem, 1.06rem + 0.4vw, 1.4rem);
+    font-weight: 680;
+    font-stretch: 92%;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+
+  /* ---- Kanal kartları -----------------------------------------------------------
+     Dört kart tek sırada; satırlar (görsel, ad, metin, maddeler, bağlantı) subgrid ile aynı hizada. */
+  .kn {
+    --kart-arasi: clamp(0.9rem, 1.6vw, 1.4rem);
+    --ic: clamp(1rem, 1.5vw, 1.35rem);
+    display: grid;
+    grid-template-columns: repeat(var(--adet), minmax(0, 1fr));
+    column-gap: var(--kart-arasi);
+    row-gap: 0.7rem;
+  }
+  .kn__kart {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+    align-items: start;
+    margin-block-end: calc(var(--kart-arasi) - 0.7rem);
+    padding-block-end: var(--ic);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+    overflow: hidden;
+  }
+  .kn__kart > :not(.kn__gorsel) {
+    margin-inline: var(--ic);
+  }
+  .kn__gorsel {
+    aspect-ratio: 4 / 3;
+    margin-block-end: 0.35rem;
+    overflow: hidden;
+    background: var(--mavi-acik);
+  }
+  .kn__gorsel :global(picture),
+  .kn__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .kn__gorsel :global(img) {
+    object-fit: cover;
+    object-position: var(--odak, 50% 50%);
+    transition: transform 700ms var(--yumusak);
+  }
+  .kn__ad {
+    font-size: clamp(1.2rem, 1.08rem + 0.5vw, 1.5rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  .kn__metin {
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  .kn__maddeler {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--cizgi-koyu);
+    font-size: var(--b-kucuk);
+    line-height: 1.42;
+  }
+  .kn__maddeler li {
+    position: relative;
+    padding-inline-start: 1.5rem;
+  }
+  .kn__maddeler li::before {
+    content: '';
+    position: absolute;
+    left: 0.1rem;
+    top: 0.38em;
+    width: 0.8rem;
+    height: 0.42rem;
+    border-left: 2.5px solid var(--kirmizi);
+    border-bottom: 2.5px solid var(--kirmizi);
+    transform: rotate(-48deg);
+  }
+  .kn__bag {
+    align-self: end;
+    font-size: var(--b-kucuk);
+  }
+  @media (hover: hover) {
+    .kn__kart:hover .kn__gorsel :global(img) {
+      transform: scale(1.045);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kn__gorsel :global(img) {
+      transition: none;
+    }
+  }
+  @media (max-width: 74.99rem) {
+    .kn {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .kn {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 0.9rem;
+    }
+    .kn__kart {
+      grid-row: auto;
+      grid-template-rows: none;
+      gap: 0.7rem;
+      margin-block-end: 0;
+    }
+    .kn__gorsel {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  /* ---- Referanslar ----------------------------------------------------------------
+     Gerçek sitelerin ilk ekranı tarayıcı çerçevesinde; altında yapılan iş, proje notu ve varsa müşterinin sözü. */
+  .rf__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1.25rem 2rem;
+    margin-block-end: clamp(2rem, 4vw, 3.25rem);
+  }
+  .rf__ust .bolum-ust {
+    margin-block-end: 0;
+  }
+  .rf {
+    --sira-arasi: clamp(2rem, 4vw, 3.25rem);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 3vw, 3rem);
+    row-gap: 0.75rem;
+  }
+  .rf--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.25rem);
+  }
+  .rf__kart {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+    align-items: start;
+    margin-block-end: calc(var(--sira-arasi) - 0.75rem);
+  }
+  /* Tek referans: ekran solda, yazı sağda. */
+  .rf--1 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rf--1 .rf__kart {
+    grid-row: auto;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    /* Yazı sütunu ekran görüntüsünün yanında dikeyde ortalanır: üstte ve altta esnek birer boşluk satırı. */
+    grid-template-rows: 1fr repeat(5, auto) 1fr;
+    column-gap: clamp(1.5rem, 4.5vw, 4.5rem);
+    row-gap: 0.9rem;
+    margin-block-end: 0;
+  }
+  .rf--1 .rf__ekran,
+  .rf--1 .rf__karo {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: center;
+  }
+  .rf--1 .rf__kart > :not(.rf__ekran, .rf__karo) {
+    grid-column: 2;
+  }
+  .rf--1 .rf__ad {
+    grid-row: 2;
+    min-height: 3.5rem;
+    margin-block-start: 0;
+  }
+  .rf--1 .rf__ad img {
+    max-width: 15rem;
+    max-height: 3.5rem;
+  }
+  .rf--1 .rf__is {
+    grid-row: 3;
+  }
+  .rf--1 .rf__soru {
+    grid-row: 4;
+  }
+  .rf--1 .rf__not {
+    grid-row: 5;
+    font-size: var(--b-govde);
+  }
+  .rf--1 .rf__alt {
+    grid-row: 6;
+  }
+  /* Projenin sorusu: sitenin etrafında kurulduğu tek soru. */
+  .rf__soru {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.35rem);
+    font-weight: 710;
+    font-stretch: 85%;
+    letter-spacing: -0.024em;
+    line-height: 1.06;
+    text-wrap: balance;
+    color: var(--murekkep);
+  }
+  .rf__ekran,
+  .rf__karo {
+    display: block;
+    overflow: hidden;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.45rem 0.45rem 0 var(--mavi-acik);
+    transition:
+      transform 260ms var(--yumusak),
+      box-shadow 260ms var(--yumusak);
+  }
+  .rf__cubuk {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 1.6rem;
+    padding-inline: 0.7rem;
+    border-block-end: 1.5px solid var(--murekkep);
+    background: var(--kagit);
+  }
+  .rf__cubuk i {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: var(--cizgi-koyu);
+  }
+  .rf__cubuk i:first-child {
+    background: var(--kirmizi);
+  }
+  .rf__cubuk b {
+    margin-inline-start: 0.5rem;
+    font-family: var(--yazi-baslik);
+    font-size: 0.6875rem;
+    font-weight: 560;
+    line-height: 1;
+    color: var(--ikincil);
+  }
+  .rf__ekran :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: 50% 0;
+  }
+  /* Ekran görüntüsü gösterilmeyen marka: kâğıt karoda logo. */
+  .rf__karo {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10.9;
+    padding: 12%;
+    background: var(--kagit);
+  }
+  .rf__karo img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 5.5rem;
+  }
+  .rf__karo strong,
+  .rf__ad strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+    font-weight: 700;
+    font-stretch: 88%;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .rf__ad {
+    display: flex;
+    align-items: center;
+    min-height: 2.6rem;
+    margin-block-start: 0.6rem;
+  }
+  .rf__ad img {
+    width: auto;
+    height: auto;
+    max-width: 11rem;
+    max-height: 2.6rem;
+  }
+  .rf__is {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    line-height: 1.3;
+    color: var(--mavi);
+  }
+  .rf__not {
+    max-width: 36em;
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  .rf__alt {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+    align-content: start;
+  }
+  .rf__soz {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.2rem 0 0;
+    padding: 0.2rem 0 0.2rem 1rem;
+    border-inline-start: 3px solid var(--kirmizi);
+  }
+  .rf__soz p {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.02rem, 0.98rem + 0.25vw, 1.15rem);
+    font-weight: 560;
+    font-stretch: 94%;
+    line-height: 1.38;
+    color: var(--murekkep);
+  }
+  .rf__soz footer {
+    font-size: var(--b-kucuk);
+    color: var(--ikincil);
+  }
+  @media (hover: hover) {
+    .rf__ekran:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 0.7rem 0.7rem 0 var(--mavi-acik);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rf__ekran {
+      transition: none;
+    }
+    .rf__ekran:hover {
+      transform: none;
+    }
+  }
+  @media (max-width: 74.99rem) {
+    .rf--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .rf__ust {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .rf__ust :global(.dugme) {
+      justify-self: start;
+    }
+    .rf,
+    .rf--3 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .rf__kart,
+    .rf--1 .rf__kart {
+      grid-row: auto;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      row-gap: 0.7rem;
+      margin-block-end: var(--sira-arasi);
+    }
+    .rf--1 .rf__ekran,
+    .rf--1 .rf__karo,
+    .rf--1 .rf__kart > :not(.rf__ekran, .rf__karo) {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .rf--1 .rf__ad {
+      margin-block-start: 0.6rem;
+    }
+    .rf__kart:last-child {
+      margin-block-end: 0;
+    }
+    .rf__ekran,
+    .rf__karo {
+      margin-inline-end: 0.45rem;
+    }
+  }
+</style>

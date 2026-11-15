@@ -1,0 +1,774 @@
+---
+/**
+ * Hakkımızda. Sahiplendiği soru: "Bu ekip nasıl çalışıyor, neye söz veriyor, neye vermiyor?"
+ *
+ * Çalışan adı, portre, kuruluş yılı, müşteri sayısı, sertifika ya da ödül üretilmez.
+ * Ekip üyeleri marka sahibi tarafından doğrulanıp EKIP listesine yazıldığında "Ekip" bölümü kendiliğinden görünür.
+ *
+ * Düzen (15 Kasım 2026): SayfaBasi (tanım + atölye masası) > BuSayfada > hikâyemiz (açılır kitap sahnesi ve kuruluş
+ * düşüncesi) > çalışma ilkeleri kartları > çalışma adımları > söz verdiklerimiz / vermediklerimiz > çalışılan markalar >
+ * (ekip) > sık sorulan sorular > ilgili sayfalar > görüşme.
+ * Hikâye bölümünün düşüncesi marka sahibinden geldi; cümleler birebir alınmadı. Bölümde kuruluş yılı, kişi adı ya da
+ * rakam yoktur.
+ * Anlatım sırası: derinlemesine inceleme, gerekçeli ve bilinçli kurulum, düzenli optimizasyon, satış hedefi.
+ * İlke kartlarındaki işletmeler temsili gündelik örneklerdir, müşteri değildir.
+ */
+import Temel from '../layouts/Temel.astro';
+import SayfaBasi from '../components/SayfaBasi.astro';
+import BuSayfada from '../components/BuSayfada.astro';
+import Adimlar from '../components/Adimlar.astro';
+import Sss from '../components/Sss.astro';
+import IlgiliSayfalar from '../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../components/GorusmeBandi.astro';
+import ProjeEkrani from '../components/ProjeEkrani.astro';
+import MusteriSozu from '../components/MusteriSozu.astro';
+import Gorsel from '../components/Gorsel.astro';
+import Cizim from '../components/Cizim.astro';
+import Isaret from '../components/Isaret.astro';
+import Ikon from '../components/Ikon.astro';
+import { hizmetBul, SITE } from '../site.config';
+import { MUSTERI_SOZLERI, PROJELER, projeBul } from '../data/projeler';
+
+import atolye from '../assets/gorseller/atolye.jpg';
+import hikaye from '../assets/gorseller/hikaye.jpg';
+import buyutec from '../assets/cizimler/buyutec.png';
+import liste from '../assets/cizimler/liste.png';
+import takvim from '../assets/cizimler/takvim.png';
+import balon from '../assets/cizimler/balon.png';
+import kilit from '../assets/cizimler/kilit.png';
+import alet from '../assets/cizimler/alet.png';
+import defter from '../assets/cizimler/defter.png';
+import yapboz from '../assets/cizimler/yapboz.png';
+import kitaplik from '../assets/cizimler/kitaplik.png';
+import terazi from '../assets/cizimler/terazi.png';
+
+import estikaEkran from '../assets/projeler/estika-masaustu.jpg';
+import gabionEkran from '../assets/projeler/gabionmaterials-mobil.jpg';
+import whiteEarthEkran from '../assets/projeler/whiteearthatelier-mobil.jpg';
+
+/** Yetkili ekip adları teyit edildiğinde doldurulur: { ad, gorev }. Boşken bölüm gizlidir. */
+const EKIP: { ad: string; gorev: string }[] = [];
+
+const CAGRI = 'Görüşme isteyin';
+const kirintilar = [{ ad: 'Hakkımızda', url: '/hakkimizda/' }];
+const sektorSayisi = new Set(PROJELER.map((p) => p.sektor)).size;
+
+/** Beş çalışma ilkesi. Her kartta ilkenin kendisi, ne anlama geldiği ve gündelik bir örneği durur. */
+const ilkeler = [
+  {
+    ad: 'Önce derinlemesine inceleriz',
+    aciklama: 'Reklam açmadan, sayfa tasarlamadan önce işletmenizi, rakiplerinizi ve müşterinizin aramalarını inceleriz. Hesabınız ya da siteniz varsa işe ona bakarak başlarız.',
+    ornek: 'Bir kombi servisinde ilk iş, insanların arıza anında Google’a ne yazdığını çıkarmaktır.',
+    cizim: buyutec,
+    genis: true,
+  },
+  {
+    ad: 'Her kararın gerekçesini söyleriz',
+    aciklama: 'Bir aramayı neden kapattığımızı, bir sayfayı neden değiştirdiğimizi anlatırız. Kararı siz de değerlendirebilmelisiniz.',
+    ornek: '“İkinci el koltuk” aramasını kapattıysak nedeni yazılıdır: yeni koltuk satan mobilyacıya satış getirmiyordur.',
+    cizim: liste,
+    genis: true,
+    mavi: true,
+  },
+  {
+    ad: 'Kurup bırakmayız',
+    aciklama: 'Yayına almak işin başıdır. Hangi aramanın, hangi reklamın ve hangi sayfanın talep getirdiğine düzenli bakar; getirmeyeni kapatır, getireni güçlendiririz.',
+    ornek: 'Bir restoranın hafta içi ve hafta sonu aramaları aynı değildir; bütçe buna göre yeniden dağıtılır.',
+    cizim: takvim,
+    mavi: true,
+  },
+  {
+    ad: 'Açık konuşuruz',
+    aciklama: 'Yaptığımız işi sade bir dille anlatırız. İşlemeyen bir şey varsa onu da söyleriz; ihtiyacınız olmayan bir hizmeti önermeyiz.',
+    ornek: 'Siteniz işini görüyorsa “yenisini yaptıralım” demeyiz, eksik olan yeri düzeltiriz.',
+    cizim: balon,
+  },
+  {
+    ad: 'Hesap ve erişim sizde kalır',
+    aciklama: 'Reklam hesabı ve web sitesi işletmenizin adınadır. Bize yönetici erişimi verirsiniz; sahiplik sizde durur, erişimi dilediğiniz zaman kaldırabilirsiniz.',
+    ornek: 'Çalışma bittiğinde hesabınız, geçmişi ve verisiyle birlikte sizde kalır.',
+    cizim: kilit,
+    mavi: true,
+  },
+];
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'İşletmenizi tanıyoruz', aciklama: 'Ne sattığınızı, müşterinizin kim olduğunu ve sizi bugün nasıl bulduğunu öğreniyoruz. Hesabınız ve siteniz varsa inceliyoruz.' },
+  { ad: 'Strateji', ozet: 'Nereden başlanacağını seçiyoruz', aciklama: 'Hangi kanalın, hangi mesajın ve hangi sayfanın gerektiğini gerekçesiyle birlikte kararlaştırıyoruz.' },
+  { ad: 'Kurulum', ozet: 'Bulguya göre kuruyoruz', aciklama: 'Hesapları sizin adınıza açıyor; kampanyaları ve sayfaları kurup yayından önce deniyoruz.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli bakıyor, geliştiriyoruz', aciklama: 'Neyin talep getirdiğini takip ediyor, yaptığımız değişiklikleri nedenleriyle size aktarıyoruz.' },
+  { ad: 'Hedef', ozet: 'Satış ve müşteri hedefiniz', aciklama: 'İşin ölçüsü tıklama değil, işletmenize gelen talep ve satıştır.' },
+];
+
+/** Her işte tuttuğumuz sözler: işletme sahibinin bizden isteyebileceği, kontrol edebileceği şeyler. */
+const verilenler = [
+  { ad: 'İncelemeden kurulum yapmayız', aciklama: 'Hesabınıza, sitenize ve müşterinizin aramalarına bakmadan kampanya açmaz, sayfa tasarlamayız.' },
+  { ad: 'Yaptığımız değişikliği nedeniyle paylaşırız', aciklama: 'Neyi kapattığımızı, neyi güçlendirdiğimizi ve gerekçesini sizden saklamayız.' },
+  { ad: 'İhtiyacınız olmayan işi önermeyiz', aciklama: 'Tek bir hizmet yetiyorsa onu söyleriz. Beş hizmetin beşini birden almanız gerekmez.' },
+  { ad: 'Hesaplarınız sizin adınıza olur', aciklama: 'Reklam hesabı ve site işletmenizde kalır; biz erişimle çalışırız.' },
+  { ad: 'Doğrulanmamış sonucu yazmayız', aciklama: 'Proje sayfalarında yapılan işi ve canlı siteyi gösteririz. Kaynağı belli olmayan rakam paylaşmayız.' },
+];
+
+/** Vermediğimiz sözler: sektörde sık duyulan vaat çizilir, altında nedenini söyleriz. */
+const verilmeyenler = [
+  { vaat: 'Google’da birinci sıra', aciklama: 'Sıralamaya Google karar verir. Sitenizdeki eksikleri giderir, sonucu birlikte takip ederiz; sıra için söz vermeyiz.' },
+  { vaat: 'Şu tarihe kadar şu kadar satış', aciklama: 'Satışı reklam kadar ürününüz, fiyatınız ve gelen talebe nasıl dönüldüğü de belirler. Rakam ve tarih sözü vermeyiz.' },
+  { vaat: 'Garantili tıklama, takipçi ya da beğeni', aciklama: 'Bunlar satış değildir. Başarıyı işletmenize gelen talep ve satışla değerlendiririz.' },
+  { vaat: 'Herkese uyan hazır kurulum', aciklama: 'Aynı sektördeki iki işletmenin müşterisi bile farklı arar. Kurulum, incelemede çıkan bulguya göre yapılır.' },
+];
+
+/** Tasarımı ekibe ait, sağlık dışı üç proje. Görüntüler canlı sitelerin ilk ekranıdır. */
+const markalar = [
+  { p: projeBul('estika'), gorsel: estikaEkran, tur: 'masaustu' as const },
+  { p: projeBul('rotech-defense'), gorsel: gabionEkran, tur: 'mobil' as const },
+  { p: projeBul('white-earth-atelier'), gorsel: whiteEarthEkran, tur: 'mobil' as const },
+];
+
+const sorular = [
+  {
+    soru: 'Satışları Artır ne iş yapar?',
+    cevap:
+      'Satışları Artır, işletmelerin internette müşteri bulması ve satışlarını artırması için çalışan bir dijital pazarlama ajansıdır. Google Ads yönetimi, Instagram ve Facebook reklam yönetimi, SEO danışmanlığı, yapay zekâ yanıtlarında görünürlük (GEO ve AEO) ve kurumsal web tasarım hizmeti verir.',
+    bag: { etiket: 'Dijital pazarlama hizmetleri', url: '/hizmetler/' },
+  },
+  {
+    soru: 'Daha önce hiç reklam vermedim. Benimle de çalışır mısınız?',
+    cevap:
+      'Evet. İlk kez reklam verecek işletmelerle de, yıllardır reklam veren işletmelerle de çalışıyoruz. İlk kez veriyorsanız hesap açılışından ilk kampanyaya kadar kurulumu birlikte yapıyor, her adımı sade bir dille anlatıyoruz. Reklam veriyorsanız önce mevcut hesabınızı inceliyoruz.',
+  },
+  {
+    soru: 'Hangi sektörlerden işletmelerle çalışıyorsunuz?',
+    cevap:
+      'Tek bir sektörle sınırlı değiliz. Çalışmalarımız arasında yapı ve mühendislik, eğitim, yeme içme, üretim ve ihracat, konaklama ve hukuk alanından markalar var. Sektörü tanımak işi hızlandırır ama her işte incelemeye baştan başlarız, çünkü aynı sektördeki iki işletmenin müşterisi bile farklı arar.',
+    bag: { etiket: 'Çalıştığımız markalar', url: '/calismalarimiz/' },
+  },
+  {
+    soru: 'Reklam hesabı ve web sitesi kimin adına olur?',
+    cevap:
+      'İşletmenizin adına olur ve sizde kalır. Reklam hesabını sizin adınıza açar ya da mevcut hesabınıza yönetici erişimiyle gireriz. Ödeme yöntemi, fatura bilgisi ve sahiplik sizde durur; erişimimizi dilediğiniz zaman kaldırabilirsiniz.',
+  },
+  {
+    soru: 'Neden sonuç garantisi vermiyorsunuz?',
+    cevap:
+      'Çünkü sonucu yalnız biz belirlemiyoruz. Sıralamaya arama motoru karar verir; satışı ise reklam kadar ürününüz, fiyatınız ve gelen talebe nasıl dönüldüğü etkiler. Tutamayacağımız bir söz yerine elimizde olanı taahhüt ediyoruz: ayrıntılı inceleme, gerekçeli karar ve düzenli optimizasyon.',
+  },
+  {
+    soru: 'Çalışmaya nasıl başlıyoruz?',
+    cevap:
+      'Bir görüşmeyle başlıyoruz. Formu doldurduğunuzda seçtiğiniz yoldan size dönüyor, işletmenizi ve ulaşmak istediğiniz müşteriyi dinliyoruz. Hesabınız ya da siteniz varsa görüşmede birlikte bakıyor, nereden başlanacağını konuşuyoruz.',
+    bag: { etiket: 'Görüşmede ne olur?', url: '/iletisim/#gorusmede' },
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'Satışları Artır hakkında',
+    url: `${SITE.url}/hakkimizda/`,
+    inLanguage: 'tr-TR',
+    about: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+  },
+];
+---
+
+<Temel
+  baslik="Hakkımızda: Nasıl Çalışıyoruz? | Satışları Artır"
+  aciklama="Satışları Artır, işletmelere müşteri kazandırmak için çalışan dijital pazarlama ajansıdır. Çalışma ilkelerimizi, neye söz verdiğimizi ve neye vermediğimizi okuyun."
+  sayfaTuru="kurumsal"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik="Satışları Artır hakkında"
+    gorsel={atolye}
+    gorselAlt="Kâğıt kasabanın kurulduğu atölye masası: yarısı tamamlanmış kâğıt bir dükkân, makas, cetvel, yapıştırıcı ve masa lambası. Kırmızı kalem çizgisi küçük kâğıt insanları dükkânın kapısına götürüyor."
+    mobilOdak="64% 50%"
+    cagri={{ etiket: CAGRI, url: '#gorusme' }}
+    ikincil={{ etiket: 'Çalışmalarımızı inceleyin', url: '/calismalarimiz/' }}
+  >
+    <p>
+      Satışları Artır, işletmelere müşteri kazandırmak için çalışan bir dijital pazarlama ajansıdır: Google Ads,
+      Instagram ve Facebook reklamları, SEO, yapay zekâ görünürlüğü (GEO ve AEO) ve web tasarım.
+    </p>
+    <p>Bu sayfada nasıl çalıştığımızı, neye söz verdiğimizi ve neye söz vermediğimizi açıkça yazdık.</p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Hikâyemiz', hedef: 'hikaye' },
+      { etiket: 'Çalışma ilkelerimiz', hedef: 'ilkeler' },
+      { etiket: 'Nasıl ilerliyoruz?', hedef: 'yontem' },
+      { etiket: 'Sözümüz', hedef: 'soz' },
+      { etiket: 'Markalar', hedef: 'markalar' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Hikâyemiz -->
+  <section class="bolum hy" id="hikaye">
+    <div class="sarici hy__ic">
+      <figure class="hy__gorsel" data-gir>
+        <Gorsel
+          src={hikaye}
+          alt="Masada açık duran kâğıt bir kitabın sayfalarından küçük bir kasaba yükseliyor: ortada çizgili tenteli bir dükkân, iki ev ve ağaçlar. Kırmızı kalemle çizilmiş yol, alışveriş torbaları taşıyan dört kişiyi sayfanın kenarından dükkânın açık kapısına götürüyor."
+          sizes="(max-width: 55.99rem) 92vw, 36vw"
+          genislikler={[480, 720, 960, 1280, 1792]}
+          kalite={68}
+        />
+      </figure>
+      <div class="hy__metin">
+        <h2 class="baslik-2">Hikâyenizi anlatmanıza yardımcı olalım.</h2>
+        <p class="giris">Satışları Artır’ı kurarken aklımızda iki söz vardı.</p>
+        <ul class="hy__iki">
+          <li data-gir>Hep gelişmek</li>
+          <li data-gir style="--gecikme:160ms"><Isaret gecikme={500}>Fark yaratmak</Isaret></li>
+        </ul>
+        <div class="hy__yazi">
+          <p>
+            İyi işler çoğu zaman bir zorluğun ardından çıkar. Bizim zorluğumuz şuydu: dijital pazarlamada işler
+            birbirinin kopyası gibi yapılıyordu. Aynı reklam metni, aynı şablon site, aynı rapor. Yaratıcılık, disiplin ve
+            yeni fikir eksikti. İşini iyi yapan pek çok işletme de bu yüzden sesini duyuramıyordu.
+          </p>
+          <p>
+            Çözümü kendimiz kurmaya karar verdik. Satışları Artır’ı ilhamla, emekle ve iş birliğiyle kurduk. İstediğimiz,
+            bir ajanstan fazlası olmaktı: hedefinize giden yolda yanınızda yürüyen bir rehber.
+          </p>
+          <p>
+            Bugün birlikte çalıştığımız her işletme bizi heyecanlandırıyor, ortaya çıkan işle gurur duyuyoruz. Çözüm
+            ortağınız olarak hikâyenizi yeniden yazmanıza ve duyması gereken kişiye duyurmanıza yardım ediyoruz.
+          </p>
+        </div>
+        <a class="ok-bag" href="#ilkeler">
+          Bunu nasıl yaptığımızı okuyun
+          <Ikon ad="arrow-down" boyut={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Çalışma ilkeleri -->
+  <section class="bolum bolum--beyaz" id="ilkeler">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Nasıl çalışıyoruz?</h2>
+        <p class="giris">
+          İlk kez reklam verecek bir işletmede de, yıllardır reklam veren bir işletmede de aynı beş ilkeyle çalışıyoruz.
+        </p>
+      </div>
+      <ul class="ilkeler">
+        {
+          ilkeler.map((i, sira) => (
+            <li class:list={['ilke', i.genis && 'ilke--genis', i.mavi && 'ilke--mavi']} data-gir style={`--gecikme:${[0, 120, 0, 120, 240][sira]}ms`}>
+              <div class="ilke__metin">
+                <h3 class="ilke__ad">{i.ad}</h3>
+                <p class="ilke__aciklama">{i.aciklama}</p>
+                <p class="ilke__ornek kucuk">{i.ornek}</p>
+              </div>
+              <div class="ilke__cizim" aria-hidden="true">
+                <Cizim src={i.cizim} sizes="(max-width: 47.99rem) 48vw, 18vw" genislikler={[280, 420, 640, 1024]} />
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Çalışma adımları -->
+  <section class="bolum" id="yontem">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Birlikte çalışmak nasıl ilerler?</h2>
+          <div class="metin">
+            <p>
+              İlk görüşmeden sonra izlediğimiz yol beş adımdır.
+              <a href={hizmetBul('google-ads').url}>Google Ads yönetiminde</a>,
+              <a href={hizmetBul('meta').url}>Instagram ve Facebook reklamlarında</a>,
+              <a href={hizmetBul('seo').url}>SEO danışmanlığında</a>,
+              <a href={hizmetBul('geo').url}>GEO ve AEO çalışmalarında</a> ve
+              <a href={hizmetBul('web').url}>web tasarımda</a> sıra değişmez.
+            </p>
+          </div>
+        </div>
+        <Cizim src={alet} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <Adimlar adimlar={adimlar} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Söz verdiklerimiz / vermediklerimiz -->
+  <section class="bolum bolum--beyaz" id="soz">
+    <div class="sarici">
+      <div class="soz__ust">
+        <div class="soz__giris">
+          <h2 class="baslik-2">Neye söz veriyoruz, neye <Isaret tip="alt">vermiyoruz?</Isaret></h2>
+          <p class="giris">
+            Bir ajansla çalışmaya başlamadan önce bilmeniz gereken iki liste. İlkindekileri bizden isteyebilirsiniz;
+            ikincidekileri vadeden olursa nasıl tutacağını sorun.
+          </p>
+        </div>
+        <Cizim src={defter} class="soz__cizim" sizes="(max-width: 55.99rem) 44vw, 20vw" />
+      </div>
+      <div class="soz__izgara">
+        <article class="soz__panel soz__panel--evet" data-gir>
+          <h3 class="soz__baslik">Söz verdiklerimiz</h3>
+          <ul class="soz__liste soz__liste--evet">
+            {
+              verilenler.map((v) => (
+                <li>
+                  <strong>{v.ad}</strong>
+                  <span>{v.aciklama}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+        <article class="soz__panel soz__panel--hayir koyu-zemin" data-gir style="--gecikme:140ms">
+          <h3 class="soz__baslik">Söz vermediklerimiz</h3>
+          <ul class="soz__liste soz__liste--hayir">
+            {
+              verilmeyenler.map((v, i) => (
+                <li>
+                  <strong><s class="soz__cizili" style={`--sira:${i}`}>“{v.vaat}”</s></strong>
+                  <span>{v.aciklama}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Çalışılan markalar -->
+  <section class="bolum" id="markalar">
+    <div class="sarici">
+      <div class="mk__ust">
+        <div class="mk__giris">
+          <h2 class="baslik-2">Hangi markalarla çalıştık?</h2>
+          <p class="giris">
+            Çalışmalarımız sayfasında yapıdan eğitime, yeme içmeden üretime {sektorSayisi} sektörden {PROJELER.length} marka
+            var. Görüntüler yayındaki sitelerin kendisi; canlı sitelerini açıp inceleyebilirsiniz.
+          </p>
+          <a class="dugme dugme--murekkep" href="/calismalarimiz/" data-olay="cta_click" data-yer="hakkimizda-markalar">
+            Çalıştığımız markaları görün
+            <Ikon ad="arrow-right" boyut={18} />
+          </a>
+        </div>
+        <div class="mk__soz">
+          <MusteriSozu {...MUSTERI_SOZLERI['hun-education']} zemin="acik" />
+        </div>
+      </div>
+      <ul class="mk__izgara">
+        {
+          markalar.map((m, i) => (
+            <li class:list={['mk__oge', `mk__oge--${m.tur}`]} data-gir style={`--gecikme:${i * 120}ms`}>
+              <ProjeEkrani gorsel={m.gorsel} marka={m.p.siteAdi ?? m.p.marka} alanAdi={m.p.alanAdi} tur={m.tur} />
+              <div class="mk__metin">
+                <h3 class="baslik-4">{m.p.siteAdi ?? m.p.marka}</h3>
+                <p class="kucuk ikincil">{m.p.sektor}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {
+    EKIP.length > 0 && (
+      <section class="bolum bolum--acik" id="ekip">
+        <div class="sarici">
+          <div class="bolum-ust">
+            <h2 class="baslik-2">Ekip</h2>
+          </div>
+          <ul class="tikli tikli--ikili">
+            {EKIP.map((k) => (
+              <li>
+                <strong>{k.ad}</strong>
+                <span>{k.gorev}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <Sss
+    baslik="Satışları Artır hakkında sık sorulan sorular"
+    giris="Kimlerle, nasıl çalıştığımız ve hesap sahipliği hakkında en çok sorulanlar."
+    sorular={sorular}
+    zemin="beyaz"
+  />
+
+  <IlgiliSayfalar
+    zemin="kagit"
+    sayfalar={[
+      { tur: 'Hizmetler', baslik: 'Dijital pazarlama hizmetleri', metin: 'Beş hizmet ve hangisinin size uygun olduğu.', url: '/hizmetler/', cizim: yapboz },
+      { tur: 'Blog', baslik: 'Reklam ve SEO yazıları', metin: 'Kendi hesabınızda uygulayabileceğiniz kontroller.', url: '/blog/', cizim: kitaplik },
+      {
+        tur: 'Blog',
+        baslik: 'Google Ads mi, Instagram reklamı mı?',
+        metin: 'İlk kanalınızı seçmek için iki senaryo.',
+        url: '/blog/google-ads-mi-instagram-reklami-mi/',
+        cizim: terazi,
+      },
+    ]}
+  />
+
+  <GorusmeBandi baslik="İşinizi anlatın, nereden başlayacağımıza birlikte bakalım." cagri={CAGRI} konum="hakkimizda" />
+</Temel>
+
+<style>
+  /* ---- Hikâyemiz: solda açılır kitap sahnesi (4:5, lacivert sert gölge), sağda başlık, iki söz ve üç paragraf. */
+  .hy__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .hy__gorsel {
+    margin: 0 0.75rem 0.75rem 0;
+    border-radius: var(--kose);
+    box-shadow: 0.75rem 0.75rem 0 var(--murekkep);
+    overflow: hidden;
+  }
+  .hy__gorsel :global(picture),
+  .hy__gorsel :global(img) {
+    display: block;
+    width: 100%;
+  }
+  .hy__gorsel :global(img) {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  .hy__metin {
+    display: grid;
+    justify-items: start;
+    max-width: 38rem;
+  }
+  .hy__metin .giris {
+    margin-block-start: 1.1rem;
+  }
+  /* İki söz: bölümün en büyük yazısı; ikincisi kırmızı kalemle halkaya alınır. */
+  .hy__iki {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem clamp(1.5rem, 3.2vw, 2.75rem);
+    margin-block: clamp(1.1rem, 2.2vw, 1.75rem) clamp(1.5rem, 3vw, 2.25rem);
+    font-family: var(--yazi-baslik);
+    font-size: clamp(2rem, 1.2rem + 2.9vw, 3.6rem);
+    font-weight: 730;
+    font-stretch: 82%;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--mavi);
+  }
+  .hy__iki li {
+    white-space: nowrap;
+  }
+  .hy__yazi {
+    display: grid;
+    gap: 1rem;
+    color: var(--murekkep-2);
+  }
+  .hy__metin :global(.ok-bag) {
+    margin-block-start: 1.6rem;
+  }
+  @media (max-width: 55.99rem) {
+    .hy__ic {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    /* Dar ekranda görsel yatay kadraja döner: kitap ve dükkân ortada kalır. */
+    .hy__gorsel :global(img) {
+      aspect-ratio: 5 / 4;
+      object-position: 50% 62%;
+    }
+  }
+
+  /* ---- Çalışma ilkeleri -----------------------------------------------------------
+     Soru kartlarının kardeşi: üst sırada iki geniş kart (yazı solda, görsel sağda), altında üç dar kart
+     (görsel üstte). Kartlar bağlantı değildir; üzerine gelince hareket etmez. */
+  .ilkeler {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .ilke {
+    grid-column: span 2;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1.1rem;
+    padding: clamp(1.4rem, 2.6vw, 2.5rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .ilke--mavi {
+    background: var(--mavi-acik);
+  }
+  .ilke--genis {
+    grid-column: span 3;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+    grid-template-rows: none;
+    align-items: center;
+  }
+  .ilke__cizim {
+    grid-row: 1;
+    width: min(56%, 12.5rem);
+    margin: -0.5rem -0.75rem -0.25rem auto;
+  }
+  .ilke--genis .ilke__cizim {
+    grid-row: auto;
+    width: auto;
+    margin: -1rem -1.25rem -1rem 0;
+  }
+  /* Dar kartlarda yazı görselin hemen altından başlar: yan yana kartların başlıkları aynı hizada durur. */
+  .ilke__metin {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+  .ilke__ad {
+    font-size: clamp(1.4rem, 1.05rem + 1.2vw, 2.05rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.06;
+    letter-spacing: -0.024em;
+  }
+  .ilke__aciklama {
+    max-width: 30em;
+    color: var(--murekkep-2);
+  }
+  /* Gündelik örnek: ilkenin altında, daha küçük ve soluk. */
+  .ilke__ornek {
+    max-width: 32em;
+    color: var(--ikincil);
+  }
+  @media (max-width: 61.99rem) {
+    .ilke,
+    .ilke--genis {
+      grid-column: span 3;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+    }
+    .ilke--genis .ilke__cizim {
+      grid-row: 1;
+      width: min(56%, 12.5rem);
+      margin: -0.5rem -0.5rem -0.25rem auto;
+    }
+    /* Beşinci kart tek kalmasın: tam genişlikte, yazı solda görsel sağda. */
+    .ilke:last-child {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.45fr);
+      grid-template-rows: none;
+      align-items: center;
+    }
+    .ilke:last-child .ilke__cizim {
+      grid-row: auto;
+      width: auto;
+      margin: -0.5rem -0.5rem -0.5rem 0;
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .ilke[class] {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+    }
+    .ilke[class] .ilke__cizim {
+      grid-row: 1;
+      width: min(48%, 11rem);
+      margin: -0.5rem -0.5rem -0.25rem auto;
+    }
+  }
+
+  /* ---- Söz verdiklerimiz / vermediklerimiz ---------------------------------------- */
+  .soz__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 46rem) auto;
+    justify-content: space-between;
+    align-items: end;
+    column-gap: 2rem;
+    margin-block-end: clamp(2rem, 4vw, 3.25rem);
+  }
+  .soz__giris {
+    display: grid;
+    gap: 1.1rem;
+  }
+  /* Altı çizili söz satır ortasında bölünmesin. */
+  .soz__giris :global(.isaret) {
+    white-space: nowrap;
+  }
+  .soz__ust :global(.soz__cizim) {
+    width: clamp(10rem, 19vw, 16rem);
+    margin-block-end: -0.5rem;
+  }
+  .soz__izgara {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .soz__panel {
+    display: grid;
+    align-content: start;
+    gap: clamp(1.25rem, 2.2vw, 1.75rem);
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+    border-radius: var(--kose);
+  }
+  .soz__panel--evet {
+    background: var(--mavi-acik);
+  }
+  .soz__panel--hayir {
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .soz__baslik {
+    font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.4rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.05;
+    letter-spacing: -0.024em;
+  }
+  .soz__liste {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .soz__liste li {
+    position: relative;
+    display: grid;
+    gap: 0.2rem;
+  }
+  .soz__liste strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.0938rem, 1.02rem + 0.3vw, 1.25rem);
+    font-weight: 640;
+    font-stretch: 94%;
+    line-height: 1.25;
+  }
+  .soz__liste span {
+    max-width: 34em;
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  .soz__panel--hayir .soz__liste span {
+    color: rgb(255 255 255 / 0.74);
+  }
+  /* Verilen söz: kırmızı kalem tiki. */
+  .soz__liste--evet li {
+    padding-inline-start: 2rem;
+  }
+  .soz__liste--evet li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.45em;
+    width: 0.95rem;
+    height: 0.5rem;
+    border-left: 2.5px solid var(--kirmizi);
+    border-bottom: 2.5px solid var(--kirmizi);
+    border-radius: 1px;
+    transform: rotate(-48deg);
+    transform-origin: left bottom;
+  }
+  /* Verilmeyen söz: vaadin üstü kırmızı kalemle çizilir. */
+  .soz__cizili {
+    text-decoration: none;
+    color: rgb(255 255 255 / 0.9);
+    background: linear-gradient(#ff6b7f, #ff6b7f) no-repeat 0 58% / 100% 0.11em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .soz__cizili {
+      transition: background-size 620ms cubic-bezier(0.6, 0.05, 0.25, 1) calc(420ms + var(--sira, 0) * 180ms);
+    }
+    :global(.js .soz__panel[data-gir]:not(.girdi-goruldu) .soz__cizili) {
+      background-size: 0 0.11em;
+    }
+  }
+  @media (max-width: 55.99rem) {
+    .soz__izgara {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .soz__ust {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .soz__ust :global(.soz__cizim) {
+      order: -1;
+      width: 9rem;
+      margin: 0 0 0.25rem -0.5rem;
+    }
+  }
+
+  /* ---- Çalışılan markalar ------------------------------------------------------------ */
+  .mk__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(1.75rem, 5vw, 5.5rem);
+    align-items: end;
+    margin-block-end: clamp(2.25rem, 4vw, 3.5rem);
+  }
+  .mk__giris {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+  .mk__soz {
+    padding-block-end: 0.4rem;
+  }
+  .mk__izgara {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 2.4fr) minmax(0, 2.4fr);
+    gap: clamp(1.25rem, 3vw, 3rem);
+    align-items: start;
+  }
+  .mk__oge {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+  }
+  .mk__oge--mobil {
+    margin-block-start: clamp(0rem, 4vw, 4rem);
+  }
+  .mk__oge--mobil + .mk__oge--mobil {
+    margin-block-start: 0;
+  }
+  .mk__metin {
+    display: grid;
+    gap: 0.15rem;
+  }
+  @media (max-width: 55.99rem) {
+    .mk__ust {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .mk__izgara {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 2.25rem;
+    }
+    .mk__oge--masaustu {
+      grid-column: 1 / -1;
+    }
+    .mk__oge--mobil {
+      margin-block-start: 0;
+    }
+    .mk__giris .dugme {
+      width: 100%;
+    }
+  }
+</style>

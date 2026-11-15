@@ -1,0 +1,53 @@
+---
+/**
+ * Rehber içinde çalışma örneği kutusu: başlık, "temsili" ibaresi ve içerik (çoğunlukla tablo).
+ * Gerçek hesap verisi olmayan her örnek temsili olarak etiketlenir.
+ *
+ * Görünüm: masadaki bir belge. Beyaz kâğıdın üst kenarından kırmızı bir ayraç sarkar
+ * (rehber dizinindeki kitaplığın ayracı); tablo kâğıdın içinde durur.
+ */
+interface Props {
+  baslik: string;
+  /** false: gerçek ve kaynağı belirtilmiş malzeme. */
+  temsili?: boolean;
+  etiket?: string;
+  not?: string;
+}
+const { baslik, temsili = true, etiket = 'Temsili örnek', not } = Astro.props;
+---
+
+<div class="ornek ornek--ayracli">
+  <div class="ornek__ust">
+    <h3 class="baslik-4">{baslik}</h3>
+    {temsili && <span class="temsili">{etiket}</span>}
+  </div>
+  <slot />
+  {not && <p class="ornek__not">{not}</p>}
+</div>
+
+<style>
+  .ornek--ayracli {
+    position: relative;
+  }
+  /* Kırmızı ayraç: kâğıdın üst kenarından sarkar, ucu çentikli. */
+  .ornek--ayracli::before {
+    content: '';
+    position: absolute;
+    top: -0.45rem;
+    right: clamp(1.1rem, 2.4vw, 2rem);
+    width: 1.05rem;
+    height: 2.1rem;
+    background: var(--kirmizi);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%);
+  }
+  .ornek--ayracli .ornek__ust {
+    padding-inline-end: 2.25rem;
+  }
+  /* Belgenin içindeki tablo satırları sık çizgi yerine nefes alır; ilk sütun satırın adıdır. */
+  .ornek--ayracli :global(.tablo td:first-child) {
+    color: var(--murekkep);
+  }
+  .ornek--ayracli :global(.tablo td) {
+    color: var(--murekkep-2);
+  }
+</style>

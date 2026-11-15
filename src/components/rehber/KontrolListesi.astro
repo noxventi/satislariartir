@@ -1,0 +1,244 @@
+---
+/**
+ * Okurun kendi telefonunda ya da hesabında uygulayacağı kontrol listesi.
+ * İşaretler yalnız bu tarayıcıda saklanır, hiçbir yere gönderilmez. Betik olmadan da işaretlenebilir.
+ *
+ * Görünüm: pano görselli beyaz kâğıt. Başlığın altındaki çizgi, işaretlenen adım kadar kırmızı kalemle dolar;
+ * işaretlenen kutuya kırmızı kalem tiki atılır. Satırlar çizgiyle ayrılmaz.
+ */
+import Cizim from '../Cizim.astro';
+import pano from '../../assets/cizimler/liste.png';
+
+interface Props {
+  kimlik: string;
+  baslik: string;
+  adimlar: string[];
+  not?: string;
+}
+const { kimlik, baslik, adimlar, not } = Astro.props;
+---
+
+<div class="ornek kl" data-kontrol-listesi={kimlik}>
+  <div class="kl__ust">
+    <div class="kl__pano" aria-hidden="true">
+      <Cizim src={pano} sizes="6rem" genislikler={[160, 240, 320]} />
+    </div>
+    <div class="kl__kunye">
+      <h3 class="baslik-4">{baslik}</h3>
+      <p class="kl__sayac" aria-live="polite" data-sayac>{adimlar.length} adım</p>
+    </div>
+  </div>
+  <div class="kl__ilerleme" aria-hidden="true"></div>
+  <ol class="kl__liste">
+    {
+      adimlar.map((adim, i) => (
+        <li>
+          <label>
+            <input type="checkbox" data-adim={i} />
+            <span class="kl__kutu" aria-hidden="true" />
+            <span class="kl__metin">{adim}</span>
+          </label>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="kl__alt">
+    {not && <p class="ornek__not">{not}</p>}
+    <button type="button" class="ok-bag kucuk" data-sifirla hidden>İşaretleri temizle</button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-kontrol-listesi]').forEach((kok) => {
+    const anahtar = `sa_kontrol_${kok.dataset.kontrolListesi}`;
+    const kutular = [...kok.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+    const sayac = kok.querySelector<HTMLElement>('[data-sayac]')!;
+    const sifirla = kok.querySelector<HTMLButtonElement>('[data-sifirla]')!;
+    const yaz = () => {
+      const tamam = kutular.filter((k) => k.checked).length;
+      sayac.textContent = tamam === kutular.length ? 'Hepsi tamam' : `${kutular.length} adımdan ${tamam} tamam`;
+      sifirla.hidden = tamam === 0;
+      // Başlığın altındaki kırmızı çizgi işaretlenen adım kadar dolar.
+      kok.style.setProperty('--oran', String(kutular.length ? tamam / kutular.length : 0));
+    };
+    try {
+      const kayit: number[] = JSON.parse(localStorage.getItem(anahtar) || '[]');
+      kutular.forEach((k, i) => (k.checked = kayit.includes(i)));
+    } catch {
+      /* depolama kapalı */
+    }
+    yaz();
+    kok.addEventListener('change', () => {
+      yaz();
+      try {
+        localStorage.setItem(anahtar, JSON.stringify(kutular.flatMap((k, i) => (k.checked ? [i] : []))));
+      } catch {
+        /* depolama kapalı */
+      }
+    });
+    sifirla.addEventListener('click', () => {
+      kutular.forEach((k) => (k.checked = false));
+      kok.dispatchEvent(new Event('change'));
+    });
+  });
+</script>
+
+<style>
+  .kl {
+    --oran: 0;
+  }
+  /* Üstte panonun taşacağı kadar yer açılır. */
+  .ornek.kl {
+    margin-block-start: 3.5rem;
+  }
+  .kl__ust {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: clamp(0.75rem, 2vw, 1.25rem);
+  }
+  /* Pano görseli kâğıdın üst kenarından taşar. Eğim görselin kendisine verilir:
+     sarıcıya verilirse görsel ayrı katman olur ve beyaz zemini alttaki yüzeye karışmaz. */
+  .kl__pano {
+    width: clamp(4.75rem, 9vw, 6.5rem);
+    margin: calc(clamp(1.1rem, 2.4vw, 2rem) * -1 - 2.5rem) 0 -0.75rem -0.35rem;
+  }
+  .kl__pano :global(img) {
+    transform: rotate(-5deg);
+  }
+  .kl__kunye {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .kl__sayac {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    line-height: 1.3;
+    color: var(--ikincil);
+    font-variant-numeric: tabular-nums;
+  }
+  /* İlerleme: ince iz, üstünde işaretlenen adım kadar kırmızı kalem çizgisi. */
+  .kl__ilerleme {
+    position: relative;
+    height: 3px;
+    margin-block: 0.9rem 0.6rem;
+    border-radius: 2px;
+    background: var(--cizgi);
+  }
+  .kl__ilerleme::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--kirmizi);
+    transform: scaleX(var(--oran));
+    transform-origin: left center;
+    transition: transform 420ms var(--yumusak);
+  }
+  .kl__liste {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.1rem;
+  }
+  .kl__liste li {
+    margin: 0;
+  }
+  .kl__liste label {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.7rem minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: start;
+    min-height: 2.75rem;
+    margin-inline: -0.7rem;
+    padding: 0.65rem 0.7rem;
+    border-radius: var(--kose);
+    cursor: pointer;
+    transition: background-color var(--hizli);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .kl__liste input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .kl__kutu {
+    position: relative;
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    background: var(--beyaz);
+    transition: border-color var(--hizli);
+  }
+  /* Kırmızı kalem tiki: kutudan biraz taşar, elle atılmış gibi durur. */
+  .kl__kutu::after {
+    content: '';
+    position: absolute;
+    left: 0.34rem;
+    top: 0.12rem;
+    width: 1.3rem;
+    height: 0.66rem;
+    border-left: 3px solid var(--kirmizi);
+    border-bottom: 3px solid var(--kirmizi);
+    border-radius: 1px;
+    transform: rotate(-50deg) scale(0);
+    transform-origin: 28% 72%;
+    transition: transform 240ms cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+  .kl__liste input:checked + .kl__kutu {
+    border-color: var(--murekkep);
+  }
+  .kl__liste input:checked + .kl__kutu::after {
+    transform: rotate(-50deg) scale(1);
+  }
+  .kl__liste input:focus-visible + .kl__kutu {
+    outline: 2px solid var(--mavi);
+    outline-offset: 3px;
+  }
+  .kl__metin {
+    padding-block-start: 0.05rem;
+  }
+  @media (hover: hover) {
+    .kl__liste label:hover {
+      background: var(--kagit);
+    }
+    .kl__liste label:hover .kl__kutu {
+      border-color: var(--murekkep);
+    }
+  }
+  .kl__liste label:has(input:checked) {
+    background: var(--kagit);
+  }
+  .kl__alt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+  }
+  .kl__alt .ok-bag {
+    min-height: 2.75rem;
+    align-items: center;
+    margin-block-start: 0.5rem;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--cizgi-koyu);
+    text-underline-offset: 0.28em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kl__kutu::after,
+    .kl__ilerleme::after {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,437 @@
+---
+/**
+ * Yasal metin düzeni (gizlilik, aydınlatma, çerez tercihleri).
+ * Veri sorumlusunun unvanı site.config.ts içinde boşsa metin "taslak" olarak işaretlenir ve aramaya kapatılır:
+ * gerçek veri sorumlusu bilgisi olmadan yasal metin yayımlanmış sayılmaz.
+ *
+ * Görünüm: üstte kilit nesnesiyle sade başlık alanı, altında beyaz zeminde uzun okuma düzeni (.yazi).
+ * - Metin sayfadan gelir ve aynen basılır; yalnız ikinci düzey başlıklara (h2) çapa eklenir.
+ * - İçindekiler bu başlıklardan kendiliğinden üretilir: masaüstünde metnin solunda yapışkan durur,
+ *   dar ekranda metnin üstünde kapalı gelir. Okunan bölüm kırmızı kalem çizgisiyle işaretlenir.
+ * - "yan" yuvası (slot) verilirse içindekiler yerine o içerik sol sütunda yapışkan durur (çerez tercihleri formu).
+ * - Tablolar çizgili satır yerine kâğıt şeritler olarak görünür.
+ */
+import Temel from '../layouts/Temel.astro';
+import Cizim from './Cizim.astro';
+import Ikon from './Ikon.astro';
+import { SITE } from '../site.config';
+import kilit from '../assets/cizimler/kilit.png';
+
+interface Props {
+  baslik: string;
+  aramaBasligi: string;
+  aciklama: string;
+  yol: string;
+  guncelleme: string;
+}
+const { baslik, aramaBasligi, aciklama, yol, guncelleme } = Astro.props;
+const taslak = !SITE.veriSorumlusu.unvan;
+const kirintilar = [{ ad: baslik, url: yol }];
+
+const kimlikUret = (metin: string) =>
+  metin
+    .toLocaleLowerCase('tr')
+    .replace(/ç/g, 'c')
+    .replace(/ğ/g, 'g')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ş/g, 's')
+    .replace(/ü/g, 'u')
+    .replace(/&[a-z#0-9]+;/g, ' ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+// Metnin kendisine dokunulmaz: yalnız h2 etiketlerine id yazılır ve aynı başlıklar içindekilere alınır.
+const ham = await Astro.slots.render('default');
+const basliklar: { kimlik: string; ad: string }[] = [];
+const kullanilan = new Set<string>();
+const icerik = ham.replace(/<h2\b([^>]*)>([\s\S]*?)<\/h2>/g, (_tum: string, oz: string, ic: string) => {
+  const ad = ic.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const mevcut = oz.match(/\bid="([^"]+)"/);
+  let kimlik = mevcut ? mevcut[1] : kimlikUret(ad) || 'bolum';
+  if (!mevcut) {
+    const kok = kimlik;
+    for (let n = 2; kullanilan.has(kimlik); n++) kimlik = `${kok}-${n}`;
+  }
+  kullanilan.add(kimlik);
+  basliklar.push({ kimlik, ad });
+  return mevcut ? `<h2${oz}>${ic}</h2>` : `<h2 id="${kimlik}"${oz}>${ic}</h2>`;
+});
+
+const yanVar = Astro.slots.has('yan');
+const icindekilerVar = !yanVar && basliklar.length > 1;
+---
+
+<Temel baslik={aramaBasligi} aciklama={aciklama} sayfaTuru="yasal" kirintilar={kirintilar} indeksle={!taslak} cagri={false}>
+  <article class="ys">
+    <header class="ys__ust">
+      <div class="sarici ys__ust-ic">
+        <div class="ys__ust-metin">
+          <nav aria-label="Sayfa konumu">
+            <ol class="kirinti">
+              <li><a href="/">Ana sayfa</a></li>
+              <li><span aria-current="page">{baslik}</span></li>
+            </ol>
+          </nav>
+          <h1 class="baslik-1 ys__baslik">{baslik}</h1>
+          <p class="kucuk ikincil">Son güncelleme: {guncelleme}</p>
+        </div>
+        <div class="ys__kilit" aria-hidden="true">
+          <Cizim src={kilit} sizes="(max-width: 47.99rem) 30vw, 14vw" genislikler={[200, 320, 480, 640]} oncelik />
+        </div>
+        {
+          taslak && (
+            <p class="ys__taslak" role="note">
+              <strong>Taslak metin.</strong> Veri sorumlusunun unvanı, adresi ve başvuru kanalı yayından önce eklenecek. Bu
+              bilgiler eklenene kadar sayfa arama motorlarına kapalıdır.
+            </p>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="ys__govde">
+      <div class:list={['sarici ys__izgara', icindekilerVar && 'ys__izgara--icindekiler', yanVar && 'ys__izgara--yan']}>
+        {
+          icindekilerVar && (
+            <nav class="ys__icindekiler" aria-label="Bu sayfada" data-icindekiler>
+              <details open>
+                <summary>
+                  Bu sayfada
+                  <Ikon ad="caret-down" boyut={16} />
+                </summary>
+                <ol>
+                  {basliklar.map((b) => (
+                    <li>
+                      <a href={`#${b.kimlik}`} set:html={b.ad} />
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            </nav>
+          )
+        }
+        <script is:inline>
+          // Dar ekranda içindekiler kapalı gelir. İlk boyamadan önce çalışır; betik yoksa liste açık kalır.
+          (function () {
+            var d = document.querySelector('[data-icindekiler] details');
+            if (d && window.matchMedia('(max-width: 61.99rem)').matches) d.removeAttribute('open');
+          })();
+        </script>
+        {
+          yanVar && (
+            <div class="yazi ys__yan">
+              <slot name="yan" />
+            </div>
+          )
+        }
+        <div class="yazi ys__metin" data-yasal-metin>
+          <Fragment set:html={icerik} />
+        </div>
+      </div>
+    </div>
+  </article>
+</Temel>
+
+<script>
+  // İçindekiler: geniş ekranda hep açık durur; okunan bölümün bağlantısı işaretlenir.
+  const nav = document.querySelector<HTMLElement>('[data-icindekiler]');
+  const metin = document.querySelector<HTMLElement>('[data-yasal-metin]');
+  if (nav && metin) {
+    const kutu = nav.querySelector('details');
+    const ozet = nav.querySelector('summary');
+    const genis = matchMedia('(min-width: 62rem)');
+    const ayarla = () => {
+      if (!kutu || !ozet) return;
+      if (genis.matches) kutu.open = true;
+      ozet.tabIndex = genis.matches ? -1 : 0;
+    };
+    ayarla();
+    genis.addEventListener('change', ayarla);
+    ozet?.addEventListener('click', (e) => {
+      if (genis.matches) e.preventDefault();
+    });
+
+    const baglar = new Map([...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')].map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+    const basliklar = [...metin.querySelectorAll<HTMLElement>('h2[id]')].filter((h) => baglar.has(h.id));
+    let bekliyor = false;
+    const isaretle = () => {
+      bekliyor = false;
+      // Ekranın üst üçte birini geçmiş son başlık okunan bölümdür.
+      const esik = innerHeight * 0.34;
+      let etkin = basliklar[0];
+      for (const h of basliklar) if (h.getBoundingClientRect().top <= esik) etkin = h;
+      baglar.forEach((a, kimlik) => {
+        if (etkin && kimlik === etkin.id) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+    };
+    if (basliklar.length) {
+      isaretle();
+      addEventListener(
+        'scroll',
+        () => {
+          if (bekliyor) return;
+          bekliyor = true;
+          requestAnimationFrame(isaretle);
+        },
+        { passive: true },
+      );
+    }
+  }
+</script>
+
+<style>
+  /* ---- Başlık alanı -------------------------------------------------------- */
+  .ys__ust {
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(1.75rem, 3.6vw, 3.25rem);
+  }
+  .ys__ust-ic {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'metin kilit'
+      'taslak kilit';
+    column-gap: clamp(1rem, 4vw, 4rem);
+    align-items: end;
+  }
+  .ys__ust-metin {
+    grid-area: metin;
+    display: grid;
+    justify-items: start;
+  }
+  .ys__baslik {
+    margin-block: clamp(1.5rem, 3vw, 2.5rem) 0.8rem;
+  }
+  .ys__kilit {
+    grid-area: kilit;
+    align-self: center;
+    width: clamp(6rem, 15vw, 13rem);
+    margin-block: -0.5rem;
+  }
+  .ys__taslak {
+    grid-area: taslak;
+    max-width: 46rem;
+    margin-block-start: 1.4rem;
+    padding: 1rem 1.15rem;
+    border-radius: var(--kose);
+    background: #f9e9ec;
+    color: var(--kirmizi-koyu);
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+  }
+
+  /* ---- Okuma alanı ---------------------------------------------------------- */
+  .ys__govde {
+    --zemin: var(--beyaz);
+    --yuzey: var(--kagit);
+    padding-block: clamp(2rem, 4.5vw, 4rem) var(--bolum);
+    background: var(--beyaz);
+  }
+  .ys__izgara {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: clamp(2rem, 5.5vw, 5.5rem);
+    row-gap: 1.5rem;
+    align-items: start;
+  }
+  .ys__izgara--icindekiler {
+    grid-template-columns: minmax(13rem, 17.5rem) minmax(0, 1fr);
+  }
+  .ys__metin {
+    min-width: 0;
+    max-width: 46rem;
+    font-size: var(--b-govde);
+  }
+  .ys__metin :global(> :first-child),
+  .ys__yan :global(> :first-child) {
+    margin-block-start: 0;
+  }
+  .ys__metin :global(h2) {
+    font-size: clamp(1.4rem, 1.25rem + 0.7vw, 1.75rem);
+  }
+
+  /* İçindekiler: kâğıt bir fiş. Okunan bölümün önündeki çizgi kırmızı kalemle uzar. */
+  .ys__icindekiler {
+    position: sticky;
+    top: calc(var(--ust-bant) + 1.75rem);
+    padding: 1.15rem 1.25rem 1rem;
+    background: var(--kagit);
+    border-radius: var(--kose);
+  }
+  .ys__icindekiler summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    list-style: none;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--ikincil);
+  }
+  .ys__icindekiler summary::-webkit-details-marker {
+    display: none;
+  }
+  .ys__icindekiler summary :global(svg) {
+    display: none;
+    transition: transform 220ms var(--yumusak);
+  }
+  .ys__icindekiler ol {
+    display: grid;
+    margin: 0.55rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ys__icindekiler a {
+    position: relative;
+    display: block;
+    padding: 0.48rem 0 0.48rem 1.75rem;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 560;
+    font-stretch: 96%;
+    line-height: 1.3;
+    color: var(--murekkep-2);
+    text-decoration: none;
+    transition: color 160ms;
+  }
+  .ys__icindekiler a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: calc(0.48rem + 0.65em - 1px);
+    width: 0.55rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--cizgi-koyu);
+    transition:
+      width 260ms var(--yumusak),
+      background-color 160ms;
+  }
+  .ys__icindekiler a:hover,
+  .ys__icindekiler a[aria-current] {
+    color: var(--murekkep);
+  }
+  .ys__icindekiler a:hover::before,
+  .ys__icindekiler a[aria-current]::before {
+    width: 1.15rem;
+    background: var(--kirmizi);
+  }
+  .ys__icindekiler a[aria-current] {
+    font-weight: 660;
+  }
+
+  /* Tablolar: çizgili satır yerine kâğıt şeritler. */
+  .ys__metin :global(.tablo) {
+    border-collapse: separate;
+    border-spacing: 0 0.4rem;
+  }
+  .ys__metin :global(.tablo th) {
+    padding: 0 1rem 0.15rem;
+    border: 0;
+  }
+  .ys__metin :global(.tablo td) {
+    padding: 0.85rem 1rem;
+    border: 0;
+    background: var(--kagit);
+  }
+  .ys__metin :global(.tablo td:first-child) {
+    border-radius: var(--kose) 0 0 var(--kose);
+  }
+  .ys__metin :global(.tablo td:last-child) {
+    border-radius: 0 var(--kose) var(--kose) 0;
+  }
+
+  /* Yan sütunlu düzen (çerez tercihleri): solda yapışkan form, sağda kayıtlar. Yalnız geniş ekranda iki sütun. */
+  @media (min-width: 75rem) {
+    .ys__izgara--yan {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+    .ys__izgara--yan .ys__metin {
+      max-width: none;
+    }
+  }
+  @media (min-width: 75rem) and (min-height: 46rem) {
+    .ys__yan {
+      position: sticky;
+      top: calc(var(--ust-bant) + 1.75rem);
+    }
+  }
+  .ys__yan {
+    min-width: 0;
+    max-width: 46rem;
+    font-size: var(--b-govde);
+  }
+
+  @media (max-width: 61.99rem) {
+    .ys__izgara--icindekiler {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ys__icindekiler {
+      position: static;
+      padding-block: 0.35rem;
+    }
+    .ys__icindekiler summary {
+      min-height: 2.75rem;
+      cursor: pointer;
+      color: var(--murekkep);
+    }
+    .ys__icindekiler summary :global(svg) {
+      display: block;
+      color: var(--kirmizi);
+    }
+    .ys__icindekiler details[open] summary :global(svg) {
+      transform: rotate(180deg);
+    }
+    .ys__icindekiler ol {
+      margin-block: 0 0.6rem;
+    }
+    .ys__icindekiler a {
+      padding-block: 0.7rem;
+    }
+    .ys__icindekiler a::before {
+      top: calc(0.7rem + 0.65em - 1px);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .ys__ust-ic {
+      grid-template-areas:
+        'metin kilit'
+        'taslak taslak';
+      column-gap: 0.75rem;
+    }
+    .ys__kilit {
+      align-self: end;
+      width: 5.75rem;
+      margin: 0 -0.4rem -0.4rem 0;
+    }
+  }
+  /* Dar ekranda yığılmış tablo: her kayıt ayrı bir kâğıt kart. */
+  @media (max-width: 43.99rem) {
+    .ys__metin :global(.tablo) {
+      border-spacing: 0;
+    }
+    .ys__metin :global(.tablo--yigin tr) {
+      margin-block-end: 0.5rem;
+      padding: 0.85rem 1rem;
+      border: 0;
+      border-radius: var(--kose);
+      background: var(--kagit);
+    }
+    .ys__metin :global(.tablo--yigin td),
+    .ys__metin :global(.tablo--yigin td:first-child),
+    .ys__metin :global(.tablo--yigin td:last-child) {
+      padding: 0.2rem 0;
+      border-radius: 0;
+      background: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ys__icindekiler a,
+    .ys__icindekiler a::before,
+    .ys__icindekiler summary :global(svg) {
+      transition: none;
+    }
+  }
+</style>

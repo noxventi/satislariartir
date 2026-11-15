@@ -1,0 +1,161 @@
+---
+/**
+ * Arama panosu: solda başlık ve yorum, sağda Google'a yazılan aramalar. Kutunun soluk mavi dolgusu aramanın hacmini
+ * gösterir (karekök ölçeği: en büyük arama kutuyu doldurur, küçükler de görünür kalır); sayı kutunun sağ ucunda durur.
+ * Hacimler yalnız ölçülmüş değerlerdir (Türkiye, aylık yaklaşık). Sektör sayfalarındaki panonun ortak bileşen hâlidir;
+ * şehir ve ilçe sayfaları bunu kullanır. Bölüm sarmalayıcısını (section, id) sayfa verir.
+ */
+import Ikon from './Ikon.astro';
+
+interface Props {
+  baslik: string;
+  giris: string;
+  yorum: string[];
+  liste: { ifade: string; hacim?: number }[];
+}
+const { baslik, giris, yorum, liste } = Astro.props;
+
+const sayiYaz = (n: number) => new Intl.NumberFormat('tr-TR').format(n);
+const enBuyuk = Math.max(0, ...liste.map((a) => a.hacim ?? 0));
+const hacimVar = enBuyuk > 0;
+const aramalar = liste.map((a) => ({
+  ...a,
+  oran: a.hacim ? Math.max(9, Math.round(Math.sqrt(a.hacim / enBuyuk) * 100)) : 0,
+}));
+---
+
+<div class="sarici ara">
+  <div class="ara__metin">
+    <h2 class="baslik-2">{baslik}</h2>
+    <p class="giris">{giris}</p>
+    <div class="metin">
+      {yorum.map((p) => <p>{p}</p>)}
+    </div>
+  </div>
+  <div class="ara__pano">
+    <p class="ara__ust">
+      <span>Google’a yazılan arama</span>
+      {hacimVar && <span>Aylık yaklaşık arama, Türkiye</span>}
+    </p>
+    <ol class="ara__liste">
+      {
+        aramalar.map((a, i) => (
+          <li data-gir style={`--oran:${a.oran}%;--gecikme:${i * 55}ms`}>
+            <span class="ara__ifade">
+              <Ikon ad="magnifying-glass" boyut={18} />
+              <span>{a.ifade}</span>
+            </span>
+            {a.hacim && <span class="ara__hacim rakam">{sayiYaz(a.hacim)}</span>}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</div>
+
+<style>
+  .ara {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .ara__metin {
+    display: grid;
+    gap: 1.2rem;
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+    background: var(--zemin);
+  }
+  .ara__pano {
+    padding: clamp(1rem, 2vw, 1.6rem);
+    background: var(--kagit);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.5rem 0.5rem 0 var(--mavi-acik);
+  }
+  .ara__ust {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.4rem 0.85rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    line-height: 1.25;
+    color: var(--ikincil);
+  }
+  .ara__ust span:last-child:not(:first-child) {
+    text-align: end;
+  }
+  .ara__liste {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .ara__liste li {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 3.1rem;
+    padding: 0.5rem 1.1rem 0.5rem 1rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: 999px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  /* Hacim dolgusu: görünüme girince soldan sağa uzar. */
+  .ara__liste li::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: -1;
+    width: var(--oran);
+    background: var(--mavi-acik);
+    transform-origin: left;
+    transition: transform 900ms var(--yumusak) var(--gecikme, 0ms);
+  }
+  :global(.js) .ara__liste li[data-gir]:not(.girdi-goruldu)::before {
+    transform: scaleX(0);
+  }
+  .ara__ifade {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-weight: 580;
+    font-stretch: 96%;
+    line-height: 1.2;
+    color: var(--murekkep);
+  }
+  .ara__ifade :global(svg) {
+    flex: none;
+    color: var(--mavi);
+  }
+  .ara__hacim {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-weight: 700;
+    color: var(--murekkep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ara__liste li::before {
+      transition: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .ara {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ara__metin {
+      position: static;
+    }
+    .ara__pano {
+      margin-inline-end: 0.5rem;
+    }
+  }
+</style>

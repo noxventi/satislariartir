@@ -1,0 +1,258 @@
+---
+no: 13
+kapak: anahtar-kelime
+kapakAlt: "Boş bir arama kutusunun yanında yatan kâğıttan dev bir anahtar; çevresinde ipli boş etiketler, biri etiketi arama kutusuna doğru kaldırmış ve etiket kırmızı kalemle çemberlenmiş, iki kişi kalan etiketleri iki yığına ayırıyor"
+soru: Anahtar kelime nedir, nasıl bulunur?
+baslik: Anahtar Kelime Nedir, Nasıl Bulunur?
+aciklama: >-
+  Anahtar kelime nedir, müşterinizin Google’a yazdığı ifadeleri nasıl bulursunuz? Arama niyeti, Google’ın kendi
+  araçları ve her aramayı bir sayfayla eşleştirme yöntemi.
+aramalar:
+  - anahtar kelime nedir
+  - anahtar kelime planlayıcı
+  - anahtar kelime bulma
+kisaCevap: >-
+  Anahtar kelime, insanların bir ürünü, hizmeti ya da bir sorunun cevabını ararken Google’a yazdığı kelime ya da
+  kelime grubudur. SEO’da bir sayfanın hangi aramaya cevap verdiğini, Google Ads’te ise reklamın hangi aramalarda
+  gösterilebileceğini belirler. Doğru ifadeler müşterinin kendi sözlerinden, Google’ın otomatik tamamlama
+  önerilerinden, Anahtar Kelime Planlayıcı’dan ve Search Console’daki sorgulardan toplanır. Sonra her ifade, o
+  aramayı yapan kişinin niyetine uyan tek bir sayfayla eşleştirilir.
+elinizeGecen: Arama niyeti örnekleri, altı adımlı bulma yöntemi ve sayfa eşleştirme tablosu
+hizmetler: [seo, google-ads]
+hizmetBaglantisi:
+  etiket: SEO danışmanlığı
+  url: /hizmetler/seo-danismanligi/
+sonraki: seo-analizi-nasil-yapilir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Ads Yardım, Anahtar Kelime Planlayıcı’yı kullanma
+    url: https://support.google.com/google-ads/answer/7337243?hl=tr
+    tur: resmi
+  - ad: "Search Console Yardımı, Performans raporu (Arama sonuçları): Genel bakış ve temel kurulum"
+    url: https://support.google.com/webmasters/answer/7576553?hl=tr
+    tur: resmi
+  - ad: Google Arama Yardım, Google otomatik tamamlama tahminlerinin işleyiş şekli
+    url: https://support.google.com/websearch/answer/7368877?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Google Web Arama için spam politikaları
+    url: https://developers.google.com/search/docs/essentials/spam-policies?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Arama Motoru Optimizasyonu (SEO) Başlangıç Kılavuzu
+    url: https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=tr
+    tur: resmi
+---
+
+import AramaKutulari from '../../components/blog/AramaKutulari.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+
+Bir mobilyacı yaptığı işe “özel üretim mobilya” der. Müşterisi ise Google’a “ölçüye göre gardırop yaptırma” ya da “duvardan duvara dolap” yazar. İkisi aynı işten söz eder ama aynı kelimeleri kullanmaz.
+
+Anahtar kelime çalışması bu aradaki mesafeyi kapatır. Müşterinin gerçekten yazdığı sözleri bulursunuz ve sitenizdeki sayfaları o sözlere göre kurarsınız. Aynı mobilyacıyla ilgili dört ayrı aramaya bakın:
+
+<AramaKutulari
+  aramalar={[
+    { ifade: 'gardırop çeşitleri', not: 'Bilgi topluyor', ton: 'notr' },
+    { ifade: 'sürgülü mü kapaklı mı gardırop', not: 'Karşılaştırıyor', ton: 'notr' },
+    { ifade: 'ölçüye göre gardırop yaptırma izmir', not: 'Usta arıyor', ton: 'evet' },
+    { ifade: 'mobilya ustası iş ilanları', not: 'Müşteri değil', ton: 'hayir' },
+  ]}
+/>
+
+## Anahtar kelime nedir?
+
+Anahtar kelime, insanların arama kutusuna yazdığı kelime ya da kelime grubudur. Adı “kelime” olsa da çoğu zaman birkaç kelimelik bir ifadedir: “ölçüye göre gardırop yaptırma” tek bir anahtar kelimedir.
+
+Terim iki yerde, birbirine yakın iki anlamda kullanılır: SEO’da (arama motoru optimizasyonu) ve Google Ads’te. Yanında sık duyacağınız iki terim daha vardır.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Anahtar kelime',
+      acilim: 'SEO’da',
+      tanim: 'Bir sayfanın cevap vermek üzere yazıldığı arama ifadesi.',
+      ornek: 'Gardırop sayfanız “ölçüye göre gardırop” aramasına cevap verir.',
+    },
+    {
+      ad: 'Anahtar kelime',
+      acilim: 'Google Ads’te',
+      tanim: 'Reklamınızın hangi aramalarda gösterilebileceğini belirlemek için hesaba yazdığınız kelime ya da kelime grubu.',
+      ornek: 'Hesaba “gardırop yaptırma” yazarsınız; reklam buna benzeyen aramalarda gösterilebilir.',
+    },
+    {
+      ad: 'Arama niyeti',
+      tanim: 'Kişinin o aramayı yaparken ne yapmak istediği: öğrenmek, karşılaştırmak ya da satın almak.',
+      ornek: '“Gardırop çeşitleri” yazan öğrenmek, “gardırop yaptırma izmir” yazan usta bulmak ister.',
+    },
+    {
+      ad: 'Arama hacmi',
+      tanim: 'Bir ifadenin ayda yaklaşık kaç kez arandığını gösteren tahmin.',
+      ornek: 'Anahtar Kelime Planlayıcı bu tahmini aylık arama sayısı olarak verir.',
+    },
+  ]}
+/>
+
+İki kullanım arasındaki fark şudur. SEO’da ifadeyi bir sayfaya siz ayırırsınız; sayfanın o aramayla ne kadar ilgili olduğunu Google kendisi değerlendirir. Google Ads’te ifadeyi hesaba yazarsınız ve reklam, seçtiğiniz eşleme türüne göre o ifadeye benzeyen aramalarda gösterilebilir. Araştırma ise ortaktır: reklam için çıkardığınız liste SEO’da, SEO için çıkardığınız liste reklamda işinize yarar.
+
+Bir yanlışı da baştan ayıralım. Sitenin koduna, ziyaretçinin görmediği bir anahtar kelime listesi eklemek işe yaramaz. Google, anahtar kelime meta etiketini kullanmadığını kendi kılavuzunda yazar. Anahtar kelime sayfanın konusunda, başlığında ve görünen metninde geçer.
+
+## Arama niyeti nedir?
+
+Aynı kelimeyi içeren iki arama iki ayrı insandan gelebilir. Biri gardırop hakkında bir şey öğrenmek istiyordur, öbürü haftaya ölçü aldırmak. Üç niyeti birbirinden ayırmak çoğu işletme için yeter:
+
+- **Bilgi arayan.** “Gardırop çeşitleri” yazar. Henüz kimden alacağını düşünmüyordur; konuyu anlatan bir yazı bekler.
+- **Karşılaştıran.** “Sürgülü mü kapaklı mı gardırop” yazar. Seçenekleri tartıyordur; ikisini yan yana görmek ister.
+- **Satın almaya hazır olan.** “Ölçüye göre gardırop yaptırma İzmir” yazar. Usta arıyordur; iş örneklerini, çalıştığınız bölgeyi ve teklif yolunu görmek ister.
+
+Bir ifadenin niyetinden emin değilseniz o aramayı Google’da kendiniz yapın. İlk sayfada çıkanlar rehber yazılarıysa Google o aramayı bilgi arayışı olarak okuyordur. Firma sayfaları ve harita çıkıyorsa arayan kişi iş yaptıracak birini arıyordur.
+
+Niyet, sayfanın türünü belirler. Bilgi arayan kişiyi teklif formuyla açılan bir hizmet sayfası karşılarsa aradığını bulamaz ve geri döner. Usta arayan kişi uzun bir rehber yazısına düşerse telefon numaranızı bulmak için sayfanın sonuna inmesi gerekir.
+
+<AraGorsel cizim="kitle" alt="Büyütecin altında, bir grubun içinden seçilmiş üç kâğıt insan figürü">
+  Çok aranan ifade her zaman müşteri getiren ifade olmaz. Önce o aramayı yapanın ne istediğine bakın, sonra sayıya.
+</AraGorsel>
+
+## Kısa anahtar kelime mi, uzun anahtar kelime mi?
+
+Anahtar kelimeler uzunluklarına göre de ayrılır. İngilizce kaynaklarda uzun ifadelere “long-tail keyword” (uzun kuyruklu anahtar kelime) dendiğini görürsünüz.
+
+<Karsilastirma
+  ara="ya da"
+  uygunEtiketi="Ne zaman"
+  sol={{
+    ust: '“mobilya”',
+    baslik: 'Kısa ifade',
+    maddeler: [
+      'Çok aranır.',
+      'Arayanın ne istediği belli değildir.',
+      'Aynı aramada büyük mağaza siteleri de yarışır.',
+    ],
+    uygun: 'Sitenizin geneli ve ana sayfası için bir çerçeve olarak',
+  }}
+  sag={{
+    ust: '“ölçüye göre gardırop yaptırma izmir”',
+    baslik: 'Uzun ifade',
+    maddeler: [
+      'Daha az aranır.',
+      'Arayanın ne istediği ve nerede olduğu bellidir.',
+      'Cevabı tek bir sayfada verilebilir.',
+    ],
+    uygun: 'Hizmet sayfaları ve ilk yazacağınız içerikler için',
+  }}
+/>
+
+Yeni bir site için başlangıç noktası uzun ifadelerdir. Yaptığınız işi, kullandığınız malzemeyi ve çalıştığınız bölgeyi içeren aramalar az kişiden gelir, ama gelen kişi ne istediğini biliyordur.
+
+Arama hacmine bakarken bunu aklınızda tutun. Yüksek bir sayı, o aramayı yapanların hepsinin sizin müşteriniz olduğu anlamına gelmez. Anahtar Kelime Planlayıcı’nın gösterdiği sayılar da tahmindir; Google, arama hacmi çok düşük olan ifadeler için aracın veri göstermeyebileceğini belirtir. Listenizdeki bir ifade araçta çıkmıyorsa bu, onu kimsenin aramadığını göstermez.
+
+## Anahtar kelime nasıl bulunur?
+
+Anahtar kelime bulma işi müşteriyi dinlemekle başlar, sonra Google’ın kendi araçlarıyla sürer. Ücretli bir araca geçmeden önce şu altı adım çoğu işletmeye yeter.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Müşterinin kendi sözlerini yazın',
+      aciklama:
+        'Telefonda, WhatsApp’ta ve dükkânda size sorulan soruları duyduğunuz gibi not edin. Kendi mesleki terimlerinizle düzeltmeyin; listeyi müşterinin diliyle tutun.',
+    },
+    {
+      ad: 'Google’ın önerilerine bakın',
+      aciklama:
+        'İfadeyi arama kutusuna yazmaya başlayın. Otomatik tamamlama tahminleri Google’da daha önce yapılmış gerçek aramaları yansıtır. Sonuç sayfasındaki ilgili aramalar da başka kullanıcıların aramalarından oluşur.',
+    },
+    {
+      ad: 'Anahtar Kelime Planlayıcı’da sayılara bakın',
+      aciklama:
+        'Google Ads’in içindeki bu araç, yazdığınız kelimeyle ya da sitenizle ilgili yeni ifadeler önerir ve her biri için aylık arama tahminini gösterir.',
+      not: 'Araca erişmek için Google Ads hesabı açıp fatura bilgilerinizle hesap kurulumunu tamamlamanız gerekir.',
+    },
+    {
+      ad: 'Search Console’da göründüğünüz aramaları okuyun',
+      aciklama:
+        'Siteniz yayındaysa Performans raporu, sitenizin hangi sorgularda gösterildiğini ve kaç kez tıklandığını listeler. Gösterilip tıklanmayan ifadeler ilk bakılacak yerdir.',
+    },
+    {
+      ad: 'Google Trends ile dönemine bakın',
+      aciklama:
+        'İki ifadeyi yan yana karşılaştırabilir, ilginin bölgelere ve zamana göre nasıl değiştiğini görebilirsiniz. Bahçe mobilyası gibi mevsimlik işlerde sayfayı ne zaman hazırlayacağınızı gösterir.',
+      not: 'Aracın Türkçe adı Google Trendler’dir.',
+    },
+    {
+      ad: 'Listeyi niyete göre ayırın',
+      aciklama:
+        'Her ifadenin yanına bilgi, karşılaştırma ya da satın alma yazın. İşinize uymayanları ve hizmet vermediğiniz bölgeleri listeden çıkarın.',
+    },
+  ]}
+/>
+
+Anahtar Kelime Planlayıcı reklam için tasarlanmıştır; Google onu Arama Ağı kampanyalarında kullanılacak anahtar kelimeleri araştırma aracı olarak tanımlar. Gösterdiği aylık arama sayıları SEO için de yol gösterir. Reklam tarafında anahtar kelimenin nasıl çalıştığını, eşleme türleriyle birlikte, [Google Ads nedir](/blog/google-ads-nedir/) yazısında anlattık.
+
+Siteniz bir süredir yayındaysa ilk bakacağınız liste Search Console’dadır. Performans raporu tıklama sayısını, gösterim sayısını, tıklama oranını ve ortalama konumu verir; verileri sorguya ya da sayfaya göre gruplayabilirsiniz. İki şeyi arayın: hiç aklınıza gelmeyen ama gösterim aldığınız ifadeler ve çok gösterilip az tıklanan ifadeler. Birincisi yeni bir sayfanın konusu olabilir. İkincisi, o sayfanın başlığının aramaya cevap vermediğini düşündürür.
+
+## Bir sayfada kaç anahtar kelime kullanılır?
+
+Kural basittir: bir sayfaya bir ana konu. Aynı niyeti taşıyan yakın ifadeler aynı sayfada toplanır. “Gardırop yaptırma”, “ölçüye göre gardırop” ve “özel ölçü gardırop” için üç ayrı sayfa açılmaz; üçü de gardırop sayfanıza aittir. Niyet değiştiğinde sayfa da değişir.
+
+<Ornek
+  baslik="Bir mobilyacı için arama ve sayfa eşleştirmesi"
+  not="Aramalar temsilidir. Kendi listenizi müşterilerinizin sorularından ve Search Console’daki sorgulardan çıkarın."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Arama</th>
+        <th scope="col">Niyet</th>
+        <th scope="col">Gideceği sayfa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Arama"><span class="sorgu">“ölçüye göre gardırop yaptırma”</span></td>
+        <td data-baslik="Niyet"><span class="hukum hukum--evet">Satın almaya hazır</span></td>
+        <td data-baslik="Sayfa">Gardırop hizmet sayfası: iş örnekleri, bölge, teklif yolu</td>
+      </tr>
+      <tr>
+        <td data-baslik="Arama"><span class="sorgu">“mutfak dolabı yaptırma izmir”</span></td>
+        <td data-baslik="Niyet"><span class="hukum hukum--evet">Satın almaya hazır</span></td>
+        <td data-baslik="Sayfa">Mutfak dolabı hizmet sayfası</td>
+      </tr>
+      <tr>
+        <td data-baslik="Arama"><span class="sorgu">“sürgülü mü kapaklı mı gardırop”</span></td>
+        <td data-baslik="Niyet"><span class="hukum">Karşılaştırıyor</span></td>
+        <td data-baslik="Sayfa">Blog yazısı; sonunda gardırop sayfasına bağlanır</td>
+      </tr>
+      <tr>
+        <td data-baslik="Arama"><span class="sorgu">“gardırop iç ölçüleri”</span></td>
+        <td data-baslik="Niyet"><span class="hukum">Bilgi arıyor</span></td>
+        <td data-baslik="Sayfa">Blog yazısı</td>
+      </tr>
+      <tr>
+        <td data-baslik="Arama"><span class="sorgu">“mobilya ustası iş ilanları”</span></td>
+        <td data-baslik="Niyet"><span class="hukum hukum--hayir">Müşteri değil</span></td>
+        <td data-baslik="Sayfa">Sayfa açılmaz</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Tablonun işi, her aramanın karşısına tek bir sayfa yazmaktır. İki sayfa aynı aramaya cevap vermeye çalışıyorsa hangisinin gösterileceğine Google karar verir ve bu, öne çıkmasını istediğiniz sayfa olmayabilir. Böyle iki sayfanız varsa ikisini birleştirin ya da birinin konusunu daraltıp ötekine bağlantı verin.
+
+İfadeyi sayfada kelimesi kelimesine tekrarlamanız gerekmez. Google’ın kılavuzuna göre dil eşleştirme sistemleri, bir sayfada terimin bire bir aynısı geçmese bile o sayfanın birçok sorguyla ilişkisini anlayabilir. Ana ifade başlıkta ve ilk paragrafta doğal biçimde geçsin, gerisini konuyu eksiksiz anlatmak halleder.
+
+<Not baslik="Aynı kelimeyi tekrar tekrar yazmak ters teper" tur="dikkat">
+  Google’ın spam politikaları anahtar kelime doldurmayı (keyword stuffing) ihlal sayar. Verdiği örnekler arasında, sayfanın
+  sıralama almaya çalıştığı şehir ve bölgelerin alt alta dizildiği metin blokları ve aynı kelimenin doğal olmayan sıklıkta
+  tekrarı vardır. Politikayı ihlal eden siteler sonuçlarda daha alt sıralara düşebilir ya da hiç görünmeyebilir.
+</Not>
+
+Listeniz ve eşleştirme tablonuz hazırsa sıradaki iş, sitenizin bu aramalara bugün nasıl cevap verdiğine bakmaktır. Bunun sırasını [SEO analizi nasıl yapılır](/blog/seo-analizi-nasil-yapilir/) yazısı verir; işin bütününü görmek için [SEO nedir](/blog/seo-nedir/) yazısına dönebilirsiniz.
+
+Aramaları sayfalarla eşleştirirken iki sayfanın aynı aramaya oynadığını fark ederseniz ya da listeniz bir türlü kısalmıyorsa bu işi birlikte yapabiliriz. [SEO danışmanlığı](/hizmetler/seo-danismanligi/) çalışmasında ilk adımlardan biri, hangi aramanın hangi sayfaya ait olduğunu yazmaktır.

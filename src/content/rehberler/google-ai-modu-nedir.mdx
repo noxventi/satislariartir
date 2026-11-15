@@ -1,0 +1,230 @@
+---
+no: 41
+kapak: google-ai-modu-nedir
+kapakAlt: "Kâğıttan dev bir arama kutusundan aşağı sarkan uzun bir yanıt kâğıdı; kutunun yanındaki blokta oturan küçük bir robot elindeki kâğıdı okuyor. Kâğıdın ucundan çıkan kırmızı kalem çizgisi, sıra sıra dizilmiş tenteli dükkânlardan kapısı açık olanına uzanıyor"
+soru: Google AI Modu nedir, sitenizin trafiğini nasıl etkiler?
+baslik: Google AI Modu Nedir, Trafiği Nasıl Etkiler?
+aciklama: >-
+  Google AI Modu nedir, AI Bakışı’ndan farkı ne, Türkiye’de kullanılabiliyor mu, kapatılabilir mi ve site sahipleri için
+  Google ne söylüyor, resmî kaynaklarıyla görün.
+aramalar:
+  - google ai modu
+  - ai modu
+  - ai modu nedir
+  - google ai modu kapatma
+kisaCevap: >-
+  Google AI Modu, Google Arama’da soruyu yapay zekâyla yanıtlayan ve yanıtın yanında kaynak sitelere bağlantı veren
+  arama modudur. Soruyu alt konulara böler, her birini aynı anda arar ve takip sorularıyla sohbet gibi sürer. Google,
+  AI Modu ile AI Bakışı’nı Türkiye’de 18 Şubat 2026’da kademeli olarak sunmaya başladı; Türkçe desteklenen diller
+  arasında. AI Bakışı kapatılamaz, ancak arama yaptıktan sonra Web filtresi seçilerek yalnız bağlantılar görülebilir.
+  Google’a göre AI Modu’nda kaynak gösterilmek için ek bir şart yoktur ve bu özelliklerden gelen trafik Search
+  Console’da Web arama türü içinde raporlanır.
+elinizeGecen: AI Modu ile AI Bakışı karşılaştırması, kapatma seçenekleri ve site sahibi kontrol listesi
+hizmetler: [geo]
+hizmetBaglantisi:
+  etiket: GEO ve AEO danışmanlığı
+  url: /hizmetler/yapay-zeka-gorunurlugu/
+sonraki: geo-nedir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Arama Yardım, Google Arama’da AI Modu ile yapay zeka destekli yanıtlar alma
+    url: https://support.google.com/websearch/answer/16011537?hl=tr
+    tur: resmi
+  - ad: Google Arama Yardım, Google Arama’daki AI Bakışı özelliğiyle aradığınız bilgilere çok daha hızlı ve kolay ulaşma
+    url: https://support.google.com/websearch/answer/14901683?hl=tr
+    tur: resmi
+  - ad: Google Türkiye Blogu, Türkiye’de AI Modu ve AI Bakışı Dönemi Başlıyor
+    url: https://blog.google/intl/tr-tr/urun-duyurulari/turkiyede-ai-modu-ve-ai-bakisi-donemi-basliyor/
+    tur: resmi
+  - ad: Google Search Central, AI features and your website
+    url: https://developers.google.com/search/docs/appearance/ai-features
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Akis from '../../components/blog/Akis.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Fethiye’de pansiyon işleten birini düşünün. Bir akşam misafirlerinin soracağı soruyu kendisi Google’a yazıyor: “çocuklu aileyle fethiye’de sakin bir koy ve yakınında kalacak yer”. Sonuçların üstünde uzun bir yanıt çıkıyor, yanında birkaç site bağlantısı. Yanıtın altından soruyu sohbet gibi sürdürebileceği bir görünüme geçiyor.
+
+O görünüm Google’ın AI Modu’dur. Pansiyon sahibinin aklındaki soru ise şudur: misafir cevabı Google’da okuyorsa benim siteme kim gelecek? Bu yazı AI Modu’nun ne olduğunu ve Google’ın site sahiplerine ne söylediğini anlatır. Yapay zekâ yanıtlarında görünmenin genel mantığı [GEO nedir](/blog/geo-nedir/) yazısında.
+
+<SonucSayfasi
+  sorgu="çocuklu aileyle fethiye’de sakin koy ve kalacak yer"
+  vurgu="yapay-zeka"
+  bolgeler={['reklam', 'yapay-zeka', 'organik']}
+  aciklamalar={{
+    reklam: 'Google Türkiye’nin duyurusuna göre reklamlar, AI Bakışı panelinin üstündeki ve altındaki alanlarda yer almaya devam eder.',
+    'yapay-zeka': 'AI Bakışı: Google’ın bazı aramalarda sonuçların üstünde gösterdiği, kaynak bağlantılı yapay zekâ özeti. Mobilde AI Modu’na buradan geçilebilir.',
+  }}
+>
+  AI Bakışı normal sonuç sayfasının içinde durur. AI Modu ise soruyu sohbet gibi sürdürdüğünüz ayrı bir arama
+  görünümüdür.
+</SonucSayfasi>
+
+## Google AI Modu nedir?
+
+AI Modu, Google Arama’da sorunuza yapay zekâyla hazırlanmış bir yanıt veren ve yanıtın yanında destekleyici sitelere bağlantı gösteren arama modudur. Google’ın yardım sayfası üç giriş yolu sayar: google.com/ai adresine gitmek, google.com’da sorunuzu yazdıktan sonra AI Modu seçeneğine dokunmak ya da Google uygulamasının ana ekranındaki AI Modu simgesini kullanmak. Soruyu yazıyla, sesle ya da kamerayla çektiğiniz bir fotoğrafla sorabilirsiniz.
+
+Arkadaki yöntemin Google’daki adı “sorgu yayılımı”dır (query fan-out). Sistem sorunuzu alt konulara böler, her birini aynı anda arar ve yanıtı bu aramaların sonuçlarından kurar. Pansiyon örneğinde koylar, ulaşım ve kalacak yer ayrı ayrı aranıp tek yanıtta birleşebilir.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'AI Modu',
+      tanim: 'Soruyu yapay zekâyla yanıtlayan, takip sorularıyla sohbet gibi süren ve kaynak sitelere bağlantı veren arama modu.',
+    },
+    {
+      ad: 'AI Bakışı',
+      acilim: 'AI Overviews',
+      tanim: 'Google’ın bazı aramalarda sonuçların üstünde gösterdiği, yapay zekâyla hazırlanmış özet. Daha ayrıntılı bilgi için bağlantılar içerir.',
+    },
+    {
+      ad: 'Sorgu yayılımı',
+      acilim: 'Query fan-out',
+      tanim: 'Sorunun alt konulara bölünüp her birinin aynı anda aranması.',
+      ornek: '“Sakin koy ve kalacak yer” sorusu koy, ulaşım ve konaklama aramalarına ayrılır.',
+    },
+    {
+      ad: 'Web filtresi',
+      tanim: 'Arama yaptıktan sonra seçilen ve AI Bakışı gibi özellikler olmadan yalnız metin bağlantılarını gösteren filtre.',
+    },
+  ]}
+/>
+
+Google, AI Modu’nun yanıtındaki bilgileri kaynak bağlantılarına tıklayarak doğrulamayı önerir. Bu, kaynak gösterilen sayfanın okunmaya devam ettiği anlamına gelir: yanıtı merak eden ya da doğrulamak isteyen kişi bağlantıya geçer. Site sahibi için soru, o bağlantılardan birinin kendi sayfası olup olmadığıdır.
+
+## AI Modu ile AI Bakışı arasındaki fark ne?
+
+İkisi de Google Arama’nın yapay zekâ özellikleridir ve ikisi de kaynak sitelere bağlantı verir. Ayrıldıkları yer, nerede durdukları ve ne kadar derine indikleridir.
+
+<Karsilastirma
+  ara="ve"
+  uygunEtiketi="Ne zaman görürsünüz"
+  sol={{
+    ust: 'Sonuç sayfasında',
+    baslik: 'AI Bakışı',
+    maddeler: [
+      'Normal sonuç sayfasının üstünde kısa bir özet olarak çıkar.',
+      'Konunun özünü hızlıca verir, ayrıntı için bağlantı gösterir.',
+      'Google’a göre temel arama özelliklerinden biridir ve kapatılamaz.',
+    ],
+    uygun: 'Google’ın yapay zekâ özetinin yararlı olacağını belirlediği aramalarda',
+  }}
+  sag={{
+    ust: 'Ayrı görünümde',
+    baslik: 'AI Modu',
+    maddeler: [
+      'Siz geçtiğinizde açılır ve takip sorularıyla sürer.',
+      'Google’a göre ayrıntılı araştırma ve karmaşık karşılaştırma isteyen sorularda işe yarar.',
+      'Yanıtından yeterince emin olmadığında bir dizi web bağlantısı sunar.',
+    ],
+    uygun: 'AI Modu seçeneğine, simgesine ya da google.com/ai adresine geçtiğinizde',
+  }}
+/>
+
+Google, iki özelliğin farklı modeller ve teknikler kullanabildiğini, bu yüzden aynı soruda farklı yanıtlar ve farklı bağlantılar gösterebildiğini belirtir. Yani AI Bakışı’nda kaynak gösterilen bir sayfa AI Modu’nda gösterilmeyebilir; tersi de olabilir.
+
+## Google AI Modu Türkiye’de ve Türkçe kullanılabiliyor mu?
+
+Evet. Google Türkiye, 18 Şubat 2026 tarihli duyurusunda AI Modu ile AI Bakışı’nın Türkiye’de o günden itibaren kademeli olarak kullanıma sunulduğunu açıkladı. Duyuruya göre özellikler Android ve iOS için Google uygulamasında ve arama sonuçları sayfasında kullanılabilir. AI Modu’nun yardım sayfasında Türkiye, özelliğin sunulduğu ülkeler arasında; Türkçe de desteklenen diller arasında yer alıyor.
+
+Kademeli sunum, özelliğin herkese aynı gün açılmadığı anlamına gelir. Bazı ek özellikler için yaş ve hesap şartları da vardır; örneğin yardım sayfasına göre kişiselleştirmeden yararlanmak için 18 yaşını doldurmuş olmak ve geçmiş ayarlarını açmak gerekir.
+
+## Google AI modu kapatılabilir mi?
+
+Google’ın yardım sayfalarında AI Modu’nu ya da AI Bakışı’nı tamamen kapatan bir ayar anlatılmaz. Google’ın kendi cümlesiyle AI Bakışı, bilgi panelleri gibi temel Google Arama özelliklerinden biridir ve bu özellikler devre dışı bırakılamaz. Yapabildikleriniz şunlardır:
+
+<Ornek
+  baslik="AI özelliklerinde kullanıcı neyi seçebilir?"
+  temsili={false}
+  not="Kaynak: Google Arama Yardım, AI Bakışı ve AI Modu sayfaları. Tarayıcı eklentisi ya da başka uygulamalarla yapılan ayarlar Google’ın anlattığı yöntemler değildir; burada yer almaz."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">İstek</th>
+        <th scope="col">Mümkün mü?</th>
+        <th scope="col">Nasıl?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="İstek"><strong>AI Bakışı’nı kalıcı olarak kapatmak</strong></td>
+        <td data-baslik="Mümkün mü?"><span class="hukum hukum--hayir">Hayır</span></td>
+        <td data-baslik="Nasıl?">Google’a göre temel arama özelliklerinden biridir ve devre dışı bırakılamaz.</td>
+      </tr>
+      <tr>
+        <td data-baslik="İstek"><strong>Yalnız bağlantıları görmek</strong></td>
+        <td data-baslik="Mümkün mü?"><span class="hukum hukum--evet">Evet</span></td>
+        <td data-baslik="Nasıl?">Arama yaptıktan sonra Web filtresini seçin; AI Bakışı gibi özellikler olmadan metin bağlantıları gösterilir.</td>
+      </tr>
+      <tr>
+        <td data-baslik="İstek"><strong>AI Modu’nda arama yapmamak</strong></td>
+        <td data-baslik="Mümkün mü?"><span class="hukum hukum--evet">Evet</span></td>
+        <td data-baslik="Nasıl?">AI Modu’na siz geçtiğinizde açılır; seçeneğine, simgesine ya da google.com/ai adresine geçmezseniz normal sonuçlarda kalırsınız.</td>
+      </tr>
+      <tr>
+        <td data-baslik="İstek"><strong>AI Modu geçmişini silmek</strong></td>
+        <td data-baslik="Mümkün mü?"><span class="hukum hukum--evet">Evet</span></td>
+        <td data-baslik="Nasıl?">Yardım sayfası, kayıtlı AI Modu geçmişinin nasıl silineceğini ayrıca anlatır.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Amacınız sonuç sayfasının en üstündeki özeti görmemekse Google’ın sunduğu yol Web filtresidir. Filtre, arama yapıldıktan sonra sonuç sayfasında seçilir.
+
+## AI Modu sitenizin trafiğini nasıl etkiler?
+
+Bu sorunun herkes için geçerli bir rakamı yok; Google’ın bu konudaki sayfalarında da bir oran verilmez. Google’ın site sahiplerine söyledikleri dört noktada toplanır. AI Modu ve AI Bakışı yanıtlarında destekleyici sitelere bağlantı verilir. Bir sayfanın bu bağlantılardan biri olabilmesi için dizinde olması ve arama sonuçlarında özet metinle gösterilmeye uygun olması gerekir; bunun dışında ek bir şart ya da özel bir optimizasyon yoktur. Bu özelliklerden gelen ziyaretler Search Console’un Performans raporunda, “Web” arama türünün içinde raporlanır.
+
+Dördüncü nokta Google’ın kendi gözlemidir: AI Bakışı olan sonuç sayfalarından gelen tıklamaların daha nitelikli olduğunu, bu ziyaretçilerin sitede daha uzun kalma olasılığının daha yüksek olduğunu yazar. Google Türkiye’nin duyurusu da Google’ın her gün web sitelerine milyarlarca tıklama yönlendirmeye devam ettiğini söyler. Bunlar Google’ın kendi açıklamalarıdır; kendi sitenizdeki etkiyi kendi verinizden okumanız gerekir.
+
+<Akis
+  asamalar={[
+    { ad: 'Soru', aciklama: 'Kişi sorusunu AI Modu’na yazar.' },
+    { ad: 'Alt aramalar', aciklama: 'Soru alt konulara bölünüp aranır.', olcu: 'Sorgu yayılımı' },
+    { ad: 'Yanıt', aciklama: 'Yanıtın yanında kaynak siteler gösterilir.', olcu: 'Dizin ve özet metin' },
+    { ad: 'Tıklama', aciklama: 'Kişi bir kaynağa geçer.', olcu: 'Search Console, Web' },
+    { ad: 'Talep', aciklama: 'Sitede arar, yazar ya da rezervasyon yapar.', olcu: 'Dönüşüm' },
+  ]}
+/>
+
+Ölçümde bilinmesi gereken bir sınır var: Search Console bu ziyaretleri ayrı bir satırda göstermez, Web arama türünün içinde sayar. Google bu yüzden Search Console’un yanında dönüşümleri ve sitede geçirilen süreyi Google Analytics gibi araçlarla izlemeyi önerir. Pansiyon için bakılacak sayı, Google’dan gelen ziyaretlerin kaçının rezervasyon talebine döndüğüdür.
+
+Kaynak gösterildiğinizde sitenizin gelen kişiye vermesi gereken şey, yanıtta yer almayan ayrıntıdır. Pansiyon örneğinde yanıt koyları ve bölgeyi anlatabilir; boş oda, oda tipleri ve rezervasyon yolu ise tesisin kendi sayfasındadır. O sayfa telefonda açılıp bu bilgiyi hemen vermiyorsa gelen ziyaretin talebe dönmesi zorlaşır.
+
+<Not baslik="Yanıtta görünmeyi kısıtlamak" tur="ipucu">
+  Bir sayfanın bilgisinin Arama’da nasıl gösterileceğini nosnippet, data-nosnippet, max-snippet ya da noindex ile
+  sınırlayabilirsiniz. Google bu kontrolleri, Arama’daki yapay zekâ özelliklerinde içeriğinizi yönetmenin yolu olarak anlatır. Sınırladığınız sayfa
+  yanıtlarda kaynak olarak da daha az kullanılabilir; bu kararı sayfa sayfa verin.
+</Not>
+
+## Site sahibi AI Modu için ne yapmalı?
+
+Google’ın çizgisi açık: AI Modu’nda kaynak gösterilmek için ek bir şart ya da özel bir optimizasyon gerekmez. Temel, dizinde olan ve soruya açıkça cevap veren bir sayfadır. Yapılacak iş, sitenin bu yanıtlara kaynak olabilecek durumda olup olmadığını görmektir.
+
+<KontrolListesi
+  kimlik="google-ai-modu-site-kontrol"
+  baslik="AI Modu için site kontrolü"
+  adimlar={[
+    'Misafirlerimin ya da müşterilerimin sorduğu soruları kendi sözleriyle AI Modu’na sordum; yanıtları ve kaynakları not ettim.',
+    'Bu soruların cevabı sitemde bir sayfada açık bir cümleyle yazıyor.',
+    'Bu sayfalar Google’ın dizininde; nosnippet ya da noindex ile kapatılmamış.',
+    'Search Console’da Web arama türündeki tıklamalara ve sorgulara bakıyorum.',
+    'Google’dan gelen ziyaretlerin kaçının arama, form ya da rezervasyona döndüğünü ölçüyorum.',
+  ]}
+  not="Aynı soruları birkaç hafta sonra aynı sözlerle yeniden sorun; yanıtlar ve bağlantılar değişebilir."
+/>
+
+Sitenin dizinde olup olmadığını ve sayfaların neden görünmediğini adım adım kontrol etmek için [SEO analizi nasıl yapılır](/blog/seo-analizi-nasil-yapilir/) yazısına bakabilirsiniz. Konaklama tesislerinde harita kaydını, siteyi ve yapay zekâ yanıtlarını birlikte nasıl ele aldığımızı [otel ve konaklama](/sektorler/otel-ve-konaklama/) sayfasında anlattık.
+
+Kendi sorularınızı sorduğunuzda adınız hiç geçmiyorsa ya da yanlış anlatılıyorsanız sıradaki adım, yanıtın dayandığı sayfaları okumaktır. [GEO ve AEO danışmanlığı](/hizmetler/yapay-zeka-gorunurlugu/) çalışmasında bunu birlikte yapıyoruz. Kavramın tamamı ve Google’ın gereksiz saydığı taktikler [GEO nedir](/blog/geo-nedir/) yazısında.

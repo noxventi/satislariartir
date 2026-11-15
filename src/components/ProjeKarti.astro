@@ -1,0 +1,307 @@
+---
+/**
+ * Proje kartı: lacivert panelde projenin adı, anlatımı, yapılan iş ve canlı sitenin gerçek ekran görüntüsü.
+ *
+ * - Ölçülmüş sonuç yoktur; kart "ne yapıldı" sorusunu yanıtlar.
+ * - Ekran görüntüsü yalnız web tasarımı da yürütülen projelerde kullanılır (src/assets/projeler/<ad>-masaustu.jpg
+ *   ve -mobil.jpg). Tasarımı ekibe ait olmayan sitelerde görüntü yerine projenin sorusu açık mavi bir kâğıt
+ *   karoda, kâğıt işi bir nesneyle durur: site tasarımı ekibe atfedilmez.
+ * - Kart bulunduğu sütunun genişliğine göre yerleşir (kapsayıcı sorgusu): geniş sütunda yan yana, dar sütunda alt alta.
+ */
+import type { ImageMetadata } from 'astro';
+import Cizim from './Cizim.astro';
+import Gorsel from './Gorsel.astro';
+import Ikon from './Ikon.astro';
+import { projeBul } from '../data/projeler';
+import megafon from '../assets/cizimler/megafon.png';
+import buyutec from '../assets/cizimler/buyutec.png';
+import dukkan from '../assets/cizimler/dukkan.png';
+
+interface Props {
+  kimlik: string;
+  /** Kartın bu sayfadaki anlatımı. Verilmezse projenin karar sorusu kullanılır. */
+  metin?: string;
+  baglantiEtiketi?: string;
+}
+const { kimlik, metin, baglantiEtiketi } = Astro.props;
+const p = projeBul(kimlik);
+const ad = p.siteAdi ?? p.marka;
+const canli = `https://${p.alanAdi}/`;
+
+const ekranlar = import.meta.glob<{ default: ImageMetadata }>('../assets/projeler/*.jpg', { eager: true });
+const ekranBul = (tur: 'masaustu' | 'mobil') => ekranlar[`../assets/projeler/${p.alanAdi.split('.')[0]}-${tur}.jpg`]?.default;
+const webTasarimi = p.obrandyKapsami.includes('Web sitesi tasarımı');
+const masaustu = webTasarimi ? ekranBul('masaustu') : undefined;
+const mobil = webTasarimi ? ekranBul('mobil') : undefined;
+
+// Görüntü yoksa soru karosundaki nesne yapılan işe göre seçilir.
+const nesne = p.obrandyKapsami.includes('Dijital reklam yönetimi') ? megafon : p.obrandyKapsami.some((k) => k.startsWith('SEO')) ? buyutec : dukkan;
+// Soru karosu projenin sorusunu taşır; aynı cümle gövdede yinelenmez.
+const govde = metin ?? (masaustu ? p.karar : undefined);
+---
+
+<article class="pk koyu-zemin">
+  <div class:list={['pk__ic', masaustu ? 'pk__ic--ekranli' : 'pk__ic--sorulu']}>
+    <div class="pk__metin">
+      <p class="pk__sektor etiket">{p.sektor}</p>
+      <h3 class="pk__ad">{ad}</h3>
+      {govde && <p class="pk__aciklama">{govde}</p>}
+      <ul class="pk__isler" aria-label="Yapılan iş">
+        {p.obrandyKapsami.map((i) => <li>{i}</li>)}
+      </ul>
+      <div class="pk__baglar">
+        {
+          p.dosya && (
+            <a class="ok-bag pk__dosya" href={p.dosya} data-olay="cta_click" data-yer="proje-karti">
+              {baglantiEtiketi ?? `${ad} projesini inceleyin`}
+              <Ikon ad="arrow-right" boyut={18} />
+            </a>
+          )
+        }
+        <a class="pk__site" href={canli} rel="noopener">
+          {p.alanAdi}
+          <Ikon ad="arrow-up-right" boyut={14} />
+        </a>
+      </div>
+      {p.tasarimNotu && <p class="mikro pk__not">{p.tasarimNotu}</p>}
+    </div>
+
+    {
+      masaustu ? (
+        <a class="pk__ekran" href={p.dosya ?? canli} rel={p.dosya ? undefined : 'noopener'} tabindex="-1" aria-hidden="true">
+          <span class="pk__masaustu">
+            <Gorsel src={masaustu} alt="" sizes="(max-width: 55.99rem) 88vw, 46vw" genislikler={[640, 960, 1280, 1440]} kalite={72} />
+          </span>
+          {mobil && (
+            <span class="pk__telefon">
+              <Gorsel src={mobil} alt="" sizes="(max-width: 55.99rem) 26vw, 12vw" genislikler={[240, 360, 480, 780]} kalite={72} />
+            </span>
+          )}
+        </a>
+      ) : (
+        <div class="pk__soru">
+          <p class="pk__soru-ad">İşletmenin sorusu</p>
+          <p class="pk__soru-yazi">{p.karar}</p>
+          <div class="pk__nesne" aria-hidden="true">
+            <Cizim src={nesne} sizes="(max-width: 47.99rem) 40vw, 14vw" genislikler={[240, 360, 520, 720]} />
+          </div>
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .pk {
+    container-type: inline-size;
+    background: var(--murekkep);
+    color: var(--beyaz);
+    border-radius: var(--kose);
+    overflow: hidden;
+  }
+  .pk__ic {
+    --ic: clamp(1.4rem, 5cqw, 3.75rem);
+    display: grid;
+    gap: clamp(1.75rem, 5cqw, 2.5rem);
+    padding: var(--ic);
+  }
+  .pk__metin {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    align-content: center;
+    min-width: 0;
+  }
+  .pk__sektor {
+    color: rgb(255 255 255 / 0.7);
+  }
+  .pk__ad {
+    font-size: clamp(2.1rem, 1.5rem + 3.4cqw, 4rem);
+    font-weight: 730;
+    font-stretch: 84%;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin-block-start: -0.35rem;
+  }
+  .pk__aciklama {
+    font-size: var(--b-giris);
+    line-height: 1.42;
+    max-width: 30em;
+    color: rgb(255 255 255 / 0.9);
+  }
+  .pk__isler {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block-start: 0.15rem;
+  }
+  .pk__isler li {
+    padding: 0.38em 0.72em 0.42em;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .pk__baglar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.75rem;
+    margin-block-start: 0.35rem;
+  }
+  .pk__dosya,
+  .pk__site {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--beyaz);
+    text-decoration-color: rgb(255 255 255 / 0.5);
+  }
+  .pk__dosya {
+    font-size: 1.125rem;
+  }
+  .pk__site {
+    gap: 0.3rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 600;
+    color: rgb(255 255 255 / 0.82);
+  }
+  .pk__dosya:hover,
+  .pk__site:hover {
+    color: var(--beyaz);
+    text-decoration-color: #ff6b7f;
+  }
+  .pk__not {
+    max-width: 34em;
+    color: rgb(255 255 255 / 0.64);
+  }
+
+  /* Gerçek ekran görüntüleri: masaüstü çerçevesi, sol alt köşesine binen telefon. */
+  .pk__ekran {
+    position: relative;
+    display: block;
+    margin-inline-start: 7%;
+    padding-block-end: 9%;
+  }
+  .pk__masaustu,
+  .pk__telefon {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--kose);
+    background: var(--beyaz);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.22),
+      0 30px 60px -24px rgb(0 0 0 / 0.65);
+  }
+  .pk__ekran :global(img) {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 900ms var(--yumusak);
+  }
+  .pk__masaustu :global(img) {
+    aspect-ratio: 16 / 10;
+  }
+  .pk__telefon {
+    position: absolute;
+    left: -7.5%;
+    bottom: 0;
+    width: 26%;
+  }
+  .pk__telefon :global(img) {
+    aspect-ratio: 9 / 17;
+  }
+  @media (hover: hover) {
+    .pk:hover .pk__masaustu :global(img) {
+      transform: scale(1.02);
+    }
+  }
+
+  /* Görüntü kullanılmayan projeler: projenin sorusu açık mavi kâğıtta. */
+  .pk__soru {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    min-height: 15rem;
+    padding: clamp(1.25rem, 4cqw, 2.25rem);
+    padding-block-end: clamp(5.5rem, 22cqw, 9rem);
+    background: var(--mavi-acik);
+    color: var(--murekkep);
+    border-radius: var(--kose);
+    overflow: hidden;
+  }
+  .pk__soru-ad {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .pk__soru-ad::before {
+    content: '';
+    width: 1.5rem;
+    height: 2px;
+    background: var(--kirmizi);
+  }
+  .pk__soru-yazi {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.4rem, 1.05rem + 2.2cqw, 2.35rem);
+    font-weight: 690;
+    font-stretch: 86%;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+    max-width: 17em;
+  }
+  .pk__nesne {
+    position: absolute;
+    right: -0.5rem;
+    bottom: -1rem;
+    width: clamp(8rem, 30cqw, 13rem);
+    transition: transform 600ms var(--yumusak);
+  }
+  @media (hover: hover) {
+    .pk:hover .pk__nesne {
+      transform: rotate(-2.5deg) scale(1.04);
+    }
+  }
+
+  /* Geniş sütun: yazı solda, görsel sağda. */
+  @container (min-width: 54rem) {
+    .pk__ic {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(2rem, 6cqw, 5.5rem);
+      align-items: center;
+    }
+    .pk__ic--sorulu {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      align-items: stretch;
+    }
+    /* Görüntü panelin sağ kenarına yaslanır. */
+    .pk__ekran {
+      margin-inline: 4% calc(var(--ic) * -1);
+    }
+    .pk__soru {
+      align-content: start;
+      min-height: 19rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pk__ekran :global(img),
+    .pk__nesne {
+      transition: none;
+    }
+    .pk:hover .pk__masaustu :global(img),
+    .pk:hover .pk__nesne {
+      transform: none;
+    }
+  }
+</style>

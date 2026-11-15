@@ -1,0 +1,471 @@
+---
+/**
+ * Sayfa sonundaki görüşme bandı. Her sayfada id="gorusme" ile bulunur; sayfa içi çağrılar buraya iner.
+ *
+ * Düzen (15 Kasım 2026 yenilemesi):
+ * - Solda başlık (son kelimenin altı kâğıt beyazı kalemle çizilir), açıklama ve "görüşme nasıl ilerler" adımları.
+ * - Sol altta bölümün mavi zeminine karışan kâğıt işi sahne: dükkânından çıkan esnaf, kırmızı kalem çizgisini izleyerek
+ *   telefonu çalan görüşme masasına yürüyor. Sahnenin fonu bölümle aynı mavidir; kenarları maskeyle erir,
+ *   alt kenarı bölümün alt kenarına oturur (araclar/gorusme-sahnesi.mjs).
+ * - Sağda form fişi: beyaz kâğıt, lacivert sert gölge, üstte kısa başlık ve telefon çizimi.
+ * - Dar ekranda sıra: metin, form, sahne.
+ *
+ * Varsayılan yuva (slot): adımların altına eklenecek kanıt (müşteri sözü, proje bağlantısı).
+ * Yuva boşsa ve `kanit` kapatılmadıysa, sayfanın kanalına uyan kayıtlı bir müşteri sözü kendiliğinden gösterilir:
+ * karar anında, formun yanında gerçek bir müşterinin cümlesi durur. Sözler src/data/projeler.ts kaydından birebir gelir.
+ * Form fişinin altında formu doldurmak istemeyen için iki yol daha vardır: WhatsApp (hazır ilk cümleyle) ve telefon.
+ * Adımlar süre ya da sonuç sözü içermez.
+ */
+import TalepFormu from './TalepFormu.astro';
+import Gorsel from './Gorsel.astro';
+import Cizim from './Cizim.astro';
+import Ikon from './Ikon.astro';
+import MusteriSozu from './MusteriSozu.astro';
+import type { KanalDegeri } from '../site.config';
+import { MUSTERI_YORUMLARI } from '../data/projeler';
+import { TELEFON_BAGLANTISI, TELEFON_YAZISI, whatsappBaglantisi } from '../lib/iletisim';
+
+import sahne from '../assets/gorseller/gorusme.jpg';
+import telefon from '../assets/cizimler/telefon.png';
+
+interface Props {
+  baslik: string;
+  metin?: string;
+  kanal?: KanalDegeri;
+  cagri: string;
+  konum: string;
+  kampanyaDurumu?: 'new' | 'existing' | '';
+  kimlik?: string;
+  /** false: kendiliğinden müşteri sözü gösterilmez (sayfada aynı söz zaten varsa ya da meslek kuralı olan sayfalarda). */
+  kanit?: boolean;
+}
+const {
+  baslik,
+  metin = 'İşletmenizi ve ulaşmak istediğiniz müşteriyi anlatın. Görüşmeye buradan başlayalım.',
+  kanal,
+  cagri,
+  konum,
+  kampanyaDurumu = '',
+  kimlik = 'gorusme',
+  kanit = true,
+} = Astro.props;
+
+// Kanala uyan müşteri sözü. Sağlık alanındaki markaların sözleri burada kullanılmaz.
+const SOZ_SECIMI: Record<KanalDegeri, string> = {
+  'google-ads': 'hun-education',
+  meta: 'hun-education',
+  seo: 'yurt-disi-egitim-rehberim',
+  geo: 'ilk-gunebakan',
+  web: 'bodrum-olive-house',
+  belirsiz: '1001-art',
+};
+const yorum = kanit && !Astro.slots.has('default') ? MUSTERI_YORUMLARI.find((y) => y.kimlik === SOZ_SECIMI[kanal ?? 'belirsiz']) : undefined;
+
+const whatsappAdresi = whatsappBaglantisi(kanal);
+
+// Başlığın son kelimesi vurgulanır (altı çizilir).
+const kelimeler = baslik.trim().split(/\s+/);
+const sonKelime = kelimeler.pop() ?? '';
+const basi = kelimeler.join(' ');
+
+const adimlar = [
+  { ad: 'Formu gönderin', aciklama: 'Adınız, işletmeniz ve size ulaşacağımız bir yol yeterli.' },
+  { ad: 'Sizi dinleyelim', aciklama: 'İşinizi, ulaşmak istediğiniz kişiyi ve bugünkü durumunuzu anlatırsınız.' },
+  { ad: 'Yolu birlikte çizelim', aciklama: 'Nereden başlanacağını ve neyin gerekmediğini açıkça söyleriz.' },
+];
+---
+
+<section class="bolum bolum--mavi koyu-zemin gb" id="gorusme">
+  <div class="sarici gb__ic">
+    <div class="gb__metin">
+      <h2 class="baslik-1 gb__baslik" data-gir>
+        {basi}{' '}<span class="gb__vurgu">{sonKelime}</span>
+      </h2>
+      <p class="giris">{metin}</p>
+
+      <div class="gb__akis">
+        <h3 class="gb__akis-ad">Görüşme nasıl ilerler?</h3>
+        <ol class="gb__adimlar">
+          {
+            adimlar.map((a, i) => (
+              <li data-gir style={`--gecikme:${i * 110}ms`}>
+                <span class="gb__no" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <strong>{a.ad}</strong>
+                <span>{a.aciklama}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      {Astro.slots.has('default') && <div class="gb__ek"><slot /></div>}
+      {
+        yorum && (
+          <div class="gb__ek">
+            <MusteriSozu soz={yorum.soz} kisi={yorum.kisi} kurum={yorum.kurum} baglam={`Yapılan iş: ${/^[A-ZÇĞİÖŞÜ]{2}/.test(yorum.is) ? yorum.is : yorum.is.charAt(0).toLocaleLowerCase('tr-TR') + yorum.is.slice(1)}.`} zemin="koyu" />
+          </div>
+        )
+      }
+    </div>
+
+    <div class="gb__form">
+      <div class="gb__form-ust">
+        <div>
+          <h3 class="gb__form-ad">Kendinizi tanıtın</h3>
+          <p>Üç bilgi yeterli. Gerisini görüşmede konuşuruz.</p>
+        </div>
+        <Cizim src={telefon} class="gb__form-cizim" sizes="6rem" genislikler={[160, 240, 320]} />
+      </div>
+      <TalepFormu konum={konum} kanal={kanal} cagri={cagri} kampanyaDurumu={kampanyaDurumu} kimlik={kimlik} />
+      {
+        (whatsappAdresi || TELEFON_BAGLANTISI) && (
+          <div class="gb__diger">
+            <p>Form doldurmak istemezseniz</p>
+            <div class="gb__yollar">
+              {whatsappAdresi && (
+                <a class="gb__yol" href={whatsappAdresi} target="_blank" rel="noopener" data-yer={`${konum}-form-alti`}>
+                  <Ikon ad="whatsapp-logo" boyut={20} />
+                  WhatsApp’tan yazın
+                </a>
+              )}
+              {TELEFON_BAGLANTISI && (
+                <a class="gb__yol" href={TELEFON_BAGLANTISI} data-yer={`${konum}-form-alti`}>
+                  <Ikon ad="phone" boyut={20} />
+                  {TELEFON_YAZISI}
+                </a>
+              )}
+            </div>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="gb__sahne" aria-hidden="true">
+      <Gorsel src={sahne} alt="" sizes="(max-width: 55.99rem) 100vw, 56vw" genislikler={[480, 720, 960, 1280, 1700]} kalite={66} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .gb {
+    --kalem-cizgisi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M1.5 5.2C14 2.7 27 6.3 41 4.4S69 2.5 82 4.6 95 4.1 98.5 3.4' fill='none' stroke='%23000' stroke-width='3.4' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    /* Sahne bölümün alt kenarına oturur: alt boşluğu form sütunu taşır. */
+    padding-block-end: 0;
+    overflow: clip;
+  }
+  .gb__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(2.25rem, 5.5vw, 5.5rem);
+  }
+  .gb__metin {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    justify-items: start;
+    align-content: start;
+  }
+  .gb__baslik {
+    max-width: 11.5em;
+  }
+  /* Son kelimenin altı kâğıt beyazı kalemle çizilir; görünüme girince soldan sağa uzar. */
+  .gb__vurgu {
+    position: relative;
+    display: inline-block;
+  }
+  .gb__vurgu::after {
+    content: '';
+    position: absolute;
+    inset: auto -0.04em -0.1em;
+    height: 0.2em;
+    background: var(--kagit);
+    -webkit-mask: var(--kalem-cizgisi) center / 100% 100% no-repeat;
+    mask: var(--kalem-cizgisi) center / 100% 100% no-repeat;
+    transition: clip-path 900ms cubic-bezier(0.6, 0.05, 0.25, 1) 250ms;
+  }
+  :global(.js) .gb__baslik[data-gir]:not(.girdi-goruldu) .gb__vurgu::after {
+    clip-path: inset(0 100% 0 0);
+  }
+  .gb__baslik.girdi-goruldu .gb__vurgu::after {
+    clip-path: inset(0 0 0 0);
+  }
+  /* Başlığın kendisi kaymaz ve solmaz; yalnız alt çizgi çizilir. */
+  :global(.js) .gb__baslik[data-gir] {
+    opacity: 1;
+    transform: none;
+  }
+  .gb__metin .giris {
+    margin-block-start: 1.4rem;
+    color: rgb(255 255 255 / 0.88);
+    max-width: 29em;
+  }
+
+  /* Görüşme nasıl ilerler: üç adım, numaralar kesik çizgiyle bağlı. */
+  .gb__akis {
+    display: grid;
+    gap: 1.1rem;
+    width: 100%;
+    margin-block-start: clamp(2rem, 4vw, 3.25rem);
+    padding-block-start: clamp(1.5rem, 3vw, 2.25rem);
+    border-block-start: 1.5px solid rgb(255 255 255 / 0.28);
+  }
+  .gb__akis-ad {
+    font-size: 1.0625rem;
+    font-weight: 640;
+    font-stretch: 96%;
+    letter-spacing: 0;
+    line-height: 1.2;
+    color: rgb(255 255 255 / 0.78);
+  }
+  .gb__adimlar {
+    --ara: clamp(1rem, 2.4vw, 2.25rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--ara);
+  }
+  .gb__adimlar li {
+    position: relative;
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    justify-items: start;
+  }
+  .gb__adimlar li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 1.25rem;
+    left: 3.1rem;
+    right: calc(0.5rem - var(--ara));
+    border-block-start: 2px dashed rgb(255 255 255 / 0.42);
+  }
+  .gb__no {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-block-end: 0.45rem;
+    border: 2px solid var(--beyaz);
+    border-radius: 50%;
+    font-family: var(--yazi-baslik);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  .gb__adimlar li:last-child .gb__no {
+    background: var(--beyaz);
+    color: var(--mavi);
+  }
+  .gb__adimlar strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.3rem);
+    font-weight: 680;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.15;
+  }
+  .gb__adimlar li > span:last-child {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: rgb(255 255 255 / 0.82);
+  }
+  .gb__ek {
+    margin-block-start: clamp(2rem, 4vw, 3.25rem);
+    max-width: 33rem;
+  }
+
+  /* Form fişi: beyaz kâğıt, lacivert sert gölge. */
+  .gb__form {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+    margin-block-end: var(--bolum);
+    padding: clamp(1.4rem, 2.6vw, 2.25rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0.6rem 0.6rem 0 var(--murekkep);
+    color: var(--murekkep);
+  }
+  .gb__form-ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(4.5rem, 7vw, 6rem);
+    gap: 1rem;
+    align-items: center;
+    margin-block-end: 1.25rem;
+    padding-block-end: 1rem;
+    border-block-end: 1.5px solid var(--murekkep);
+  }
+  .gb__form-ust > div {
+    display: grid;
+    gap: 0.3rem;
+  }
+  .gb__form-ad {
+    font-size: clamp(1.45rem, 1.25rem + 0.9vw, 1.9rem);
+    font-weight: 710;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.05;
+    color: var(--murekkep);
+  }
+  .gb__form-ust p {
+    font-size: var(--b-kucuk);
+    line-height: 1.4;
+    color: var(--ikincil);
+  }
+  .gb__form-ust :global(.gb__form-cizim) {
+    margin: -0.75rem -0.5rem -0.75rem 0;
+  }
+  .gb__form :global(a) {
+    color: var(--mavi);
+    text-decoration-color: rgb(23 61 166 / 0.38);
+  }
+  .gb__form :global(:focus-visible) {
+    outline-color: var(--mavi);
+  }
+  /* Form beyaz fişin üstünde: düğme gölgesi ve kıvılcımı açık zemin renklerine döner. */
+  .gb__form :global(.dugme) {
+    --dg: var(--murekkep);
+    --dk: var(--kirmizi);
+  }
+
+  /* Form fişinin altı: formu doldurmak istemeyen için WhatsApp ve telefon. */
+  .gb__diger {
+    display: grid;
+    gap: 0.7rem;
+    margin-block-start: 1.25rem;
+    padding-block-start: 1.1rem;
+    border-block-start: 1.5px dashed var(--cizgi-koyu);
+  }
+  .gb__diger p {
+    font-family: var(--yazi-baslik);
+    font-size: 0.9375rem;
+    font-weight: 620;
+    font-stretch: 96%;
+    line-height: 1.2;
+    color: var(--ikincil);
+  }
+  .gb__yollar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr));
+    gap: 0.5rem;
+  }
+  .gb__form :global(a.gb__yol),
+  .gb__yol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding-inline: 0.75rem;
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 640;
+    font-stretch: 94%;
+    line-height: 1;
+    font-variant-numeric: lining-nums tabular-nums;
+    white-space: nowrap;
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      background-color 160ms,
+      color 160ms;
+  }
+  .gb__yol :global(svg) {
+    flex: none;
+    color: var(--mavi);
+    transition: color 160ms;
+  }
+  .gb__form :global(a.gb__yol:hover),
+  .gb__yol:hover {
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .gb__yol:hover :global(svg) {
+    color: var(--beyaz);
+  }
+
+  /* Sahne: fonu bölümün mavisiyle aynı; üst ve yan kenarları erir, alt kenarı bölümün sonuna oturur. */
+  .gb__sahne {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    margin: clamp(1rem, 2.5vw, 2rem) 0 0 calc(-1 * clamp(0rem, 3vw, 3rem));
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%), linear-gradient(to right, transparent 0, #000 9%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 26%), linear-gradient(to right, transparent 0, #000 9%, #000 86%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .gb__sahne :global(picture),
+  .gb__sahne :global(img) {
+    display: block;
+    width: 100%;
+  }
+  .gb__sahne :global(img) {
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gb__vurgu::after {
+      transition: none;
+    }
+  }
+  @media (max-width: 55.99rem) {
+    .gb__ic {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      row-gap: clamp(2rem, 6vw, 3rem);
+    }
+    .gb__metin,
+    .gb__form,
+    .gb__sahne {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .gb__form {
+      margin: 0 0.6rem 0 0;
+    }
+    .gb__sahne {
+      margin: 0 calc(-1 * var(--kenar));
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%);
+      mask-image: linear-gradient(to bottom, transparent 0, #000 30%);
+    }
+    .gb__sahne :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+  /* Telefonda adımlar alt alta: numara solda, yazı sağda; kesik çizgi numaraları dikeyde bağlar. */
+  @media (max-width: 39.99rem) {
+    .gb__adimlar {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 1.1rem;
+    }
+    .gb__adimlar li {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      column-gap: 0.9rem;
+      row-gap: 0.2rem;
+    }
+    .gb__no {
+      grid-row: 1 / span 2;
+      margin: 0;
+    }
+    .gb__adimlar strong {
+      align-self: end;
+    }
+    .gb__adimlar li:not(:last-child)::after {
+      top: 2.75rem;
+      bottom: -0.85rem;
+      left: calc(1.25rem - 1px);
+      right: auto;
+      border-block-start: 0;
+      border-inline-start: 2px dashed rgb(255 255 255 / 0.42);
+    }
+  }
+</style>

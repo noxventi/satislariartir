@@ -1,0 +1,376 @@
+---
+/**
+ * Google Ads hizmet sayfası.
+ * Ana niyet: "google reklam yönetimi", "google ads yönetimi", "google ads ajansı / danışmanlığı", "google reklam verme".
+ * H1 kararı ve arama verisi: arastirma/openseo-2026-11-14.md
+ *
+ * Bu sayfa diğer hizmet sayfalarının kalıbıdır (15 Kasım 2026 düzeni):
+ * SayfaBasi (tanım cümlesi + kâğıt işi sahne) > BuSayfada > kapsam kartları > soru kartları > çalışma adımları >
+ * iki durum (ilk kez / mevcut hesap) > çalışma örneği + proje > sık sorulan sorular > ilgili sayfalar > görüşme.
+ * Anlatım sırası: derinlemesine inceleme, bilinçli kurulum, düzenli optimizasyon, satış hedefi.
+ * Başka sayfalardan bağlanan çapalar: #ilk-kampanya, #hesap-inceleme.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import SoruKartlari from '../../components/SoruKartlari.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import IkiDurum from '../../components/IkiDurum.astro';
+import Sss from '../../components/Sss.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import SehirBaglantilari from '../../components/SehirBaglantilari.astro';
+import ProjeKarti from '../../components/ProjeKarti.astro';
+import Cizim from '../../components/Cizim.astro';
+import { hizmetBul, SITE } from '../../site.config';
+
+import gorsel from '../../assets/gorseller/yol-arama.jpg';
+import hedef from '../../assets/cizimler/hedef.png';
+import liste from '../../assets/cizimler/liste.png';
+import telefon from '../../assets/cizimler/telefon.png';
+import buyutec from '../../assets/cizimler/buyutec.png';
+import megafon from '../../assets/cizimler/megafon.png';
+import terazi from '../../assets/cizimler/terazi.png';
+import mesaj from '../../assets/cizimler/mesaj.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+
+const hizmet = hizmetBul('google-ads');
+const kirintilar = [
+  { ad: 'Hizmetler', url: '/hizmetler/' },
+  { ad: 'Google Ads yönetimi', url: hizmet.url },
+];
+
+const kapsam = [
+  { ad: 'Anahtar kelime ve arama araştırması', aciklama: 'Müşterinizin Google’a gerçekten yazdığı aramaları buluyor, satın almaya yakın olanları araştırma yapanlardan ayırıyoruz.' },
+  { ad: 'Kampanya ve hesap kurulumu', aciklama: 'Arama kampanyalarını, gerekiyorsa görüntülü ve yeniden pazarlama kampanyalarını hedefinize göre kuruyoruz.' },
+  { ad: 'Reklam metinleri', aciklama: 'Her arama grubuna, o aramayı yapan kişinin sorusuna cevap veren reklam metinleri yazıyor ve deniyoruz.' },
+  { ad: 'Dönüşüm takibi', aciklama: 'Telefon aramasını, formu ve WhatsApp tıklamasını ayrı ayrı sayacak şekilde kuruyor, yayından önce test ediyoruz.' },
+  { ad: 'Negatif kelimeler ve bütçe', aciklama: 'Satış getirmeyen aramaları kapatıyor, bütçeyi teklif getiren aramalara ve saatlere topluyoruz.' },
+  { ad: 'Açılış sayfası', aciklama: 'Reklamın açtığı sayfayı telefonda deniyor, talep bırakmayı zorlaştıran yerleri düzeltiyoruz.' },
+];
+
+const sorunlar = [
+  {
+    soru: 'Google Ads’te tıklama var, neden telefon gelmiyor?',
+    ornek:
+      'Bir kombi servisi günde onlarca tıklama alıyor ama telefon çalmıyor. Çoğu zaman tıklayan kişi başka bir şey arıyordur ya da telefonda açılan sayfada numaraya dokunulamıyordur.',
+    care: 'Arama terimlerini ve mobil sayfayı birlikte inceliyor, sorunun hangisinde olduğunu buluyoruz.',
+    bag: { etiket: 'Tıklama var, telefon yok rehberi', url: '/blog/google-ads-tiklama-var-telefon-yok/' },
+    cizim: telefon,
+  },
+  {
+    soru: 'Google reklamım neden gösterilmiyor?',
+    ornek: 'Kendi telefonunuzdan aratıp reklamı görememeniz yayında olmadığını göstermez. Onay, bütçe, teklif ya da hedefleme ayarı reklamı sınırlıyor olabilir.',
+    care: 'Hesaptaki durumu okuyup reklamı sınırlayan ayarı düzeltiyoruz.',
+    bag: { etiket: 'Reklamım neden gösterilmiyor?', url: '/blog/google-reklamim-neden-gosterilmiyor/' },
+    cizim: buyutec,
+  },
+  {
+    soru: 'Reklam bütçem neden çabuk bitiyor?',
+    ornek: 'Geniş eşlemeyle açılmış tek bir kelime, ilgisiz yüzlerce aramada reklam gösterebilir. Bütçe öğlene kalmadan biter, akşam arayan müşteri reklamı görmez.',
+    care: 'Eşleme türlerini, negatif kelimeleri ve gün içi dağılımı düzenleyip bütçeyi satış getiren aramalara yayıyoruz.',
+    bag: { etiket: 'Hesap incelemesinde neye bakıyoruz?', url: '#hesap-inceleme' },
+    cizim: megafon,
+  },
+  {
+    soru: 'Google Ads mi, Instagram reklamı mı?',
+    ornek: 'Çilingir arayan kişi Google’a yazar; yeni açılan bir kafeyi çoğu kişi Instagram’da görür. Doğru kanal, müşterinizin sizi arayarak mı yoksa görerek mi bulduğuna bağlıdır.',
+    care: 'Müşterinizin davranışını inceleyip hangi kanalla başlayacağınızı birlikte seçiyoruz.',
+    bag: { etiket: 'Google Ads mi, Instagram mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+    cizim: terazi,
+    genis: true,
+  },
+];
+
+const adimlar = [
+  { ad: 'İnceleme', ozet: 'Hesap, rakip ve arama analizi', aciklama: 'Mevcut hesabınızı ya da pazarınızı inceliyor; kimin, neyi, nasıl aradığını çıkarıyoruz.' },
+  { ad: 'Strateji', ozet: 'Hedef ve kampanya planı', aciklama: 'Hangi başvuruyu istediğinizi netleştirip kampanya yapısını ve bütçe dağılımını planlıyoruz.' },
+  { ad: 'Kurulum', ozet: 'Kampanya, reklam, dönüşüm', aciklama: 'Kampanyaları, reklam metinlerini ve dönüşüm takibini kuruyor, yayından önce test ediyoruz.' },
+  { ad: 'Optimizasyon', ozet: 'Düzenli takip ve iyileştirme', aciklama: 'Arama terimlerini düzenli okuyor, sonuç getirmeyeni kapatıp getireni güçlendiriyoruz.' },
+  { ad: 'Hedef', ozet: 'Satış ve müşteri hedefiniz', aciklama: 'Başarıyı tıklamayla değil, işletmenize gelen talep ve satışla değerlendiriyoruz.' },
+];
+
+// Temsili arama terimleri. Gerçek hesap verisi değildir; kararın nasıl verildiğini gösterir.
+const terimler = [
+  { terim: 'arsama çelik villa yaptırmak istiyorum', karar: 'Öne al', tur: 'evet', gerekce: 'Arsası hazır, yaptırmak istiyor. Bütçe bu aramaya toplanır, reklam teklif sayfasını açar.' },
+  { terim: 'çelik villa modelleri', karar: 'İzle', tur: '', gerekce: 'Model araştırıyor. Reklam model sayfasını açar; teklife dönüp dönmediğine göre karar verilir.' },
+  { terim: 'çelik ev görselleri', karar: 'Ayır', tur: 'hayir', gerekce: 'Görsel arıyor. Teklif kampanyasından çıkarılır, bütçe teklif isteyen aramaya kalır.' },
+  { terim: 'çelik konstrüksiyon iş ilanları', karar: 'Hariç tut', tur: 'hayir', gerekce: 'İş arıyor. Negatif anahtar kelime olur, reklam bu aramada gösterilmez.' },
+];
+
+const sorular = [
+  {
+    soru: 'Google Ads yönetimi nedir?',
+    cevap:
+      'Google Ads yönetimi, Google’da reklam veren bir işletmenin kampanyalarının kurulması, arama terimlerinin düzenli incelenmesi ve bütçenin sonuç getiren aramalara yönlendirilmesi işidir. Anahtar kelime seçimini, reklam metinlerini, dönüşüm takibini ve düzenli optimizasyonu kapsar.',
+  },
+  {
+    soru: 'Google reklam verme işini kendim yapabilir miyim?',
+    cevap:
+      'Yapabilirsiniz; Google Ads hesabını herkes açıp reklam verebilir. Zor olan, bütçenin hangi aramalara gittiğini görmek ve satış getirmeyen tıklamaları ayıklamaktır. Hesabınız varsa önce arama terimleri raporuna bakın; nereye bakacağınızı rehberimizde anlattık.',
+    bag: { etiket: 'Google Ads’te tıklama var ama neden telefon gelmiyor?', url: '/blog/google-ads-tiklama-var-telefon-yok/' },
+  },
+  {
+    soru: 'Google Ads ajansı ile çalışmak ne sağlar?',
+    cevap:
+      'Bir Google Ads ajansı kampanyayı kurmakla kalmaz; hangi aramaların para harcadığını düzenli okur, satış getirmeyenleri kapatır ve reklam metinlerini dener. Kendi başına reklam veren işletmelerde en sık gördüğümüz sorun, hesabın kurulduktan sonra bir daha açılmamasıdır.',
+  },
+  {
+    soru: 'Sadece Google Ads danışmanlığı alabilir miyim?',
+    cevap:
+      'Evet. Danışmanlıkta hesabı sizin ekibiniz yönetir. Biz arama terimlerini, hesap yapısını ve dönüşüm takibini birlikte gözden geçirir, yapılacak değişikliği gerekçesiyle yazarız. Değişikliği kimin uygulayacağı ilk görüşmede netleşir.',
+  },
+  {
+    soru: 'Reklam hesabı kimin adına açılır?',
+    cevap:
+      'Hesap işletmenizin adına açılır ve sizde kalır. Bize yönetici erişimi verirsiniz. Ödeme yöntemi, fatura bilgisi ve hesabın sahipliği sizde durur; erişimi dilediğiniz zaman kaldırabilirsiniz. Hesabınız başka bir ajansın yönetici hesabı altında açıldıysa sahipliğin nasıl devralınacağını ilk görüşmede birlikte kontrol ederiz.',
+  },
+  {
+    soru: 'Google reklamları ne zaman sonuç verir?',
+    cevap:
+      'Kesin bir süre söylemek doğru olmaz. Arama reklamları yayına girdiği gün gösterilmeye başlar; hangi aramaların talep getirdiği ise veri biriktikçe netleşir ve bütçe buna göre düzenlenir. Sonucu sektörünüz, bütçeniz ve reklamın açtığı sayfa etkiler.',
+  },
+  {
+    soru: 'Google Ads bütçesi ne kadar olmalı?',
+    cevap:
+      'Tek bir doğru rakam yoktur. Bütçe, hedeflediğiniz aramaların tıklama maliyetine ve kaç başvuruya ihtiyacınız olduğuna göre belirlenir. Görüşmede sektörünüzdeki aramaları birlikte inceleyip gerçekçi bir başlangıç planı çıkarıyoruz.',
+  },
+  {
+    soru: 'Sonuç garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Sıra, tıklama ya da satış sayısı için söz vermiyoruz. Söz verdiğimiz şey hesabınızı ayrıntılı incelemek, verdiğimiz kararları gerekçesiyle anlatmak ve düzenli optimizasyon yapmaktır.',
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Google Ads reklam yönetimi',
+    serviceType: 'Google Ads yönetimi ve danışmanlığı',
+    provider: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    url: `${SITE.url}${hizmet.url}`,
+    description:
+      'Ayrıntılı hesap incelemesi, bilinçli kampanya kurulumu ve düzenli optimizasyonla yürütülen Google Ads reklam yönetimi ve danışmanlığı.',
+  },
+];
+---
+
+<Temel
+  baslik="Google Ads Yönetimi ve Danışmanlığı | Satışları Artır"
+  aciklama="Google Ads reklam yönetimi: ayrıntılı hesap incelemesi, bilinçli kampanya kurulumu ve düzenli optimizasyon. İlk kez reklam verenler ve mevcut hesaplar için."
+  sayfaTuru="hizmet"
+  hizmet="google-ads"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: hizmet.cagri, url: '#gorusme' }}
+>
+  <SayfaBasi
+    kirintilar={kirintilar}
+    baslik="Google Ads reklam yönetimi"
+    gorsel={gorsel}
+    gorselAlt="Kâğıttan dev bir arama kutusuna uzanan küçük bir müşteri; kutudan çıkan kırmızı kalem çizgisi ışıkları yanan dükkâna gidiyor"
+    cagri={{ etiket: hizmet.cagri, url: '#gorusme', kanal: 'google-ads' }}
+    ikincil={{ etiket: 'İlk kampanyamı planlamak istiyorum', url: '#ilk-kampanya' }}
+  >
+    <p>
+      Google Ads yönetimi, hizmetinizi Google’da arayan kişiye doğru reklamı gösterme ve bütçeyi satış getiren aramalara
+      yönlendirme işidir.
+    </p>
+    <p>
+      İlk kez Google’a reklam verecekseniz hesabı baştan kuruyor, reklam veriyorsanız hesabınızı ayrıntılı inceleyip
+      düzenli optimizasyonla geliştiriyoruz.
+    </p>
+  </SayfaBasi>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Neleri kapsar?', hedef: 'kapsam' },
+      { etiket: 'Sık yaşanan sorunlar', hedef: 'sorunlar' },
+      { etiket: 'Nasıl çalışıyoruz?', hedef: 'yontem' },
+      { etiket: 'İlk kez ya da mevcut hesap', hedef: 'ilk-kampanya' },
+      { etiket: 'Örnek', hedef: 'ornek' },
+      { etiket: 'Sık sorulanlar', hedef: 'sss' },
+    ]}
+  />
+
+  <!-- Kapsam -->
+  <section class="bolum bolum--beyaz" id="kapsam">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Google Ads yönetimi neleri kapsar?</h2>
+          <div class="metin">
+            <p>
+              Reklamı açmak işin küçük kısmıdır. Hangi aramada görüneceğiniz, tıklayan kişinin ne göreceği ve bütçenin
+              nereye gideceği, yayından önce verilen kararlardır.
+            </p>
+          </div>
+        </div>
+        <Cizim src={hedef} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili">
+          {
+            kapsam.map((k) => (
+              <li>
+                <strong>{k.ad}</strong>
+                <span>{k.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık yaşanan sorunlar -->
+  <section class="bolum" id="sorunlar">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Google reklamlarında en sık duyduğumuz sorular</h2>
+        <p class="giris">Reklam veren işletmelerin çoğu aynı dört noktada takılıyor. Her birinde ilk baktığımız yer:</p>
+      </div>
+      <SoruKartlari kartlar={sorunlar} />
+    </div>
+  </section>
+
+  <!-- Yöntem -->
+  <section class="bolum bolum--beyaz" id="yontem">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Google Ads’te nasıl çalışıyoruz?</h2>
+        <p class="giris">
+          Reklamı açıp beklemiyoruz. Önce inceliyor, sonra kuruyor, ardından düzenli takip ve optimizasyonla hedefinize
+          yaklaştırıyoruz.
+        </p>
+      </div>
+      <Adimlar adimlar={adimlar} />
+    </div>
+  </section>
+
+  <!-- İki durum: ilk kez / mevcut hesap -->
+  <IkiDurum
+    kimlik="ilk-kampanya"
+    baslik="İlk kez mi reklam vereceksiniz, hesabınız mı var?"
+    giris="İki durumda başlangıç noktası farklıdır. Hangisindeyseniz oradan başlıyoruz."
+    sol={{
+      ust: 'Hiç Google reklamı vermediyseniz',
+      baslik: 'Hesabı sıfırdan, sizin adınıza kuruyoruz',
+      metin: 'İlk kampanyada en pahalı hata, hazırlık yapmadan yayına çıkmaktır. Yayından önce üç şeyi birlikte netleştiriyoruz.',
+      maddeler: [
+        { ad: 'Hangi başvuruyu istiyorsunuz?', aciklama: 'Telefon araması, teklif formu, keşif talebi ya da WhatsApp görüşmesi. Kampanyanın hedefi bu seçime göre kurulur.' },
+        { ad: 'Müşteri sizi hangi sözlerle arıyor?', aciklama: 'Hizmetin adı, sorunun adı ve bölge. İlk anahtar kelimeler ve ilk negatif liste buradan çıkar.' },
+        { ad: 'Tıklayan kişi nereye inecek?', aciklama: 'Aradığı işi ilk ekranda gösteren, telefonda sorunsuz çalışan bir sayfa. Sayfa hazır değilse önce onu konuşuruz.' },
+      ],
+      cagri: { etiket: 'İlk kampanyamı planlayalım', kampanyaDurumu: 'new', kanal: 'google-ads', yer: 'ilk-kampanya' },
+      bag: { etiket: 'Google Ads mi, Instagram mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+      cizim: yolAyrimi,
+    }}
+    sag={{
+      kimlik: 'hesap-inceleme',
+      ust: 'Google’a reklam veriyorsanız',
+      baslik: 'Hesabınızı devralmadan önce inceliyoruz',
+      metin: 'İlk iş yeni kampanya açmak değildir. Önce hesabın bugün neye para harcadığını ve neyi kaçırdığını görmemiz gerekir.',
+      maddeler: [
+        { ad: 'Arama terimleri', aciklama: 'Tıklamayı getiren gerçek aramaları okuyor, her biri için bir karar yazıyoruz.' },
+        { ad: 'Dönüşüm takibi', aciklama: 'Form, telefon ve WhatsApp doğru sayılıyor mu? Deneme başvurusuyla kontrol ediyoruz.' },
+        { ad: 'Mobil sayfa ve form', aciklama: 'Reklamın açtığı sayfayı telefonda deniyoruz: numara aranabiliyor mu, form çalışıyor mu?' },
+        { ad: 'Konum ve zamanlama', aciklama: 'Reklamın gösterildiği bölge ve saatleri, hizmet verdiğiniz bölge ve saatlerle karşılaştırıyoruz.' },
+      ],
+      cagri: { etiket: hizmet.cagri, kampanyaDurumu: 'existing', kanal: 'google-ads', yer: 'hesap-inceleme' },
+    }}
+  />
+
+  <!-- Çalışma örneği -->
+  <section class="bolum bolum--beyaz" id="ornek">
+    <div class="sarici konu">
+      <div class="konu__baslik konu__baslik--yapiskan">
+        <h2 class="baslik-2">Bir arama terimi kararı nasıl verilir?</h2>
+        <div class="metin">
+          <p>
+            Google Ads’te bütçeyi anahtar kelime harcamaz, insanların gerçekten yazdığı arama harcar. Aynı kelimenin
+            içinden model araştıran da çıkar, iş arayan da, teklif isteyen de.
+          </p>
+          <p>
+            Arama terimleri raporunu satır satır okuyup her terim için bir karar yazıyoruz. Kararın gerekçesi, o aramayı
+            yapan kişinin sizden ne istediğidir.
+          </p>
+        </div>
+        <Cizim src={liste} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik konu__icerik--genis">
+        <div class="ornek">
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Çelik villa firması için arama terimi kararları</h3>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+          <table class="tablo tablo--yigin">
+            <thead>
+              <tr>
+                <th scope="col">Arama terimi</th>
+                <th scope="col">Karar</th>
+                <th scope="col">Gerekçe</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                terimler.map((t) => (
+                  <tr>
+                    <td data-baslik="Arama terimi">
+                      <span class="sorgu">“{t.terim}”</span>
+                    </td>
+                    <td data-baslik="Karar">
+                      <span class:list={['hukum', t.tur && `hukum--${t.tur}`]}>{t.karar}</span>
+                    </td>
+                    <td data-baslik="Gerekçe">{t.gerekce}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <p class="ornek__not">Terimler gerçek bir hesaptan alınmadı. Sizin hesabınızda bu tabloyu kendi arama terimlerinizle kuruyoruz.</p>
+        </div>
+      </div>
+      <div class="konu__tam proje-yeri">
+        <ProjeKarti
+          kimlik="celikvillam"
+          metin="Çelik villa yaptırmak isteyenler model, uygulama ve teklif bilgisine farklı sorularla geliyor. Projede site bu sorular etrafında kuruldu; reklamlar, kendi projesi için teklif isteyen ziyaretçiye göre düzenleniyor."
+        />
+      </div>
+    </div>
+  </section>
+
+  <Sss
+    baslik="Google Ads yönetimi hakkında sık sorulan sorular"
+    giris="Google reklamları, ajansla çalışma ve hesap sahipliği hakkında en çok sorulanlar."
+    sorular={sorular}
+  />
+
+  <SehirBaglantilari hizmet="reklam" baslik="Şehrinize göre reklam yönetimi" metin="Reklam ajansı arayan işletmeler aramaya çoğu zaman şehrin adını ekliyor. Altı şehir için ayrı sayfalar yazdık." />
+
+  <IlgiliSayfalar
+    baslik="Google Ads rehberleri ve ilgili hizmetler"
+    sayfalar={[
+      { tur: 'Blog', baslik: 'Google Ads’te tıklama var ama neden telefon gelmiyor?', url: '/blog/google-ads-tiklama-var-telefon-yok/', cizim: telefon },
+      { tur: 'Blog', baslik: 'Google reklamım neden gösterilmiyor?', url: '/blog/google-reklamim-neden-gosterilmiyor/', cizim: buyutec },
+      { tur: 'Blog', baslik: 'Google Ads mi, Instagram reklamı mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/', cizim: terazi },
+      { tur: 'Hizmet', baslik: 'Instagram ve Facebook reklam yönetimi', url: '/hizmetler/meta-reklam-yonetimi/', cizim: mesaj },
+    ]}
+  />
+
+  <GorusmeBandi
+    baslik="Google Ads hesabınıza birlikte bakalım."
+    metin="Hesabınız varsa son dönemin arama terimlerini, yoksa ulaşmak istediğiniz müşteriyi anlatın. Görüşmeye buradan başlayalım."
+    kanal="google-ads"
+    cagri={hizmet.cagri}
+    konum="hizmet-google-ads"
+  />
+</Temel>
+
+<style>
+  .proje-yeri {
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+  }
+</style>

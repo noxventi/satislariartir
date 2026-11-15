@@ -1,0 +1,210 @@
+---
+no: 10
+kapak: seo-nedir
+kapakAlt: "Beş basamaklı kâğıt merdivene dizilmiş beş dükkân; en üsttekinin kapısı açık, önünde müşteri kuyruğu var ve üstünde dev bir büyüteç duruyor; en alttaki esnaf merdiven taşıyor, basamakların kenarında kırmızı kalem çizgisi yükseliyor"
+soru: SEO nedir, nasıl yapılır?
+baslik: SEO Nedir, Nasıl Yapılır?
+aciklama: >-
+  SEO nedir, Google bir sayfayı nasıl bulup sıralar? Teknik, içerik ve bağlantı işleri, Google Ads’ten farkı
+  ve kendi sitenizde yapacağınız ilk kontrol.
+aramalar:
+  - seo nedir
+  - seo nasıl yapılır
+  - arama motoru optimizasyonu
+kisaCevap: >-
+  SEO (arama motoru optimizasyonu), bir web sitesinin Google gibi arama motorlarında reklam vermeden, organik
+  sonuçlarda görünmesi için yapılan çalışmaların bütünüdür. Google bir sayfayı üç aşamada işler: tarar, dizine ekler
+  ve uygun aramalarda sonuçlar arasında gösterir. SEO çalışması bu aşamalardaki engelleri kaldırır ve sayfayı, arayan kişinin
+  sorusuna cevap verecek hâle getirir. Tıklama için ödeme yapılmaz; karşılığında emek ve zaman ister. Google hiçbir
+  sayfanın dizine ekleneceğinin ya da sonuçlarda gösterileceğinin sözünü vermez.
+elinizeGecen: Google’ın üç aşaması, SEO’nun iş kolları ve ilk kontrol listesi
+hizmetler: [seo]
+hizmetBaglantisi:
+  etiket: SEO danışmanlığı
+  url: /hizmetler/seo-danismanligi/
+sonraki: anahtar-kelime-nedir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Arama Merkezi, Arama Motoru Optimizasyonu (SEO) Başlangıç Kılavuzu
+    url: https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Google Arama’nın işleyiş şekliyle ilgili ayrıntılı kılavuz
+    url: https://developers.google.com/search/docs/fundamentals/how-search-works?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, SEO’ya ihtiyacınız var mı?
+    url: https://developers.google.com/search/docs/fundamentals/do-i-need-seo?hl=tr
+    tur: resmi
+  - ad: Google İşletme Profili Yardım, Google’daki yerel sıralamanızı yükseltmeyle ilgili ipuçları
+    url: https://support.google.com/business/answer/7091?hl=tr
+    tur: resmi
+  - ad: Search Console Yardımı, Search Console hakkında
+    url: https://support.google.com/webmasters/answer/9128668?hl=tr
+    tur: resmi
+---
+
+import SonucSayfasi from '../../components/blog/SonucSayfasi.astro';
+import Akis from '../../components/blog/Akis.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Not from '../../components/blog/Not.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Halısını yıkatmak isteyen biri Google’a “halı yıkama” ve semtinin adını yazar. Karşısına önce birkaç reklam, sonra bir harita, onun altında da sıra sıra siteler çıkar. Kişi listeye göz atar, birkaç siteyi açar, birini arar.
+
+O alttaki listeye para ödeyerek girilmez. Hangi sitenin orada, kaçıncı sırada duracağına Google karar verir. SEO, sitenizin o listede yer alması için yapılan işin adıdır.
+
+<SonucSayfasi sorgu="halı yıkama çankaya" vurgu="organik">
+  Sonuç sayfasında üç bölge vardır. SEO, reklam olmayan organik sonuçlarla ilgilenir. Harita sonuçları ise yerel
+  SEO’nun konusudur.
+</SonucSayfasi>
+
+## SEO nedir?
+
+SEO, İngilizce “search engine optimization” sözünün kısaltmasıdır; Türkçesi arama motoru optimizasyonudur. Google’ın başlangıç kılavuzundaki tanımıyla SEO, arama motorlarının içeriğinizi anlamasına, insanların da sitenizi bulup ziyaret edip etmeyeceğine karar vermesine yardım eder.
+
+Tanımın iki yarısı iki ayrı işe karşılık gelir:
+
+- **Google için yapılan iş.** Sayfanız okunabilmeli ve neyle ilgili olduğu anlaşılmalıdır.
+- **İnsan için yapılan iş.** Arama sonucunda başlığınızı gören kişi tıklamaya değer bulmalı, sayfayı açan kişi de aradığını görmelidir.
+
+Organik sonuçlarda görünmenin bir ücreti yoktur. Google, bir siteyi daha sık taramak ya da daha üst sırada göstermek için ödeme kabul etmediğini açıkça yazar. Google’a reklam vermeniz de organik sonuçlardaki yerinizi değiştirmez.
+
+## Google bir sayfayı nasıl bulur ve sıralar?
+
+Google Arama üç aşamada çalışır ve her sayfa her aşamadan geçmez. SEO’da ilk iş, sayfanızın hangi aşamada kaldığını bilmektir.
+
+<Akis
+  asamalar={[
+    { ad: 'Tarama', aciklama: 'Google’ın tarayıcısı sayfanızı bulur ve içeriğini indirir.', olcu: 'Googlebot' },
+    { ad: 'Dizine ekleme', aciklama: 'Sayfanın konusu çözülür ve Google dizinine kaydedilir.', olcu: 'Google dizini' },
+    { ad: 'Sonuçları sunma', aciklama: 'Biri arama yapınca dizindeki uygun sayfalar sıralanır.', olcu: 'Her aramada' },
+  ]}
+/>
+
+Her aşamada işi durdurabilecek ayrı bir şey vardır:
+
+- **Tarama.** Google yeni sayfaları çoğunlukla bildiği sayfalardaki bağlantılardan ve kendisine gönderilen site haritasından bulur. Sunucudaki bir sorun ya da tarayıcılara yol gösteren robots.txt dosyasındaki bir kural taramayı engelleyebilir.
+- **Dizine ekleme.** Taranan her sayfa dizine girmez. İçeriğin kalitesi düşükse ya da sayfada dizine eklemeyi kapatan bir kural (noindex) varsa sayfa dışarıda kalır.
+- **Arama sonuçlarını sunma.** Google sıralarken arayanın konumu, dili ve cihazı gibi bilgileri de içeren yüzlerce etkene bakar. Aynı aramayı yapan iki kişi farklı sonuç görebilir.
+
+<AraGorsel cizim="buyutec" alt="Yan yana duran kâğıttan dükkânlar; büyütecin altındaki dükkânın üstü bir örtüyle kapalı">
+  Sıralama en son aşamadır. Sayfanız taranmıyor ya da dizine girmiyorsa içeriği düzeltmek hiçbir şeyi değiştirmez.
+</AraGorsel>
+
+## SEO nasıl yapılır?
+
+SEO tek bir iş gibi anılır ama üç ayrı iş kolundan oluşur. Müşterisi yakınından gelen işletmelerde bunlara dördüncüsü eklenir.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Teknik SEO',
+      tanim: 'Sayfaların Google tarafından taranabilmesi ve dizine eklenebilmesi için yapılan işler.',
+      ornek: 'Site haritası, yönlendirmeler, sayfa hızı, telefondaki görünüm.',
+    },
+    {
+      ad: 'Site içi SEO',
+      acilim: 'İçerik ve sayfa',
+      tanim: 'Her sayfanın tek bir konuyu, arayan kişinin sorusuna cevap verecek biçimde anlatması.',
+      ornek: 'Koltuk yıkama için ayrı, halı yıkama için ayrı bir sayfa.',
+    },
+    {
+      ad: 'Site dışı SEO',
+      acilim: 'Bağlantı ve bilinirlik',
+      tanim: 'Başka sitelerin sizden söz etmesi ve sitenize bağlantı vermesi.',
+      ornek: 'Esnaf odasının üye rehberinde sitenizin adresi.',
+    },
+    {
+      ad: 'Yerel SEO',
+      tanim: 'Bulunduğunuz bölgede yapılan aramalarda ve Google Haritalar’da görünmek için yapılan çalışma.',
+      ornek: 'Google İşletme Profili, her yerde aynı adres ve telefon, yorumlar.',
+    },
+  ]}
+/>
+
+Bu işlerin bir sırası vardır ve sıra atlandığında emek boşa gider:
+
+- **Önce teknik taraf.** Google’ın ulaşamadığı bir sayfayı yeniden yazmak bir şey değiştirmez. İlk bakılan yer, sayfaların taranıp dizine eklenip eklenmediğidir.
+- **Sonra sayfalar ve içerik.** Her arama için tek bir sayfa belirlenir ve o sayfa, arayan kişinin sorusunu cevaplayacak biçimde yazılır. İşe müşterinizin kullandığı ifadelerden başlanır; bunun yolunu [anahtar kelime nedir, nasıl bulunur](/blog/anahtar-kelime-nedir/) yazısı anlatır.
+- **Ardından bağlantılar.** Başka sitelerin size bağlantı vermesi zamanla olur. Hangi bağlantının işe yaradığını, hangisinden uzak durulacağını [backlink nedir](/blog/backlink-nedir/) yazısında bulursunuz.
+- **Müşteriniz yakınınızdan geliyorsa yerel bilgiler.** Harita sonuçları ayrı çalışır: Google oradaki sırayı çoğunlukla alaka düzeyine, mesafeye ve işletmenin ne kadar bilindiğine göre belirler. İlk adım [Google İşletme Profili açmak](/blog/google-isletme-profili-nasil-acilir/) ve bilgileri eksiksiz doldurmaktır.
+
+Google’ın kılavuzuna göre insanların ilgi çekici ve yararlı bulduğu içerik, sitenin aramadaki varlığını kılavuzdaki diğer bütün önerilerden daha çok etkiler. Teknik iş bu içeriğin önündeki engeli kaldırır, onun yerini tutmaz.
+
+Daha önce SEO yaptırdıysanız ve bir şey değişmediyse aynı sıra, işin nerede takıldığını bulmak için de kullanılır. Sayfalar dizinde olmayabilir. Dizindedir ama müşterinizin yazmadığı aramalarda gösteriliyordur. Ya da gösteriliyor ve tıklanıyordur ama gelen kişi sizi aramıyordur. Üçünün çözümü ayrıdır; hangisinde olduğunuzu bilmeden yeni içerik yazmak sorunu yerinde bırakır.
+
+## SEO mu, Google Ads mi?
+
+İkisi aynı sonuç sayfasında görünür ama farklı çalışır. Birini seçmeden önce neyi ne zaman istediğinize bakın.
+
+<Karsilastirma
+  uygunEtiketi="Ne zaman"
+  sol={{
+    ust: 'Organik sonuçlar',
+    baslik: 'SEO',
+    maddeler: [
+      'Tıklama için ödeme yapılmaz.',
+      'Sıra satın alınmaz; Google belirler.',
+      'Yapılan işin karşılığı zamanla görülür.',
+      'Sayfa yayında kaldıkça aramada görünebilir.',
+    ],
+    uygun: 'Aramadan düzenli müşteri almak istiyorsanız ve beklemeye vaktiniz varsa',
+  }}
+  sag={{
+    ust: 'Sponsorlu sonuçlar',
+    baslik: 'Google Ads',
+    maddeler: [
+      'Tıklama başına ödeme yapılır.',
+      'Kampanya yayına girince görünürlük başlar.',
+      'Reklam durduğunda bu görünürlük de biter.',
+      'Hangi aramalarda görünmek istediğinizi siz seçersiniz.',
+    ],
+    uygun: 'Hemen talebe ihtiyacınız varsa ya da yeni bir hizmeti deniyorsanız',
+  }}
+/>
+
+Çoğu işletmede ikisi birlikte yürür. Hemen talebe ihtiyacı olan işletme reklamla başlar, SEO çalışmasını yanında yürütür. Reklamda talep getiren aramalar, SEO’da hangi sayfaların önce kurulacağını da gösterir. Reklam tarafının nasıl işlediğini [Google Ads nedir, nasıl çalışır](/blog/google-ads-nedir/) yazısında okuyabilirsiniz.
+
+## SEO ne kadar sürede sonuç verir?
+
+Bu soruya tek bir süreyle cevap verilemez. Google’ın başlangıç kılavuzu şunu söyler: bazı değişiklikler birkaç saat içinde, bazıları birkaç ayda yansır; yaptığınız işin yararını görmek için genelde birkaç hafta beklemeniz gerekebilir. Aynı kılavuz, sitede yapılan her değişikliğin arama sonuçlarında gözle görülür bir etki bırakmayacağını da yazar.
+
+Sürenin neye bağlı olduğu ise bellidir:
+
+- **Sitenin bugünkü durumu.** Dizine kapalı bir sayfanın açılması çabuk görünür. Hiç olmayan bir sayfanın yazılıp sıralamada yer bulması daha uzun sürer.
+- **Aynı aramadaki diğer siteler.** O aramaya kaç site, ne kadar iyi cevap veriyor?
+- **Yapılan işin türü.** Önce tarama ve dizine ekleme düzeltmeleri görünür. Hangi aramalarda gösterildiğiniz ondan sonra değişir.
+- **Sayfanın kendisi.** Talep en son gelir ve gelen kişinin sayfada ne gördüğüne bağlıdır.
+
+<Not baslik="Birinci sıra sözü verene dikkat" tur="dikkat">
+  Google’ın kendi belgesi, kimsenin Google’da birinci sıra için söz veremeyeceğini yazar. Sıralama sözü veren ya da Google
+  ile özel bir ilişkisi olduğunu söyleyen kişilere karşı dikkatli olmanızı ister.
+</Not>
+
+## SEO’ya kendi başınıza nereden başlarsınız?
+
+Google, yerel çapta küçük bir işletmenin bu işin büyük bölümünü büyük olasılıkla kendisinin halledebileceğini söyler. İlk kontrol için ücretli bir araca gerek yoktur; Google’ın kendisi ve Search Console yeter.
+
+Search Console, Google’ın sitenizi nasıl gördüğünü gösteren ücretsiz hizmetidir. Hangi sayfalarınızın dizinde olduğunu, hangi aramalarda gösterildiğinizi ve size hangi sitelerin bağlantı verdiğini oradan öğrenirsiniz. Google’da görünmek için Search Console’a kaydolmak şart değildir, ama kaydolmadan sitenizin durumunu ancak tahmin edersiniz.
+
+<KontrolListesi
+  kimlik="seo-nedir-ilk-kontrol"
+  baslik="Sitem için ilk SEO kontrolü"
+  adimlar={[
+    'Google’a site:alanadim.com yazdım; sitemden sonuçlar çıkıyor.',
+    'Sitemi Search Console’a ekledim ve sahipliğini doğruladım.',
+    'Her hizmetim için ayrı bir sayfam var; hepsi tek sayfada toplanmış değil.',
+    'Sayfa başlıklarım ne iş yaptığımı ve nerede olduğumu söylüyor.',
+    'Sayfaları kendi telefonumda açtım; yazılar okunuyor, numaraya dokunulabiliyor.',
+    'Google İşletme Profilimdeki adres ve telefon sitemdekiyle aynı.',
+  ]}
+  not="İşaretleyemediğiniz ilk madde, başlayacağınız yerdir."
+/>
+
+Listeyi bitirdiyseniz aynı kontrolü raporlarla, daha ayrıntılı yapabilirsiniz: [SEO analizi nasıl yapılır](/blog/seo-analizi-nasil-yapilir/) yazısı sırayı adım adım verir.
+
+Kontrolde takıldığınız yeri bulamadıysanız ya da bulup düzeltmeye vaktiniz yoksa sıradaki adım sitenize birlikte bakmaktır. [SEO danışmanlığı](/hizmetler/seo-danismanligi/) sayfasında işi nasıl ele aldığımızı okuyabilirsiniz: önce site incelenir, sonra bulguya göre sayfalar kurulur ve düzenli olarak yeniden ele alınır.

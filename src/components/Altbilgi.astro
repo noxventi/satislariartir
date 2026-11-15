@@ -1,0 +1,402 @@
+---
+/**
+ * Alt bilgi.
+ *
+ * Geniş ekran: solda marka, tanım ve iletişim; sağda dört bağlantı sütunu (Hizmetler, Sektörler, Şehirler, Satışları Artır).
+ * Telefon (48rem altı): marka ve kısa tanım > dokunulacak üç iletişim satırı (telefon, WhatsApp, e-posta) tek bir
+ * çerçevede > bağlantı grupları açılır kapanır satırlar olarak > yasal bağlantılar ve telif satırı.
+ * Gruplar <details open> ile yazılır: betik çalışmazsa hepsi açık kalır ve bütün bağlantılar okunur
+ * (üst menüdeki "Menü" düğmesinin betiksiz hedefi de burasıdır). Betik telefonda grupları kapatır, geniş ekranda
+ * açık tutar ve başlığa tıklamayı etkisiz kılar (src/scripts/site.ts, altBilgi).
+ */
+import Logo from './Logo.astro';
+import Ikon from './Ikon.astro';
+import { ANA_MENU, HIZMETLER, SITE } from '../site.config';
+import { SEKTORLER, sektorUrl } from '../data/sektorler';
+import { TELEFON_BAGLANTISI, TELEFON_YAZISI, whatsappBaglantisi } from '../lib/iletisim';
+import { SEHIRLER, sehirSayfalari, yerelUrl } from '../data/yerel';
+
+interface Props {
+  sade?: boolean;
+}
+const { sade = false } = Astro.props;
+const { eposta, telefon, whatsapp, adres } = SITE.iletisim;
+// Künye: veri sorumlusu bilgileri doldurulunca alt satırda görünür (6563 sayılı Kanun m. 3 kapsamındaki tanıtıcı bilgiler).
+const vs = SITE.veriSorumlusu;
+const kunye = [vs.unvan, vs.adres, vs.mersis && `MERSİS: ${vs.mersis}`, vs.vergiNo && `${vs.vergiDairesi ? vs.vergiDairesi + ' V.D. ' : 'Vergi no: '}${vs.vergiNo}`, vs.kep && `KEP: ${vs.kep}`].filter(Boolean);
+const iletisimVar = Boolean(eposta || telefon || whatsapp || adres);
+const yil = new Date().getFullYear();
+
+// Şehirler: her şehrin ilk sayfası (web tasarım, yoksa sıradaki) ve dizin.
+const sehirBaglantilari = SEHIRLER.flatMap((sehir) => {
+  const ilk = sehirSayfalari(sehir.kimlik).find((s) => !s.ilce);
+  return ilk ? [{ etiket: ilk.baslik, url: yerelUrl(ilk) }] : [];
+});
+
+const gruplar = [
+  { ad: 'Hizmetler', baglantilar: HIZMETLER.map((h) => ({ etiket: h.menuAdi, url: h.url })) },
+  { ad: 'Sektörler', baglantilar: SEKTORLER.map((sk) => ({ etiket: sk.ad, url: sektorUrl(sk) })) },
+  ...(sehirBaglantilari.length ? [{ ad: 'Şehirler', baglantilar: [...sehirBaglantilari, { etiket: 'Bütün şehirler', url: '/sehirler/' }] }] : []),
+  {
+    ad: 'Satışları Artır',
+    baglantilar: [...ANA_MENU.map((m) => ({ etiket: m.etiket, url: m.url })), { etiket: 'Tüm hizmetler', url: '/hizmetler/' }, { etiket: 'İletişim', url: '/iletisim/' }],
+  },
+];
+---
+
+<footer class="alt koyu-zemin" id="alt-menu">
+  <div class="sarici">
+    {
+      !sade && (
+        <div class="alt__ust">
+          <div class="alt__marka">
+            <Logo acik />
+            <p class="alt__tanim">
+              İşletmelere müşteri kazandırmak için çalışan dijital pazarlama ajansı<span class="alt__tanim-ek">: Google Ads, Instagram ve Facebook reklamları, SEO, GEO ve web tasarım</span>.
+            </p>
+            {iletisimVar && (
+              <ul class="alt__iletisim">
+                {telefon && (
+                  <li>
+                    <a href={TELEFON_BAGLANTISI} data-olay="phone_click" data-yer="alt-bilgi">
+                      <Ikon ad="phone" boyut={18} />
+                      <span class="alt__yol-ad">Telefon</span>
+                      <span class="alt__yol-deger">{TELEFON_YAZISI}</span>
+                    </a>
+                  </li>
+                )}
+                {whatsapp && (
+                  <li>
+                    <a href={whatsappBaglantisi()} data-olay="whatsapp_click" data-yer="alt-bilgi" rel="noopener">
+                      <Ikon ad="whatsapp-logo" boyut={18} />
+                      <span class="alt__yol-ad">WhatsApp</span>
+                      <span class="alt__yol-deger">
+                        <span class="alt__genis">WhatsApp’tan yazın</span>
+                        <span class="alt__dar">Mesaj yazın</span>
+                      </span>
+                    </a>
+                  </li>
+                )}
+                {eposta && (
+                  <li>
+                    <a href={`mailto:${eposta}`}>
+                      <Ikon ad="envelope-simple" boyut={18} />
+                      <span class="alt__yol-ad">E-posta</span>
+                      <span class="alt__yol-deger">{eposta}</span>
+                    </a>
+                  </li>
+                )}
+                {adres && <li class="alt__adres">{adres}</li>}
+              </ul>
+            )}
+          </div>
+
+          <nav class="alt__gezinti" aria-label="Alt menü">
+            {gruplar.map((g) => (
+              <details class="alt__grup" open data-alt-grup>
+                <summary>
+                  <h2 class="alt__baslik">{g.ad}</h2>
+                  <Ikon ad="plus" boyut={18} class="alt__arti" />
+                </summary>
+                <ul>
+                  {g.baglantilar.map((b) => (
+                    <li>
+                      <a href={b.url}>{b.etiket}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))}
+          </nav>
+        </div>
+      )
+    }
+
+    <div class="alt__alt">
+      <div class="alt__telif">
+        <p>© {yil} {SITE.ad}</p>
+        {kunye.length > 0 && <p class="alt__kunye">{kunye.join(', ')}</p>}
+        <p class="alt__marka-notu">Sitede adı geçen marka ve logolar sahiplerine aittir.</p>
+      </div>
+      <ul class="alt__yasal">
+        <li><a href="/gizlilik/">Gizlilik</a></li>
+        <li><a href="/aydinlatma/">Aydınlatma metni</a></li>
+        <li><a href="/cerez-tercihleri/">Çerez tercihleri</a></li>
+        <li><a href="/kullanim-kosullari/">Kullanım koşulları</a></li>
+        {sade && <li><a href="/iletisim/">İletişim</a></li>}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .alt {
+    background: var(--murekkep);
+    color: rgb(255 255 255 / 0.82);
+    padding-block: clamp(3.5rem, 6vw, 5.5rem) calc(2rem + env(safe-area-inset-bottom));
+    font-size: var(--b-kucuk);
+  }
+  .alt ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .alt a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--hizli);
+  }
+  .alt a:hover {
+    color: var(--beyaz);
+    text-decoration: underline;
+    text-decoration-color: rgb(255 255 255 / 0.5);
+  }
+  .alt__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+    padding-block-end: clamp(2.5rem, 5vw, 4.5rem);
+    border-block-end: 1px solid rgb(255 255 255 / 0.16);
+    margin-block-end: 1.75rem;
+  }
+  .alt__tanim {
+    max-width: 30rem;
+    margin-block-start: 0.9rem;
+    font-size: var(--b-govde);
+    line-height: 1.5;
+    color: rgb(255 255 255 / 0.74);
+  }
+  /* ".alt ul" kuralı kenar boşluğunu sıfırladığı için seçici bir basamak güçlendirildi. */
+  .alt .alt__iletisim {
+    margin-block-start: 1.6rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .alt__iletisim a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.5rem;
+    color: var(--beyaz);
+    font-size: var(--b-govde);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  /* Geniş ekranda satırın adı yazılmaz: simge ve değer yeter. */
+  .alt__yol-ad,
+  .alt__dar {
+    display: none;
+  }
+  .alt__adres {
+    max-width: 26rem;
+    margin-block-start: 0.5rem;
+  }
+  .alt__gezinti {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem clamp(1rem, 2vw, 2rem);
+    align-items: start;
+  }
+  /* Orta genişlik: dört sütun sığmaz, ikişerli dizilir. */
+  @media (min-width: 48rem) and (max-width: 74.99rem) {
+    .alt__gezinti {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* Geniş ekranda grup başlığı düğme gibi davranmaz. */
+  .alt__grup summary {
+    display: block;
+    list-style: none;
+    cursor: default;
+  }
+  .alt__grup summary::-webkit-details-marker {
+    display: none;
+  }
+  .alt__grup :global(.alt__arti) {
+    display: none;
+  }
+  .alt__baslik {
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    font-stretch: 100%;
+    letter-spacing: 0.012em;
+    color: rgb(255 255 255 / 0.6);
+    margin-block-end: 0.6rem;
+  }
+  .alt__gezinti li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.4rem;
+    font-size: var(--b-govde);
+    line-height: 1.25;
+    color: var(--beyaz);
+  }
+  @media (max-width: 61.99rem) {
+    .alt__ust {
+      grid-template-columns: 1fr;
+    }
+  }
+  .alt__alt {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    color: rgb(255 255 255 / 0.66);
+  }
+  .alt__telif {
+    display: grid;
+    gap: 0.3rem;
+  }
+  .alt__kunye,
+  .alt__marka-notu {
+    max-width: 44rem;
+    font-size: var(--b-mikro);
+    line-height: 1.45;
+    color: rgb(255 255 255 / 0.56);
+  }
+  .alt__yasal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.6rem;
+  }
+  .alt__yasal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.4rem;
+  }
+
+  /* ---- Telefon -------------------------------------------------------------------- */
+  @media (max-width: 47.99rem) {
+    .alt {
+      padding-block: 2.75rem calc(2rem + env(safe-area-inset-bottom));
+    }
+    .alt__ust {
+      gap: 1.75rem;
+      padding-block-end: 0;
+      border-block-end: 0;
+      margin-block-end: 1.25rem;
+    }
+    /* Hizmet adları aşağıdaki "Hizmetler" grubunda zaten var. */
+    .alt__tanim-ek {
+      display: none;
+    }
+    .alt__tanim {
+      margin-block-start: 0.8rem;
+    }
+
+    /* İletişim: tek çerçevede üç satır. Solda simge ve satırın adı, sağda değer; satırın tamamına dokunulur. */
+    .alt__genis {
+      display: none;
+    }
+    .alt__dar {
+      display: inline;
+    }
+    .alt .alt__iletisim {
+      gap: 0;
+      margin-block-start: 1.5rem;
+      border: 1.5px solid rgb(255 255 255 / 0.3);
+      border-radius: var(--kose);
+    }
+    .alt__iletisim li + li {
+      border-block-start: 1px solid rgb(255 255 255 / 0.16);
+    }
+    .alt__iletisim a {
+      display: grid;
+      grid-template-columns: 1.25rem auto minmax(0, 1fr);
+      gap: 0.7rem;
+      min-height: 3.5rem;
+      padding-inline: 1rem;
+    }
+    .alt__iletisim a:hover {
+      text-decoration: none;
+    }
+    .alt__iletisim a :global(svg) {
+      color: rgb(255 255 255 / 0.7);
+    }
+    .alt__yol-ad {
+      display: block;
+      font-family: var(--yazi-baslik);
+      font-size: var(--b-kucuk);
+      font-weight: 600;
+      color: rgb(255 255 255 / 0.66);
+    }
+    .alt__yol-deger {
+      justify-self: end;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      text-align: end;
+      font-family: var(--yazi-baslik);
+      font-size: 1rem;
+      font-weight: 640;
+      font-stretch: 94%;
+      line-height: 1.2;
+    }
+    .alt__adres {
+      max-width: none;
+      margin: 0;
+      padding: 0.9rem 1rem;
+    }
+
+    /* Bağlantı grupları: açılır kapanır satırlar. */
+    .alt__gezinti {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      border-block-start: 1px solid rgb(255 255 255 / 0.16);
+    }
+    .alt__grup {
+      border-block-end: 1px solid rgb(255 255 255 / 0.16);
+    }
+    .alt__grup summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 3.5rem;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .alt__baslik {
+      margin: 0;
+      font-size: 1.0625rem;
+      font-weight: 650;
+      font-stretch: 92%;
+      letter-spacing: -0.008em;
+      color: var(--beyaz);
+    }
+    .alt__grup :global(.alt__arti) {
+      display: block;
+      flex: none;
+      color: rgb(255 255 255 / 0.7);
+      transition: transform 260ms var(--yumusak);
+    }
+    .alt__grup[open] :global(.alt__arti) {
+      transform: rotate(45deg);
+      color: var(--beyaz);
+    }
+    .alt__grup ul {
+      display: grid;
+      padding-block-end: 0.85rem;
+    }
+    .alt__gezinti li a {
+      display: flex;
+      min-height: 2.75rem;
+      color: rgb(255 255 255 / 0.86);
+    }
+
+    /* Yasal bağlantılar üstte, telif satırı altta. */
+    .alt__alt {
+      flex-direction: column-reverse;
+      gap: 0.35rem;
+    }
+    .alt__yasal {
+      gap: 0 1.4rem;
+    }
+    .alt__yasal a {
+      min-height: 2.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .alt__grup :global(.alt__arti) {
+      transition: none;
+    }
+  }
+</style>

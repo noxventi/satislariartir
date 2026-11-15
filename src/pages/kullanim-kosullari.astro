@@ -1,0 +1,133 @@
+---
+/**
+ * Kullanım koşulları: sitedeki içeriğin niteliği, sonuç ve doğruluk garantisi olmadığı, üçüncü taraf verileri, markalar,
+ * fikri haklar, bağlantılar ve sorumluluğun sınırları.
+ * Sorumluluk sınırları 6098 sayılı Türk Borçlar Kanunu m. 115 ve tüketici mevzuatı saklı tutularak yazılmıştır
+ * (ağır kusurdan sorumsuzluk kaydı geçersizdir; tüketicinin kanuni hakları kısıtlanamaz).
+ * Son gözden geçirme: 15 Kasım 2026. Yayından önce hukuk danışmanınca okunması önerilir (TESLIM.md).
+ */
+import YasalDuzen from '../components/YasalDuzen.astro';
+import { SITE } from '../site.config';
+
+const vs = SITE.veriSorumlusu;
+---
+
+<YasalDuzen
+  baslik="Kullanım koşulları"
+  aramaBasligi="Kullanım Koşulları | Satışları Artır"
+  aciklama="satislariartir.com internet sitesinin kullanım koşulları: içeriğin niteliği, üçüncü taraf verileri, markalar, fikri haklar ve sorumluluğun sınırları."
+  yol="/kullanim-kosullari/"
+  guncelleme="15 Kasım 2026"
+>
+  <p>
+    Bu koşullar, satislariartir.com internet sitesinin (“site”) kullanımına ilişkindir. Siteyi kullanarak bu koşulları
+    kabul etmiş sayılırsınız. Kişisel verilerinizin işlenmesi ayrıca <a href="/aydinlatma/">aydınlatma metninde</a> ve
+    <a href="/gizlilik/">gizlilik</a> sayfasında anlatılır.
+  </p>
+
+  <h2>Site sahibi</h2>
+  {
+    vs.unvan ? (
+      <p>
+        Site, <strong>{vs.unvan}</strong>
+        {vs.adres && <> ({vs.adres})</>} tarafından işletilir.
+        {vs.mersis && <> MERSİS no: {vs.mersis}.</>}
+        {vs.vergiNo && (
+          <>
+            {' '}
+            Vergi dairesi ve numarası: {vs.vergiDairesi && <>{vs.vergiDairesi}, </>}
+            {vs.vergiNo}.
+          </>
+        )}{' '}
+        Bu sayfada “biz” ve “Satışları Artır” ifadeleri site sahibini anlatır.
+      </p>
+    ) : (
+      <p>Site sahibinin unvanı, adresi ve sicil bilgileri bu metin yayımlanmadan önce buraya eklenecektir.</p>
+    )
+  }
+
+  <h2>İçeriğin niteliği</h2>
+  <p>
+    Sitedeki yazılar, rehberler, sektör ve şehir sayfaları genel bilgilendirme amaçlıdır. Hukuki, mali, vergisel ya da
+    tıbbi danışmanlık değildir ve sizin işletmenize özel bir tavsiye yerine geçmez. Meslek kuralları ve mevzuatla ilgili
+    bölümler, yazıldığı tarihteki kaynaklara dayanır; kendi durumunuz için bağlı olduğunuz meslek kuruluşuna ya da bir
+    hukukçuya danışmanızı öneririz.
+  </p>
+  <p>
+    Sitedeki içerik bir teklif ya da sözleşme değildir. Hizmetlerimizin kapsamı, süresi ve bedeli ancak taraflar arasında
+    yazılı olarak yapılan sözleşmeyle belirlenir.
+  </p>
+
+  <h2>Sonuç garantisi olmadığı</h2>
+  <p>
+    Reklam, arama motoru optimizasyonu (SEO), yapay zekâ görünürlüğü ve web sitesi çalışmalarının sonucu; işletmenin
+    kendisine, pazara, rekabete, bütçeye ve Google, Meta gibi platformların kendi kararlarına bağlıdır. Bu nedenle sitede ya
+    da görüşmelerde belirli bir sıralama, tıklama, başvuru, satış ya da ciro için garanti verilmez. Sitede anlatılan
+    çalışma yöntemi bir sonuç taahhüdü değildir.
+  </p>
+
+  <h2>Üçüncü taraf verileri ve platform bilgileri</h2>
+  <p>
+    Sitede yer alan arama hacimleri, ölçüm araçlarından belirtilen tarihte alınmış yaklaşık değerlerdir. Platformların
+    özellikleri, kuralları, ücretleri ve arayüzleri hakkındaki bilgiler, yazıldığı tarihte ilgili platformun kendi
+    yayınlarından derlenmiştir. Fiyatlarla ilgili yazılardaki piyasa aralıkları kaynaklarıyla birlikte, bilgi için verilir
+    ve teklif niteliği taşımaz. Bu bilgiler sonradan değişebilir; doğruluğu ve güncelliği için ilgili kaynağın kendisine
+    bakmanızı öneririz.
+  </p>
+
+  <h2>Örnekler, referanslar ve markalar</h2>
+  <ul>
+    <li>
+      “Temsili” olarak işaretlenen örnekler ve yazılarda anlatılan işletmeler gerçek değildir; yöntemi anlatmak için
+      kurgulanmıştır.
+    </li>
+    <li>
+      Sitede adı, logosu ya da ekran görüntüsü geçen markalar ve ürün adları sahiplerine aittir. Bu markaların anılması,
+      yalnız birlikte yürütülen çalışmayı ya da ilgili platformu göstermek içindir; aralarında başka bir ilişki ya da
+      onay bulunduğu anlamına gelmez. Google, Meta, Instagram, WhatsApp, YouTube, Apple ve benzeri adlar ilgili şirketlerin
+      markalarıdır; site bu şirketlerle bağlantılı değildir.
+    </li>
+    <li>
+      Müşteri yorumları, müşterilerin kendi sözleridir; her işletmede aynı sonucun alınacağı anlamına gelmez.
+    </li>
+  </ul>
+
+  <h2>Fikri haklar</h2>
+  <p>
+    Sitenin tasarımı, metinleri, görselleri ve diğer içeriği üzerindeki haklar, aksi belirtilmedikçe Satışları Artır’a ya
+    da lisans verenlerine aittir. Kaynak gösterilerek ve bağlantı verilerek kısa alıntı yapılabilir; içeriğin tamamının ya da
+    önemli bir bölümünün izinsiz kopyalanması, çoğaltılması ya da ticari amaçla kullanılması yasaktır.
+  </p>
+
+  <h2>Bağlantılar</h2>
+  <p>
+    Site, bilgi amacıyla başka internet sitelerine bağlantı verir. Bu sitelerin içeriğinden, gizlilik uygulamalarından ve
+    erişilebilirliğinden o sitelerin sahipleri sorumludur.
+  </p>
+
+  <h2>Sitenin kullanımı</h2>
+  <p>
+    Siteyi hukuka uygun amaçlarla kullanmayı; formu başkası adına, yanlış ya da yanıltıcı bilgiyle doldurmamayı, siteye
+    zarar verecek otomatik istek ya da saldırı girişiminde bulunmamayı kabul edersiniz. Siteyi bakım ya da güvenlik
+    nedeniyle geçici olarak kapatabilir, içeriği önceden haber vermeksizin değiştirebiliriz.
+  </p>
+
+  <h2>Sorumluluğun sınırları</h2>
+  <p>
+    Kanunun izin verdiği ölçüde, sitedeki genel bilgilere dayanılarak alınan kararlardan, sitenin geçici olarak
+    erişilemez olmasından ve üçüncü taraf sitelerden doğan zararlardan sorumlu değiliz. Bu sınırlama, kasıt ya da ağır
+    kusurdan doğan sorumluluğu ve tüketici mevzuatından doğan haklarınızı kapsamaz.
+  </p>
+
+  <h2>Uygulanacak hukuk</h2>
+  <p>
+    Bu koşullar Türkiye Cumhuriyeti hukukuna tabidir. Tüketici sıfatıyla yaptığınız başvurularda tüketici mevzuatının
+    öngördüğü hakem heyetleri ve mahkemelere başvuru hakkınız saklıdır.
+  </p>
+
+  <h2>Değişiklikler ve iletişim</h2>
+  <p>
+    Bu koşulları güncelleyebiliriz; güncel metin her zaman bu sayfada yayımlanır. Sorularınız için
+    <a href={`mailto:${vs.eposta || SITE.iletisim.eposta}`}>{vs.eposta || SITE.iletisim.eposta}</a> adresine yazabilirsiniz.
+  </p>
+</YasalDuzen>

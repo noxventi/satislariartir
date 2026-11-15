@@ -1,0 +1,199 @@
+---
+/**
+ * Marka logosu: tıklayan ok, fiyat etiketi, kıvılcımlar ve "Satışları Artır" yazısı.
+ *
+ * Logonun anlattığı şey bir tıklamadır; hareket de onu oynatır: ok basar, kıvılcımlar tıklama noktasından
+ * dışarı fırlar, etiket sallanır. Üzerine gelince, odaklanınca ya da dokununca bir kez oynar (src/scripts/site.ts).
+ * `canli` örnek (üst bilgi) sayfa açılırken de oynar: oturumun ilk sayfasında tam açılış, sonrakilerde kısa bir tık.
+ * Hareket azaltma tercihinde logo durağandır.
+ *
+ * Yazı tek yerde durur (Temel.astro içindeki <symbol id="sa-logo-yazi">); simge parçaları burada çizilir ki
+ * ayrı ayrı hareket edebilsin. Renkler tasarım değişkenlerinden gelir; koyu zeminde açık tonlara geçer.
+ * Kaynak dosya: gorsel-kaynak/marka/logo-kaynak.png. Vektöre çeviren betik: araclar/logo-vektor.mjs.
+ */
+import logo from '../data/logo.json';
+
+interface Props {
+  acik?: boolean; // koyu zemin üstünde
+  canli?: boolean; // sayfa açılışında oynar
+}
+const { acik = false, canli = false } = Astro.props;
+
+const kutu = (d: string) => {
+  const n = d.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+  const x = n.filter((_, i) => i % 2 === 0);
+  const y = n.filter((_, i) => i % 2 === 1);
+  return { x0: Math.min(...x), x1: Math.max(...x), y0: Math.min(...y), y1: Math.max(...y) };
+};
+const yuvarla = (v: number) => Math.round(v * 10) / 10;
+
+// Kırmızı katman: üstteki üç parça kıvılcım, alttaki iki parça etiket ve deliği.
+const parcalar = logo.kirmizi
+  .split(/(?=M)/)
+  .map((d) => d.trim())
+  .filter(Boolean)
+  .map((d) => ({ d, ...kutu(d) }));
+const ortaY = (Math.min(...parcalar.map((p) => p.y0)) + Math.max(...parcalar.map((p) => p.y1))) / 2;
+const kivilcimlar = parcalar.filter((p) => p.y1 < ortaY).sort((a, b) => a.x0 - b.x0);
+const etiket = parcalar.filter((p) => p.y1 >= ortaY);
+
+// Tıklama noktası: dikey kıvılcımın ekseni ile yatay kıvılcımın ekseninin kesiştiği yer.
+const dikey = [...kivilcimlar].sort((a, b) => a.x1 - a.x0 - (b.x1 - b.x0))[0];
+const yatay = [...kivilcimlar].sort((a, b) => a.y1 - a.y0 - (b.y1 - b.y0))[0];
+const merkez = `${yuvarla((dikey.x0 + dikey.x1) / 2)}px ${yuvarla((yatay.y0 + yatay.y1) / 2)}px`;
+
+// Okun ucu (sol üst köşe) ve etiketin oka tutunduğu köşe.
+const ok = kutu(logo.mavi);
+const okUcu = `${yuvarla(ok.x0 + (ok.x1 - ok.x0) * 0.14)}px ${yuvarla(ok.y0 + 1)}px`;
+const govde = etiket[0];
+const etiketMili = `${yuvarla(govde.x0 + (govde.x1 - govde.x0) * 0.2)}px ${yuvarla(govde.y0 + 1)}px`;
+---
+
+<a
+  class:list={['logo', acik && 'logo--acik', canli && 'logo--canli']}
+  href="/"
+  aria-label="Satışları Artır, ana sayfa"
+  style={`--logo-merkez:${merkez};--logo-uc:${okUcu};--logo-mil:${etiketMili}`}
+  data-logo
+>
+  <svg viewBox={`0 0 ${logo.kutu[0]} ${logo.kutu[1]}`} width={logo.kutu[0]} height={logo.kutu[1]} aria-hidden="true" focusable="false">
+    <path class="logo__etiket" fill-rule="evenodd" d={etiket.map((p) => p.d).join(' ')}></path>
+    <path class="logo__ok" fill-rule="evenodd" d={logo.mavi}></path>
+    {kivilcimlar.map((k, i) => <path class="logo__kivilcim" style={`--i:${i}`} d={k.d} />)}
+    <use class="logo__yazi" href="#sa-logo-yazi"></use>
+  </svg>
+</a>
+
+<style>
+  .logo {
+    --logo-yazi: var(--murekkep);
+    --logo-mavi: var(--mavi);
+    --logo-kirmizi: var(--kirmizi);
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    /* Okun sol kenarı ile kıvılcımların boşluğu göz hizasını bozmasın. */
+    margin-inline-start: -0.15rem;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .logo svg {
+    display: block;
+    width: auto;
+    height: clamp(2.4rem, 2.15rem + 0.9vw, 2.875rem);
+    overflow: visible;
+  }
+  .logo--acik {
+    --logo-yazi: var(--beyaz);
+    --logo-mavi: #8eabff;
+    --logo-kirmizi: #ff6b7f;
+  }
+  .logo__ok {
+    fill: var(--logo-mavi);
+    transform-origin: var(--logo-uc);
+  }
+  .logo__etiket,
+  .logo__kivilcim {
+    fill: var(--logo-kirmizi);
+  }
+  .logo__etiket {
+    transform-origin: var(--logo-mil);
+  }
+  .logo__kivilcim {
+    transform-origin: var(--logo-merkez);
+  }
+  .logo__ok,
+  .logo__etiket,
+  .logo__kivilcim {
+    transform-box: view-box;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Tık: üzerine gelince, odaklanınca ya da dokununca bir kez. */
+    .logo--tik .logo__ok {
+      animation: logo-bas 340ms cubic-bezier(0.3, 0, 0.2, 1);
+    }
+    .logo--tik .logo__kivilcim {
+      animation: logo-kivilcim 460ms cubic-bezier(0.2, 0.9, 0.3, 1) calc(90ms + var(--i) * 45ms) backwards;
+    }
+    .logo--tik .logo__etiket {
+      animation: logo-salla 640ms cubic-bezier(0.3, 0, 0.3, 1) 70ms;
+    }
+
+    /* Oturumun ilk sayfası: ok gelir, basar, kıvılcımlar çıkar, etiket yerine düşer, yazı açılır. */
+    :global(html[data-logo='acilis']) .logo--canli .logo__ok {
+      animation:
+        logo-ok-gir 480ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms backwards,
+        logo-bas 320ms cubic-bezier(0.3, 0, 0.2, 1) 580ms;
+    }
+    :global(html[data-logo='acilis']) .logo--canli .logo__kivilcim {
+      animation: logo-kivilcim 480ms cubic-bezier(0.2, 0.9, 0.3, 1) calc(680ms + var(--i) * 50ms) backwards;
+    }
+    :global(html[data-logo='acilis']) .logo--canli .logo__etiket {
+      animation: logo-etiket-gir 700ms cubic-bezier(0.25, 0.8, 0.3, 1) 300ms backwards;
+    }
+    :global(html[data-logo='acilis']) .logo--canli .logo__yazi {
+      animation: logo-yazi-gir 560ms cubic-bezier(0.2, 0.7, 0.2, 1) 220ms backwards;
+    }
+
+    /* Sonraki sayfalar: yalnız kısa bir tık. */
+    :global(html[data-logo='kisa']) .logo--canli .logo__ok {
+      animation: logo-bas 320ms cubic-bezier(0.3, 0, 0.2, 1) 220ms;
+    }
+    :global(html[data-logo='kisa']) .logo--canli .logo__kivilcim {
+      animation: logo-kivilcim 460ms cubic-bezier(0.2, 0.9, 0.3, 1) calc(310ms + var(--i) * 45ms) backwards;
+    }
+
+    @keyframes logo-bas {
+      40% {
+        transform: scale(0.88);
+      }
+    }
+    @keyframes logo-kivilcim {
+      0% {
+        transform: scale(0.15);
+        opacity: 0;
+      }
+      55% {
+        transform: scale(1.14);
+        opacity: 1;
+      }
+    }
+    @keyframes logo-salla {
+      28% {
+        transform: rotate(-11deg);
+      }
+      58% {
+        transform: rotate(5deg);
+      }
+      82% {
+        transform: rotate(-2deg);
+      }
+    }
+    @keyframes logo-ok-gir {
+      from {
+        transform: translate(-11px, 9px) rotate(-10deg);
+        opacity: 0;
+      }
+    }
+    @keyframes logo-etiket-gir {
+      0% {
+        transform: translate(-4px, -9px) rotate(-26deg);
+        opacity: 0;
+      }
+      55% {
+        transform: rotate(6deg);
+        opacity: 1;
+      }
+      80% {
+        transform: rotate(-2deg);
+      }
+    }
+    @keyframes logo-yazi-gir {
+      from {
+        transform: translateX(-7px);
+        opacity: 0;
+      }
+    }
+  }
+</style>

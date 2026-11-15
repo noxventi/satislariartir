@@ -1,0 +1,340 @@
+---
+/**
+ * Şehirler dizini (/sehirler/). Şehir ve ilçe sayfalarına giriş.
+ * Bölümler: üst alan > şehir kartları (şehrin kâğıt işi sahnesi, şehir sayfaları, ilçe sayfaları) > birlikte nasıl
+ * çalışıyoruz (uzaktan) > sık sorulan sorular > görüşme.
+ * Kartlar src/data/yerel/ altındaki kayıtlardan üretilir; yeni sayfa dosyası eklenince bağlantı kendiliğinden gelir.
+ * Sayfada hiçbir şehirde ofis olduğu yazılmaz.
+ */
+import Temel from '../../layouts/Temel.astro';
+import SayfaBasi from '../../components/SayfaBasi.astro';
+import Sss from '../../components/Sss.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import Gorsel from '../../components/Gorsel.astro';
+import Ikon from '../../components/Ikon.astro';
+import { SITE } from '../../site.config';
+import { HIZMET_ADI, SEHIRLER, sehirGorseli, sehirSayfalari, yerelUrl } from '../../data/yerel';
+
+const kirintilar = [{ ad: 'Şehirler', url: '/sehirler/' }];
+const BASLIK = 'Şehrinize göre web tasarım, reklam ve SEO';
+const ACIKLAMA =
+  'Ankara, İstanbul, İzmir, Bursa, Eskişehir ve Antalya’daki işletmeler için web tasarım, reklam yönetimi ve SEO sayfaları. Çalışmayı uzaktan yürütüyoruz.';
+
+const sehirler = SEHIRLER.map((sehir) => {
+  const sayfalar = sehirSayfalari(sehir.kimlik);
+  return {
+    ...sehir,
+    gorsel: sehirGorseli(sehir.kimlik),
+    sehirSayfalari: sayfalar.filter((s) => !s.ilce),
+    ilceler: sayfalar.filter((s) => s.ilce),
+  };
+}).filter((s) => s.sehirSayfalari.length + s.ilceler.length > 0);
+
+const duzen = [
+  { ad: 'Görüşmeler telefonla ya da görüntülü', aciklama: 'İlk görüşmeyi ve sonraki toplantıları telefonla ya da görüntülü yapıyoruz. Çalışmak için aynı şehirde olmamız gerekmiyor.' },
+  { ad: 'Önce sizin şehrinizdeki aramalar', aciklama: 'Her projenin başında müşterinizin şehrinizde ve ilçenizde Google’a ne yazdığını araştırıyor, planı bu veriye göre kuruyoruz.' },
+  { ad: 'Hesaplar ve site sizin adınıza', aciklama: 'Reklam hesabı, alan adı ve site sizin adınıza açılır; bize yönetici erişimi verirsiniz.' },
+];
+
+const sorular = [
+  {
+    soru: 'Hangi şehirlerdeki işletmelerle çalışıyorsunuz?',
+    cevap:
+      'Türkiye’nin her şehrindeki işletmelerle çalışabiliyoruz, çünkü işi uzaktan yürütüyoruz. Bu sayfadaki altı şehir, şehir adıyla en çok arama yapılan yerler olduğu için ayrıca yazdığımız sayfalardır; şehriniz listede yoksa yöntem aynıdır.',
+  },
+  {
+    soru: 'Aynı şehirde değilsek birlikte nasıl çalışacağız?',
+    cevap:
+      'Görüşmeleri telefonla ya da görüntülü yapıyoruz; taslakları, reklam hesabını ve siteyi bağlantı üzerinden birlikte inceliyoruz. Web tasarım, reklam yönetimi ve SEO ekranda yürüyen işlerdir; aynı şehirde olmak gerekmez.',
+  },
+  {
+    soru: 'İlçe sayfaları neden var?',
+    cevap:
+      'Çünkü işletme sahipleri aramayı çoğu zaman ilçe adıyla yapıyor: “çankaya web tasarım”, “kadıköy web tasarım” gibi. Ölçtüğümüz aramalarda yeterli ilgi gören ilçeler için, o ilçenin iş dokusuna göre ayrı sayfa yazdık.',
+  },
+  {
+    soru: 'Şehrim ya da ilçem listede yok, ne yapmalıyım?',
+    cevap:
+      'Görüşme isteyin; işletmenizi ve ulaşmak istediğiniz müşteriyi anlatın. İlk adımda bulunduğunuz yerde müşterinizin ne aradığına bakıyoruz, sonrası listede olan şehirlerdekiyle aynı ilerliyor.',
+    bag: { etiket: 'Görüşme isteyin', url: '/iletisim/' },
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: BASLIK,
+    url: `${SITE.url}/sehirler/`,
+    description: ACIKLAMA,
+    isPartOf: { '@type': 'WebSite', name: SITE.ad, url: `${SITE.url}/` },
+  },
+];
+---
+
+<Temel baslik="Şehirler: Web Tasarım, Reklam ve SEO | Satışları Artır" aciklama={ACIKLAMA} sayfaTuru="hizmetler" kirintilar={kirintilar} yapisalVeri={yapisalVeri}>
+  <SayfaBasi kirintilar={kirintilar} baslik={BASLIK} uzunBaslik cagri={{ etiket: 'Görüşme isteyin', url: '#gorusme', yer: 'sehirler-ust' }} ikincil={{ etiket: 'Şehirleri görün', url: '#sehirler' }}>
+    <p>
+      İşletme sahibi web sitesi, reklam ya da SEO için ajans ararken çoğu zaman aramasına şehrinin adını yazıyor. Aşağıdaki
+      sayfaları, altı şehirde ve en çok aranan ilçelerde işletmelerin karşılaştığı durumlara göre ayrı ayrı yazdık.
+    </p>
+    <p>Çalışmayı uzaktan yürütüyoruz: görüşmeleri telefonla ya da görüntülü yapıyoruz.</p>
+  </SayfaBasi>
+
+  <section class="bolum bolum--beyaz" id="sehirler">
+    <div class="sarici">
+      <ul class="sh">
+        {
+          sehirler.map((s, i) => (
+            <li class="sh__kart" data-gir style={`--gecikme:${(i % 3) * 90}ms`}>
+              <div class="sh__gorsel">
+                <Gorsel src={s.gorsel} alt={s.gorselAlt} sizes="(max-width: 47.99rem) 92vw, (max-width: 74.99rem) 46vw, 30vw" genislikler={[480, 720, 960, 1280]} kalite={66} />
+              </div>
+              <h2 class="sh__ad" id={s.kimlik}>
+                {s.ad}
+              </h2>
+              <ul class="sh__sayfalar">
+                {s.sehirSayfalari.map((x) => (
+                  <li>
+                    <a href={yerelUrl(x)}>
+                      <span>
+                        <strong>{x.baslik}</strong>
+                        <small>{HIZMET_ADI[x.hizmet]}</small>
+                      </span>
+                      <Ikon ad="arrow-right" boyut={16} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {s.ilceler.length > 0 && (
+                <div class="sh__ilceler">
+                  <p>İlçeler</p>
+                  <ul>
+                    {s.ilceler.map((x) => (
+                      <li>
+                        <a href={yerelUrl(x)}>{x.ilce}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bolum" id="duzen">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Birlikte nasıl çalışıyoruz?</h2>
+        <p class="giris">Yöntemimiz şehre göre değişmez; değişen, müşterinizin o şehirde ne aradığı ve nasıl karar verdiğidir.</p>
+      </div>
+      <ol class="dz">
+        {
+          duzen.map((d, i) => (
+            <li data-gir style={`--gecikme:${i * 90}ms`}>
+              <span class="dz__no" aria-hidden="true">
+                {i + 1}
+              </span>
+              <strong>{d.ad}</strong>
+              <span>{d.aciklama}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <Sss baslik="Şehir sayfaları hakkında sık sorulan sorular" giris="Uzaktan çalışma ve ilçe sayfaları hakkında en çok sorulanlar." sorular={sorular} zemin="beyaz" />
+
+  <GorusmeBandi
+    baslik="Şehrinizdeki müşterinize birlikte bakalım."
+    metin="İşletmenizi, bulunduğunuz şehri ve ulaşmak istediğiniz müşteriyi anlatın. Görüşmeye buradan başlayalım."
+    kanal="belirsiz"
+    cagri="Görüşme isteyin"
+    konum="sehirler"
+  />
+</Temel>
+
+<style>
+  /* ---- Şehir kartları: üç sütunlu eş ızgara; görsel, ad, şehir sayfaları ve ilçeler aynı hizada (subgrid). */
+  .sh {
+    --kart-arasi: clamp(1.25rem, 2.6vw, 2.25rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--kart-arasi);
+    row-gap: 0.9rem;
+  }
+  .sh__kart {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    align-items: start;
+    margin-block-end: calc(var(--kart-arasi) + 0.6rem);
+  }
+  .sh__gorsel {
+    overflow: hidden;
+    border-radius: var(--kose);
+    background: #c9d5ee;
+  }
+  .sh__gorsel :global(picture),
+  .sh__gorsel :global(img) {
+    display: block;
+    width: 100%;
+  }
+  .sh__gorsel :global(img) {
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+  .sh__ad {
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.15rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    letter-spacing: -0.026em;
+    line-height: 1.05;
+    scroll-margin-top: calc(var(--ust-bant) + 1.5rem);
+  }
+  .sh__sayfalar {
+    display: grid;
+    border-block-start: 1.5px solid var(--murekkep);
+  }
+  .sh__sayfalar a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    min-height: 3.5rem;
+    padding-block: 0.55rem;
+    border-block-end: 1px solid var(--cizgi);
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  .sh__sayfalar a > span {
+    display: grid;
+    gap: 0.1rem;
+  }
+  .sh__sayfalar strong {
+    font-family: var(--yazi-baslik);
+    font-size: 1.0625rem;
+    font-weight: 660;
+    font-stretch: 92%;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .sh__sayfalar small {
+    font-size: var(--b-mikro);
+    color: var(--ikincil);
+  }
+  .sh__sayfalar a :global(svg) {
+    color: var(--kirmizi);
+    transition: transform 200ms var(--yumusak);
+  }
+  .sh__sayfalar a:hover strong {
+    color: var(--mavi);
+  }
+  .sh__sayfalar a:hover :global(svg) {
+    transform: translateX(3px);
+  }
+  .sh__ilceler {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .sh__ilceler p {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    color: var(--ikincil);
+  }
+  .sh__ilceler ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .sh__ilceler a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding-inline: 0.85rem;
+    background: var(--kagit);
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: 999px;
+    font-family: var(--yazi-baslik);
+    font-size: 0.9375rem;
+    font-weight: 620;
+    font-stretch: 94%;
+    line-height: 1;
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      border-color 160ms,
+      background-color 160ms;
+  }
+  .sh__ilceler a:hover {
+    border-color: var(--murekkep);
+    background: var(--beyaz);
+  }
+  @media (max-width: 74.99rem) {
+    .sh {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .sh {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sh__sayfalar a :global(svg) {
+      transition: none;
+    }
+  }
+
+  /* ---- Çalışma düzeni: üç numaralı madde ---- */
+  .dz {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .dz li {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+  }
+  .dz__no {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-block-end: 0.5rem;
+    border: 2px solid var(--murekkep);
+    border-radius: 50%;
+    font-family: var(--yazi-baslik);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+  }
+  .dz strong {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+    font-weight: 690;
+    font-stretch: 88%;
+    letter-spacing: -0.016em;
+    line-height: 1.15;
+  }
+  .dz li > span:last-child {
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 61.99rem) {
+    .dz {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

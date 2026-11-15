@@ -1,0 +1,261 @@
+---
+no: 39
+kapak: youtube-reklam-nasil-verilir
+kapakAlt: "Kâğıttan, sinema perdesi gibi duran bir video ekranında çizgili tenteli bir dükkân ve beyaz oynat simgesi; ekranın ilerleme çubuğu kırmızı kalemle çizilmiş. Önündeki iki bankta dört izleyici oturuyor, bir başkası elinde alışveriş torbasıyla kırmızı kalem çizgisini izleyerek ekrandaki dükkânın aynısına yürüyor"
+soru: YouTube’a reklam nasıl verilir?
+baslik: "YouTube Reklam Verme: Adım Adım Rehber"
+aciklama: >-
+  YouTube reklamı Google Ads’te video kampanyasıyla nasıl verilir, hangi reklam biçimi seçilir ve ödeme izlenmeye mi
+  gösterime mi göre alınır, adım adım görün.
+aramalar:
+  - youtube reklam verme
+  - youtube reklam
+  - youtube ads
+  - youtube reklam nasıl verilir
+kisaCevap: >-
+  YouTube’a reklam, Google Ads hesabında açılan bir video kampanyasıyla verilir. Reklamda kullanılacak videonun önce bir
+  YouTube kanalına yüklenmiş olması gerekir. Kampanyada hedefi, bütçeyi ve reklamın kimlere gösterileceğini seçersiniz;
+  reklam atlanabilir, atlanamayan, en çok altı saniyelik bumper, feed içi ya da Shorts biçiminde yayınlanabilir. Ödemenin
+  neye göre alınacağını biçim ve teklif stratejisi belirler: görüntüleme başına teklif verilen atlanabilir reklamda izleyici
+  30 saniye izlediğinde ya da etkileşime girdiğinde, atlanamayan ve bumper reklamda gösterim sayısına göre ödersiniz.
+elinizeGecen: Reklam biçimleri, ödeme tablosu, kurulum adımları ve yayın öncesi kontrol listesi
+hizmetler: [google-ads]
+hizmetBaglantisi:
+  etiket: Google Ads yönetimi
+  url: /hizmetler/google-ads-yonetimi/
+sonraki: google-ads-mi-instagram-reklami-mi
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Ads Yardım, Video reklam biçimleri hakkında
+    url: https://support.google.com/google-ads/answer/2375464?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Video kampanyası oluşturma
+    url: https://support.google.com/google-ads/answer/2375497?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, İşleme yönelik video kampanyaları
+    url: https://support.google.com/google-ads/answer/10147229?hl=tr
+    tur: resmi
+  - ad: YouTube Yardım, YouTube reklamları ve görüntüleme metrikleri hakkında
+    url: https://support.google.com/youtube/answer/2375431?hl=tr
+    tur: resmi
+  - ad: YouTube Yardım, YouTube Tanıt’ı kullanmaya başlama
+    url: https://support.google.com/youtube/answer/12199105?hl=tr
+    tur: resmi
+---
+
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Bursa’da ölçüye göre mutfak dolabı yapan bir atölye düşünün. Elinde telefonla çekilmiş bir dakikalık bir video var: kapaklar takılıyor, çekmeceler sessizce kapanıyor, en sonda bitmiş mutfak görünüyor. Video kanalda duruyor ve şimdiye kadar birkaç yüz kişi izlemiş.
+
+Bu videoyu mutfağını yenilemeyi düşünen ve YouTube’da dekorasyon videoları izleyen kişilere göstermenin yolu YouTube reklamıdır. YouTube reklamları Google Ads üzerinden verilir; arama reklamı veren bir işletme aynı hesapta video kampanyası da açabilir.
+
+<AraGorsel cizim="kreatif" alt="Yan yana duran iki kâğıt çerçeve; biri kırmızı kalemle halkaya alınmış">
+  İzleyici atlanabilir reklamı beş saniye sonra geçebilir. Videonun ilk saniyelerinde ne gösterdiğiniz, kampanya
+  ayarları kadar sonucu belirler.
+</AraGorsel>
+
+## YouTube reklamı nedir, nerede görünür?
+
+YouTube reklamı, Google Ads’teki video kampanyalarıyla yayınlanan reklamdır. Google’a göre bu kampanyalar reklamı YouTube’daki videolarda ve Google video iş ortaklarının sitelerinde ve uygulamalarında gösterir. Reklamın nerede, ne kadar süreyle ve nasıl görüneceğini seçtiğiniz biçim belirler.
+
+Google’ın yardım sayfasında saydığı biçimlerden işletmelerin en sık karşılaştıkları şunlardır:
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Atlanabilir yayın içi reklam',
+      tanim: 'İzlenen videonun içinde oynar; izleyici beş saniye sonra reklamı atlayabilir.',
+      ornek: 'Dekorasyon videosu açan kişi, önce atölyenin mutfak videosunu görür.',
+    },
+    {
+      ad: 'Atlanamayan yayın içi reklam',
+      tanim: 'İzleyici reklamı atlayamaz; reklam 60 saniye ya da daha kısa sürer.',
+    },
+    {
+      ad: 'Bumper reklam',
+      tanim: 'Başka bir videodan önce, sonra ya da video sırasında oynayan beş altı saniyelik, atlanamayan reklam.',
+      ornek: 'Tek bir söz ve işletmenin adı sığar.',
+    },
+    {
+      ad: 'Feed içi video reklam',
+      tanim: 'YouTube arama sonuçlarında, sıradaki videolar arasında ve mobil ana sayfada küçük resim ve kısa metinle görünür.',
+      ornek: '“Mutfak dolabı modelleri” arayan kişi sonuçlarda videonuzu görür ve tıklarsa izler.',
+    },
+    {
+      ad: 'Shorts reklamı',
+      tanim: 'Shorts akışında kısa videoların arasında görünür; izleyici kaydırarak hemen geçebilir.',
+    },
+  ]}
+/>
+
+YouTube ana sayfasının en üstündeki Masthead alanı ise ayrı bir yerdir: yalnız rezervasyonla satılır ve Google temsilcisinin yardımıyla açılır. Yerel bir işletmenin ilk kampanyası çoğu zaman yukarıdaki biçimlerle kurulur.
+
+YouTube reklamını arama reklamından ayıran şey, kişinin o anda ne yaptığıdır. Google’a “mutfak dolabı” yazan kişi bir şey arıyordur; YouTube’da yemek videosu açan kişi ise reklam beklemiyordur. Feed içi reklam bu ayrımın arasında durur, çünkü YouTube’da arama yapan kişiye gösterilir.
+
+## Hangi YouTube reklam biçimi seçilmeli?
+
+Biçimi videonuzun süresi ve reklamdan beklediğiniz belirler. Mutfak atölyesi örneğinde üç ayrı ihtiyaç olabilir:
+
+- **Yapılan işi anlatmak.** Bir dakikalık montaj videosu atlanabilir yayın içi reklama uyar. Görüntüleme başına teklifte ödeme, izleyici 30 saniye izlediğinde ya da etkileşime girdiğinde doğar; ilk saniyelerde atlayan kişi için ödeme yapmazsınız.
+- **Adı akılda bırakmak.** Altı saniyeye bir söz ve işletmenin adı sığar. Bumper reklam bu kısa hatırlatma içindir; kişiyi siteye götürmekten çok adınızı tanıtır.
+- **YouTube’da arayana görünmek.** “Mutfak dolabı modelleri” ya da “hazır mutfak mı özel üretim mi” diye YouTube’da arama yapan kişiye feed içi reklam görünür. Ödeme, kişi videoyu izlemek için tıkladığında ya da reklam en az 10 saniye kendiliğinden oynadığında doğar.
+
+Elinizde dikey ve kısa bir video varsa Shorts akışı da bir seçenektir; Google bu reklamın 60 saniyeden kısa olmasını önerir. Hangi biçimi seçerseniz seçin, ilk kampanyada tek bir hedefle başlamak sonucu okumayı kolaylaştırır.
+
+## YouTube reklam verme adımları nelerdir?
+
+Aşağıdaki sıra, Google’ın video kampanyası oluşturma rehberindeki sıradır. Ekran adları zaman zaman değişir; her adımın işlevi aynı kalır.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Videoyu YouTube’a yükleyin',
+      aciklama: 'Reklamda kullanılacak videonun bir YouTube kanalında yayınlanmış olması gerekir. Kampanyada videoyu kanalda arayarak ya da bağlantısını yapıştırarak seçersiniz.',
+      not: 'Kanal işletmenin kendi Google hesabında dursun, bir çalışanın kişisel kanalında değil.',
+    },
+    {
+      ad: 'Google Ads hesabını hazırlayın',
+      aciklama: 'Hesabınız yoksa işletmenin Google hesabıyla açın ve ödeme bilgisini girin. Arama reklamı veriyorsanız aynı hesabı kullanabilirsiniz.',
+    },
+    {
+      ad: 'Kampanya hedefini seçin',
+      aciklama: 'Google satış, potansiyel müşteri, web sitesi trafiği ya da YouTube erişimi, görüntülemeleri ve etkileşimleri arasından seçim ister. Seçtiğiniz hedef, karşınıza çıkacak kampanya alt türlerini belirler.',
+    },
+    {
+      ad: 'Bütçeyi ve teklif stratejisini belirleyin',
+      aciklama: 'Her gün harcanacak ortalama tutarı ya da kampanyanın tamamı için toplam bütçeyi girersiniz. Teklif stratejisi, neye göre ödeyeceğinizi belirler.',
+    },
+    {
+      ad: 'Reklamı kimin göreceğini seçin',
+      aciklama: 'Konum ve dil seçilir; kitle, konu, anahtar kelime ya da yerleşimle hedef daraltılır. Reklamın yanında görünmesini istemediğiniz içerikleri hariç tutabilirsiniz.',
+    },
+    {
+      ad: 'Reklamı oluşturun',
+      aciklama: 'Videoyu seçer, reklama tıklayan kişinin gideceği sayfayı ve diğer reklam öğelerini ekler, kampanyayı kaydedersiniz.',
+    },
+  ]}
+/>
+
+<Not baslik="Satış ya da başvuru hedefliyorsanız" tur="dikkat">
+  Google’ın yardım sayfasına göre işleme yönelik video kampanyalarının, yani doğrudan dönüşüm getirmeye odaklanan video
+  kampanyalarının tümü Mayıs 2026 itibarıyla Talep Yaratma kampanyalarına yükseltildi. Hesabınızda gördüğünüz seçenekler
+  eski anlatımlardaki ekranlardan bu yüzden farklı olabilir; kurulumu bugünkü ekrana göre yapın.
+</Not>
+
+Hedeflemede ölçü, hizmet verdiğiniz yerdir. Bursa’daki atölye için konum Bursa ve montaja gidilen ilçeler, dil Türkçedir. Kitle ve konu seçimi bunun üstüne eklenir; örneğin ev ve dekorasyon videoları izleyenler. Hedefi daralttıkça reklam daha az ama işinizle daha ilgili kişiye gösterilir.
+
+## YouTube reklamında ödeme neye göre alınır?
+
+Ödemeyi doğuran olay, reklamın biçimine ve seçtiğiniz teklif stratejisine göre değişir. Hesapta üç kısaltmayla karşılaşırsınız: görüntüleme başına maliyet (GBM), bin gösterim başına maliyet (BGBM) ve edinme başına maliyet (EBM).
+
+<Ornek
+  baslik="Hangi biçimde ne zaman ödersiniz?"
+  temsili={false}
+  not="Kaynak: Google Ads Yardım, Video reklam biçimleri hakkında. Tutar açık artırmaya, hedeflemeye ve teklifinize göre değişir; tabloda yalnız ödemenin neye göre doğduğu yer alır."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Biçim</th>
+        <th scope="col">Süre</th>
+        <th scope="col">Ödeme ne zaman doğar?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Biçim"><strong>Atlanabilir yayın içi</strong></td>
+        <td data-baslik="Süre">Üst sınır yok; beş saniye sonra atlanabilir</td>
+        <td data-baslik="Ödeme">GBM teklifinde izleyici 30 saniyeyi (daha kısa videoda tamamını) izlediğinde ya da videoyla etkileşime girdiğinde. Hedef BGBM, Hedef EBM ve Dönüşümleri artırma tekliflerinde gösterim sayısına göre.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Biçim"><strong>Atlanamayan yayın içi</strong></td>
+        <td data-baslik="Süre">60 saniye ya da daha kısa</td>
+        <td data-baslik="Ödeme">Hedef BGBM teklifiyle, gösterim sayısına göre.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Biçim"><strong>Bumper</strong></td>
+        <td data-baslik="Süre">Beş altı saniye</td>
+        <td data-baslik="Ödeme">Hedef BGBM teklifiyle, gösterim sayısına göre.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Biçim"><strong>Feed içi video</strong></td>
+        <td data-baslik="Süre">Üst sınır yok</td>
+        <td data-baslik="Ödeme">Kişi reklamı izlemek için tıkladığında ya da reklam en az 10 saniye kendiliğinden oynadığında.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Biçim"><strong>Shorts</strong></td>
+        <td data-baslik="Süre">60 saniyeden kısa olması önerilir</td>
+        <td data-baslik="Ödeme">GBM teklifinde 10 saniye ya da tamamı izlendiğinde, harekete geçirici düğmeye dokunulduğunda ya da beğeni, yorum, paylaşım yapıldığında. Hedef BGBM teklifinde gösterim sayısına göre.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Açık artırmayla satın alınan video kampanyalarında tutar sabit bir tarifeden gelmez. Aynı kişilere ulaşmak isteyen diğer reklamverenlerle yapılan açık artırmada, sizin teklifinize ve hedeflemenize göre oluşur. Bu yüzden “bir izlenme kaç lira” sorusunun herkes için geçerli bir cevabı yoktur.
+
+Ücretli izlenmeler hesapta “TrueView görüntülemeleri” adıyla görünür. Google, Ekim 2025’te metriğin adını böyle değiştirdi ve bu değişikliğin faturalandırmayı etkilemediğini belirtti.
+
+Videonun altında herkese açık görünen izlenme sayısı ayrı bir sayıdır. YouTube’un yardım sayfasına göre reklam izlenmeleri bu sayıya eklenebilir, ama fatura o sayıya göre kesilmez. Bu yüzden izlenme sayısı tek başına bir sonuç ölçüsü sayılmaz: mutfak atölyesi için asıl soru, reklamı izleyenlerden kaçının siteye geçip keşif talebi bıraktığıdır. Bu oranları okumayı [ROAS, CTR ve TBM nedir](/blog/roas-ctr-tbm-nedir/) yazısında anlattık.
+
+## YouTube Studio’dan mı, Google Ads’ten mi reklam verilir?
+
+YouTube’un kendi içinde de bir tanıtım aracı var: Tanıt. YouTube onu Google Ads tarafından desteklenen, basitleştirilmiş bir reklam aracı olarak tanımlar. Videonun menüsünden ya da YouTube Studio’daki tanıtımlar bölümünden açılır; bütçe ve süre belirlenerek başlatılır.
+
+<Karsilastirma
+  uygunEtiketi="Kimin için"
+  sol={{
+    ust: 'YouTube içinden',
+    baslik: 'Tanıt',
+    maddeler: [
+      'Videonun yanından birkaç adımda başlatılır.',
+      'Hedef abone, görüntüleme ya da sitenize tıklama olabilir.',
+      'Yalnız YouTube’da yönetilir; Google Ads hesabından erişilemez.',
+    ],
+    uygun: 'Videosunu ve kanalını daha çok kişiye ulaştırmak isteyen kanal sahibi',
+  }}
+  sag={{
+    ust: 'Google Ads hesabından',
+    baslik: 'Video kampanyası',
+    maddeler: [
+      'Konum, dil, kitle, konu ve yerleşimle ayrıntılı hedefleme yapılır.',
+      'Reklam biçimi ve teklif stratejisi ayrı ayrı seçilir.',
+      'Arama kampanyalarıyla aynı hesapta, aynı dönüşüm ölçümüyle izlenir.',
+    ],
+    uygun: 'Reklamdan arama, form ya da satış bekleyen işletme',
+  }}
+/>
+
+YouTube da bu ayrımı kendisi yapar: gelişmiş hedefleme ve ayrıntılı analiz için kampanyayı Google Ads’te oluşturmanızı söyler. İki yolun arkasında aynı reklam altyapısı durur; fark, ne kadar ayar ve ölçüm istediğinizdedir.
+
+## YouTube reklamı vermeden önce neler hazır olmalı?
+
+Video kampanyası birkaç dakikada kurulur. Sonucu belirleyen hazırlık ise kurulumdan önce yapılır: videonun ilk saniyeleri, reklamdan sonra açılacak sayfa ve ölçüm. Videoyu siz sağlarsınız; çekim ve kurgu bizim yaptığımız işler arasında değil.
+
+<KontrolListesi
+  kimlik="youtube-reklam-yayin-oncesi"
+  baslik="Video kampanyası öncesi kontrol"
+  adimlar={[
+    'Videonun ilk beş saniyesinde işletmemin adı ve ne yaptığım görünüyor.',
+    'Video işletmenin kendi YouTube kanalında; kanal işletmenin Google hesabına bağlı.',
+    'Reklamı izleyenin gideceği sayfayı telefonda açtım; numaraya dokunuluyor, form çalışıyor.',
+    'Dönüşüm takibi kurulu; bir deneme başvurusunun sayıldığını gördüm.',
+    'Reklamın gösterileceği bölgeyi ve dili hizmet verdiğim yere göre seçtim.',
+    'Reklamımın yanında görünmesini istemediğim içerik türlerini not ettim.',
+  ]}
+  not="İzlenme artarken talep gelmiyorsa önce bu listeye dönün. Sorun videoda olabileceği gibi videodan sonraki adımda da olabilir."
+/>
+
+Kampanya yayına girdikten sonraki ilk haftalarda üç şeye bakılır: reklamın hangi videolarda gösterildiği, izleyenlerin siteye geçip geçmediği ve gelen talebin işinize uyup uymadığı. Sonuç getirmeyen yerleşimler ve kitleler daraltılır, bütçe talep getiren tarafa toplanır.
+
+Reklamdan sonra açılacak sayfanın nasıl olması gerektiğini [landing page nedir](/blog/landing-page-nedir/) yazısında anlattık. Mutfak, mobilya ve dekorasyon firmalarında bitmiş işi, haritayı ve keşif talebini nasıl birlikte ele aldığımızı [iç mimarlık ve dekorasyon](/sektorler/ic-mimarlik-ve-dekorasyon/) sayfasında görebilirsiniz.
+
+Video kampanyası, arama kampanyalarıyla aynı Google Ads hesabında durur ve aynı dönüşüm ölçümüne bakar. Hesabı kurmadan ya da var olan kampanyayı düzeltmeden önce neye baktığımızı [Google Ads yönetimi](/hizmetler/google-ads-yonetimi/) sayfasında anlattık. YouTube ile Instagram arasında kararsızsanız sıradaki yazı [Google Ads ile Instagram reklamını](/blog/google-ads-mi-instagram-reklami-mi/) müşterinin satın alma biçimine göre karşılaştırır.

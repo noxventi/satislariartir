@@ -1,0 +1,2262 @@
+---
+/**
+ * Ana sayfa.
+ *
+ * Fikir: insanlar derdini değil çözümü arıyor ("google'a reklam vermek", "seo ajansı", "web sitesi yaptırmak").
+ * Asıl istedikleri ise markanın adı: satışları artırmak. Üst alan gerçek aramaları yazar, altında
+ * arama motorlarının bildik cümlesi durur: "Bunu mu demek istediniz: Satışları artır."
+ *
+ * Arama hacimleri OpenSEO verisidir (Türkiye, Kasım 2026): arastirma/openseo-2026-11-14.md ve TESLIM.md.
+ * Kaynak notu sayfada gösterilmez (marka sahibinin kararı, 15 Kasım 2026); kayıt bu dosyalarda durur.
+ * Soru kartlarındaki işletmeler gündelik hayattan temsili örneklerdir, müşteri değildir.
+ * Bölüm sırası: üst alan, logo şeridi, reklam verenlerin soruları, ilk kez reklam verecekler, hizmetler, çalışma yöntemi,
+ * markalar, rehberler, sık sorulan sorular, görüşme. İki kitle (reklam veren ve hiç vermemiş) art arda, eşit ağırlıkta durur.
+ */
+import Temel from '../layouts/Temel.astro';
+import Gorsel from '../components/Gorsel.astro';
+import Cizim from '../components/Cizim.astro';
+import Ikon from '../components/Ikon.astro';
+import Isaret from '../components/Isaret.astro';
+import GorusmeBandi from '../components/GorusmeBandi.astro';
+import MarkaSeridi from '../components/MarkaSeridi.astro';
+import { HIZMETLER, SITE } from '../site.config';
+import type { ImageMetadata } from 'astro';
+import { MUSTERI_YORUMLARI, PROJELER } from '../data/projeler';
+import { SEKTORLER, sektorGorseli, sektorUrl } from '../data/sektorler';
+
+import kapakMasaustu from '../assets/gorseller/kapak-masaustu.jpg';
+import kapakMobil from '../assets/gorseller/kapak-mobil.jpg';
+import megafon from '../assets/cizimler/megafon.png';
+import mesaj from '../assets/cizimler/mesaj.png';
+import buyutec from '../assets/cizimler/buyutec.png';
+import dukkan from '../assets/cizimler/dukkan.png';
+import balon from '../assets/cizimler/balon.png';
+import yolAyrimi from '../assets/cizimler/yol-ayrimi.png';
+import defter from '../assets/cizimler/defter.png';
+
+import yolArama from '../assets/gorseller/yol-arama.jpg';
+import yolAkis from '../assets/gorseller/yol-akis.jpg';
+import yolCevap from '../assets/gorseller/yol-cevap.jpg';
+import yolYapayZeka from '../assets/gorseller/yol-yapay-zeka.jpg';
+import yolSite from '../assets/gorseller/yol-site.jpg';
+import ilkAdim from '../assets/gorseller/ilk-adim.jpg';
+
+
+const ANA_CAGRI = 'Satışlarımı artırmak istiyorum';
+
+const ekranlar = import.meta.glob<{ default: ImageMetadata }>('../assets/projeler/*-masaustu.jpg', { eager: true });
+const logoDosyalari = import.meta.glob<{ default: ImageMetadata }>('../assets/logolar/*.png', { eager: true });
+const logoBul = (kimlik: string) => logoDosyalari['../assets/logolar/' + kimlik + '.png']?.default;
+const isAdlari: Record<string, string> = {
+  'Web sitesi tasarımı': 'Web tasarım',
+  'SEO ve GEO': 'SEO ve GEO',
+  SEO: 'SEO',
+  'Dijital reklam yönetimi': 'Reklam yönetimi',
+  'Sosyal medya yönetimi': 'Sosyal medya',
+  'CRM yapısı': 'CRM',
+};
+
+/** Çalıştığımız markalar: altı canlı sitenin masaüstü ilk ekranı, hepsi aynı ölçüde, düz bir ızgarada. */
+const vitrin = ['celikvillam', 'tarum-havuz', 'burger-engineer', 'estika', 'bodrum-olive-house', 'esvia'].map((kimlik) => {
+  const p = PROJELER.find((x) => x.kimlik === kimlik)!;
+  return {
+    ad: p.siteAdi ?? p.marka,
+    sektor: p.sektor,
+    // İlk iş adı büyük harfle başlar, sonrakiler cümle içinde olduğu için küçük harfle (kısaltmalar hariç).
+    isler: p.obrandyKapsami
+      .map((k) => isAdlari[k] ?? k)
+      .map((k, i) => (i === 0 || /^(SEO|CRM|GEO)/.test(k) ? k : k.charAt(0).toLocaleLowerCase('tr') + k.slice(1)))
+      .join(', '),
+    url: p.dosya ?? '/calismalarimiz/',
+    ekran: ekranlar['../assets/projeler/' + p.alanAdi.split('.')[0] + '-masaustu.jpg'].default,
+    logo: logoBul(kimlik),
+  };
+});
+
+/** Müşteri yorumları: sözler veride kelimesi kelimesine durur (src/data/projeler.ts). */
+const yorumlar = MUSTERI_YORUMLARI.map((y) => ({
+  ...y,
+  logo: logoBul(y.kimlik),
+  // Kısa söz büyük, uzun söz küçük dizilir: kartlar aynı yükseklikte kalır, boşluk kalmaz.
+  boy: y.soz.length < 125 ? 'buyuk' : y.soz.length < 230 ? 'orta' : 'kucuk',
+}));
+const [googleAds, meta, seo, geo, web] = HIZMETLER;
+
+/** Türkiye'de gerçekten yapılan aramalar ve aylık yaklaşık hacimleri (OpenSEO, Kasım 2026). */
+const aramalar = [
+  { terim: 'google’a reklam vermek', hacim: '5.400' },
+  { terim: 'seo ajansı', hacim: '8.100' },
+  { terim: 'instagram reklam verme', hacim: '5.400' },
+  { terim: 'web sitesi yaptırmak', hacim: '590' },
+  { terim: 'reklam ajansı', hacim: '6.600' },
+  { terim: 'dijital pazarlama ajansı', hacim: '2.400' },
+];
+
+/**
+ * İşletmelerden en sık duyulan altı soru. Başlıklar insanların aramaya yazdığı biçimde sorudur;
+ * her kartta nedenin gündelik bir örneği ve yapılan iş durur.
+ */
+const dertler = [
+  {
+    soru: 'Google reklamı veriyorum, neden satış gelmiyor?',
+    ornek:
+      'Sorun çoğu zaman bütçede değil, tıklayan kişidedir. “Koltuk takımı” aramasına reklam veren bir mobilyacıya tıklayanların bir kısmı ikinci el arıyor, bir kısmı başka şehirde yaşıyor.',
+    care: 'Arama terimlerini tek tek inceliyor, satış getirmeyenleri kapatıyor ve bütçeyi teklif getiren aramalara topluyoruz.',
+    bag: { etiket: googleAds.ad, url: googleAds.url },
+    cizim: megafon,
+    genis: true,
+  },
+  {
+    soru: 'Instagram reklamından mesaj geliyor, neden satış olmuyor?',
+    ornek: 'Bir güzellik salonuna “fiyat?” diye yazıp bir daha dönmeyenler tanıdık gelir. Kayıp çoğu zaman reklamda değil, ilk yanıtla randevu arasındadır.',
+    care: 'Reklamın verdiği sözü, hedef kitleyi ve mesajdan randevuya giden adımları birlikte düzeltiyoruz.',
+    bag: { etiket: 'Instagram ve Facebook reklam yönetimi', url: meta.url },
+    cizim: mesaj,
+    genis: false,
+  },
+  {
+    soru: 'Web sitem Google’da neden çıkmıyor?',
+    ornek: '“Kadıköy çilingir” yazan kişi ilk sayfada kimi görürse onu arar. Orada değilseniz ya Google sayfanıza erişemiyordur ya da sayfa aranan soruyu cevaplamıyordur.',
+    care: 'Teknik engelleri kaldırıyor, hizmet sayfalarınızı müşterinizin yazdığı aramalara göre yeniden kuruyoruz.',
+    bag: { etiket: seo.ad, url: seo.url },
+    cizim: buyutec,
+    genis: false,
+  },
+  {
+    soru: 'Web sitem var, neden müşteri getirmiyor?',
+    ornek: 'Menüsü PDF olan bir restoran sitesi düşünün: telefonda geç açılıyor, rezervasyon düğmesi sayfanın en altında. Ziyaretçi geliyor ama aradığını bulamadan çıkıyor.',
+    care: 'Ziyaretçinin aradığı hizmeti ilk ekranda görüp tek adımda talep bırakabileceği sayfalar tasarlıyoruz.',
+    bag: { etiket: 'Kurumsal web tasarım', url: web.url },
+    cizim: dukkan,
+    genis: true,
+  },
+  {
+    soru: 'ChatGPT’ye sorulduğunda markam neden önerilmiyor?',
+    ornek:
+      '“Ankara’da hangi mimarlık ofisiyle çalışmalıyım?” sorusuna verilen yanıtta birkaç isim geçer. Sizinki geçmiyorsa yanıtın dayandığı kaynaklarda markanız ya yoktur ya da eksik anlatılmıştır.',
+    care: 'Müşterilerinizin sorduğu soruları belirliyor, yanıtlarda adınızın geçip geçmediğini ölçüyor ve kaynak gösterilen sayfaları düzeltiyoruz.',
+    bag: { etiket: 'GEO ve AEO danışmanlığı', url: geo.url },
+    cizim: balon,
+    genis: true,
+  },
+  {
+    soru: 'Reklamı durdurunca müşteri de duruyor. Ne yapmalıyım?',
+    ornek: 'Bir pilates stüdyosu reklam bütçesini kıstığı hafta telefon susuyorsa bütün müşterisi reklamdan geliyordur. Reklam dışı sonuçlarda görünmüyordur.',
+    care: 'Reklamın yanında, Google’ın reklam dışı sonuçlarında ve yapay zekâ yanıtlarında da görünmeniz için SEO çalışması yürütüyoruz.',
+    bag: { etiket: 'SEO ve GEO çalışmaları', url: '/hizmetler/' },
+    cizim: yolAyrimi,
+    genis: false,
+  },
+];
+
+/**
+ * İlk kez reklam verecek ya da deneyip sonuç alamamış işletmeler. Marka sahibi için öncelikli kitle
+ * (15 Kasım 2026). Başlıklar onların kendi cümlesi; yanıtlar ne yaptığımızı sade bir dille söyler.
+ */
+const ilkAdimlar = [
+  {
+    soz: 'Hiç reklam vermedim. Nereden başlamalıyım?',
+    cevap:
+      'Google reklam verme mi, Instagram reklam verme mi? Müşterinizin sizi nasıl bulduğuna bakıp kanalı birlikte seçiyoruz. Hesap açılışından ilk kampanyaya kadar kurulumu biz yapıyoruz.',
+    bag: { etiket: 'Google Ads mi, Instagram mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+  },
+  {
+    soz: 'Google’a reklam vermeyi denedim, reklamım çıkmadı.',
+    cevap: 'Reklamın onaylanmaması ya da gösterilmemesi ödeme, onay ya da hedefleme ayarından kaynaklanabilir. Nedenini bulup hesabı düzeltiyoruz.',
+    bag: { etiket: 'Reklamım neden gösterilmiyor?', url: '/blog/google-reklamim-neden-gosterilmiyor/' },
+  },
+  {
+    soz: 'Instagram’da gönderimi öne çıkardım, kimse yazmadı.',
+    cevap: '“Öne çıkar” düğmesi hızlıdır ama hedef ve kitle seçenekleri sınırlıdır. Reklamı Meta Reklam Yöneticisi’nde, satış hedefinize göre baştan kuruyoruz.',
+    bag: { etiket: 'Reklam vermek için gerekenler', url: '/blog/meta-reklam-vermek-icin-gerekenler/' },
+  },
+  {
+    soz: 'Web sitem yok. Yine de reklam verebilir miyim?',
+    cevap:
+      'Instagram ve Facebook’ta mesaj ya da form hedefiyle site olmadan reklam verilebilir. Google reklamlarında tıklayan kişinin ineceği bir sayfa gerekir; tek sayfalık bir açılış sayfasıyla başlayabiliriz.',
+    bag: { etiket: 'Kurumsal web tasarım', url: web.url },
+  },
+];
+
+/** Beş hizmet: başlık hizmetin aranan adı, üst satır müşterinin o andaki davranışı. */
+const yollar = [
+  {
+    hizmet: googleAds,
+    ad: 'Google Ads yönetimi',
+    davranis: 'Müşteri hizmetinizin adını Google’a yazıyor.',
+    is: 'Google reklamlarınızı arama terimlerine göre kuruyor, satış getirmeyen aramaları kapatıyor, telefon ve form dönüşümlerini izleyerek bütçeyi teklif getiren aramalara yönlendiriyoruz.',
+    bag: 'Google Ads yönetimi nasıl işliyor?',
+    gorsel: yolArama,
+    alt: 'Kâğıttan dev bir arama kutusuna uzanan küçük bir müşteri; kutudan çıkan kırmızı kalem çizgisi ışıkları yanan dükkâna gidiyor',
+    sizes: '(max-width: 47.99rem) 100vw, 56vw',
+  },
+  {
+    hizmet: meta,
+    ad: 'Instagram ve Facebook reklam yönetimi',
+    davranis: 'Instagram’da gezinirken işinizi görüyor.',
+    is: 'Meta reklamlarını hedefinize göre kuruyor, görsel ve metinleri tek tek deniyor, mesaj ve form başvurularının satışa dönmesi için adımları düzenliyoruz.',
+    bag: 'Meta reklam yönetimi nasıl işliyor?',
+    gorsel: yolAkis,
+    alt: 'Kâğıttan dev bir telefonun ekranındaki fotoğraf kareleri; dükkânın olduğu kare kırmızı kalemle çembere alınmış, önünde bakan küçük insanlar',
+    sizes: '(max-width: 47.99rem) 100vw, 32vw',
+  },
+  {
+    hizmet: seo,
+    ad: 'SEO danışmanlığı',
+    davranis: 'Reklamı atlayıp sorusunun cevabını arıyor.',
+    is: 'Sitenizin teknik eksiklerini öncelik sırasına koyuyor, hizmet sayfalarınızı ve içeriğinizi müşterinizin gerçekten yazdığı aramalara göre düzenliyoruz.',
+    bag: 'SEO danışmanlığı nasıl işliyor?',
+    gorsel: yolCevap,
+    alt: 'Elinde soru işaretiyle reklam panolarının yanından geçip açık duran dev bir kitaba yürüyen küçük bir müşteri; kitapta bir satır kırmızı kalemle çizilmiş',
+    sizes: '(max-width: 47.99rem) 100vw, 32vw',
+  },
+  {
+    hizmet: geo,
+    ad: 'GEO ve AEO danışmanlığı',
+    davranis: 'ChatGPT’ye ya da Google’ın yapay zekâ özetine soruyor.',
+    is: 'Müşterilerinizin sorduğu soruları belirliyor, yapay zekâ yanıtlarında markanızın doğru bilgiyle geçip geçmediğini ölçüyor, kaynak gösterilen sayfaları düzeltiyoruz.',
+    bag: 'GEO ve AEO danışmanlığı nasıl işliyor?',
+    gorsel: yolYapayZeka,
+    alt: 'Kâğıttan bir yardımcı robot ve konuşma balonu; balondaki üç dükkândan ortadaki kırmızı kalemle çembere alınmış, karşısında dinleyen bir müşteri',
+    sizes: '(max-width: 47.99rem) 100vw, 32vw',
+  },
+  {
+    hizmet: web,
+    ad: 'Kurumsal web tasarım',
+    davranis: 'Hangi yoldan gelirse gelsin web sitenize iniyor.',
+    is: 'Ziyaretçinin aradığı hizmeti ilk ekranda görüp talep bırakabileceği, mobilde test edilmiş hizmet sayfaları ve reklam açılış sayfaları tasarlıyoruz.',
+    bag: 'Web tasarım süreci nasıl işliyor?',
+    gorsel: yolSite,
+    alt: 'Ekranı dükkân vitrini olan kâğıttan bir dizüstü bilgisayar; üç ayrı yönden gelen kırmızı çizgiler kapıda birleşiyor, küçük müşteriler içeri giriyor',
+    sizes: '(max-width: 47.99rem) 100vw, 32vw',
+  },
+];
+
+/** Çalışma yöntemi: incelemeden hedefe beş adım. */
+const duraklar = [
+  { ad: 'İnceleme', ornek: 'İşletme, rakip ve arama analizi', kontrol: 'Müşteriniz neyi, nasıl arıyor? Rakipleriniz ne söylüyor? Reklam açmadan önce bunları çıkarıyoruz.' },
+  { ad: 'Strateji', ornek: 'Kanal, mesaj ve hedef kararı', kontrol: 'Hedefinize en doğru ve en hızlı ulaştıracak kanalı ve teklifi birlikte seçiyoruz.' },
+  { ad: 'Kurulum', ornek: 'Bilinçli kurulan reklam ve sayfalar', kontrol: 'Her kampanya ve her sayfa, incelemede çıkan bir bulguya dayanır.' },
+  { ad: 'Optimizasyon', ornek: 'Düzenli takip ve iyileştirme', kontrol: 'Sonuç getirmeyen aramayı, reklamı ya da sayfayı kapatıyor, getireni güçlendiriyoruz.' },
+  { ad: 'Hedef', ornek: 'Satış ve müşteri hedefiniz', kontrol: 'Başarıyı tıklamayla değil, işletmenize gelen talep ve satışla değerlendiriyoruz.' },
+];
+
+/**
+ * Sık sorulan sorular. Sorular Türkiye'de gerçekten aranan ifadelerden seçildi (OpenSEO, Kasım 2026:
+ * "google reklam verme" 5.400, "instagram reklam verme" 5.400, "seo nedir" 5.400, "dijital pazarlama nedir" 1.900,
+ * "geo nedir" 1.000, "web sitesi yaptırmak" 590). Yanıtlarda fiyat, süre ve sıralama sözü yoktur.
+ */
+const sorular = [
+  {
+    soru: 'Dijital pazarlama ajansı ne iş yapar?',
+    cevap:
+      'Dijital pazarlama ajansı, bir işletmenin internette müşteri bulması için gereken işleri planlar ve yürütür: Google ve sosyal medya reklamları, arama motoru optimizasyonu (SEO), web sitesi ve bunların düzenli takibi. Satışları Artır bu işleri birbirinden kopuk değil, tek bir satış hedefine göre yürütür.',
+  },
+  {
+    soru: 'Google reklam verme işini kendim yapabilir miyim, ajans gerekir mi?',
+    cevap:
+      'Google Ads hesabını herkes açıp reklam verebilir. Zor olan, bütçenin hangi aramalara gittiğini görmek ve satış getirmeyen tıklamaları ayıklamaktır. Hesabınız varsa önce arama terimleri raporuna bakın; nereye bakacağınızı rehberimizde anlattık.',
+    bag: { etiket: 'Google Ads’te tıklama var ama neden telefon gelmiyor?', url: '/blog/google-ads-tiklama-var-telefon-yok/' },
+  },
+  {
+    soru: 'Google reklamları mı, Instagram reklamları mı daha çok satış getirir?',
+    cevap:
+      'İkisi farklı işe yarar. Google reklamları hizmeti o anda arayan kişiye ulaşır. Instagram ve Facebook reklamları ise henüz aramayan ama ilgilenebilecek kişiye işinizi gösterir. Hangisinden başlanacağı, müşterinizin sizi arayarak mı yoksa görerek mi bulduğuna bağlıdır.',
+    bag: { etiket: 'Google Ads mi, Instagram reklamı mı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' },
+  },
+  {
+    soru: 'SEO nedir, reklamdan farkı ne?',
+    cevap:
+      'SEO (arama motoru optimizasyonu), web sitenizin Google’ın reklam dışı sonuçlarında görünmesi için yapılan teknik ve içerik çalışmasıdır. Reklamda tıklama başına ödeme yapılır ve reklam durunca trafik kesilir. SEO’da sonuç daha geç gelir ama tıklama için ödeme yapılmaz. Sıralama sözü vermiyoruz; neyi neden düzelttiğimizi ve sonucunu gösteriyoruz.',
+    bag: { etiket: seo.ad, url: seo.url },
+  },
+  {
+    soru: 'GEO nedir, SEO’dan farkı ne?',
+    cevap:
+      'GEO (üretken yapay zekâ optimizasyonu), ChatGPT, Gemini ve Google’ın yapay zekâ özetleri gibi araçların verdiği yanıtlarda markanızın doğru bilgiyle anılması için yapılan çalışmadır. SEO sayfanızın arama sonuçlarında görünmesini hedefler; GEO ise yanıtın içinde adınızın geçmesini. AEO, soruya doğrudan cevap veren içerik düzenidir.',
+    bag: { etiket: 'GEO ve AEO danışmanlığı', url: geo.url },
+  },
+  {
+    soru: 'Yeni web sitesi yaptırmak mı gerekir, mevcut siteyi düzeltmek yeter mi?',
+    cevap:
+      'Her zaman yeni bir site gerekmez. Sayfalar telefonda rahat açılıyor, ziyaretçi aradığı hizmeti ilk ekranda görüyor ve talep bırakabiliyorsa mevcut siteyi düzeltmek yeterlidir. Hizmetler tek sayfada toplanmışsa ya da siteyi kendiniz güncelleyemiyorsanız yeniden kurmak daha doğru olur.',
+    bag: { etiket: 'Kurumsal web tasarım', url: web.url },
+  },
+  {
+    soru: 'Reklamlar açıldıktan sonra süreç nasıl ilerliyor?',
+    cevap:
+      'Reklamı açıp bırakmıyoruz. Hangi aramanın, hangi reklamın ve hangi sayfanın talep getirdiğine düzenli olarak bakıyor, sonuç getirmeyeni kapatıp getireni güçlendiriyoruz. Yapılan değişiklikleri ve nedenlerini sizinle paylaşıyoruz.',
+  },
+  {
+    soru: 'Reklam vermek için neler gerekir?',
+    cevap:
+      'Bir reklam hesabı (Google Ads ya da Meta), hesaba tanımlı bir ödeme yöntemi, müşterinin size ulaşacağı bir kanal (telefon, WhatsApp, form ya da web sayfası) ve reklamın metni ile görseli gerekir. İlk kez reklam veriyorsanız hesap açılışını ve kurulumu birlikte yapıyoruz.',
+    bag: { etiket: 'Meta’da reklam vermek için gerekenler', url: '/blog/meta-reklam-vermek-icin-gerekenler/' },
+  },
+  {
+    soru: 'Daha önce reklam verdim, sonuç alamadım. Yeniden denemeli miyim?',
+    cevap:
+      'Çoğu zaman neden bulunabilir: reklam yanlış kişilere gösterilmiştir, tıklayan kişinin indiği sayfa talep bırakmaya uygun değildir ya da gelen mesajlar yanıtsız kalmıştır. Önce eski hesabınızı inceliyor, neyin işlemediğini gösteriyor, sonra reklamları yeniden kuruyoruz.',
+  },
+];
+
+const rehberler = [
+  {
+    soru: 'Google Ads’te tıklama var ama neden telefon gelmiyor?',
+    cevap: 'Çoğu zaman sorun üç yerden birindedir: mobil sayfa, tıklamayı getiren aramalar ya da telefonun nasıl sayıldığı.',
+    url: '/blog/google-ads-tiklama-var-telefon-yok/',
+  },
+  {
+    soru: 'Instagram reklamından mesaj geliyor ama neden satış olmuyor?',
+    cevap: 'Son mesajları aşama aşama sınıflayın. Kaybın hangi adımda olduğunu çalışma tablosu gösterir.',
+    url: '/blog/instagram-reklam-mesajlari-satisa-donusmuyor/',
+  },
+  {
+    soru: 'Google reklamım neden gösterilmiyor?',
+    cevap: 'Kendi aramanızda reklamı görememek, yayında olmadığını göstermez. Önce hesaptaki gösterim sayısına bakın.',
+    url: '/blog/google-reklamim-neden-gosterilmiyor/',
+  },
+];
+
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE.url}/#kurum`,
+    name: SITE.ad,
+    url: `${SITE.url}/`,
+    logo: `${SITE.url}/logo.png`,
+    description: SITE.aciklama,
+    ...(SITE.iletisim.telefon && { telephone: SITE.iletisim.telefon.replace(/\s/g, '') }),
+    ...(SITE.iletisim.eposta && { email: SITE.iletisim.eposta }),
+    areaServed: { '@type': 'Country', name: 'Türkiye' },
+    knowsAbout: ['Dijital pazarlama', 'Google Ads yönetimi', 'Meta reklam yönetimi', 'SEO danışmanlığı', 'GEO ve AEO', 'Web tasarımı'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE.url}/#site`,
+    name: SITE.ad,
+    url: `${SITE.url}/`,
+    inLanguage: 'tr-TR',
+    publisher: { '@id': `${SITE.url}/#kurum` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${SITE.url}/#sss`,
+    mainEntity: sorular.map((s) => ({
+      '@type': 'Question',
+      name: s.soru,
+      acceptedAnswer: { '@type': 'Answer', text: s.cevap },
+    })),
+  },
+];
+---
+
+<Temel
+  baslik="Dijital Pazarlama Ajansı: Reklam, SEO ve Web | Satışları Artır"
+  aciklama={SITE.aciklama}
+  sayfaTuru="ana"
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: ANA_CAGRI, url: '#gorusme' }}
+>
+  <!-- Üst alan -->
+  <section class="kapak">
+    <div class="sarici kapak__ic">
+      <div class="kapak__metin">
+        <h1 class="kapak__h1">Dijital pazarlama ajansı</h1>
+
+        {/* Yazılan arama süsleme değil, gerçek veridir; ekran okuyucu için aşağıda düz liste olarak da durur. */}
+        <div class="ara" data-ara aria-hidden="true">
+          <Ikon ad="magnifying-glass" boyut={22} class="ara__ikon" />
+          <p class="ara__satir">
+            <span class="ara__yazi" data-yazi>{aramalar[0].terim}</span><span class="ara__imlec"></span>
+          </p>
+          <p class="ara__hacim">
+            ayda yaklaşık <strong data-sayi>{aramalar[0].hacim}</strong> arama
+          </p>
+        </div>
+        <ul class="gorunmez" data-aramalar>
+          {aramalar.map((a) => <li data-terim={a.terim} data-hacim={a.hacim}>“{a.terim}”: Türkiye’de ayda yaklaşık {a.hacim} arama</li>)}
+        </ul>
+
+        <p class="kapak__oneri">
+          <span class="kapak__demek">Bunu mu demek istediniz:</span>
+          <span class="dev kapak__soz"><Isaret gecikme={500}>Satışları artır.</Isaret></span>
+        </p>
+
+        <p class="giris kapak__giris">
+          Satışları Artır, işletmelere daha fazla müşteri kazandırmak için çalışan bir dijital pazarlama ajansıdır. Google
+          Ads ve Instagram reklam yönetimi, SEO, yapay zekâ görünürlüğü (GEO) ve web tasarım: hepsini ayrıntılı
+          incelemeyle kuruyor, düzenli optimizasyonla geliştiriyoruz.
+        </p>
+
+        <div class="kapak__eylem">
+          <a class="dugme" href="#gorusme" data-ana-cagri data-olay="cta_click" data-yer="kapak">
+            {ANA_CAGRI}
+            <Ikon ad="arrow-right" boyut={18} />
+          </a>
+          <a class="ok-bag" href="/calismalarimiz/">
+            Çalışmalarımızı inceleyin
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+        </div>
+      </div>
+
+      <figure class="kapak__gorsel">
+        <Gorsel
+          src={kapakMasaustu}
+          mobil={kapakMobil}
+          alt="Kâğıttan yapılmış mavi beyaz bir kasaba. Küçük kâğıt insanlar, masaya çizilmiş kırmızı kalem çizgisini izleyerek ışıkları yanan bir dükkâna yürüyor. Çizginin ucunda kırmızı bir marangoz kalemi duruyor."
+          sizes="(max-width: 61.99rem) 100vw, (min-width: 90rem) 88rem, 97vw"
+          mobilSizes="100vw"
+          genislikler={[900, 1200, 1500, 1900, 2400]}
+          mobilGenislikler={[480, 720, 960, 1400]}
+          oncelik
+        />
+      </figure>
+    </div>
+
+    <MarkaSeridi />
+  </section>
+
+  <!-- Sorular ve yapılan iş -->
+  <section class="bolum bolum--beyaz dert">
+    <div class="sarici">
+      <div class="dert__ust">
+        <h2 class="baslik-2">Satışlarınız neden artmıyor?</h2>
+        <p class="giris">
+          Reklam, SEO ya da yeni bir web sitesi tek başına satış getirmez. Sorun çoğu zaman aşağıdaki altı noktadan
+          birindedir. İşletmelerden en sık duyduğumuz sorular ve her birinde yaptığımız iş:
+        </p>
+      </div>
+
+      <ul class="dert__izgara">
+        {
+          dertler.map((d, i) => (
+            <li class:list={['dert__kart', i % 2 === 1 ? 'dert__kart--mavi' : 'dert__kart--kagit']}>
+              <div class="dert__metin">
+                <h3 class="dert__soz">
+                  <span>{d.soru}</span>
+                </h3>
+                <p class="dert__ornek kucuk">{d.ornek}</p>
+                <p class="dert__care">{d.care}</p>
+                <a class="ok-bag dert__bag" href={d.bag.url}>
+                  {d.bag.etiket}
+                  <Ikon ad="arrow-right" boyut={16} />
+                </a>
+              </div>
+              <div class="dert__cizim" aria-hidden="true">
+                <Cizim src={d.cizim} sizes="(max-width: 43.99rem) 6rem, (max-width: 61.99rem) 24vw, 22vw" genislikler={[200, 280, 420, 640, 1024]} />
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- İlk kez reklam verecekler ve deneyip sonuç alamayanlar -->
+  <section class="bolum ilk" id="ilk-reklam">
+    <div class="sarici ilk__ic">
+      <div class="ilk__ust">
+        <h2 class="baslik-2">İlk kez reklam mı vereceksiniz?</h2>
+        <p class="giris">
+          Hiç reklam vermediyseniz ya da deneyip sonuç alamadıysanız doğru yerdesiniz. Reklam hesabını açmaktan ilk
+          kampanyayı yayına almaya kadar her adımı sizinle birlikte kuruyor, ne yaptığımızı sade bir dille anlatıyoruz.
+        </p>
+      </div>
+      <figure class="ilk__gorsel">
+        <Gorsel
+          src={ilkAdim}
+          alt="Kâğıttan küçük bir dükkânın önünde, elinde megafonla boş yola bakan bir esnaf. Masadaki kırmızı kalem dükkânın kapısından başlayan çizginin yalnız ilk kısmını çizmiş; yolun devamı kurşun kalemle noktalı işaretlenmiş."
+          sizes="(max-width: 61.99rem) 100vw, 38vw"
+          genislikler={[480, 720, 960, 1280, 1600]}
+          kalite={68}
+        />
+      </figure>
+      <ul class="ilk__liste">
+        {
+          ilkAdimlar.map((a) => (
+            <li class="ilk__kart">
+              <h3 class="ilk__soz">“{a.soz}”</h3>
+              <p class="ilk__cevap">{a.cevap}</p>
+              <a class="ok-bag ilk__bag" href={a.bag.url}>
+                {a.bag.etiket}
+                <Ikon ad="arrow-right" boyut={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="ilk__eylem">
+        <a class="dugme dugme--murekkep" href="#gorusme" data-kampanya-durumu="new" data-olay="cta_click" data-yer="ilk-reklam">
+          İlk reklamımı planlamak istiyorum
+          <Ikon ad="arrow-right" boyut={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Müşterinin beş yolu: beş hizmet -->
+  <section class="bolum yol">
+    <div class="sarici">
+      <div class="yol__ust">
+        <h2 class="baslik-2">Dijital pazarlama hizmetlerimiz</h2>
+        <p class="giris">
+          Müşteri size beş yoldan gelir: Google’da arar, Instagram’da görür, sorusuna cevap arar, yapay zekâya danışır ve
+          sonunda web sitenize iner. Reklam ajansı, SEO ajansı ve web tasarım ajansından ayrı ayrı alacağınız işleri tek
+          ekip olarak, aynı satış hedefiyle yürütüyoruz.
+        </p>
+      </div>
+      <ul class="yol__izgara">
+        {
+          yollar.map((y, i) => (
+            <li class:list={['yol__oge', `yol__oge--${i + 1}`]}>
+              <a class="yol__gorsel" href={y.hizmet.url} tabindex="-1">
+                <Gorsel src={y.gorsel} alt={y.alt} sizes={y.sizes} genislikler={[480, 720, 960, 1280, 1700]} kalite={66} />
+              </a>
+              <p class="yol__davranis">{y.davranis}</p>
+              <h3 class="yol__ad">{y.ad}</h3>
+              <p class="yol__is">{y.is}</p>
+              <a class="ok-bag" href={y.hizmet.url}>
+                {y.bag}
+                <Ikon ad="arrow-right" boyut={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {/* Sektörler: aynı hizmetler her sektörde başka kurulur. */}
+      <div class="sektor-seridi" data-gir>
+        <div class="sektor-seridi__metin">
+          <h3 class="baslik-3">Sektörünüze göre kuruyoruz</h3>
+          <p>Havuz yaptıracak kişi aylarca araştırır, burger yiyecek kişi beş dakikada karar verir. Çalıştığımız sektörlerde neyin değiştiğini ayrı ayrı anlattık.</p>
+          <a class="ok-bag" href="/sektorler/">
+            Bütün sektörler
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+        </div>
+        <ul class:list={['sektor-seridi__liste', SEKTORLER.length % 3 === 0 && 'sektor-seridi__liste--uclu']} style={`--sutun:${SEKTORLER.length % 3 === 0 ? 3 : 4}`}>
+          {
+            SEKTORLER.map((sk) => (
+              <li>
+                <a href={sektorUrl(sk)}>
+                  <span class="sektor-seridi__gorsel" aria-hidden="true">
+                    <Gorsel src={sektorGorseli(sk.kimlik)} alt="" sizes="(max-width: 47.99rem) 30vw, 4rem" genislikler={[120, 180, 240, 360]} kalite={60} />
+                  </span>
+                  <strong>{sk.ad}</strong>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Yöntem: satışın izini sürmek -->
+  <section class="bolum bolum--beyaz iz" id="yontem">
+    <div class="sarici">
+      <div class="iz__ust">
+        <h2 class="dev iz__soru">Satış hedefinize <Isaret tip="alt">en doğru ve en hızlı</Isaret> şekilde ulaşın.</h2>
+        <div class="iz__aciklama">
+          <p class="giris">
+            Reklamı açıp beklemiyoruz. Önce işletmenizi, rakiplerinizi ve müşterinizin aramalarını derinlemesine
+            inceliyor, reklamları ve sayfaları bu bilgiyle kuruyoruz. Sonrası düzenli takip ve optimizasyon: sonuç
+            getireni güçlendiriyor, getirmeyeni kapatıyoruz.
+          </p>
+          <p class="kucuk ikincil">Google Ads, Instagram reklamları, SEO ve web tasarımda izlediğimiz yol aynıdır.</p>
+        </div>
+      </div>
+
+      <ol class="iz__yol" data-gir>
+        {
+          duraklar.map((d, i) => (
+            <li class="iz__durak" style={`--sira:${i}`}>
+              <span class="iz__nokta" aria-hidden="true" />
+              <h3>{d.ad}</h3>
+              <p class="iz__ornek">{d.ornek}</p>
+              <p class="iz__kontrol kucuk ikincil">{d.kontrol}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Çalıştığımız markalar: altı canlı site, düz ızgara -->
+  <section class="bolum marka" id="markalar">
+    <div class="sarici">
+      <div class="marka__ust">
+        <div>
+          <h2 class="baslik-2">Çalıştığımız markalar</h2>
+          <p class="giris">Yürüttüğümüz projelerden altısının yayındaki ilk ekranı. Her biri gerçek, bugün açabileceğiniz bir site.</p>
+        </div>
+        <a class="ok-bag" href="/calismalarimiz/">
+          Bütün çalışmalar
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </div>
+      <ul class="marka__izgara">
+        {
+          vitrin.map((m, i) => (
+            <li class="marka__oge" data-gir style={'--gecikme:' + (i % 3) * 90 + 'ms'}>
+              <a class="marka__kart" href={m.url}>
+                <span class="marka__ekran">
+                  <span class="marka__cubuk" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <Gorsel
+                    src={m.ekran}
+                    alt={m.ad + ' web sitesinin ilk ekranı'}
+                    sizes="(max-width: 61.99rem) 48vw, 30vw"
+                    genislikler={[480, 720, 960, 1280]}
+                    kalite={68}
+                  />
+                </span>
+                <span class="marka__logo">
+                  {m.logo ? <img src={m.logo.src} width={m.logo.width} height={m.logo.height} alt={m.ad} loading="lazy" decoding="async" /> : <strong>{m.ad}</strong>}
+                </span>
+                <span class="marka__bilgi">
+                  <span class="marka__sektor">{m.sektor}</span>
+                  <span class="marka__is">{m.isler}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Müşteri yorumları: lacivert bölüm, yana kayan kartlar, altında ilerleyen kırmızı kalem çizgisi -->
+  <section class="bolum yorum koyu-zemin" id="yorumlar">
+    <div class="sarici">
+      <div class="yorum__ust">
+        <div>
+          <h2 class="baslik-2">Müşterilerimiz ne diyor?</h2>
+          <p class="giris">Birlikte çalıştığımız işletmelerin kendi cümleleri.</p>
+        </div>
+        <div class="yorum__oklar" data-yorum-oklar>
+          <button type="button" data-yon="-1" aria-label="Önceki yorumlar" disabled>
+            <Ikon ad="arrow-left" boyut={20} />
+          </button>
+          <button type="button" data-yon="1" aria-label="Sonraki yorumlar">
+            <Ikon ad="arrow-right" boyut={20} />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="yorum__serit" data-yorum-serit tabindex="0" role="region" aria-label="Müşteri yorumları, yana kaydırılabilir">
+      <ul class="yorum__liste">
+        {
+          yorumlar.map((y) => (
+            <li class="yorum__kart">
+              <span class="yorum__tirnak" aria-hidden="true">
+                “
+              </span>
+              <blockquote class:list={['yorum__soz', 'yorum__soz--' + y.boy]}>
+                <p>{y.soz}</p>
+              </blockquote>
+              <footer class="yorum__kim">
+                {y.logo && <img class="yorum__logo" src={y.logo.src} width={y.logo.width} height={y.logo.height} alt="" loading="lazy" decoding="async" />}
+                <p class="yorum__ad">
+                  <strong>{y.kisi}</strong>
+                  <span>{y.kurum}</span>
+                </p>
+                <p class="yorum__is">{y.is}</p>
+              </footer>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="sarici">
+      <div class="yorum__ilerleme" aria-hidden="true">
+        <span data-yorum-cizgi />
+      </div>
+    </div>
+  </section>
+
+  <!-- Bilgi paylaşımı -->
+  <section class="bolum bolum--beyaz bilgi">
+    <div class="sarici bilgi__ic">
+      <div class="bilgi__giris">
+        <div class="bilgi__cizim" aria-hidden="true">
+          <Cizim src={defter} sizes="(max-width: 47.99rem) 70vw, 30vw" genislikler={[360, 560, 800, 1168]} />
+        </div>
+        <h2 class="baslik-2">Bildiğimizi paylaşıyoruz</h2>
+        <p class="giris">
+          Google Ads, Instagram reklamları, SEO ve web sitesi hakkında en sık sorulan soruları blogda tek tek yanıtlıyoruz.
+          Her yazının sonunda kendi hesabınızda uygulayabileceğiniz bir kontrol kalır.
+        </p>
+        <a class="ok-bag" href="/blog/">
+          Bütün blog yazıları
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </div>
+      <ul class="bilgi__liste">
+        {
+          rehberler.map((r) => (
+            <li>
+              <a class="bilgi__kart" href={r.url}>
+                <h3 class="baslik-3">{r.soru}</h3>
+                <p>{r.cevap}</p>
+                <span class="bilgi__ok" aria-hidden="true">
+                  <Ikon ad="arrow-right" boyut={22} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Sık sorulan sorular: sorular arama kutusu gibi durur, dokununca yanıt açılır. -->
+  <section class="bolum sss" id="sss">
+    <div class="sarici sss__ic">
+      <div class="sss__giris">
+        <h2 class="baslik-2">Sık sorulan sorular</h2>
+        <p class="giris">Dijital pazarlama, reklam verme, SEO ve web sitesi hakkında bize en çok sorulanlar.</p>
+        <a class="ok-bag" href="#gorusme">
+          Sorunuz burada yoksa bize yazın
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
+      </div>
+      <div class="sss__liste">
+        {
+          sorular.map((s) => (
+            <details class="sss__oge" name="sss">
+              <summary class="sss__soru">
+                <Ikon ad="magnifying-glass" boyut={20} class="sss__ikon" />
+                <h3>{s.soru}</h3>
+                <Ikon ad="plus" boyut={20} class="sss__arti" />
+              </summary>
+              <div class="sss__cevap">
+                <p>{s.cevap}</p>
+                {s.bag && (
+                  <a class="ok-bag" href={s.bag.url}>
+                    {s.bag.etiket}
+                    <Ikon ad="arrow-right" boyut={16} />
+                  </a>
+                )}
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <GorusmeBandi
+    baslik="Satışlarınızı artırmaya nereden başlayalım?"
+    metin="İşletmenizi ve ulaşmak istediğiniz müşteriyi anlatın. Hangi işe ihtiyacınız olduğunu bilmeniz gerekmiyor, görüşmede birlikte buluruz."
+    cagri={ANA_CAGRI}
+    konum="ana-sayfa"
+    kimlik="ana"
+    kanit={false}
+  />
+</Temel>
+
+<script>
+  // Üst alandaki arama satırı: gerçek aramalar sırayla yazılır, kırmızı kalemle çizilir.
+  // Betik yoksa ya da hareket azaltılmışsa ilk arama sabit olarak görünür.
+  const kok = document.querySelector<HTMLElement>('[data-ara]');
+  const liste = [...document.querySelectorAll<HTMLElement>('[data-aramalar] li')].map((li) => ({
+    terim: li.dataset.terim || '',
+    hacim: li.dataset.hacim || '',
+  }));
+  if (kok && liste.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const yazi = kok.querySelector<HTMLElement>('[data-yazi]')!;
+    const sayi = kok.querySelector<HTMLElement>('[data-sayi]')!;
+    const bekle = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    let gorunur = true;
+    new IntersectionObserver(([g]) => (gorunur = g.isIntersecting)).observe(kok);
+
+    (async () => {
+      let i = 0;
+      // İlk arama sayfayla birlikte yazılı gelir: yalnız çizilir.
+      for (;;) {
+        await bekle(1700);
+        kok.setAttribute('data-cizili', '');
+        await bekle(1300);
+        while (!gorunur || document.hidden) await bekle(600);
+        i = (i + 1) % liste.length;
+        kok.removeAttribute('data-cizili');
+        kok.setAttribute('data-yaziyor', '');
+        yazi.textContent = '';
+        sayi.textContent = liste[i].hacim;
+        for (const harf of liste[i].terim) {
+          yazi.textContent += harf;
+          await bekle(42 + Math.random() * 38);
+        }
+        kok.removeAttribute('data-yaziyor');
+      }
+    })();
+  } else if (kok) {
+    kok.setAttribute('data-cizili', '');
+  }
+
+  // Müşteri yorumları: oklar bir kart kaydırır, alttaki kırmızı çizgi görülen kısmı gösterir.
+  const serit = document.querySelector<HTMLElement>('[data-yorum-serit]');
+  if (serit) {
+    const oklar = [...document.querySelectorAll<HTMLButtonElement>('[data-yorum-oklar] button')];
+    const cizgi = document.querySelector<HTMLElement>('[data-yorum-cizgi]');
+    const guncelle = () => {
+      const enCok = serit.scrollWidth - serit.clientWidth;
+      cizgi?.style.setProperty('--dolu', String(Math.min(1, (serit.scrollLeft + serit.clientWidth) / serit.scrollWidth)));
+      oklar.forEach((o) => (o.disabled = o.dataset.yon === '-1' ? serit.scrollLeft < 8 : serit.scrollLeft > enCok - 8));
+    };
+    oklar.forEach((o) =>
+      o.addEventListener('click', () => {
+        const kart = serit.querySelector<HTMLElement>('.yorum__kart');
+        const adim = kart ? kart.offsetWidth + parseFloat(getComputedStyle(kart.parentElement!).columnGap || '0') : serit.clientWidth * 0.8;
+        serit.scrollBy({ left: Number(o.dataset.yon) * adim, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }),
+    );
+    serit.addEventListener('scroll', guncelle, { passive: true });
+    addEventListener('resize', guncelle);
+    guncelle();
+  }
+</script>
+
+<style>
+  /* ---- Üst alan ----------------------------------------------------------
+     Fotoğrafın boş sol yarısı sayfanın kırık beyazıyla aynı tonda: yazı masanın üstünde durur,
+     kırmızı kalem çizgisi yazının altından çıkıp dükkâna gider. Görselin ölçeği sarıcıya bağlıdır. */
+  .kapak {
+    position: relative;
+    overflow: clip;
+  }
+  .kapak__ic {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    align-content: center;
+    min-height: min(47rem, 54vw);
+    padding-block: clamp(1.5rem, 3vw, 2.75rem);
+  }
+  .kapak__metin {
+    grid-column: 1 / span 7;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: start;
+  }
+  .kapak__h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: clamp(1.1rem, 0.95rem + 0.55vw, 1.45rem);
+    font-weight: 640;
+    font-stretch: 94%;
+    letter-spacing: -0.008em;
+    line-height: 1.2;
+    color: var(--mavi);
+  }
+  .kapak__h1::before {
+    content: '';
+    flex: none;
+    width: 2.25rem;
+    height: 2px;
+    background: var(--kirmizi);
+  }
+
+  /* Arama satırı */
+  .ara {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.85rem;
+    width: min(100%, 33rem);
+    min-height: 4rem;
+    margin-block-start: clamp(1.25rem, 2.4vw, 2rem);
+    padding: 0.5rem 1.1rem 0.5rem 1.15rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.35rem 0.35rem 0 var(--mavi-acik);
+  }
+  .ara :global(.ara__ikon) {
+    color: var(--ikincil);
+  }
+  .ara__satir {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 0.95rem + 0.8vw, 1.6rem);
+    font-weight: 560;
+    font-stretch: 92%;
+    letter-spacing: -0.012em;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .ara__yazi {
+    position: relative;
+  }
+  /* Kırmızı kalem: yazılan aramanın üstü çizilir. */
+  .ara__yazi::after {
+    content: '';
+    position: absolute;
+    inset-inline: -0.1em;
+    top: 54%;
+    height: 0.11em;
+    min-height: 2px;
+    background: var(--kirmizi);
+    border-radius: 2px;
+    transform: scaleX(0) rotate(-1.2deg);
+    transform-origin: left center;
+    transition: transform 420ms cubic-bezier(0.6, 0.05, 0.25, 1);
+  }
+  .ara[data-cizili] .ara__yazi::after {
+    transform: scaleX(1) rotate(-1.2deg);
+  }
+  .ara[data-yaziyor] .ara__yazi::after {
+    transition: none;
+  }
+  .ara__imlec {
+    flex: none;
+    width: 2px;
+    height: 1.15em;
+    margin-inline-start: 0.12em;
+    background: var(--kirmizi);
+  }
+  .ara__hacim {
+    font-size: var(--b-mikro);
+    line-height: 1.25;
+    color: var(--ikincil);
+    text-align: end;
+    white-space: nowrap;
+  }
+  .ara__hacim strong {
+    display: block;
+    font-family: var(--yazi-baslik);
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-stretch: 90%;
+    color: var(--murekkep);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ara__imlec {
+      animation: imlec 1.05s steps(1) infinite;
+    }
+    @keyframes imlec {
+      50% {
+        opacity: 0;
+      }
+    }
+  }
+
+  .kapak__oneri {
+    display: grid;
+    margin-block-start: clamp(1.4rem, 2.6vw, 2.25rem);
+  }
+  .kapak__demek {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.4rem);
+    font-weight: 560;
+    font-stretch: 96%;
+    color: var(--murekkep-2);
+  }
+  .kapak__soz {
+    font-size: clamp(3.2rem, 0.6rem + 6.5vw, 6.25rem);
+    margin-block-start: 0.04em;
+  }
+  .kapak__giris {
+    max-width: 25em;
+    margin-block-start: clamp(1.1rem, 2vw, 1.6rem);
+  }
+  @media (min-width: 62rem) and (max-width: 79.99rem) {
+    .kapak__giris {
+      max-width: 21em;
+    }
+    .ara {
+      width: min(100%, 29rem);
+    }
+  }
+  .kapak__eylem {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.1rem 2rem;
+    margin-block-start: clamp(1.5rem, 2.4vw, 2.1rem);
+  }
+
+  .kapak__gorsel {
+    position: absolute;
+    z-index: 0;
+    /* Kasaba biraz sağa kayar: yazının bittiği yerde yalnız boş masa kalır. */
+    inset-inline: 7% calc((100vw - 100%) / -2 - 7%);
+    max-width: 104rem;
+    top: 53%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 30%, #000 55%),
+      linear-gradient(to bottom, transparent 0%, #000 12%, #000 86%, transparent 100%);
+    mask-image:
+      linear-gradient(to right, transparent 30%, #000 55%),
+      linear-gradient(to bottom, transparent 0%, #000 12%, #000 86%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .kapak__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* Tablet ve telefon: görsel en üstte durur, yazı görselin eriyen alt kenarına hafifçe biner. */
+  @media (max-width: 61.99rem) {
+    .kapak__ic {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-height: 0;
+      padding-block: 0 clamp(1.25rem, 3vw, 2rem);
+    }
+    .kapak__gorsel {
+      order: -1;
+      position: relative;
+      inset: auto;
+      top: auto;
+      max-width: none;
+      transform: none;
+      margin: 0 calc(var(--kenar) * -1);
+      -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+    }
+    .kapak__gorsel :global(img) {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      object-position: 100% 50%;
+    }
+    .kapak__metin {
+      margin-block-start: -2rem;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .kapak__metin {
+      justify-items: stretch;
+    }
+    .kapak__h1 {
+      font-size: 1.1rem;
+    }
+    .ara {
+      grid-template-columns: auto minmax(0, 1fr);
+      row-gap: 0.1rem;
+      width: 100%;
+      min-height: 0;
+      padding: 0.75rem 0.9rem;
+      box-shadow: 0.25rem 0.25rem 0 var(--mavi-acik);
+    }
+    .ara__satir {
+      font-size: clamp(1.1rem, 0.7rem + 2.4vw, 1.35rem);
+    }
+    .ara__hacim {
+      grid-column: 2;
+      text-align: start;
+    }
+    .ara__hacim strong {
+      display: inline;
+      font-size: inherit;
+    }
+    .kapak__soz {
+      font-size: clamp(2.45rem, 11.4vw, 3.3rem);
+      /* Halkanın sol yayı kenar boşluğunda kalsın. */
+      padding-inline-start: 0.3em;
+    }
+    .kapak__giris {
+      max-width: none;
+    }
+    .kapak__eylem {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.4rem;
+    }
+    .kapak__eylem .ok-bag {
+      align-self: flex-start;
+      min-height: 2.75rem;
+      align-items: center;
+    }
+    .kapak__gorsel :global(img) {
+      aspect-ratio: 4 / 3;
+      object-position: 50% 50%;
+    }
+    .kapak__metin {
+      margin-block-start: -1.25rem;
+    }
+  }
+
+  /* ---- İlk reklam -----------------------------------------------------------
+     İlk kez reklam verecek ve deneyip sonuç alamamış işletmeler. Soluk mavi zemin, beyaz kartlar. */
+  .ilk {
+    background: var(--mavi-acik);
+  }
+  .ilk__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+    grid-template-areas:
+      'gorsel ust'
+      'gorsel liste'
+      'gorsel eylem';
+    grid-template-rows: auto 1fr auto;
+    column-gap: clamp(1.5rem, 4vw, 4.5rem);
+    row-gap: clamp(1.5rem, 2.6vw, 2.25rem);
+  }
+  .ilk__ust {
+    grid-area: ust;
+    display: grid;
+    gap: 1.1rem;
+    max-width: 42rem;
+  }
+  .ilk__gorsel {
+    grid-area: gorsel;
+    overflow: hidden;
+    border-radius: var(--kose);
+  }
+  .ilk__gorsel :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .ilk__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 50%;
+  }
+  .ilk__liste {
+    grid-area: liste;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  }
+  .ilk__kart {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 0.7rem;
+    justify-items: start;
+    padding: clamp(1.15rem, 2vw, 1.75rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    transition:
+      transform 220ms var(--yumusak),
+      box-shadow 220ms var(--yumusak);
+  }
+  .ilk__soz {
+    font-size: clamp(1.2rem, 1.02rem + 0.7vw, 1.6rem);
+    font-weight: 690;
+    font-stretch: 89%;
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+  .ilk__cevap {
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  /* Kartın tamamı tıklanır. */
+  .ilk__bag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .ilk__eylem {
+    grid-area: eylem;
+  }
+  @media (hover: hover) {
+    .ilk__kart:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.35rem 0.35rem 0 rgb(23 61 166 / 0.2);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ilk__kart {
+      transition: none;
+    }
+    .ilk__kart:hover {
+      transform: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .ilk__ic {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'ust' 'gorsel' 'liste' 'eylem';
+      grid-template-rows: none;
+    }
+    .ilk__gorsel :global(img) {
+      aspect-ratio: 16 / 10;
+      height: auto;
+      object-position: 50% 62%;
+    }
+  }
+  @media (max-width: 43.99rem) {
+    .ilk__liste {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ilk__gorsel :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+    .ilk__eylem .dugme {
+      width: 100%;
+    }
+  }
+
+  /* ---- Dertler ------------------------------------------------------------
+     Altı kart, üç sütunlu düz bir ızgarada. Kartların satırları ortaktır (subgrid): görsel, soru, örnek,
+     yapılan iş ve bağlantı her kartta aynı hizada başlar. Renkler dama düzenindedir. */
+  .dert__ust {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 46rem;
+    margin-block-end: clamp(2rem, 4vw, 3.5rem);
+  }
+  .dert__izgara {
+    --kart-arasi: clamp(0.75rem, 1.5vw, 1.4rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--kart-arasi);
+    row-gap: 0.8rem;
+  }
+  /* Kart sıraları arasındaki boşluk: satır aralığı kart içi aralık olduğu için aradaki fark alt kenardan tamamlanır. */
+  .dert__kart {
+    margin-block-end: calc(var(--kart-arasi) - 0.8rem);
+  }
+  .dert__kart {
+    position: relative;
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+    justify-items: start;
+    align-items: start;
+    padding: clamp(1.4rem, 2.2vw, 2.1rem);
+    border-radius: var(--kose);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  @supports not (grid-template-rows: subgrid) {
+    .dert__kart {
+      grid-row: auto;
+      grid-template-rows: auto auto auto 1fr auto;
+    }
+  }
+  .dert__kart--kagit {
+    background: var(--kagit);
+  }
+  .dert__kart--mavi {
+    background: var(--mavi-acik);
+  }
+  .dert__metin {
+    display: contents;
+  }
+  .dert__cizim {
+    order: -1;
+    justify-self: end;
+    width: min(50%, 11rem);
+    margin: -0.6rem -0.6rem -0.2rem 0;
+  }
+  .dert__soz {
+    align-self: end;
+    font-size: clamp(1.35rem, 1.05rem + 1vw, 1.85rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  /* Üzerine gelince soru kırmızı kalemle çizilir. */
+  .dert__soz span {
+    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 56% / 0 0.09em;
+    transition: background-size 520ms cubic-bezier(0.6, 0.05, 0.25, 1);
+  }
+  .dert__kart:hover .dert__soz span,
+  .dert__kart:focus-within .dert__soz span {
+    background-size: 100% 0.09em;
+  }
+  .dert__ornek {
+    color: var(--ikincil);
+  }
+  .dert__care {
+    font-weight: 600;
+    color: var(--murekkep);
+  }
+  .dert__bag {
+    align-self: end;
+  }
+  /* Kartın tamamı tıklanır. */
+  .dert__bag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  /* Hareket görselin kendisine verilir: sarıcıya verilirse ayrı katman açılır, beyaz zemin kutu olarak görünür. */
+  .dert__cizim :global(img) {
+    transition: transform 600ms var(--yumusak);
+  }
+  .dert__kart:hover .dert__cizim :global(img) {
+    transform: rotate(-2.5deg) scale(1.04);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dert__cizim :global(img),
+    .dert__soz span {
+      transition: none;
+    }
+    .dert__kart:hover .dert__cizim :global(img) {
+      transform: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .dert__izgara {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* Telefon: görsel kendi satırını kaplamaz; başlığın sağında küçük durur, kart kısalır. */
+  @media (max-width: 43.99rem) {
+    .dert__izgara {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 0.75rem;
+    }
+    .dert__kart {
+      grid-row: auto;
+      grid-template-columns: minmax(0, 1fr) 5.75rem;
+      grid-template-rows: none;
+      column-gap: 0.75rem;
+      row-gap: 0.7rem;
+      margin-block-end: 0;
+      padding: 1.25rem;
+    }
+    .dert__soz {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+    }
+    .dert__cizim {
+      order: 0;
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+      width: 100%;
+      margin: -0.35rem -0.35rem 0 0;
+    }
+    .dert__ornek,
+    .dert__care,
+    .dert__bag {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---- Hizmetler -------------------------------------------------------------
+     Beş hizmet düz bir ızgarada: üstte iki, altta üç kart. Aynı sıradaki görseller aynı oranda;
+     satırlar ortak (subgrid) olduğu için üst satır, başlık, açıklama ve bağlantı aynı hizada durur. */
+  .yol__ust {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 46rem;
+    margin-block-end: clamp(2.25rem, 4vw, 3.5rem);
+  }
+  /* Sektör şeridi: solda kısa açıklama, sağda sekiz sektör karosu (dört sütun, iki sıra). */
+  .sektor-seridi {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+    margin-block-start: clamp(3rem, 6vw, 5.5rem);
+    padding-block-start: clamp(2rem, 4vw, 3.25rem);
+    border-block-start: 1.5px solid var(--murekkep);
+  }
+  .sektor-seridi__metin {
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+    color: var(--murekkep-2);
+  }
+  .sektor-seridi__metin h3 {
+    color: var(--murekkep);
+  }
+  .sektor-seridi__liste {
+    display: grid;
+    grid-template-columns: repeat(var(--sutun, 4), minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .sektor-seridi__liste a {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: center;
+    height: 100%;
+    min-height: 4.1rem;
+    padding: 0.4rem 0.7rem 0.4rem 0.4rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      transform 220ms var(--yumusak),
+      box-shadow 220ms var(--yumusak);
+  }
+  .sektor-seridi__gorsel {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #c9d5ee;
+  }
+  .sektor-seridi__gorsel :global(picture),
+  .sektor-seridi__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .sektor-seridi__gorsel :global(img) {
+    object-fit: cover;
+  }
+  .sektor-seridi__liste strong {
+    font-family: var(--yazi-baslik);
+    font-size: 1rem;
+    font-weight: 670;
+    font-stretch: 91%;
+    letter-spacing: -0.012em;
+    line-height: 1.14;
+  }
+  @media (hover: hover) {
+    .sektor-seridi__liste a:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.3rem 0.3rem 0 rgb(23 61 166 / 0.2);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sektor-seridi__liste a {
+      transition: none;
+    }
+    .sektor-seridi__liste a:hover {
+      transform: none;
+    }
+  }
+  @media (max-width: 74.99rem) {
+    .sektor-seridi {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .sektor-seridi__liste {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Üçerli düzen: görsel üstte, ad altında; bütün karolar aynı ölçüde, sırada yetim karo kalmaz. */
+    .sektor-seridi__liste--uclu {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sektor-seridi__liste--uclu a {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      gap: 0.45rem;
+      align-items: start;
+      min-height: 0;
+      padding: 0.3rem 0.3rem 0.6rem;
+    }
+    .sektor-seridi__liste--uclu .sektor-seridi__gorsel {
+      aspect-ratio: 4 / 3;
+    }
+    .sektor-seridi__liste--uclu strong {
+      padding-inline: 0.25rem;
+      font-size: 0.8125rem;
+      line-height: 1.16;
+    }
+  }
+  .yol__izgara {
+    --sira-arasi: clamp(2.5rem, 4.6vw, 4.25rem);
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 0.7rem;
+  }
+  .yol__oge {
+    grid-column: span 2;
+    grid-row: span 5;
+    display: grid;
+    grid-template-rows: subgrid;
+    justify-items: start;
+    align-items: start;
+  }
+  /* İkinci kart sırası: boşluk görselin üstünden verilir (satırlar ortak olduğu için hizayı bozmaz). */
+  .yol__oge:nth-child(n + 3) .yol__gorsel {
+    margin-block-start: var(--sira-arasi);
+  }
+  @supports not (grid-template-rows: subgrid) {
+    .yol__oge {
+      grid-row: auto;
+      grid-template-rows: auto auto auto 1fr auto;
+    }
+  }
+  .yol__oge--1,
+  .yol__oge--2 {
+    grid-column: span 3;
+  }
+  .yol__gorsel {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--kose);
+    margin-block-end: 0.4rem;
+  }
+  .yol__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 900ms var(--yumusak);
+  }
+  .yol__oge--1 .yol__gorsel :global(img),
+  .yol__oge--2 .yol__gorsel :global(img) {
+    aspect-ratio: 16 / 10;
+  }
+  /* Dikey sahnelerin yatay kırpımında anlatan kısım kadrajda kalsın. */
+  .yol__oge--2 .yol__gorsel :global(img) {
+    object-position: 50% 44%;
+  }
+  .yol__oge--3 .yol__gorsel :global(img) {
+    object-position: 50% 50%;
+  }
+  .yol__oge--4 .yol__gorsel :global(img) {
+    object-position: 50% 38%;
+  }
+  .yol__oge--5 .yol__gorsel :global(img) {
+    object-position: 50% 32%;
+  }
+  .yol__oge:hover .yol__gorsel :global(img) {
+    transform: scale(1.03);
+  }
+  /* Üst satır: müşterinin o andaki davranışı. Başlık: hizmetin aranan adı. */
+  .yol__davranis {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 620;
+    font-stretch: 96%;
+    line-height: 1.3;
+    color: var(--mavi);
+  }
+  .yol__ad {
+    font-size: clamp(1.4rem, 1.12rem + 1vw, 1.95rem);
+    font-weight: 700;
+    font-stretch: 87%;
+    line-height: 1.06;
+    letter-spacing: -0.022em;
+    margin-block-start: -0.3rem;
+    text-wrap: balance;
+  }
+  .yol__oge--1 .yol__ad,
+  .yol__oge--2 .yol__ad {
+    font-size: clamp(1.6rem, 1.15rem + 1.5vw, 2.4rem);
+  }
+  .yol__is {
+    color: var(--murekkep-2);
+    max-width: 34em;
+  }
+  .yol__oge > :global(.ok-bag) {
+    align-self: end;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .yol__gorsel :global(img) {
+      transition: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .yol__oge[class] {
+      grid-column: span 3;
+    }
+    .yol__oge[class] .yol__gorsel :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .yol__izgara {
+      --sira-arasi: 2.25rem;
+    }
+    .yol__oge[class] {
+      grid-column: 1 / -1;
+    }
+    .yol__oge + .yol__oge .yol__gorsel {
+      margin-block-start: var(--sira-arasi);
+    }
+  }
+
+  /* ---- İz ------------------------------------------------------------------- */
+  .iz__ust {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 1.75rem;
+    align-items: end;
+  }
+  .iz__soru {
+    grid-column: 1 / span 7;
+    font-size: clamp(2.3rem, 0.9rem + 4.3vw, 4.6rem);
+    max-width: 10.5em;
+  }
+  /* Altı çizili söz satır ortasında bölünmesin. */
+  .iz__soru :global(.isaret) {
+    white-space: nowrap;
+  }
+  .iz__aciklama {
+    grid-column: 8 / -1;
+    display: grid;
+    gap: 0.9rem;
+    padding-block-end: 0.6rem;
+  }
+  .iz__yol {
+    --cizgi-y: 0.6rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.2vw, 2.25rem);
+    margin-block-start: clamp(2.75rem, 5vw, 4.5rem);
+  }
+  /* Kırmızı kalem çizgisi: incelemeden hedefe tek hat. */
+  .iz__yol::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0.4rem 0;
+    top: var(--cizgi-y);
+    height: 3px;
+    background: var(--kirmizi);
+    transform-origin: left center;
+    filter: url(#kalem-dokusu);
+  }
+  .iz__durak {
+    position: relative;
+    padding-block-start: 3rem;
+    display: grid;
+    align-content: start;
+    gap: 0.55rem;
+  }
+  .iz__durak h3 {
+    font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2.1rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.02;
+  }
+  .iz__nokta {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--beyaz);
+    border: 3px solid var(--kirmizi);
+  }
+  .iz__durak:last-child .iz__nokta {
+    background: var(--kirmizi);
+    box-shadow: 0 0 0 4px rgb(185 35 56 / 0.16);
+  }
+  .iz__ornek {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.3;
+    color: var(--murekkep);
+    margin-block-start: 0.2rem;
+  }
+  .iz__ornek {
+    font-weight: 600;
+  }
+  .iz__kontrol {
+    max-width: 16em;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .iz__yol[data-gir] {
+      opacity: 1;
+      transform: none;
+    }
+    :global(.js) .iz__yol[data-gir]::before {
+      transform: scaleX(0);
+      transition: transform 1400ms cubic-bezier(0.6, 0.05, 0.25, 1) 150ms;
+    }
+    :global(.js) .iz__yol[data-gir] .iz__durak {
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity 500ms var(--yumusak) calc(200ms + var(--sira) * 240ms),
+        transform 600ms var(--yumusak) calc(200ms + var(--sira) * 240ms);
+    }
+    :global(.js) .iz__yol[data-gir]:global(.girdi-goruldu)::before {
+      transform: none;
+    }
+    :global(.js) .iz__yol[data-gir]:global(.girdi-goruldu) .iz__durak {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (max-width: 55.99rem) {
+    .iz__soru,
+    .iz__aciklama {
+      grid-column: 1 / -1;
+    }
+    .iz__yol {
+      grid-template-columns: 1fr;
+      row-gap: 1.75rem;
+    }
+    .iz__yol::before {
+      inset-inline: 0.55rem auto;
+      inset-block: 0.5rem 1.5rem;
+      width: 3px;
+      height: auto;
+      transform-origin: center top;
+    }
+    .iz__durak {
+      padding-block-start: 0;
+      padding-inline-start: 2.5rem;
+      gap: 0.3rem;
+    }
+    .iz__nokta {
+      top: 0.2rem;
+    }
+    .iz__kontrol {
+      max-width: none;
+    }
+  }
+  @media (max-width: 55.99rem) and (prefers-reduced-motion: no-preference) {
+    :global(.js) .iz__yol[data-gir]::before {
+      transform: scaleY(0);
+    }
+  }
+  /* ---- Markalar ----------------------------------------------------------------
+     Altı canlı sitenin ilk ekranı: aynı ölçüde çerçeveler, üç sütunlu düz ızgara. Altında markanın logosu,
+     sektörü ve yapılan iş aynı hizada durur. */
+  .marka__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1.25rem 2rem;
+    margin-block-end: clamp(2rem, 4vw, 3.25rem);
+  }
+  .marka__ust > div {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 44rem;
+  }
+  .marka__izgara {
+    --sira-arasi: clamp(1.75rem, 3.4vw, 2.75rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.25rem);
+    row-gap: 0.85rem;
+  }
+  .marka__oge {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+  .marka__kart {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-items: start;
+    color: var(--murekkep);
+    text-decoration: none;
+  }
+  /* Sonraki kart sıraları: boşluk ekran görüntüsünün üstünden verilir. */
+  .marka__oge:nth-child(n + 4) .marka__ekran {
+    margin-block-start: var(--sira-arasi);
+  }
+  @supports not (grid-template-rows: subgrid) {
+    .marka__oge,
+    .marka__kart {
+      grid-row: auto;
+      grid-template-rows: auto auto 1fr;
+    }
+  }
+  /* Tarayıcı penceresi: ince çubuk, üç nokta, altında sitenin ilk ekranı. */
+  .marka__ekran {
+    display: block;
+    overflow: hidden;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: var(--kose);
+    box-shadow: 0.4rem 0.4rem 0 var(--mavi-acik);
+    transition:
+      transform 260ms var(--yumusak),
+      box-shadow 260ms var(--yumusak);
+  }
+  .marka__cubuk {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 1.5rem;
+    padding-inline: 0.65rem;
+    border-block-end: 1.5px solid var(--murekkep);
+    background: var(--kagit);
+  }
+  .marka__cubuk i {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--cizgi-koyu);
+  }
+  .marka__cubuk i:first-child {
+    background: var(--kirmizi);
+  }
+  .marka__ekran :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: 50% 0;
+  }
+  .marka__logo {
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+    margin-block-start: 0.5rem;
+  }
+  .marka__logo img {
+    width: auto;
+    height: auto;
+    max-width: 10.5rem;
+    max-height: 100%;
+  }
+  .marka__bilgi {
+    display: grid;
+    gap: 0.15rem;
+    align-content: start;
+  }
+  .marka__sektor {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .marka__is {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  @media (hover: hover) {
+    .marka__kart:hover .marka__ekran {
+      transform: translate(-3px, -3px);
+      box-shadow: 0.65rem 0.65rem 0 var(--mavi-acik);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marka__ekran {
+      transition: none;
+    }
+    .marka__kart:hover .marka__ekran {
+      transform: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .marka__izgara {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .marka__oge:nth-child(n + 3) .marka__ekran {
+      margin-block-start: var(--sira-arasi);
+    }
+  }
+  /* Telefon: altı site iki sütunda, küçük pencereler hâlinde bir arada görünür; alt alta altı tam ekran dizilmez. */
+  @media (max-width: 43.99rem) {
+    .marka__ust {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .marka__ust :global(.ok-bag) {
+      justify-self: start;
+    }
+    .marka__izgara {
+      --sira-arasi: 1.6rem;
+      column-gap: 0.85rem;
+      row-gap: 0.55rem;
+    }
+    .marka__ekran {
+      box-shadow: 0.25rem 0.25rem 0 var(--mavi-acik);
+    }
+    .marka__cubuk {
+      gap: 0.22rem;
+      height: 1rem;
+      padding-inline: 0.45rem;
+    }
+    .marka__cubuk i {
+      width: 0.28rem;
+      height: 0.28rem;
+    }
+    .marka__logo {
+      height: 2rem;
+      margin-block-start: 0.4rem;
+    }
+    .marka__logo img {
+      max-width: min(100%, 8rem);
+    }
+    .marka__sektor,
+    .marka__is {
+      font-size: 0.8125rem;
+      line-height: 1.35;
+    }
+  }
+
+  /* ---- Müşteri yorumları ---------------------------------------------------------
+     Lacivert bölüm. Kartlar yana kayar (dokunarak, klavyeyle ya da oklarla); hepsi aynı yükseklikte.
+     Alttaki kırmızı kalem çizgisi görülen kısım kadar uzar. */
+  .yorum {
+    --serit-kenar: max(var(--kenar), calc((100vw - var(--genislik)) / 2));
+    background: var(--murekkep);
+    color: var(--beyaz);
+    overflow: clip;
+  }
+  .yorum__ust {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1.25rem 2rem;
+    margin-block-end: clamp(1.75rem, 3.5vw, 3rem);
+  }
+  .yorum__ust > div:first-child {
+    display: grid;
+    gap: 1rem;
+  }
+  .yorum__ust .giris {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .yorum__oklar {
+    display: flex;
+    gap: 0.6rem;
+  }
+  .yorum__oklar button {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border: 1.5px solid rgb(255 255 255 / 0.4);
+    border-radius: 50%;
+    background: none;
+    color: var(--beyaz);
+    cursor: pointer;
+    transition:
+      background-color 180ms,
+      color 180ms,
+      border-color 180ms,
+      opacity 180ms;
+  }
+  .yorum__oklar button:disabled {
+    opacity: 0.32;
+    cursor: default;
+  }
+  @media (hover: hover) {
+    .yorum__oklar button:not(:disabled):hover {
+      background: var(--beyaz);
+      border-color: var(--beyaz);
+      color: var(--murekkep);
+    }
+  }
+  .yorum__serit {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--serit-kenar);
+    scrollbar-width: none;
+    padding-block: 0.5rem 0.9rem;
+  }
+  .yorum__serit::-webkit-scrollbar {
+    display: none;
+  }
+  .yorum__serit:focus-visible {
+    outline: 2px solid var(--beyaz);
+    outline-offset: -4px;
+  }
+  .yorum__liste {
+    display: flex;
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+    width: max-content;
+    padding-inline: var(--serit-kenar);
+  }
+  .yorum__kart {
+    flex: none;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+    width: clamp(17.5rem, 30vw, 26.5rem);
+    padding: clamp(1.5rem, 2.4vw, 2.25rem);
+    background: var(--kagit);
+    border-radius: var(--kose);
+    box-shadow: 0.4rem 0.4rem 0 rgb(0 0 0 / 0.28);
+    color: var(--murekkep);
+    scroll-snap-align: start;
+  }
+  .yorum__tirnak {
+    display: block;
+    height: 2.2rem;
+    font-family: var(--yazi-baslik);
+    font-size: 5.5rem;
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--kirmizi);
+  }
+  .yorum__soz p {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);
+    font-weight: 560;
+    font-stretch: 95%;
+    line-height: 1.3;
+    letter-spacing: -0.012em;
+  }
+  .yorum__soz--buyuk p {
+    font-size: clamp(1.45rem, 1.2rem + 1vw, 1.95rem);
+    font-weight: 600;
+    font-stretch: 90%;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+  .yorum__soz--kucuk p {
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    font-weight: 540;
+    line-height: 1.36;
+    letter-spacing: -0.006em;
+  }
+  .yorum__kim {
+    display: grid;
+    gap: 0.5rem;
+    padding-block-start: 0.5rem;
+  }
+  .yorum__logo {
+    width: auto;
+    height: auto;
+    max-width: 9rem;
+    max-height: 2rem;
+    margin-block-end: 0.3rem;
+  }
+  .yorum__ad {
+    display: grid;
+    gap: 0.05rem;
+    line-height: 1.3;
+  }
+  .yorum__ad strong {
+    font-family: var(--yazi-baslik);
+    font-weight: 680;
+    font-stretch: 94%;
+  }
+  .yorum__ad span {
+    font-size: var(--b-kucuk);
+    color: var(--murekkep-2);
+  }
+  .yorum__is {
+    font-size: var(--b-mikro);
+    color: var(--ikincil);
+  }
+  .yorum__ilerleme {
+    height: 3px;
+    margin-block-start: clamp(1.25rem, 2.5vw, 2rem);
+    background: rgb(255 255 255 / 0.16);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .yorum__ilerleme span {
+    display: block;
+    height: 100%;
+    background: #ff6b7f;
+    transform: scaleX(var(--dolu, 0.34));
+    transform-origin: left center;
+    transition: transform 220ms var(--yumusak);
+  }
+  @media (max-width: 47.99rem) {
+    .yorum__kart {
+      width: min(82vw, 21rem);
+    }
+    .yorum__oklar button {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+  }
+
+  /* ---- Bilgi ------------------------------------------------------------------- */
+  .bilgi__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 6vw, 6.5rem);
+    align-items: center;
+  }
+  .bilgi__giris {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+  .bilgi__cizim {
+    width: min(100%, 24rem);
+    margin: -1rem 0 -0.5rem -1rem;
+  }
+  .bilgi__liste {
+    display: grid;
+    gap: clamp(0.6rem, 1.2vw, 1rem);
+  }
+  .bilgi__kart {
+    position: relative;
+    display: grid;
+    gap: 0.6rem;
+    padding: clamp(1.25rem, 2.4vw, 2rem);
+    padding-inline-end: clamp(3.5rem, 6vw, 5rem);
+    border-radius: var(--kose);
+    background: var(--kagit);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition: transform 320ms var(--yumusak);
+  }
+  .bilgi__liste li:nth-child(2) .bilgi__kart {
+    background: var(--mavi-acik);
+  }
+  .bilgi__kart p {
+    color: var(--murekkep-2);
+    max-width: 36em;
+  }
+  .bilgi__ok {
+    position: absolute;
+    inset-inline-end: clamp(1.1rem, 2vw, 1.75rem);
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--kirmizi);
+    transition: transform 280ms var(--yumusak);
+  }
+  .bilgi__kart:hover {
+    transform: translateX(-4px);
+  }
+  .bilgi__kart:hover .bilgi__ok {
+    transform: translateX(6px);
+  }
+  @media (max-width: 55.99rem) {
+    .bilgi__ic {
+      grid-template-columns: 1fr;
+    }
+    .bilgi__cizim {
+      width: min(72%, 19rem);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bilgi__kart,
+    .bilgi__ok {
+      transition: none;
+    }
+  }
+
+  /* ---- Sık sorulan sorular ---------------------------------------------------------
+     Her soru üst alandaki arama kutusunun küçüğüdür: büyüteç, soru, açınca altında yanıt. */
+  .sss__ic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 2rem;
+    align-items: start;
+  }
+  .sss__giris {
+    grid-column: 1 / span 4;
+    position: sticky;
+    top: calc(var(--ust-bant) + 2rem);
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+  .sss__liste {
+    grid-column: 6 / -1;
+    display: grid;
+    gap: 0.8rem;
+  }
+  .sss__oge {
+    background: var(--beyaz);
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: var(--kose);
+    transition:
+      border-color 200ms,
+      box-shadow 240ms var(--yumusak),
+      transform 240ms var(--yumusak);
+  }
+  .sss__oge[open] {
+    border-color: var(--murekkep);
+    box-shadow: 0.35rem 0.35rem 0 var(--mavi-acik);
+  }
+  .sss__soru {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.9rem;
+    min-height: 3.75rem;
+    padding: 0.8rem 1.15rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .sss__soru::-webkit-details-marker {
+    display: none;
+  }
+  .sss__soru h3 {
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3rem);
+    font-weight: 620;
+    font-stretch: 93%;
+    letter-spacing: -0.01em;
+    line-height: 1.22;
+  }
+  .sss__soru :global(.sss__ikon) {
+    color: var(--ikincil);
+  }
+  .sss__soru :global(.sss__arti) {
+    color: var(--murekkep);
+    transition: transform 280ms var(--yumusak);
+  }
+  .sss__oge[open] .sss__soru :global(.sss__arti) {
+    transform: rotate(45deg);
+    color: var(--kirmizi);
+  }
+  .sss__cevap {
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+    max-width: 46rem;
+    padding: 0.15rem 1.15rem 1.35rem calc(1.15rem + 20px + 0.9rem);
+    color: var(--murekkep-2);
+  }
+  @media (hover: hover) {
+    .sss__oge:not([open]):hover {
+      border-color: var(--murekkep);
+      transform: translate(-1px, -1px);
+      box-shadow: 0.2rem 0.2rem 0 var(--mavi-acik);
+    }
+  }
+  /* Destekleyen tarayıcıda yanıt yumuşak açılır; desteklemeyende doğrudan açılır. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (interpolate-size: allow-keywords) {
+      .sss__oge {
+        interpolate-size: allow-keywords;
+      }
+      .sss__oge::details-content {
+        block-size: 0;
+        overflow: clip;
+        transition:
+          block-size 340ms var(--yumusak),
+          content-visibility 340ms allow-discrete;
+      }
+      .sss__oge[open]::details-content {
+        block-size: auto;
+      }
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .sss__giris,
+    .sss__liste {
+      grid-column: 1 / -1;
+    }
+    .sss__giris {
+      position: static;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .sss__soru {
+      column-gap: 0.7rem;
+      padding-inline: 0.9rem;
+    }
+    .sss__cevap {
+      padding-inline: 0.9rem;
+    }
+  }
+</style>

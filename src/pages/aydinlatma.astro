@@ -1,0 +1,230 @@
+---
+/**
+ * KVKK madde 10 kapsamında aydınlatma metni (görüşme formu, telefon, WhatsApp, e-posta ve site ziyareti).
+ * Metin, kodun yaptığı işle birebir uyumlu tutulmalıdır (src/pages/api/talep.ts, src/lib/talepler.ts, src/scripts/olcum.ts).
+ * Dayanaklar: 6698 sayılı Kanun m. 4, 5, 9, 10, 11, 13; Aydınlatma Yükümlülüğünün Yerine Getirilmesinde Uyulacak Usul ve
+ * Esaslar Hakkında Tebliğ; Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ.
+ * Veri sorumlusu bilgileri src/site.config.ts içindeki SITE.veriSorumlusu alanından gelir; boşken sayfa taslaktır.
+ * Son gözden geçirme: 15 Kasım 2026. Yayından önce hukuk danışmanınca okunması önerilir (TESLIM.md).
+ */
+import YasalDuzen from '../components/YasalDuzen.astro';
+import { SITE } from '../site.config';
+
+const vs = SITE.veriSorumlusu;
+const basvuruEposta = vs.eposta || SITE.iletisim.eposta;
+---
+
+<YasalDuzen
+  baslik="Aydınlatma metni"
+  aramaBasligi="Aydınlatma Metni | Satışları Artır"
+  aciklama="Görüşme formu, telefon, WhatsApp, e-posta ve site ziyareti sırasında işlenen kişisel verilere ilişkin, 6698 sayılı Kanun kapsamındaki aydınlatma metni."
+  yol="/aydinlatma/"
+  guncelleme="15 Kasım 2026"
+>
+  <p>
+    Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“Kanun”) 10. maddesi uyarınca, satislariartir.com
+    internet sitesi, görüşme formu ve sitede yer alan iletişim kanalları aracılığıyla işlenen kişisel verileriniz hakkında
+    sizi bilgilendirmek için hazırlanmıştır.
+  </p>
+
+  <h2>Veri sorumlusu</h2>
+  {
+    vs.unvan ? (
+      <p>
+        Kişisel verileriniz, veri sorumlusu sıfatıyla <strong>{vs.unvan}</strong>
+        {vs.adres && <> ({vs.adres})</>} tarafından işlenmektedir.
+        {vs.mersis && <> MERSİS no: {vs.mersis}.</>}
+        {vs.vergiNo && (
+          <>
+            {' '}
+            Vergi dairesi ve numarası: {vs.vergiDairesi && <>{vs.vergiDairesi}, </>}
+            {vs.vergiNo}.
+          </>
+        )}{' '}
+        Metinde “biz” ve “Satışları Artır” ifadeleri veri sorumlusunu anlatır.
+      </p>
+    ) : (
+      <p>Veri sorumlusunun unvanı, adresi ve sicil bilgileri bu metin yayımlanmadan önce buraya eklenecektir.</p>
+    )
+  }
+
+  <h2>Hangi kişisel verileri işliyoruz?</h2>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Veri kategorisi</th>
+        <th scope="col">Veriler</th>
+        <th scope="col">Nasıl toplanır?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Kategori">Kimlik</td>
+        <td data-baslik="Veriler">Ad (ve isterseniz soyad)</td>
+        <td data-baslik="Toplama">Görüşme formuna, WhatsApp mesajına ya da e-postaya yazmanızla</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kategori">İletişim</td>
+        <td data-baslik="Veriler">Telefon numarası ya da e-posta adresi (formda seçtiğiniz yola göre biri); bize yazdığınız ya da bizi aradığınız numara ve adres</td>
+        <td data-baslik="Toplama">Form, telefon görüşmesi, WhatsApp ve e-posta</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kategori">Müşteri işlem</td>
+        <td data-baslik="Veriler">İşletme adı, görüşmek istediğiniz konu, yazdığınız not, web sitesi ya da sosyal medya adresiniz, talebin durumu ve görüşme notları</td>
+        <td data-baslik="Toplama">Form, görüşmeler ve yazışmalar</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kategori">Pazarlama (kaynak bilgisi)</td>
+        <td data-baslik="Veriler">Formun gönderildiği sayfa, siteye giriş sayfası, adres çubuğundaki kampanya etiketleri</td>
+        <td data-baslik="Toplama">Form gönderimi sırasında otomatik olarak</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kategori">İşlem güvenliği</td>
+        <td data-baslik="Veriler">IP adresi (kayda yazılmaz, aşağıya bakın) ve sunucu erişim kayıtları</td>
+        <td data-baslik="Toplama">Siteyi ve formu kullanırken otomatik olarak</td>
+      </tr>
+      <tr>
+        <td data-baslik="Kategori">Ölçüm</td>
+        <td data-baslik="Veriler">Reklam tıklama kimlikleri, çerez kimlikleri, ziyaret edilen sayfalar ve dokunulan düğmeler</td>
+        <td data-baslik="Toplama">Yalnız çerez tercihlerinden ölçüme izin verdiyseniz, otomatik olarak</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Formda fiyat, bütçe, kimlik numarası, ödeme bilgisi ya da özel nitelikli kişisel veri (sağlık, din, etnik köken vb.)
+    istemiyoruz. Not alanına ya da mesajınıza bu tür bilgileri yazmamanızı rica ederiz; yazılırsa talebinizi yanıtlamak
+    dışında kullanılmaz ve silinmesini isteyebilirsiniz.
+  </p>
+
+  <h2>Kişisel verileri toplama yöntemi</h2>
+  <p>
+    Kişisel verileriniz; internet sitesindeki görüşme formu, sitede yer alan telefon, WhatsApp ve e-posta bağlantıları
+    üzerinden kurduğunuz iletişim ve ölçüme izin vermeniz hâlinde çerezler aracılığıyla, elektronik ortamda otomatik ya da
+    kısmen otomatik yollarla toplanır. Telefon görüşmelerinde aldığımız notlar da bu kapsamdadır.
+  </p>
+
+  <h2>İşleme amaçları ve hukuki sebepler</h2>
+  <ul>
+    <li>
+      <strong>Görüşme talebinizin alınması, size dönülmesi ve hizmet teklifinin hazırlanması.</strong> Bir sözleşmenin
+      kurulmasıyla doğrudan doğruya ilgili olması (Kanun m. 5/2-c).
+    </li>
+    <li>
+      <strong>Talebin hangi sayfa ve kampanyadan geldiğinin anlaşılması, hizmetlerin ve sitenin geliştirilmesi.</strong>
+      Temel hak ve özgürlüklerinize zarar vermemek kaydıyla veri sorumlusunun meşru menfaati (Kanun m. 5/2-f).
+    </li>
+    <li>
+      <strong>Formun kötüye kullanımının ve otomatik gönderimlerin engellenmesi, bilgi güvenliğinin sağlanması.</strong>
+      Veri sorumlusunun meşru menfaati (Kanun m. 5/2-f).
+    </li>
+    <li>
+      <strong>Olası bir uyuşmazlıkta hakların tespiti ve korunması.</strong> Bir hakkın tesisi, kullanılması veya
+      korunması için veri işlemenin zorunlu olması (Kanun m. 5/2-e).
+    </li>
+    <li>
+      <strong>Yetkili kurumların talepleri ve yasal yükümlülükler.</strong> Hukuki yükümlülüğün yerine getirilmesi
+      (Kanun m. 5/2-ç).
+    </li>
+    <li>
+      <strong>Ziyaret ve reklam ölçümü.</strong> Açık rızanız (Kanun m. 5/1). Ölçüm çerezleri siz izin vermeden çalışmaz;
+      rızanızı <a href="/cerez-tercihleri/">çerez tercihleri</a> sayfasından dilediğiniz zaman geri alabilirsiniz.
+    </li>
+  </ul>
+  <p>
+    Ayrı ve açık bir onayınız olmadan size ticari elektronik ileti (kampanya, bülten) göndermiyoruz ve iletişim
+    bilgilerinizi pazarlama listesine eklemiyoruz.
+  </p>
+
+  <h2>Kişisel veriler kimlere ve hangi amaçla aktarılır?</h2>
+  <ul>
+    <li>
+      <strong>Barındırma ve altyapı hizmeti sağlayıcıları:</strong> Site ve talep kayıtları, hizmet aldığımız barındırma
+      şirketinin sunucularında saklanır.
+    </li>
+    <li>
+      <strong>İletişim ve iş araçları:</strong> Talebin ekibe iletilmesi ve yanıtlanması için kullanılan e-posta hizmeti,
+      müşteri takip yazılımı ya da benzeri araçlar.
+    </li>
+    <li>
+      <strong>WhatsApp:</strong> Bize WhatsApp’tan yazarsanız mesajlarınız WhatsApp’ın (Meta) altyapısı üzerinden iletilir;
+      bu iletim için WhatsApp’ın kendi gizlilik koşulları da geçerlidir.
+    </li>
+    <li>
+      <strong>Ölçüm sağlayıcıları:</strong> Yalnız ölçüme izin verdiyseniz sayfa ve etkinlik bilgileri ilgili ölçüm
+      sağlayıcısına (ör. Google, Meta) iletilir. Adınız, telefonunuz, e-posta adresiniz, işletmenizin adı ve yazdığınız
+      not bu sağlayıcılara gönderilmez.
+    </li>
+    <li>
+      <strong>Yetkili kurum ve kuruluşlar:</strong> Kanunen yetkili kamu kurumları ve yargı mercilerinin talebi hâlinde,
+      talep kapsamıyla sınırlı olarak.
+    </li>
+  </ul>
+
+  <h2>Yurt dışına aktarım</h2>
+  <p>
+    Barındırma, e-posta ve ölçüm hizmeti aldığımız sağlayıcıların sunucuları yurt dışında bulunabilir. Bu durumda
+    kişisel verileriniz, Kanun’un 9. maddesinde öngörülen şartlara uygun olarak; yeterlilik kararı bulunan ülkelere,
+    Kurul’a bildirilen standart sözleşme gibi uygun güvencelerle ya da aynı maddede sayılan arızi aktarım hâllerine
+    dayanılarak aktarılır. Ölçüm çerezleri yoluyla yapılan aktarım yalnız ölçüme izin vermeniz hâlinde gerçekleşir.
+  </p>
+
+  <h2>Saklama süresi</h2>
+  <ul>
+    <li>
+      Sözleşmeye dönüşmeyen görüşme talepleri ve yazışmalar, son iletişim tarihinden itibaren en geç iki yıl içinde silinir
+      ya da anonim hâle getirilir.
+    </li>
+    <li>
+      Sözleşmeye dönüşen taleplerde kayıtlar, ilgili mevzuatın öngördüğü süre boyunca (ör. Türk Ticaret Kanunu’nun 82.
+      maddesindeki ticari defter ve belgeler için on yıl) saklanır.
+    </li>
+    <li>IP adresiniz talep kaydına yazılmaz; yalnız kötüye kullanımı engellemek için en çok on dakika sunucu belleğinde tutulur.</li>
+    <li>Ölçüm çerezlerinin süreleri <a href="/cerez-tercihleri/">çerez tercihleri</a> sayfasında yazılıdır.</li>
+  </ul>
+  <p>Süresi dolan ya da işleme şartı ortadan kalkan veriler, ilk periyodik imha işleminde silinir, yok edilir ya da anonim hâle getirilir.</p>
+
+  <h2>Kanun’un 11. maddesindeki haklarınız</h2>
+  <p>Veri sorumlusuna başvurarak:</p>
+  <ul>
+    <li>Kişisel verinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme,</li>
+    <li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+    <li>Yurt içinde ya da yurt dışında aktarıldığı üçüncü kişileri bilme,</li>
+    <li>Eksik ya da yanlış işlenmişse düzeltilmesini isteme,</li>
+    <li>Kanun’un 7. maddesindeki şartlar çerçevesinde silinmesini ya da yok edilmesini isteme,</li>
+    <li>Düzeltme, silme ya da yok etme işlemlerinin verinin aktarıldığı üçüncü kişilere bildirilmesini isteme,</li>
+    <li>Münhasıran otomatik sistemlerle analiz edilmesi sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme,</li>
+    <li>Kanuna aykırı işleme nedeniyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>
+  </ul>
+  <p>haklarına sahipsiniz.</p>
+
+  <h2>Başvuru yolu</h2>
+  <p>
+    Başvurunuzu, Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ uyarınca Türkçe ve yazılı olarak; adınızı,
+    soyadınızı, Türkiye Cumhuriyeti vatandaşıysanız kimlik numaranızı (yabancıysanız uyruğunuzu ve pasaport ya da kimlik
+    numaranızı), tebligata esas adresinizi, varsa e-posta adresinizi ya da telefon numaranızı ve talep konunuzu belirterek
+    iletebilirsiniz:
+  </p>
+  <ul>
+    {vs.adres && <li>Islak imzalı dilekçeyle, elden ya da posta yoluyla: {vs.adres}</li>}
+    {vs.kep && <li>Kayıtlı elektronik posta (KEP) ile: {vs.kep}</li>}
+    {
+      basvuruEposta && (
+        <li>
+          Güvenli elektronik imza ya da mobil imzayla ya da daha önce bize bildirdiğiniz ve sistemimizde kayıtlı e-posta
+          adresinizden: <a href={`mailto:${basvuruEposta}`}>{basvuruEposta}</a>
+        </li>
+      )
+    }
+  </ul>
+  <p>
+    Başvurunuz, talebin niteliğine göre en kısa sürede ve en geç otuz gün içinde ücretsiz olarak sonuçlandırılır. İşlemin
+    ayrıca bir maliyet gerektirmesi hâlinde Kişisel Verileri Koruma Kurulu’nca belirlenen tarifedeki ücret alınabilir.
+    Kimliğinizi doğrulamak için ek bilgi isteyebiliriz.
+  </p>
+
+  <h2>Bu metindeki değişiklikler</h2>
+  <p>
+    Bu metni, işleme faaliyetlerimiz ya da mevzuat değiştiğinde güncelleyebiliriz. Güncel metin her zaman bu sayfada
+    yayımlanır; son güncelleme tarihi sayfanın başında yazılıdır.
+  </p>
+</YasalDuzen>

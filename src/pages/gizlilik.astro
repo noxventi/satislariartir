@@ -1,0 +1,124 @@
+---
+/**
+ * Gizlilik: sitenin gerçekte ne topladığını sade dille anlatır.
+ * Metin, kodun yaptığı işle birebir uyumlu tutulmalıdır (src/pages/api/talep.ts, src/scripts/olcum.ts).
+ */
+import YasalDuzen from '../components/YasalDuzen.astro';
+import { SITE } from '../site.config';
+
+const vs = SITE.veriSorumlusu;
+---
+
+<YasalDuzen
+  baslik="Gizlilik"
+  aramaBasligi="Gizlilik | Satışları Artır"
+  aciklama="Satışları Artır web sitesinin hangi bilgileri topladığını, ne için kullandığını ve hangi bilgileri hiçbir araca göndermediğini açıklar."
+  yol="/gizlilik/"
+  guncelleme="15 Kasım 2026"
+>
+  <p>
+    Bu sayfa, satislariartir.com adresini ziyaret ettiğinizde ve görüşme formunu doldurduğunuzda hangi bilgilerin
+    toplandığını anlatır. Kişisel verilerin işlenmesine ilişkin resmî bilgilendirme <a href="/aydinlatma/">aydınlatma metnindedir</a>.
+  </p>
+
+  <h2>Formda sizden ne istiyoruz?</h2>
+  <ul>
+    <li>Adınız ve işletmenizin adı.</li>
+    <li>Seçtiğiniz iletişim yoluna göre telefon numaranız ya da e-posta adresiniz. Yalnız seçtiğiniz yolun bilgisi kaydedilir.</li>
+    <li>Hangi konuda görüşmek istediğiniz.</li>
+    <li>İsterseniz kısa bir not ve web sitesi ya da Instagram adresiniz.</li>
+  </ul>
+  <p>Fiyat, bütçe, kimlik numarası ya da ödeme bilgisi istemiyoruz.</p>
+
+  <h2>Formla birlikte başka ne kaydedilir?</h2>
+  <ul>
+    <li>Formu gönderdiğiniz sayfa ve siteye ilk girdiğiniz sayfa.</li>
+    <li>
+      Siteye bir reklamdan ya da bağlantıdan geldiyseniz adres çubuğundaki kampanya etiketleri (ör. kaynak, kampanya adı).
+      Bu bilgi sekmeniz açık kaldığı sürece tarayıcınızda tutulur ve forma eklenir.
+    </li>
+    <li>Reklam tıklama kimlikleri ve ilk ziyaretinizin kaynağı, yalnız ölçüme izin verdiyseniz saklanır.</li>
+    <li>
+      IP adresiniz talep kaydına yazılmaz. Formun kısa sürede çok kez gönderilmesini engellemek için en çok on dakika
+      sunucunun belleğinde tutulur ve sonra kendiliğinden silinir.
+    </li>
+  </ul>
+
+  <h2>Telefon, WhatsApp ya da e-postayla yazarsanız</h2>
+  <p>
+    Sitedeki telefon, WhatsApp ve e-posta bağlantıları sizi doğrudan ilgili uygulamaya götürür. WhatsApp bağlantısı,
+    sohbeti sayfanın konusunu söyleyen hazır bir ilk cümleyle açar; göndermeden önce değiştirebilir ya da silebilirsiniz.
+    Bu kanallardan paylaştığınız ad, numara ve mesaj içeriğini yalnız talebinizi yanıtlamak için kullanırız. WhatsApp
+    mesajları WhatsApp’ın (Meta) altyapısı üzerinden iletilir; o iletim için WhatsApp’ın kendi gizlilik koşulları da geçerlidir.
+  </p>
+
+  <h2>Bu bilgileri ne için kullanıyoruz?</h2>
+  <ul>
+    <li>Görüşme talebinizi yanıtlamak ve seçtiğiniz yoldan size dönmek için.</li>
+    <li>Hangi sayfanın ve hangi kampanyanın görüşme talebi getirdiğini anlamak için.</li>
+  </ul>
+  <p>Ayrı ve açık bir izniniz olmadan sizi pazarlama listesine eklemiyoruz.</p>
+
+  <h2>Hangi bilgiyi hiçbir araca göndermiyoruz?</h2>
+  <p>
+    Adınız, telefonunuz, e-posta adresiniz, işletmenizin adı ve yazdığınız not; analiz, reklam ya da hata izleme
+    araçlarına gönderilmez. Ölçüm araçlarına yalnız şu tür bilgiler gider: hangi sayfada olduğunuz, hangi düğmeye
+    dokunduğunuz ve bir talebin kaydedildiği. Talep için kullanılan kayıt numarası kişisel bilgi içermez.
+  </p>
+
+  <h2>Çerezler ve ölçüm</h2>
+  <p>
+    Ziyaretleri ve reklam sonuçlarını ölçen araçlar yalnız siz izin verirseniz çalışır. İzin vermeseniz de sitenin
+    tamamını ve formu kullanabilirsiniz. Seçiminizi dilediğiniz zaman <a href="/cerez-tercihleri/">çerez tercihleri</a>
+    sayfasından değiştirebilirsiniz.
+  </p>
+
+  <h2>Bilgileriniz nerede durur, kim görür?</h2>
+  <ul>
+    <li>
+      Talep kayıtları sitenin sunucusundaki veritabanında tutulur. Kayıtların listelendiği sayfa şifreyle korunur; kayıtlara
+      yalnız talepleri yanıtlayan ekip üyeleri erişir.
+    </li>
+    <li>Sunucu hizmetini sağlayan barındırma şirketi, hizmetin gereği olarak bu verileri barındırır.</li>
+    <li>Ölçüme izin verdiyseniz, yukarıda sayılan kişisel olmayan bilgiler ilgili ölçüm sağlayıcısına iletilir.</li>
+    <li>
+      Barındırma, e-posta ve ölçüm sağlayıcılarının sunucuları yurt dışında olabilir; bu aktarım Kanun’un 9. maddesindeki
+      şartlara uygun yapılır. Ayrıntılar <a href="/aydinlatma/">aydınlatma metnindedir</a>.
+    </li>
+  </ul>
+  <p>
+    Sözleşmeye dönüşmeyen talepler son iletişim tarihinden itibaren en geç iki yıl içinde silinir ya da anonim hâle
+    getirilir. Kaydınızın daha önce silinmesini isteyebilirsiniz.
+  </p>
+
+  <h2>Güvenlik</h2>
+  <p>
+    Site yalnız şifreli bağlantı (HTTPS) üzerinden çalışır. Form başka sitelerden gönderilemez; otomatik gönderimleri
+    ayıklayan önlemler vardır. İnternet üzerinden yapılan hiçbir iletimin tamamen güvenli olduğu garanti edilemese de
+    verilerinizi korumak için makul teknik ve idari tedbirleri alırız.
+  </p>
+
+  <h2>Bu sayfadaki değişiklikler</h2>
+  <p>Sitenin topladığı bilgiler değişirse bu sayfayı güncelleriz; son güncelleme tarihi sayfanın başında yazılıdır.</p>
+
+  <h2>Haklarınız ve başvuru</h2>
+  <p>
+    Hakkınızda kayıt bulunup bulunmadığını öğrenebilir, kaydın düzeltilmesini ya da silinmesini isteyebilirsiniz.
+    Haklarınızın tam listesi aydınlatma metninde yer alır.
+  </p>
+  {
+    vs.unvan ? (
+      <p>
+        Veri sorumlusu: <strong>{vs.unvan}</strong>
+        {vs.adres && <>, {vs.adres}</>}.{' '}
+        {vs.eposta && (
+          <>
+            Başvuru için: <a href={`mailto:${vs.eposta}`}>{vs.eposta}</a>
+          </>
+        )}
+      </p>
+    ) : (
+      <p>Veri sorumlusunun unvanı ve başvuru adresi bu metin yayımlanmadan önce buraya eklenecektir.</p>
+    )
+  }
+</YasalDuzen>

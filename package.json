@@ -1,0 +1,30 @@
+{
+  "name": "satislariartir",
+  "version": "0.1.0",
+  "description": "Satışları Artır web sitesi",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "ikonlar": "node araclar/ikon-uret.mjs",
+    "gorseller": "node araclar/gorsel-isle.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.6",
+    "@astrojs/node": "^11.1.13",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/source-sans-3": "^5.3.1",
+    "@iconify-json/ph": "^1.2.2",
+    "astro": "^7.4.12",
+    "sharp": "^0.35.5"
+  },
+  "private": true,
+  "devDependencies": {
+    "puppeteer-core": "^25.17.0"
+  }
+}

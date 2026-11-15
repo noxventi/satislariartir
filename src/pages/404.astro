@@ -1,0 +1,150 @@
+---
+/**
+ * Sayfa bulunamadı. Kısa ve sıcak: devrilmiş yön tabelası, tek cümlelik açıklama ve gidilebilecek dört yer.
+ * İndekslenmez; mobil görüşme çubuğu yoktur.
+ */
+import Temel from '../layouts/Temel.astro';
+import IlgiliSayfalar from '../components/IlgiliSayfalar.astro';
+import Cizim from '../components/Cizim.astro';
+import Isaret from '../components/Isaret.astro';
+import Ikon from '../components/Ikon.astro';
+
+import tabela from '../assets/cizimler/tabela.png';
+import yapboz from '../assets/cizimler/yapboz.png';
+import kitaplik from '../assets/cizimler/kitaplik.png';
+import kasaba from '../assets/gorseller/kapak-mobil.jpg';
+import celikvillamEkran from '../assets/projeler/celikvillam-masaustu.jpg';
+---
+
+<Temel baslik="Sayfa bulunamadı | Satışları Artır" aciklama="Aradığınız sayfa bu adreste değil." sayfaTuru="sistem" indeksle={false} cagri={false}>
+  <section class="yok">
+    <div class="sarici yok__ic">
+      <div class="yok__metin">
+        <h1 class="dev">Bu adreste <Isaret tip="alt">bir sayfa yok.</Isaret></h1>
+        <p class="giris">
+          Tabela devrilmiş ama yol yerinde duruyor. Bağlantı eski olabilir ya da adres yanlış yazılmış olabilir; aşağıdaki
+          dört yerden biri sizi aradığınıza götürür.
+        </p>
+        <div class="yok__eylem">
+          <a class="dugme dugme--murekkep" href="/">
+            <Ikon ad="arrow-left" boyut={18} />
+            Ana sayfaya dönün
+          </a>
+          <a class="ok-bag" href="/iletisim/">
+            Aradığınızı bize sorun
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+        </div>
+      </div>
+      <div class="yok__cizim" aria-hidden="true">
+        <Cizim src={tabela} sizes="(max-width: 55.99rem) 62vw, 34vw" genislikler={[320, 480, 720, 1024]} oncelik />
+      </div>
+    </div>
+  </section>
+
+  <IlgiliSayfalar
+    baslik="Aradığınız büyük ihtimalle bunlardan biri"
+    sayfalar={[
+      {
+        tur: 'Ana sayfa',
+        baslik: 'Satışları Artır',
+        metin: 'Dijital pazarlama ajansı: reklam, SEO ve web.',
+        url: '/',
+        gorsel: kasaba,
+        gorselAlt: 'Kâğıttan mavi beyaz bir kasaba; küçük kâğıt insanlar ışıkları yanan bir dükkâna yürüyor',
+      },
+      { tur: 'Hizmetler', baslik: 'Dijital pazarlama hizmetleri', metin: 'Google Ads, Instagram reklamları, SEO, GEO ve web tasarım.', url: '/hizmetler/', cizim: yapboz },
+      { tur: 'Blog', baslik: 'Reklam ve SEO yazıları', metin: 'Sık yaşanan sorunlar için adım adım kontroller.', url: '/blog/', cizim: kitaplik },
+      {
+        tur: 'Projeler',
+        baslik: 'Çalıştığımız markalar',
+        metin: 'Canlı sitelerini açıp inceleyebileceğiniz projeler.',
+        url: '/calismalarimiz/',
+        gorsel: celikvillamEkran,
+        gorselAlt: 'ÇelikVillam web sitesinin masaüstündeki ilk ekranı',
+      },
+    ]}
+  />
+</Temel>
+
+<style>
+  .yok {
+    padding-block: clamp(2rem, 5vw, 4.5rem) clamp(2.5rem, 6vw, 5rem);
+  }
+  .yok__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+  }
+  .yok__metin {
+    display: grid;
+    gap: clamp(1.25rem, 2.4vw, 2rem);
+    justify-items: start;
+  }
+  .yok__metin h1 {
+    font-size: clamp(2.8rem, 1rem + 7vw, 6.5rem);
+    max-width: 8em;
+  }
+  .yok__eylem {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.1rem 2rem;
+  }
+  /* Çizimin kenarındaki beyaz pay zemine karışır; eksi boşluk nesneyi büyütür. */
+  .yok__cizim {
+    justify-self: end;
+    width: min(100%, 31rem);
+    margin: -2.5rem -2rem -2.5rem 0;
+    transform-origin: 30% 78%;
+  }
+  /* Tabela sayfa açılırken bir kez sallanıp durur. */
+  @media (prefers-reduced-motion: no-preference) {
+    .yok__cizim {
+      animation: tabela-salla 1500ms cubic-bezier(0.3, 0.6, 0.3, 1) 250ms both;
+    }
+    @keyframes tabela-salla {
+      0% {
+        transform: rotate(-7deg);
+      }
+      35% {
+        transform: rotate(3.5deg);
+      }
+      62% {
+        transform: rotate(-1.8deg);
+      }
+      82% {
+        transform: rotate(0.7deg);
+      }
+      100% {
+        transform: none;
+      }
+    }
+  }
+  @media (max-width: 55.99rem) {
+    .yok__ic {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.5rem;
+    }
+    .yok__cizim {
+      order: -1;
+      justify-self: start;
+      width: min(68%, 17rem);
+      margin: -1.5rem 0 -1.75rem -1.25rem;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .yok__eylem {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.4rem;
+    }
+    .yok__eylem .ok-bag {
+      align-self: flex-start;
+      min-height: 2.75rem;
+      align-items: center;
+    }
+  }
+</style>

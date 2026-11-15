@@ -1,0 +1,194 @@
+---
+/**
+ * Sayfa sonundaki "buradan nereye" kartları: ziyaretçi sayfanın sonunda çıkmaza girmesin.
+ * Her kartta küçük bir görsel, sayfanın türü, başlığı ve bir cümlelik açıklaması vardır. İki ile dört kart.
+ */
+import type { ImageMetadata } from 'astro';
+import Cizim from './Cizim.astro';
+import Gorsel from './Gorsel.astro';
+import Ikon from './Ikon.astro';
+
+export interface IlgiliSayfa {
+  /** Sayfanın türü: "Hizmet", "Rehber", "Proje". */
+  tur?: string;
+  baslik: string;
+  metin?: string;
+  url: string;
+  /** Beyaz zeminli kâğıt işi nesne (src/assets/cizimler). */
+  cizim?: ImageMetadata;
+  /** Fotoğraf ya da sahne (src/assets/gorseller, src/assets/projeler). */
+  gorsel?: ImageMetadata;
+  gorselAlt?: string;
+}
+interface Props {
+  baslik?: string;
+  giris?: string;
+  sayfalar: IlgiliSayfa[];
+  zemin?: 'kagit' | 'beyaz';
+}
+const { baslik = 'Buradan nereye?', giris, sayfalar, zemin = 'beyaz' } = Astro.props;
+---
+
+<section class:list={['bolum bolum--siki is', zemin === 'beyaz' && 'bolum--beyaz']}>
+  <div class="sarici">
+    <div class="is__ust">
+      <h2 class="baslik-3">{baslik}</h2>
+      {giris && <p>{giris}</p>}
+    </div>
+    <ul class="is__izgara" style={`--adet:${Math.min(sayfalar.length, 4)}`}>
+      {
+        sayfalar.map((s) => (
+          <li>
+            <a class="is__kart" href={s.url}>
+              <span class:list={['is__gorsel', s.gorsel && 'is__gorsel--foto']} aria-hidden={s.gorsel ? undefined : 'true'}>
+                {s.gorsel && <Gorsel src={s.gorsel} alt={s.gorselAlt ?? ''} sizes="(max-width: 47.99rem) 90vw, 24vw" genislikler={[320, 480, 720, 960]} kalite={64} />}
+                {s.cizim && !s.gorsel && <Cizim src={s.cizim} sizes="(max-width: 47.99rem) 40vw, 12vw" genislikler={[240, 360, 520]} />}
+              </span>
+              <span class="is__metin">
+                {s.tur && <span class="is__tur">{s.tur}</span>}
+                <strong class="is__baslik">{s.baslik}</strong>
+                {s.metin && <span class="is__aciklama">{s.metin}</span>}
+              </span>
+              <span class="is__ok" aria-hidden="true">
+                <Ikon ad="arrow-right" boyut={20} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .is__ust {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 44rem;
+    margin-block-end: clamp(1.5rem, 3vw, 2.25rem);
+    color: var(--murekkep-2);
+  }
+  .is__ust h2 {
+    color: var(--murekkep);
+  }
+  .is__izgara {
+    display: grid;
+    grid-template-columns: repeat(var(--adet), minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  }
+  .is__izgara li {
+    display: grid;
+  }
+  .is__kart {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+    padding: clamp(1.1rem, 1.8vw, 1.5rem);
+    background: var(--yuzey, var(--kagit));
+    border-radius: var(--kose);
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      transform 220ms var(--yumusak),
+      box-shadow 220ms var(--yumusak);
+  }
+  /* Görsel alanı sabit yükseklikte bir kutudur; görsel ne olursa olsun bu kutunun içinde kalır, yazıya değmez.
+     Seçiciler bilerek belirli yazıldı: Cizim ve Gorsel bileşenlerinin kendi img kuralları bunları ezmesin. */
+  .is__kart .is__gorsel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: clamp(7rem, 10vw, 9rem);
+    overflow: hidden;
+  }
+  .is__kart .is__gorsel :global(picture) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  .is__kart .is__gorsel :global(picture img) {
+    display: block;
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  .is__kart .is__gorsel--foto {
+    border-radius: 3px;
+  }
+  .is__kart .is__gorsel--foto :global(picture img) {
+    width: 100%;
+    object-fit: cover;
+  }
+  .is__metin {
+    display: grid;
+    align-content: start;
+    gap: 0.3rem;
+    padding-inline-end: 1.75rem;
+  }
+  .is__tur {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 640;
+    color: var(--mavi);
+  }
+  .is__baslik {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem);
+    font-weight: 670;
+    font-stretch: 90%;
+    letter-spacing: -0.014em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .is__aciklama {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  .is__ok {
+    position: absolute;
+    right: clamp(1.1rem, 1.8vw, 1.5rem);
+    bottom: clamp(1.1rem, 1.8vw, 1.5rem);
+    color: var(--kirmizi);
+  }
+  @media (hover: hover) {
+    .is__kart:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.35rem 0.35rem 0 rgb(23 61 166 / 0.2);
+    }
+    .is__kart:hover .is__ok :global(svg) {
+      animation: ok-gec 460ms var(--yumusak);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .is__kart {
+      transition: none;
+    }
+    .is__kart:hover {
+      transform: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .is__izgara {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* Telefonda görsel solda, yazı sağda: kartlar kısalır, liste hızlı taranır. */
+  @media (max-width: 43.99rem) {
+    .is__izgara {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .is__kart {
+      grid-template-columns: 5.5rem minmax(0, 1fr);
+      grid-template-rows: none;
+      align-items: center;
+    }
+    .is__kart .is__gorsel {
+      height: 5.5rem;
+    }
+  }
+</style>

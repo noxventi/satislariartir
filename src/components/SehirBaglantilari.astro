@@ -1,0 +1,116 @@
+---
+/**
+ * Hizmet sayfalarının sonunda: o hizmet için yazılmış şehir ve ilçe sayfalarına bağlantılar.
+ * Kayıt src/data/yerel/ altından gelir; yeni sayfa eklenince bağlantı kendiliğinden çıkar. Sayfa yoksa bölüm çizilmez.
+ */
+import Ikon from './Ikon.astro';
+import { YEREL_SAYFALAR, yerelUrl, type YerelHizmet } from '../data/yerel';
+
+interface Props {
+  hizmet: YerelHizmet;
+  baslik: string;
+  metin: string;
+}
+const { hizmet, baslik, metin } = Astro.props;
+const sayfalar = YEREL_SAYFALAR.filter((s) => s.hizmet === hizmet);
+const sehirler = sayfalar.filter((s) => !s.ilce);
+const ilceler = sayfalar.filter((s) => s.ilce);
+---
+
+{
+  sayfalar.length > 0 && (
+    <section class="bolum bolum--siki sb" id="sehirler">
+      <div class="sarici sb__ic">
+        <div class="sb__metin">
+          <h2 class="baslik-3">{baslik}</h2>
+          <p>{metin}</p>
+          <a class="ok-bag" href="/sehirler/">
+            Bütün şehirler
+            <Ikon ad="arrow-right" boyut={16} />
+          </a>
+        </div>
+        <div class="sb__listeler">
+          <ul class="sb__liste">
+            {sehirler.map((s) => (
+              <li>
+                <a href={yerelUrl(s)}>{s.baslik}</a>
+              </li>
+            ))}
+          </ul>
+          {ilceler.length > 0 && (
+            <ul class="sb__liste sb__liste--ilce">
+              {ilceler.map((s) => (
+                <li>
+                  <a href={yerelUrl(s)}>{s.baslik}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .sb__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .sb__metin {
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+    color: var(--murekkep-2);
+  }
+  .sb__metin h2 {
+    color: var(--murekkep);
+  }
+  .sb__listeler {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .sb__liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .sb__liste a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    background: var(--beyaz);
+    border: 1.5px solid var(--murekkep);
+    border-radius: 999px;
+    font-family: var(--yazi-baslik);
+    font-size: 1rem;
+    font-weight: 640;
+    font-stretch: 93%;
+    line-height: 1;
+    color: var(--murekkep);
+    text-decoration: none;
+    transition:
+      background-color 160ms,
+      color 160ms;
+  }
+  .sb__liste--ilce a {
+    min-height: 2.5rem;
+    padding-inline: 0.85rem;
+    border-color: var(--cizgi-koyu);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+  .sb__liste a:hover {
+    background: var(--murekkep);
+    border-color: var(--murekkep);
+    color: var(--beyaz);
+  }
+  @media (max-width: 61.99rem) {
+    .sb__ic {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

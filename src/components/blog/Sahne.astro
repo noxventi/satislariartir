@@ -1,0 +1,78 @@
+---
+/**
+ * Yazı içi sahne: fotoğraflanmış kâğıt işi bir görsel ve altında açıklaması.
+ * Kullanım (MDX): <Sahne ad="gorseller/yol-arama" alt="...">Açıklama cümlesi.</Sahne>
+ * "ad", src/assets/ altındaki klasör ve dosya adıdır (uzantısız): blog/..., gorseller/..., sektorler/...
+ */
+import type { ImageMetadata } from 'astro';
+import Gorsel from '../Gorsel.astro';
+
+const sahneler = import.meta.glob<{ default: ImageMetadata }>('../../assets/{blog,gorseller,sektorler}/*.jpg', { eager: true });
+
+interface Props {
+  ad: string;
+  alt: string;
+  /** Dikey sahnelerde (4:5) görsel dar tutulur, açıklama yanına gelir. */
+  bicim?: 'yatay' | 'dikey';
+}
+const { ad, alt, bicim = 'yatay' } = Astro.props;
+const kayit = sahneler[`../../assets/${ad}.jpg`];
+if (!kayit) throw new Error(`Sahne: src/assets/${ad}.jpg bulunamadı.`);
+---
+
+<figure class:list={['sahne', `sahne--${bicim}`]} data-gir>
+  <div class="sahne__gorsel">
+    <Gorsel src={kayit.default} alt={alt} sizes="(max-width: 61.99rem) 92vw, 52rem" genislikler={[480, 720, 960, 1280, 1700]} kalite={64} />
+  </div>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style>
+  .sahne {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .sahne__gorsel {
+    overflow: hidden;
+    border-radius: var(--kose);
+    box-shadow: 0.4rem 0.4rem 0 var(--mavi-acik);
+  }
+  .sahne__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .sahne figcaption {
+    margin: 0;
+    max-width: 43rem;
+    padding-inline-start: 0.9rem;
+    border-inline-start: 3px solid var(--kirmizi);
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+    color: var(--murekkep-2);
+  }
+  /* Dikey sahne: görsel solda dar sütunda, açıklama sağda büyük harflerle. */
+  .sahne--dikey {
+    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+  }
+  .sahne--dikey figcaption {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.02rem + 0.62vw, 1.55rem);
+    font-weight: 640;
+    font-stretch: 90%;
+    letter-spacing: -0.016em;
+    line-height: 1.2;
+    color: var(--murekkep);
+    text-wrap: balance;
+  }
+  @media (max-width: 35.99rem) {
+    .sahne--dikey {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sahne--dikey .sahne__gorsel {
+      width: min(70%, 15rem);
+    }
+  }
+</style>

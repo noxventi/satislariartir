@@ -1,0 +1,169 @@
+---
+/**
+ * İki seçeneği yan yana gösterir: "X mi, Y mi?" soruları için.
+ * Kullanım (MDX):
+ * <Karsilastirma
+ *   sol={{ ust: 'Arayan müşteri', baslik: 'Google Ads', maddeler: ['...', '...'], uygun: 'Çilingir, kombi servisi, avukat' }}
+ *   sag={{ ust: 'Gören müşteri', baslik: 'Instagram reklamı', maddeler: ['...'], uygun: 'Kafe, butik, güzellik salonu' }}
+ * />
+ * "uygun" satırı kartın altında ayrı bir şeritte durur (etiketi: uygunEtiketi, varsayılan "Kimler için").
+ */
+interface Secenek {
+  ust?: string;
+  baslik: string;
+  maddeler: string[];
+  uygun?: string;
+}
+interface Props {
+  sol: Secenek;
+  sag: Secenek;
+  /** İki kartın arasındaki küçük yuvarlak etiket. */
+  ara?: string;
+  uygunEtiketi?: string;
+}
+const { sol, sag, ara = 'ya da', uygunEtiketi = 'Kimler için' } = Astro.props;
+---
+
+<div class="kars" data-gir>
+  {
+    [sol, sag].map((s, i) => (
+      <section class:list={['kars__kart', i === 1 && 'kars__kart--mavi']}>
+        {s.ust && <p class="kars__ust">{s.ust}</p>}
+        <p class="kars__baslik">{s.baslik}</p>
+        <ul class="kars__liste">
+          {s.maddeler.map((m) => (
+            <li>{m}</li>
+          ))}
+        </ul>
+        {s.uygun && (
+          <p class="kars__uygun">
+            <strong>{uygunEtiketi}:</strong> {s.uygun}
+          </p>
+        )}
+      </section>
+    ))
+  }
+  <span class="kars__ara" aria-hidden="true">{ara}</span>
+</div>
+
+<style>
+  .kars {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+  .kars__kart {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.7rem;
+    align-content: start;
+    padding: clamp(1.15rem, 2.2vw, 1.75rem);
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0 0 0 1.5px var(--murekkep);
+  }
+  .kars__kart--mavi {
+    background: var(--mavi-acik);
+  }
+  .kars__ust {
+    margin: 0;
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 650;
+    color: var(--mavi);
+  }
+  .kars__baslik {
+    margin: 0;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.85rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.022em;
+    line-height: 1.05;
+    color: var(--murekkep);
+  }
+  .kars__liste {
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+    margin: 0.2rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+  }
+  .kars__liste li {
+    position: relative;
+    margin: 0;
+    padding-inline-start: 1.6rem;
+  }
+  /* Kırmızı kalem tiki. */
+  .kars__liste li::before {
+    content: '';
+    position: absolute;
+    left: 0.1rem;
+    top: 0.42em;
+    width: 0.85rem;
+    height: 0.45rem;
+    border-left: 2.5px solid var(--kirmizi);
+    border-bottom: 2.5px solid var(--kirmizi);
+    transform: rotate(-48deg);
+  }
+  .kars__uygun {
+    margin: 0.4rem 0 0;
+    padding-block-start: 0.8rem;
+    border-block-start: 1px solid var(--cizgi-koyu);
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  .kars__uygun strong {
+    color: var(--murekkep);
+  }
+  .kars__ara {
+    position: absolute;
+    left: 50%;
+    top: clamp(1.4rem, 2.6vw, 2.1rem);
+    translate: -50% 0;
+    display: grid;
+    place-items: center;
+    min-width: 3.1rem;
+    height: 3.1rem;
+    padding-inline: 0.5rem;
+    border-radius: 999px;
+    background: var(--kirmizi);
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--beyaz);
+    box-shadow: 0 0 0 4px var(--kagit);
+  }
+  /* Dar ekranda kartlar alt alta gelir; yuvarlak etiket iki kartın arasına, yazılara değmeden oturur. */
+  @media (max-width: 43.99rem) {
+    .kars {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .kars__kart:first-child {
+      order: 1;
+    }
+    .kars__ara {
+      order: 2;
+      position: relative;
+      left: auto;
+      top: auto;
+      z-index: 1;
+      align-self: center;
+      min-width: 2.7rem;
+      height: 2.7rem;
+      margin-block: -0.55rem;
+      translate: none;
+    }
+    .kars__kart:last-of-type {
+      order: 3;
+    }
+  }
+</style>

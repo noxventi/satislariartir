@@ -1,0 +1,308 @@
+---
+no: 43
+kapak: web-tasarim-firmasi-nasil-secilir
+kapakAlt: "Yan yana üç kâğıt tasarım stüdyosu; tabelaları boş, açık kapılarının ardındaki masalarda dizüstü bilgisayarlar duruyor. Elinde not panosu olan önlüklü bir esnaf onlara bakıyor; ayağından çıkan kırmızı kalem çizgisi üç kapıya da uğruyor ve üçüncü stüdyonun kapısında, kalemin ucunda bitiyor"
+soru: En iyi web tasarım firması nasıl seçilir?
+baslik: En İyi Web Tasarım Firması Nasıl Seçilir?
+aciklama: >-
+  Web tasarım firmalarını hazır listeye bakmadan kendiniz sıralayın: yayındaki siteleri inceleme, görüşme soruları,
+  teklif karşılaştırma ve site sahipliği kontrolü.
+aramalar:
+  - web tasarım firmaları
+  - en iyi web tasarım firmaları
+  - web tasarım ajansları
+kisaCevap: >-
+  En iyi web tasarım firması, işinize benzer siteler kurmuş, bu siteleri bugün de çalışır tutan ve sorularınıza
+  yazılı, açık cevap veren firmadır. Adayların yayındaki sitelerini telefonunuzda açın, hızlarını Google’ın ücretsiz
+  aracı PageSpeed Insights ile ölçün ve sayfa başlıklarına bakın. İlk görüşmede işi kimin yapacağını, sayfaların neye
+  göre planlanacağını ve yayından sonra ne olacağını sorun. Teklifleri aynı kalemler üzerinden karşılaştırın; alan
+  adı, barındırma ve yönetim paneli sizin adınıza açılmalıdır. Sıralama garantisi veren firmaya temkinli yaklaşın:
+  Google’ın kendi rehberine göre kimse Google’da birinci sıra garantisi veremez.
+elinizeGecen: Yayındaki siteyi inceleme adımları, görüşme soruları, teklif tablosu ve sözleşme kontrolü
+hizmetler: [web]
+hizmetBaglantisi:
+  etiket: Kurumsal web tasarım
+  url: /hizmetler/web-tasarim/
+sonraki: web-sitesi-fiyatlari
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: Google Arama Merkezi, SEO’ya ihtiyacınız var mı?
+    url: https://developers.google.com/search/docs/fundamentals/do-i-need-seo?hl=tr
+    tur: resmi
+  - ad: Google for Developers, PageSpeed Insights Hakkında
+    url: https://developers.google.com/speed/docs/insights/v5/about?hl=tr
+    tur: resmi
+  - ad: ICANN Blog, Do You Have a Domain Name? Here’s What You Need to Know
+    url: https://www.icann.org/en/blogs/details/do-you-have-a-domain-name-heres-what-you-need-to-know-26-3-2018-en
+    tur: resmi
+  - ad: Search Console Yardımı, Sahipleri, kullanıcıları ve izinleri yönetme
+    url: https://support.google.com/webmasters/answer/7687615?hl=tr
+    tur: resmi
+  - ad: Google İşletme Profili Yardım, Google’daki yerel sıralamanızı yükseltmeyle ilgili ipuçları
+    url: https://support.google.com/business/answer/7091?hl=tr
+    tur: resmi
+---
+
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AramaKutulari from '../../components/blog/AramaKutulari.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Bir düğün salonunun sahibi, yıllar önce yaptırdığı siteyi yenilemeye karar verdiği akşam Google’a “en iyi web tasarım firmaları” yazıyor. Karşısına üç ayrı liste çıkıyor: ikisini birer web tasarım ajansı, birini bir firma rehberi hazırlamış. Üç listede ortak tek bir isim yok.
+
+Hazır listeler çoğu zaman kimin hazırladığını ve sırayı neye göre verdiğini yazmaz. Bu yazı bir liste değil; hiçbir firmayı, bizi de, “en iyi” ilan etmiyor. Karşınıza çıkan her firmayı kendiniz sıralayabilmeniz için ölçütleri ve ücretsiz araçları bir araya getiriyor. Yazıyı web sitesi de kuran bir ajans hazırladı; aynı ölçütleri bize de uygulayabilirsiniz.
+
+<AraGorsel cizim="dukkan" alt="Ekranı çizgili tenteli bir dükkâna dönüşmüş kâğıttan dizüstü bilgisayar; vitrin camının köşesinde kırmızı bir örümcek ağı">
+  Bir firma hakkında en çok şeyi, başkaları için kurduğu ve bugün hâlâ yayında olan siteler söyler. Referans görseli
+  yalnız ilk günü gösterir.
+</AraGorsel>
+
+## Web tasarım firmalarının yaptığı işler nasıl incelenir?
+
+Firmaların “referanslar” sayfasında çoğu zaman dizüstü ve telefon çizimlerine yerleştirilmiş ekran görüntüleri durur. Bu görseller tasarımın nasıl göründüğünü gösterir, sitenin nasıl çalıştığını göstermez. Görselin arkasındaki site hiç yayına girmemiş, başka bir firmaya geçmiş ya da kapanmış olabilir.
+
+İlk iş, firmadan son birkaç yılda kurduğu ve bugün yayında olan sitelerin adreslerini istemektir. Elinize üç dört adres geçince her birine aşağıdaki sırayla bakın.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'İşinize yakın siteleri seçin',
+      aciklama:
+        'Sektörü ya da ölçeği sizinkine benzeyen iki üç site seçin. Adres açılmıyorsa ya da site başka bir tasarıma geçmişse nedenini sorun.',
+    },
+    {
+      ad: 'Telefonunuzda açın',
+      aciklama:
+        'Yazılar yakınlaştırmadan okunuyor mu, menü açılıyor mu, düğmelere parmakla rahat basılıyor mu? Telefon numarasına dokunun; arama ekranı açılmalı.',
+    },
+    {
+      ad: 'Hızı ölçün',
+      aciklama:
+        'Adresi Google’ın ücretsiz aracı PageSpeed Insights’a (pagespeed.web.dev) yazın. Rapor telefon ve bilgisayar için ayrı sonuç verir; önce telefon sonucuna bakın.',
+      not: 'Puanda 90 ve üzeri iyi, 50 ile 89 arası iyileştirilmesi gereken, 50’nin altı zayıf sayılır.',
+    },
+    {
+      ad: 'Formu deneyin',
+      aciklama:
+        'Müşteri sitelerinde formu göndermeyin; alanların telefonda rahat doldurulup doldurulmadığına bakmanız yeter. Göndermeyi firmanın kendi sitesinde yapın: teklif isteğinize gelen cevap da bir bilgidir.',
+    },
+    {
+      ad: 'Sayfa başlıklarına bakın',
+      aciklama:
+        'Siteyi bilgisayarda açıp sayfalar arasında gezinin, tarayıcı sekmesindeki başlığı okuyun. Google’a “site:” ile adresi bitişik yazarsanız (site:ornek.com gibi) sayfaların arama sonucunda nasıl göründüğünü de görürsünüz.',
+      not: 'Bütün sayfaların başlığı aynıysa ya da yalnız “Ana Sayfa” yazıyorsa sayfalar aramaya göre adlandırılmamıştır.',
+    },
+  ]}
+/>
+
+PageSpeed Insights iki tür veri gösterir. Gerçek kullanıcı verisi Chrome Kullanıcı Deneyimi Raporu’ndan gelir ve son 28 günü kapsar; yeni ya da az ziyaret alan sitelerde bu veri hiç gösterilmeyebilir. Puan ise tek bir cihazda yapılan yükleme simülasyonuna dayanır. Bu yüzden tek bir ölçümle firma elemeyin; aynı firmanın üç sitesi de telefonda zayıf aralıkta kalıyorsa bunu görüşmede sorun.
+
+## Web tasarım ajansına ilk görüşmede ne sorulmalı?
+
+İyi bir ilk görüşmede siteden önce işiniz konuşulur. Hangi hizmetiniz daha çok kazandırıyor, müşteriniz sizi bugün nereden buluyor, siteden telefon mu, form mu, mağaza ziyareti mi bekliyorsunuz? Bunları sormadan renk, şablon ya da sayfa sayısı öneren firma siteyi kendi kalıbına göre kurar.
+
+Aşağıdaki soruları her adaya aynı biçimde sorun. Cevabı tartarken neyin söylendiğine olduğu kadar nasıl söylendiğine de bakın: açık cevap, kimin neyi ne zaman yapacağını söyler.
+
+<Ornek
+  baslik="İlk görüşmede sorulacak sorular"
+  etiket="Görüşme rehberi"
+  not="Cevap örnekleri temsilidir. Aynı soruları her adaya sorun ve cevapları görüşmeden hemen sonra yan yana yazın."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Soru</th>
+        <th scope="col">Açık cevap</th>
+        <th scope="col">Dikkat edilecek cevap</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Soru"><strong>Projemde kim çalışacak?</strong></td>
+        <td data-baslik="Açık cevap">Tasarımı, kodlamayı ve metni kimin yapacağını söyler; görüştüğünüz kişinin projedeki yerini anlatır.</td>
+        <td data-baslik="Dikkat edilecek cevap">“Ekibimiz ilgilenecek” der, kim olduğunu söylemez.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Soru"><strong>Hangi sayfaları öneriyorsunuz, neye bakarak?</strong></td>
+        <td data-baslik="Açık cevap">Önce hizmetlerinizi ve müşterinizin aramalarını sorar; sayfa listesini buna göre çıkaracağını söyler.</td>
+        <td data-baslik="Dikkat edilecek cevap">İşinizi sormadan paket adı ya da sayfa sayısı söyler.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Soru"><strong>Site hangi altyapıyla kurulacak, başka bir firma devralabilir mi?</strong></td>
+        <td data-baslik="Açık cevap">Altyapının adını söyler; yönetim panelinin ve dosyaların size nasıl devredileceğini anlatır.</td>
+        <td data-baslik="Dikkat edilecek cevap">Soruyu geçiştirir ya da siteye kendisinden başkasının bakamayacağını söyler.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Soru"><strong>Telefonda neyi, nasıl deniyorsunuz?</strong></td>
+        <td data-baslik="Açık cevap">Formu, arama ve WhatsApp düğmelerini gerçek telefonda denediğini, başvurunun ulaştığını bir deneme kaydıyla gösterdiğini anlatır.</td>
+        <td data-baslik="Dikkat edilecek cevap">“Mobil uyumlu yapıyoruz” deyip geçer.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Soru"><strong>Yayından sonra bir hata çıkarsa ne olur?</strong></td>
+        <td data-baslik="Açık cevap">Destek süresini ve neyin dahil olduğunu teklife yazacağını söyler.</td>
+        <td data-baslik="Dikkat edilecek cevap">“Bizi her zaman arayabilirsiniz” der, yazıya dökmez.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Bir soruya açık cevap alamadıysanız o konuyu teklif aşamasında yazılı isteyin. Görüşmede size hiç soru sorulmadıysa bunu da not edin.
+
+## Web tasarım teklifleri nasıl karşılaştırılır?
+
+Teklifler geldiğinde göz önce rakama gider. Rakamları karşılaştırmadan önce her teklifin hangi işi yazılı olarak üstlendiğine bakın. En kolay yol, kalemleri bir tabloya döküp her teklifte hangisinin yazdığını işaretlemektir.
+
+<Ornek
+  baslik="Üç teklif, aynı kalemler"
+  not="Tabloda fiyat yok; yalnız her kalemin teklifte yazılı olup olmadığı işaretlendi. Boş kalan her hücre firmaya sorulacak bir sorudur."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Kalem</th>
+        <th scope="col">Teklif A</th>
+        <th scope="col">Teklif B</th>
+        <th scope="col">Teklif C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Kalem"><strong>Sayfa listesi, adlarıyla</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--evet">Yazıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--evet">Yazıyor</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Kalem"><strong>Metni ve fotoğrafı kimin hazırlayacağı</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--evet">Yazıyor</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Kalem"><strong>Sayfa başlıkları ve adresleri</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--evet">Yazıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--evet">Yazıyor</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Kalem"><strong>Alan adı ve barındırma kimin adına</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--evet">Yazıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--evet">Yazıyor</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Kalem"><strong>Yönetim paneli ve dosyaların teslimi</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--evet">Yazıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--evet">Yazıyor</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Kalem"><strong>Yayın sonrası destek ve süresi</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--evet">Yazıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+      </tr>
+      <tr>
+        <td data-baslik="Kalem"><strong>Yıllık giderler, ayrı satırda</strong></td>
+        <td data-baslik="Teklif A"><span class="hukum hukum--hayir">Yazmıyor</span></td>
+        <td data-baslik="Teklif B"><span class="hukum hukum--evet">Yazıyor</span></td>
+        <td data-baslik="Teklif C"><span class="hukum hukum--evet">Yazıyor</span></td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Teklif A tek satırdan oluşuyor: “kurumsal web sitesi” ve bir rakam. Neyi kapsamadığını söylemediği için öteki ikisiyle karşılaştırılamaz. B ile C’nin boşlukları farklı: B metni kimin yazacağını, C yayından sonrasını yazmıyor. Boş satırları firmaya sorun, cevabı teklife eklenmiş hâliyle isteyin; fiyatı hangi kalemlerin büyüttüğünü [web sitesi fiyatları](/blog/web-sitesi-fiyatlari/) yazısında tek tek açtık.
+
+## Alan adı, barındırma ve site kimin adına olmalı?
+
+Siteyi kuran firmayla yollar bir gün ayrılabilir: firma kapanır, tasarımcı başka işe geçer ya da siteyi başka birine yeniletmek istersiniz. O gün elinizde neyin kaldığını, bugün neyin kimin adına kayıtlı olduğu belirler.
+
+Alan adlarını dünya çapında koordine eden kuruluş ICANN, web tasarımcısının, barındırma firmasının ya da başka bir üçüncü tarafın alan adının kayıt sahibi olarak yazılmasını önermez; hesabın giriş bilgilerini kimseyle paylaşmamanızı da söyler. Barındırma hesabı, yönetim paneli ve Google’ın sitenizin aramadaki durumunu gösteren ücretsiz aracı Search Console için de aynı düzen geçerlidir: hesap sizin adınıza açılır, firma kendi kullanıcısıyla çalışır. Alan adının nasıl kaydedildiğini [domain ve hosting nedir](/blog/domain-ve-hosting-nedir/) yazısında anlattık.
+
+<KontrolListesi
+  kimlik="web-tasarim-sozlesme-oncesi"
+  baslik="Sözleşmeden önce kontrol"
+  adimlar={[
+    'Alan adı benim ya da işletmemin adına kayıtlı; kayıt firmasındaki hesaba kendi e-postamla giriyorum.',
+    'Barındırma hesabı ve yönetim paneli benim adıma açılacak; firmaya ayrı bir kullanıcı verilecek.',
+    'Search Console’da sitenin sahibi ben olacağım; firma kullanıcı olarak eklenecek.',
+    'Neyin teslim edileceği yazılı: sitenin dosyaları, metinler, görseller ve tasarım dosyalarının verilip verilmeyeceği.',
+    'Yayından sonraki destek süresi ve neleri kapsadığı yazılı; süre bitince bakımın nasıl ücretleneceği belli.',
+    'Çalışma bittiğinde erişimlerin nasıl devredileceği ve firmanın kullanıcılarının kaldırılacağı sözleşmede yazıyor.',
+  ]}
+  not="Bu liste sözleşmede hangi başlıkların bulunması gerektiğini hatırlatır, hukuki görüş yerine geçmez. Metnin hukuki yönü için bir hukukçuya danışın."
+/>
+
+Çalışma bittiğinde firmanın erişimlerini kaldırın. Search Console’da bir ayrıntıya dikkat edin: Google’ın yardım sayfasına göre kaldırılan bir sahibin doğrulama jetonu sitede kalırsa o kişi sahipliği yeniden doğrulayabilir. Firmayı listeden çıkarırken jetonunun da silinmesini isteyin.
+
+## Ajans mı, serbest tasarımcı mı, hazır site platformu mu?
+
+Ajans ile serbest çalışan arasındaki genel farkı [dijital pazarlama ajansı nasıl seçilir](/blog/dijital-pazarlama-ajansi-nasil-secilir/) yazısında anlattık. Web sitesinde soruyu değiştiren şey, sitenin yıllarca yaşamasıdır: kuran kişiye ulaşılamadığında siteye başka birinin bakabilmesi gerekir.
+
+<Karsilastirma
+  uygunEtiketi="Ne zaman"
+  sol={{
+    ust: 'Tek kişi',
+    baslik: 'Serbest tasarımcı',
+    maddeler: [
+      'Tasarımı ve kurulumu çoğu zaman aynı kişi yapar; doğrudan onunla konuşursunuz.',
+      'Yayından sonraki değişiklikler onun takvimine bağlıdır.',
+      'Ulaşılamaz olursa sitenin kurulumunu bilen başka kimse kalmayabilir; erişimler bu yüzden sizde durmalı.',
+    ],
+    uygun: 'Az sayfalı ve sık değişmeyecek bir site için',
+  }}
+  sag={{
+    ust: 'Ekip',
+    baslik: 'Web tasarım ajansı',
+    maddeler: [
+      'Tasarım, yazılım ve metin ayrı kişilerde olabilir; sizin projenizde kimin çalışacağını sorun.',
+      'Yayından sonraki bakım için çoğu zaman ayrı bir düzeni vardır.',
+      'Site, reklam ve arama çalışmasıyla birlikte planlanabilir.',
+    ],
+    uygun: 'Çok hizmetli, reklam verilecek ya da sık güncellenecek bir site için',
+  }}
+/>
+
+Üçüncü yol, hazır bir site platformunda siteyi kendiniz kurmaktır. Barındırma çoğunlukla aboneliğin içindedir ve birkaç sayfalık bir site kısa sürede yayına girer. Bazı firmalar da siteyi böyle bir platformda kurar; o durumda platform hesabının kimin adına açılacağını ve platformdan ayrılırsanız neyi yanınızda götürebileceğinizi baştan sorun. Kendiniz kurmayı düşünüyorsanız [web sitesi nasıl kurulur](/blog/web-sitesi-nasil-kurulur/) yazısı üç kurulum yolunu yan yana koyar.
+
+### Web tasarım firması aynı şehirde mi olmalı?
+
+Aramaya şehir adı eklemek sonuçları daraltır. Google’ın İşletme Profili yardım sayfasına göre harita sonuçlarında bakılan etkenlerden biri işletmenin arayan kişiye uzaklığıdır; kişi konumunu paylaşmazsa Google onun konumu hakkında bildiklerini kullanır. Şehir adını yazdığınızda ise hangi şehirdeki firmaları istediğinizi açıkça söylemiş olursunuz.
+
+<AramaKutulari
+  aramalar={[
+    { ifade: 'web tasarım ajansları', not: 'Ülke genelinden ajanslar, dizinler ve listeler', ton: 'notr' },
+    { ifade: 'en iyi web tasarım firmaları', not: 'Listeler; sıranın ölçütü çoğu zaman yazmaz', ton: 'hayir' },
+    { ifade: 'ankara web tasarım firmaları', not: 'O şehirde çalıştığını söyleyen firmalar', ton: 'notr' },
+    { ifade: 'çankaya web tasarım', not: 'Semti tanıyan birini arayan işletme', ton: 'notr' },
+  ]}
+/>
+
+Aynı şehirde olmak şart değildir. Web sitesi işinin büyük kısmı görüşme, taslak paylaşımı ve ekran üzerinden yapılan incelemeyle yürür; işini uzaktan yürüten firmalar da vardır. Yüz yüze görüşmek istiyorsanız bunu baştan ölçütlerinize ekleyin; yakınlıktan çok, firmanın müşterinizin hangi sözlerle ve hangi semt adlarıyla aradığını bilip bilmediğine bakın. Şehirlere göre yapılan aramaları [şehir sayfalarında](/sehirler/) topladık; örneğin [Ankara web tasarım](/ankara-web-tasarim/) ve [İstanbul web tasarım](/istanbul-web-tasarim/) sayfalarında aramalar ve seçim ölçütleri bir arada duruyor.
+
+## Web tasarım firması seçerken nelere dikkat edilmeli?
+
+Bazı işaretler teklif aşamasında görünür ve sonradan düzeltmesi zordur. Sitenin yanında arama motoru optimizasyonu (SEO) da teklif ediliyorsa ilk bakılacak yer sıralama sözüdür; SEO teklifini ayrıca tartmak için [SEO fiyatları](/blog/seo-fiyatlari/) yazısındaki listeyi kullanabilirsiniz.
+
+<Not baslik="Siteyle birlikte sıralama sözü" tur="dikkat">
+  Google Arama Merkezi’nin “SEO’ya ihtiyacınız var mı?” sayfası bu konuda tek cümle kurar: “Kimse Google’da birinci
+  sıra garantisi veremez.” Aynı sayfa, sıralama garantisi veren ya da Google ile “özel ilişkisi” olduğunu ileri süren
+  firmalara karşı dikkatli olunmasını ister. Site teklifine “ilk sayfa” sözü eklenmişse bu sözü neye dayandırdığını
+  sorun.
+</Not>
+
+Sıralama sözünün dışında dört işaret daha var:
+
+- **Alan adının ya da sitenin firmanın adına açılması.** “Biz sizin yerinize hallederiz” diye başlayan kayıt, ayrıldığınız gün adresinizi firmadan istemek zorunda kalmanız demektir.
+- **Tek satırlık teklif.** Sayfa listesi, içerik ve yıllık giderler yazmıyorsa neyin yapılmayacağı da belli değildir.
+- **Yayından sonrasının belirsiz kalması.** Destek süresi, güncellemeler ve yedeğin kimde olduğu yazmıyorsa ilk hatada bunlar pazarlık konusu olur.
+- **Durup dururken gelen e-postalar.** Google aynı sayfada, size kendiliğinden yazan SEO firmalarına ve web danışmanlıklarına karşı dikkatli olunmasını ister.
+
+Bugün atabileceğiniz ilk adım, aklınızdaki firmalardan yayındaki site adreslerini istemek ve her birini telefonunuzda açmaktır. Görüşmeye soru tablosuyla gidin, teklifleri aynı kalemler üzerinden isteyin. Bu soruları bize de sorabilirsiniz; [kurumsal web tasarım](/hizmetler/web-tasarim/) sayfasında yayındaki sitelerimizin adresleri duruyor.

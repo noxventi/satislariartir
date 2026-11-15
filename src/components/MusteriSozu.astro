@@ -1,0 +1,52 @@
+---
+/**
+ * Doğrulanmış müşteri sözü. Yalnız müşterinin gerçekten söylediği cümle, atfıyla kullanılır.
+ * Yıldız puanı ve portre yoktur.
+ */
+interface Props {
+  soz: string;
+  kisi: string;
+  kurum: string;
+  baglam: string;
+  /** Verilirse sözün altında kaynak bağlantısı görünür. */
+  kaynakUrl?: string;
+  /** koyu: mavi bant üstünde. acik: kırık beyaz ya da beyaz zeminde. */
+  zemin?: 'koyu' | 'acik';
+}
+const { soz, kisi, kurum, baglam, kaynakUrl, zemin = 'koyu' } = Astro.props;
+---
+
+<figure class:list={['soz', `soz--${zemin}`]}>
+  <blockquote>
+    <p>“{soz}”</p>
+  </blockquote>
+  <figcaption class="kucuk">
+    <strong>{kisi}</strong>, {kurum}. {baglam}
+    {kaynakUrl && <a href={kaynakUrl} rel="noopener">Yorumun kaynağı</a>}
+  </figcaption>
+</figure>
+
+<style>
+  .soz {
+    padding-inline-start: 1.25rem;
+    border-inline-start: 2px solid var(--kirmizi);
+  }
+  .soz--koyu {
+    border-inline-start-color: rgb(255 255 255 / 0.45);
+  }
+  .soz blockquote p {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+    font-weight: 540;
+    font-stretch: 94%;
+    line-height: 1.32;
+    letter-spacing: -0.008em;
+  }
+  .soz figcaption {
+    margin-block-start: 0.9rem;
+    color: var(--ikincil);
+  }
+  .soz--koyu figcaption {
+    color: rgb(255 255 255 / 0.8);
+  }
+</style>

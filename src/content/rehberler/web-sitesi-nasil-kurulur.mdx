@@ -1,0 +1,279 @@
+---
+no: 11
+kapak: web-sitesi-kurma
+kapakAlt: "İnşaat hâlindeki kâğıttan dev bir dizüstü bilgisayar; vinç ekrana bir sayfa bloğu indiriyor, iskeledeki baretli işçiler blokları yerleştiriyor, yerde açılmış bir plan ve cetvel duruyor, ekrandaki bloklardan biri kırmızı kalemle işaretlenmiş"
+soru: Web sitesi nasıl kurulur?
+baslik: Web Sitesi Nasıl Kurulur? Adım Adım Rehber
+aciklama: >-
+  Web sitesi kurma işinde gerekenler, hazır site kurucu, WordPress ve özel tasarım arasındaki fark, açılacak
+  sayfalar ve yayından önce yapılacak kontroller.
+aramalar:
+  - web sitesi kurma
+  - web sitesi nasıl kurulur
+  - web sitesi yaptırmak
+kisaCevap: >-
+  Web sitesi kurmak için bir alan adı, sitenin dosyalarının duracağı bir barındırma hizmeti ve sayfaları
+  oluşturacağınız bir araç gerekir. Bu araç hazır bir site kurucu, WordPress gibi bir içerik yönetim sistemi ya da
+  işinize göre çizilen özel bir tasarım olabilir. Hangisini seçeceğinizi kaç hizmeti kime anlatacağınız ve siteyi
+  kimin güncelleyeceği belirler. Yayına almadan önce siteyi telefonda açın, formdan bir deneme başvurusu gönderin
+  ve siteyi Search Console’a ekleyin.
+elinizeGecen: Kurulum sırası, üç kurulum yolunun karşılaştırması ve yayın öncesi kontrol listesi
+hizmetler: [web]
+hizmetBaglantisi:
+  etiket: Kurumsal web tasarım
+  url: /hizmetler/web-tasarim/
+sonraki: domain-ve-hosting-nedir
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 8
+kaynaklar:
+  - ad: ICANN, About Domain Names
+    url: https://www.icann.org/resources/pages/about-domain-names-2018-08-30-en
+    tur: resmi
+  - ad: Google Arama Merkezi, Web sitenizin Google’da yer almasını sağlama
+    url: https://developers.google.com/search/docs/fundamentals/get-on-google?hl=tr
+    tur: resmi
+  - ad: Google Arama Merkezi, Mobil site ve mobil öncelikli dizine ekleme en iyi uygulamaları
+    url: https://developers.google.com/search/docs/crawling-indexing/mobile/mobile-sites-mobile-first-indexing?hl=tr
+    tur: resmi
+  - ad: Search Console Yardımı, Search Console’a web sitesi veya platform mülkü ekleme
+    url: https://support.google.com/webmasters/answer/34592?hl=tr
+    tur: resmi
+  - ad: Google Chrome Yardım, Site bağlantılarının güvenli olup olmadığını kontrol etme
+    url: https://support.google.com/chrome/answer/95617?hl=tr
+    tur: resmi
+---
+
+import Sahne from '../../components/blog/Sahne.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Mahallenizde bir pilates stüdyosu açtınız. İlk hafta üç kişi aynı şeyi sordu: “Siteniz var mı? Ders saatlerine oradan bakayım.” Instagram hesabınız hazır, ama Google’a stüdyonun adını yazan kişi size ait bir sayfa bulamıyor.
+
+Web sitesi kurma işi dışarıdan tek bir iş gibi görünür. İçinde birbirinden ayrı altı parça vardır; biri eksik kaldığında site yayına girer ama talep getirmez.
+
+<Sahne
+  ad="gorseller/yol-site"
+  alt="Ekranı dükkân vitrini olan kâğıttan bir dizüstü bilgisayar; kırmızı kalem çizgileri kapıda birleşiyor, küçük müşteriler içeri giriyor"
+  bicim="dikey"
+>
+  Web sitesi, işletmenizin internetteki dükkânıdır. Kapıdan giren kişi ne iş yaptığınızı ve size nasıl ulaşacağını
+  ilk bakışta görmelidir.
+</Sahne>
+
+## Web sitesi kurmak için neler gerekir?
+
+Bir işletme sitesi altı parçadan oluşur. İlk üçü sitenin altyapısıdır, son üçü ziyaretçinin gördüğü ve kullandığı kısımdır.
+
+- **Alan adı.** Sitenizin adresi: “ornek.com” gibi.
+- **Barındırma.** Sitenin dosyalarının durduğu ve ziyaretçiye sunulduğu yer.
+- **Site aracı.** Sayfaları oluşturup güncellediğiniz sistem: hazır bir site kurucu, bir içerik yönetim sistemi ya da özel yazılmış bir site.
+- **Sayfalar ve içerik.** Hizmetlerinizi anlatan metinler ve işinizi gösteren fotoğraflar.
+- **Form ve iletişim.** Ziyaretçinin size ulaştığı yollar: telefon, WhatsApp ve form.
+- **Yasal metinler.** Formla ad ve telefon topluyorsanız aydınlatma metni, çerez kullanıyorsanız çerez bilgilendirmesi. Hangi metnin gerektiğini bir hukukçuyla netleştirin.
+
+Alan adlarını dünya çapında koordine eden kuruluş ICANN (Internet Corporation for Assigned Names and Numbers), alan adını posta adresine benzetir: adres tek başına yetmez, mektubun teslim edileceği bir bina da gerekir. O bina barındırmadır.
+
+<Terimler
+  terimler={[
+    {
+      ad: 'Alan adı',
+      acilim: 'Domain',
+      tanim: 'Sitenizin internetteki adresi; tarayıcıya yazılan ad.',
+      ornek: '“ornek.com” bir alan adıdır.',
+    },
+    {
+      ad: 'Barındırma',
+      acilim: 'Hosting',
+      tanim: 'Sitenizin dosyalarını saklayan ve adresinizi yazan kişiye gösteren hizmet.',
+      ornek: 'Alan adı kapıdaki numaraysa barındırma dükkânın kendisidir.',
+    },
+    {
+      ad: 'SSL sertifikası',
+      tanim: 'Site ile ziyaretçinin tarayıcısı arasındaki bağlantıyı şifreleyen sertifika.',
+      ornek: 'Sertifikalı sitenin adresi “https” ile başlar; yoksa Chrome “Güvenli değil” uyarısı gösterir.',
+    },
+    {
+      ad: 'İçerik yönetim sistemi',
+      acilim: 'CMS',
+      tanim: 'Kod yazmadan sayfa eklemenizi, metin ve görsel değiştirmenizi sağlayan yazılım.',
+      ornek: 'WordPress bir içerik yönetim sistemidir.',
+    },
+  ]}
+/>
+
+Uzantı seçimi, alan adının kimin adına kaydedileceği ve yenileme gibi ayrıntıları [domain ve hosting nedir](/blog/domain-ve-hosting-nedir/) yazısında ayrıca anlattık.
+
+Siteniz zaten varsa bu altı parça bir denetim listesi işi görür. Talep getirmeyen sitelerde eksik çoğu zaman altyapıda çıkmaz: hizmetler tek sayfaya sıkışmıştır, form bir yere ulaşmıyordur ya da telefon numarasına dokununca arama başlamıyordur.
+
+## Web sitesi kurma adımları nelerdir?
+
+Kurulum tema seçmekle başlamaz. İlk iş, sitede hangi sayfaların olacağını yazmaktır; hangi araçla kuracağınız ve ne kadar içerik gerektiği bu listeden çıkar.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Sayfa listesini yazın',
+      aciklama:
+        'Müşterinizin ayrı ayrı aradığı her iş için bir sayfa, yanına hakkımızda ve iletişim sayfası. Listeyi müşterinizin kullandığı sözlerle yazın.',
+    },
+    {
+      ad: 'Alan adını kendi adınıza alın',
+      aciklama: 'Kısa, kolay söylenen ve işletme adınızla uyuşan bir ad seçin. Kaydı işletmenizin e-postasıyla, kendi hesabınızda yapın.',
+      not: 'Kayıt bir ajansın ya da çalışanın hesabında durursa adresin yönetimi de onda kalır.',
+    },
+    {
+      ad: 'Kurulum yolunu seçin',
+      aciklama: 'Hazır site kurucu, içerik yönetim sistemi ya da özel tasarım. Seçimi sayfa sayısı ve siteyi kimin güncelleyeceği belirler.',
+    },
+    {
+      ad: 'Metin ve fotoğrafları toplayın',
+      aciklama: 'Her sayfa için bir başlık, birkaç paragraf ve işinizi gösteren gerçek fotoğraflar. Çoğu projede en uzun süren kısım budur.',
+    },
+    {
+      ad: 'Sayfaları kurun, formu bağlayın',
+      aciklama: 'İlk ekrana işin adını ve tek bir görüşme düğmesini koyun. Formun, telefon ve WhatsApp düğmelerinin kime ulaşacağını belirleyin.',
+    },
+    {
+      ad: 'Deneyin ve yayına alın',
+      aciklama: 'Siteyi telefonda açın, bir deneme başvurusu gönderin, ardından siteyi Search Console’a ekleyin.',
+    },
+  ]}
+/>
+
+İkinci adımı ertelemeyin. Site yıllar içinde birkaç kez yenilenebilir; alan adı ise kartvizitinizde, tabelanızda ve müşterinizin aklında aynı kalır.
+
+Kurulumun ne kadar süreceği sayfa sayısına ve içeriğin ne kadar hazır olduğuna bağlıdır. Metinler ve fotoğraflar elinizdeyse iş hızlı ilerler; değilse takvimi içeriğin toplanması belirler.
+
+## Hazır site kurucu mu, WordPress mi, özel tasarım mı?
+
+Bir siteyi kurmanın üç yolu vardır. Üçü de çalışan bir site verir. Ayrıldıkları yer, sayfa düzeninde ne kadar serbest olduğunuz ve bakımı kimin üstlendiğidir.
+
+<Ornek
+  baslik="Üç kurulum yolu"
+  etiket="Genel karşılaştırma"
+  not="Tablo genel bir karşılaştırmadır; belirli bir ürünü anlatmaz. Aynı araçla kurulan iki site, içine konan emeğe göre çok farklı sonuç verebilir."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Yol</th>
+        <th scope="col">Nasıl çalışır?</th>
+        <th scope="col">Kime uyar?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Yol"><strong>Hazır site kurucu</strong></td>
+        <td data-baslik="Nasıl çalışır?">Bir şablon seçer, metin ve fotoğrafı yerine koyarsınız. Barındırma çoğunlukla aboneliğin içindedir.</td>
+        <td data-baslik="Kime uyar?">Birkaç sayfalık, tek hizmetli siteler; yeni açılan işletmeler.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Yol"><strong>İçerik yönetim sistemi</strong></td>
+        <td data-baslik="Nasıl çalışır?">WordPress gibi bir yazılım barındırmaya kurulur, tema ve eklentilerle genişler. Güncelleme ve yedek, siteyi yönetenin işidir.</td>
+        <td data-baslik="Kime uyar?">Sayfa sayısı zamanla artacak, blog ya da çok sayıda hizmet sayfası olan siteler.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Yol"><strong>Özel tasarım</strong></td>
+        <td data-baslik="Nasıl çalışır?">Sayfa düzeni işinize göre çizilir ve kodlanır. Kurulumu bir ekip yapar, yönetim paneli size devredilir.</td>
+        <td data-baslik="Kime uyar?">Birden çok hizmeti farklı müşterilere anlatan, reklam açılış sayfası ya da özel işlev isteyen işletmeler.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Yeni açılan pilates stüdyosuna birkaç sayfalık hazır bir şablon çoğu zaman yeter: dersler, eğitmenler, adres ve iletişim. Mutfak dolabını, vestiyeri ve ofis mobilyasını ayrı müşterilere anlatan bir mobilyacıda ise şablonun sayfa düzeni işin anlatımına dar gelir. Kararı sitenin görünüşü vermez; kaç hizmeti kime anlatacağınız verir.
+
+Hangi yolu seçerseniz seçin iki soruyu baştan sorun:
+
+- Siteyi ileride başka bir araca ya da başka bir firmaya taşıyabilecek misiniz?
+- Yönetim paneline, alan adına ve barındırmaya kimin hesabıyla giriliyor?
+
+Bu iki cevap, bir yıl sonra siteyi yenilemek istediğinizde elinizin ne kadar serbest olacağını gösterir.
+
+## Bir web sitesinde hangi sayfalar olmalı?
+
+İlk sitede en sık yapılan hata, bütün hizmetleri tek bir “Hizmetlerimiz” sayfasına sıralamaktır. Kombi bakımı arayan kişi ile klima montajı arayan kişi aynı sayfaya gelir ve ikisi de kendi işini satır aralarında arar.
+
+Sayfa listesini kendi iç düzeninize göre çıkarmayın; müşterinizin aradığı işlere göre çıkarın. Bir havuz firması için “havuz yapımı” ve “havuz yenileme” iki ayrı sayfadır: birini bahçesine yeni havuz isteyen, diğerini eski havuzu su kaçıran kişi arar.
+
+- **Ana sayfa.** Ne iş yaptığınızı adıyla söyler ve ziyaretçiyi hizmet sayfalarına dağıtır.
+- **Her hizmete ayrı sayfa.** O işi arayan kişinin görmek istediği fotoğraf, aradığı bilgi ve tek bir görüşme düğmesi.
+- **Hakkımızda.** İşi kimin, nerede ve ne zamandır yaptığı.
+- **İletişim.** Telefon, adres, çalışma saatleri, harita ve form.
+- **Yasal metinler.** Aydınlatma metni ve çerez bilgilendirmesi gibi sayfalar.
+
+<AraGorsel cizim="taslak" alt="Kâğıttan dizüstü bilgisayar ve telefon üzerinde sayfa taslağı; telefondaki düğme kırmızı kalemle çembere alınmış">
+  Her sayfanın ilk ekranı üç soruya cevap vermelidir: bu firma ne iş yapıyor, benim işimi de yapıyor mu, konuşmak
+  istersem ne yapacağım?
+</AraGorsel>
+
+Reklam verecekseniz listeye bir sayfa türü daha eklenir: reklama tıklayan kişinin indiği ve tek bir talebe götüren [açılış sayfası (landing page)](/blog/landing-page-nedir/). Sayfa adlarını ve başlıklarını yazarken müşterinizin Google’a yazdığı sözleri kullanın; bu sözleri nasıl bulacağınızı [anahtar kelime nedir](/blog/anahtar-kelime-nedir/) yazısı anlatır.
+
+## Web sitesi yayına alınmadan önce neler kontrol edilir?
+
+Google, bir siteyi dizine eklerken ve sıralarken sayfanın telefon için hazırlanan sürümünü kullanır; buna mobil öncelikli dizine ekleme denir. Müşteriniz de siteyi büyük olasılıkla telefonda açar. Bu yüzden kontrolü masanızdaki bilgisayarda bırakmayın, telefonu elinize alın.
+
+Güvenli bağlantı da bu kontrolün parçasıdır. Chrome, https kullanmayan sitelerde adres çubuğuna “Güvenli değil” uyarısı koyar. Formuna adını ve telefonunu yazacak kişi için bu uyarı iyi bir karşılama olmaz.
+
+<KontrolListesi
+  kimlik="web-sitesi-yayin-oncesi"
+  baslik="Yayın öncesi kontrol"
+  adimlar={[
+    'Ana sayfayı ve her hizmet sayfasını telefonda açtım; yazılar okunuyor, menü ekrana sığıyor.',
+    'Telefon numarasına dokununca arama, WhatsApp düğmesine dokununca sohbet açılıyor.',
+    'Formdan bir deneme başvurusu gönderdim ve başvuru bana ulaştı.',
+    'Adres “https” ile başlıyor; tarayıcı “Güvenli değil” uyarısı göstermiyor.',
+    'Sayfa hızını PageSpeed Insights ile ölçtüm, ağır görselleri küçülttüm.',
+    'Siteyi Search Console’a ekledim ve sitenin sahibi olduğumu doğruladım.',
+  ]}
+  not="İşaretleyemediğiniz madde varsa yayını bir gün erteleyin. Aksi hâlde hatayı ilk gören müşteriniz olur."
+/>
+
+<Not baslik="Site Google’da ne zaman görünür?">
+  Google yeni siteleri kendisi bulur; çoğu zaman siteyi yayınlamak dışında bir şey yapmanız gerekmez. Yine de yeni
+  bir sitenin fark edilmesi birkaç hafta sürebilir. Sayfalarınızın bulunup bulunmadığını Search Console’dan
+  izlersiniz.
+</Not>
+
+## Web sitesi yaptırmak mı, kendiniz kurmak mı?
+
+Birkaç sayfalık bir siteyi hazır araçlarla kendiniz yayına alabilirsiniz. Sayfayı açmak işin kolay kısmıdır. Zor olan, hangi hizmete ayrı sayfa gerektiğine, ilk ekranda ne yazacağına ve talebin size nasıl ulaşacağına karar vermektir.
+
+<Karsilastirma
+  sol={{
+    ust: 'Kendiniz kurarsanız',
+    baslik: 'Hazır araçla kurulum',
+    maddeler: [
+      'Kısa sürede yayına girebilirsiniz.',
+      'Metni, fotoğrafı ve sayfa düzenini siz hazırlarsınız.',
+      'Form, hız ve telefon kontrolü sizin işinizdir.',
+      'Güncelleme ve yedek takibi sizde kalır.',
+    ],
+    uygun: 'Tek hizmetiniz ve siteye ayıracak zamanınız varsa',
+  }}
+  sag={{
+    ust: 'Yaptırırsanız',
+    baslik: 'Ajans ya da tasarımcı',
+    maddeler: [
+      'Sayfa listesi, işiniz ve müşterinizin aramaları incelenerek çıkar.',
+      'Tasarım ve kurulum sizin yerinize yapılır.',
+      'Metin ve fotoğraf için yine sizden bilgi gerekir.',
+      'Erişimlerin kimde kalacağını baştan yazdırmanız gerekir.',
+    ],
+    uygun: 'Birden çok hizmetiniz varsa ya da reklam verecekseniz',
+  }}
+  uygunEtiketi="Ne zaman"
+/>
+
+İki yol birbirini dışlamaz. Hazır bir kurucuyla başlayıp iş büyüdüğünde siteyi yeniden kurdurabilirsiniz. Alan adını baştan kendi adınıza aldıysanız site değişir, adres sizde kalır.
+
+Yaptırmaya karar verirseniz teklifleri aynı sayfa listesi üzerinden isteyin. Fiyatı hangi kalemlerin değiştirdiğini [web sitesi fiyatları](/blog/web-sitesi-fiyatlari/) yazısında tek tek açtık.
+
+Bugün yapabileceğiniz iş kâğıt ve kalemle başlar: müşterinizin sizi ararken kullandığı sözleri yazın ve her biri için bir sayfa adı belirleyin. Kuracağınız aracı da, alacağınız teklifi de bu listeyle karşılaştırırsınız. Listeyi ve ilk ekranları birlikte çıkarmak isterseniz [kurumsal web tasarım](/hizmetler/web-tasarim/) sayfasında nasıl çalıştığımızı görebilirsiniz.

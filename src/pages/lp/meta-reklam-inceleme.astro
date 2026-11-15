@@ -1,0 +1,492 @@
+---
+/**
+ * Reklam açılış sayfası: Instagram ve Facebook, mevcut reklamveren.
+ * Reklam mesajı: "Son mesajların kaçı görüşmeye döndü?"
+ * noindex,follow: taranabilir, site haritasında yok. Form kanal ve kampanya durumu dolu gelir.
+ * WhatsApp seçeneği yalnız doğrulanmış numara tanımlıysa görünür; tıklaması talep sayılmaz (whatsapp_click).
+ *
+ * Düzen (15 Kasım 2026): üst alan (başlık, form, sahne) > neye bakıyoruz (görselli kartlar + temsili döküm) >
+ * inceleme adımları > iki kitle için kısa not (reklam verenler, ilk kez reklam verecekler) > sık sorulanlar > kapanış.
+ * Tek amaç görüşme talebidir: sayfada tek form vardır (#gorusme), bütün çağrılar ona iner.
+ * Anlatım sırası: inceleme, bulguya dayanan kurulum, düzenli optimizasyon. Fiyat, süre ve sonuç sözü yazılmaz.
+ * Korunan çapalar: #gorusme, #ornek.
+ */
+import Temel from '../../layouts/Temel.astro';
+import LpKapak from '../../components/lp/LpKapak.astro';
+import LpKapanis from '../../components/lp/LpKapanis.astro';
+import Adimlar from '../../components/Adimlar.astro';
+import Sss from '../../components/Sss.astro';
+import Cizim from '../../components/Cizim.astro';
+import Ikon from '../../components/Ikon.astro';
+import MusteriSozu from '../../components/MusteriSozu.astro';
+import { SITE } from '../../site.config';
+import { MUSTERI_SOZLERI } from '../../data/projeler';
+
+import sahne from '../../assets/gorseller/yol-akis.jpg';
+import mesaj from '../../assets/cizimler/mesaj.png';
+import kreatif from '../../assets/cizimler/kreatif.png';
+import kitle from '../../assets/cizimler/kitle.png';
+import takvim from '../../assets/cizimler/takvim.png';
+import yapboz from '../../assets/cizimler/yapboz.png';
+import megafon from '../../assets/cizimler/megafon.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+import telefon from '../../assets/cizimler/telefon.png';
+
+const CAGRI = 'Gelen talepleri görüşelim';
+const soz = MUSTERI_SOZLERI['hun-education'];
+const { whatsapp } = SITE.iletisim;
+
+// İncelemede bakılan üç yer. Örnek işletmeler temsilidir.
+const bakilanlar = [
+  {
+    soru: 'Reklam kime, ne söz veriyor?',
+    ornek: 'Reklam “yerinde keşif” diyorsa yazan kişi keşif bekler. İlk yanıtta fiyat listesiyle karşılaşırsa konuşma orada biter.',
+    is: 'Görseli, metni ve düğmeyi birlikte okuyor; hangi sözün mesaj getirdiğini deneyerek buluyoruz.',
+    cizim: kreatif,
+  },
+  {
+    soru: 'Mesajlar doğru kişilerden mi geliyor?',
+    ornek: 'Ankara’da hizmet veren bir güzellik salonuna başka şehirlerden yazılıyorsa reklam yanlış yerde, yanlış kişiye gösteriliyordur.',
+    is: 'Hedef kitleyi ve reklamın gösterildiği bölgeyi, hizmet verdiğiniz yerle karşılaştırıyoruz.',
+    cizim: kitle,
+  },
+  {
+    soru: 'İlk mesajdan sonra ne oluyor?',
+    ornek: '“Fiyat?” diye yazıp bir daha dönmeyenler çoğu zaman reklamda değil, ilk yanıtla randevu arasında kaybedilir.',
+    is: 'İlk yanıtın ne zaman, hangi sözle gittiğine ve konuşmanın nerede koptuğuna bakıyoruz.',
+    cizim: takvim,
+  },
+];
+
+// Temsili döküm: on mesajın nerede kaldığı. Gerçek hesap verisi değildir.
+const dokum = [
+  { durum: 'Hizmet bölgesi dışından yazdı', adet: 3, sonraki: 'Reklamın gösterildiği bölge gözden geçirilir.' },
+  { durum: 'İlk yanıta dönmedi', adet: 2, sonraki: 'İlk yanıtın metni ve saati ele alınır.' },
+  { durum: 'Bilgi aldı, ilerlemedi', adet: 3, sonraki: 'Reklamın sözü ile ilk yanıt yan yana konur.' },
+  { durum: 'Görüşmeye döndü', adet: 2, sonraki: 'Bu mesajların geldiği reklam öne alınır.', one: true },
+];
+
+const adimlar = [
+  {
+    ad: 'İnceleme',
+    ozet: 'Reklam, kitle ve mesajlar',
+    aciklama: 'Reklamlarınızı ve son dönemde gelen mesajları birlikte açıyor; kimin yazdığına değil, konuşmanın nerede kaldığına bakıyoruz.',
+  },
+  {
+    ad: 'Bulgular',
+    ozet: 'Kaybın olduğu adım',
+    aciklama: 'Sorun reklamın sözünde mi, hedef kitlede mi, ilk yanıtta mı? Hangisinde olduğunu örnek mesajlarla gösteriyoruz.',
+  },
+  {
+    ad: 'Plan',
+    ozet: 'Önce neyin değişeceği',
+    aciklama: 'Yeniden kurulacak reklamı, denenecek görsel ve metinleri, düzenlenecek ilk yanıtı öncelik sırasına koyuyoruz.',
+  },
+];
+
+const sorular = [
+  {
+    soru: 'Mesajlarımı sizinle paylaşmam gerekiyor mu?',
+    cevap:
+      'İsim ve telefon paylaşmanız gerekmez. Son mesajları görüşmede birlikte sınıflıyoruz: hangi bölgeden yazıldı, ne soruldu, konuşma nerede kaldı. Dökümü isim ve telefon olmadan çıkarıyoruz.',
+  },
+  {
+    soru: 'Gönderiyi öne çıkarmak yeterli değil mi?',
+    cevap:
+      'Çoğu zaman yetmez. “Öne çıkar” düğmesi hızlıdır ama hedef ve kitle seçenekleri sınırlıdır. Reklamı Meta Reklam Yöneticisi’nde, satış hedefinize göre baştan kuruyoruz.',
+  },
+  {
+    soru: 'Hiç reklam vermedim. Bu sayfa bana uygun mu?',
+    cevap:
+      'Bu sayfa Instagram ya da Facebook’ta reklam veren işletmeler için hazırlandı; yine de görüşme isteyebilirsiniz. İlk kez reklam verecekseniz incelenecek bir reklam olmadığı için işe hesabı, hedefi ve ilk reklamı birlikte kurarak başlıyoruz.',
+    bag: { etiket: 'İlk kez Instagram’da reklam verecekler için', url: '/hizmetler/meta-reklam-yonetimi/#ilk-kampanya' },
+  },
+  {
+    soru: 'Sonuç garantisi veriyor musunuz?',
+    cevap:
+      'Hayır. Mesaj, randevu ya da satış sayısı için söz vermiyoruz. Söz verdiğimiz şey reklamlarınızı ayrıntılı incelemek, verdiğimiz kararları gerekçesiyle anlatmak ve düzenli optimizasyon yapmaktır.',
+  },
+];
+---
+
+<Temel
+  baslik="Instagram Reklam Mesajları İncelemesi ve Görüşme | Satışları Artır"
+  aciklama="Instagram reklamından gelen mesajlar neden satışa dönmüyor? Reklamın sözünü, hedef kitleyi ve ilk yanıtı birlikte inceleyelim. Görüşme için talep bırakın."
+  sayfaTuru="lp"
+  hizmet="meta"
+  indeksle={false}
+  sade
+  sadeBaglantilar={[
+    { etiket: 'İnceleme', url: '#inceleme' },
+    { etiket: 'Sorular', url: '#sss' },
+  ]}
+  cagri={{ etiket: CAGRI, url: '#gorusme' }}
+>
+  <LpKapak
+    zemin="acik"
+    baslik="Instagram reklamından gelen mesajlar nerede kalıyor?"
+    vurgu="nerede kalıyor?"
+    altMetin="Reklamın verdiği sözü, hedef kitleyi ve mesajdan sonraki adımları birlikte inceleyelim; kaybın nerede olduğunu gösterelim."
+    kanal="meta"
+    cagri={CAGRI}
+    konum="lp-meta"
+    kampanyaDurumu="existing"
+    formKimligi="lp-meta"
+    formBasligi="Mesajlarınızı anlatın"
+    formMetni="Ne sattığınızı ve nasıl mesajlar aldığınızı yazın."
+    gorsel={sahne}
+    gorselAlt="Kâğıttan dev bir telefonun ekranındaki fotoğraf kareleri; dükkânın olduğu kare kırmızı kalemle çembere alınmış, önünde bakan küçük insanlar"
+    odak="50% 58%"
+    mobilOdak="50% 62%"
+    nesne={mesaj}
+    whatsapp={whatsapp}
+  />
+
+  <div class="lp-govde">
+    <!-- Neye bakıyoruz? -->
+    <section class="bolum bolum--beyaz" id="inceleme">
+      <div class="sarici">
+        <div class="bolum-ust">
+          <h2 class="baslik-2">Instagram reklam incelemesinde neye bakıyoruz?</h2>
+          <p class="giris">
+            Yeni reklam açmadan önce kaybın reklamda mı, yoksa mesajdan sonraki adımlarda mı olduğunu görmemiz gerekir.
+            İncelemede üç yere bakıyoruz:
+          </p>
+        </div>
+
+        <ul class="bak">
+          {
+            bakilanlar.map((b, i) => (
+              <li class="bak__kart" data-gir style={`--gecikme:${i * 90}ms`}>
+                <div class="bak__cizim" aria-hidden="true">
+                  <Cizim src={b.cizim} sizes="(max-width: 55.99rem) 24vw, 14vw" genislikler={[200, 320, 480, 640]} />
+                </div>
+                <h3 class="bak__soru">{b.soru}</h3>
+                <p class="bak__ornek kucuk">{b.ornek}</p>
+                <p class="bak__is">{b.is}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Temsili örnek: on mesajın dökümü -->
+        <div class="ornek dokum" id="ornek" data-gir>
+          <div class="ornek__ust">
+            <h3 class="baslik-4">Son on mesaj nerede kaldı?</h3>
+            <span class="temsili">Temsili örnek</span>
+          </div>
+          <ul class="dokum__izgara">
+            {
+              dokum.map((d) => (
+                <li class:list={['dokum__kutu', d.one && 'dokum__kutu--one']}>
+                  <p class="dokum__adet">
+                    <span class="rakam">{d.adet}</span>
+                    <span class="gorunmez"> mesaj</span>
+                    <span class="dokum__cetele" aria-hidden="true">
+                      {Array.from({ length: d.adet }, () => (
+                        <i />
+                      ))}
+                    </span>
+                  </p>
+                  <p class="dokum__durum">{d.durum}</p>
+                  <p class="dokum__sonraki">{d.sonraki}</p>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="ornek__not">
+            Sayılar gerçek bir hesaptan alınmadı. Görüşmede aynı dökümü sizin son mesajlarınızla, isim ve telefon olmadan çıkarıyoruz.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- İnceleme adımları -->
+    <section class="bolum" id="surec">
+      <div class="sarici konu konu--ust">
+        <div class="konu__baslik konu__baslik--cizimli">
+          <div>
+            <h2 class="baslik-2">İnceleme nasıl ilerliyor?</h2>
+            <div class="metin">
+              <p>Yeni reklam açmakla başlamıyoruz: önce bakıyor, sonra gösteriyor, sonra planlıyoruz.</p>
+            </div>
+          </div>
+          <Cizim src={yapboz} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+        </div>
+        <div class="konu__icerik">
+          <Adimlar adimlar={adimlar} />
+        </div>
+      </div>
+    </section>
+
+    <!-- İki kitle için kısa not: sayfa reklam verenlere yöneliktir; ilk kez reklam verecekler hizmet sayfasına yönlendirilir. -->
+    <section class="bolum bolum--beyaz bolum--siki" id="kimler-icin">
+      <div class="sarici">
+        <h2 class="baslik-2">Reklam veriyor musunuz, ilk kez mi vereceksiniz?</h2>
+        <div class="bak bak--ikili">
+          <article class="bak__kart">
+            <div class="bak__cizim" aria-hidden="true">
+              <Cizim src={megafon} sizes="(max-width: 55.99rem) 24vw, 9vw" genislikler={[200, 320, 480]} />
+            </div>
+            <h3 class="bak__soru">Instagram ya da Facebook’ta reklam veriyorsanız</h3>
+            <p class="bak__ornek">
+              Bu sayfa sizin için. Mesaj geliyor ama randevuya dönmüyorsa, gönderiyi öne çıkardığınız hâlde kimse
+              yazmıyorsa ya da aynı reklam uzun süredir değişmeden yayındaysa önce nedenini buluyoruz.
+            </p>
+            <a
+              class="dugme dugme--murekkep dugme--kucuk bak__is"
+              href="#gorusme"
+              data-kampanya-durumu="existing"
+              data-kanal-sec="meta"
+              data-olay="cta_click"
+              data-yer="lp-mevcut-hesap"
+            >
+              {CAGRI}
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </article>
+          <article class="bak__kart">
+            <div class="bak__cizim" aria-hidden="true">
+              <Cizim src={yolAyrimi} sizes="(max-width: 55.99rem) 24vw, 9vw" genislikler={[200, 320, 480]} />
+            </div>
+            <h3 class="bak__soru">Hiç reklam vermediyseniz</h3>
+            <p class="bak__ornek">
+              İncelenecek bir reklamınız yoksa başlangıç noktanız farklıdır: reklamdan ne beklediğinizi netleştiriyor,
+              hesabı ve ilk kampanyayı birlikte kuruyoruz.
+            </p>
+            <a class="ok-bag bak__is" href="/hizmetler/meta-reklam-yonetimi/#ilk-kampanya">
+              İlk kampanya nasıl kuruluyor?
+              <Ikon ad="arrow-right" boyut={16} />
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <Sss
+      baslik="Reklam incelemesi hakkında sık sorulanlar"
+      sorular={sorular}
+    />
+
+    <LpKapanis
+      baslik="Son on mesajınıza birlikte bakalım."
+      metin="Formu doldurun; reklamlarınızı ve gelen mesajları görüşmede birlikte açalım."
+      cagri={CAGRI}
+      kanal="meta"
+      yer="lp-kapanis"
+      cizim={telefon}
+    >
+      <MusteriSozu soz={soz.soz} kisi={soz.kisi} kurum={soz.kurum} baglam={soz.baglam} zemin="acik" />
+    </LpKapanis>
+  </div>
+</Temel>
+
+<style>
+  /* Açılış sayfası kısa kalır: bölüm boşlukları sitenin geri kalanından dardır. */
+  .lp-govde {
+    --bolum: clamp(3rem, 6.4vw, 6.25rem);
+  }
+
+  /* Neye bakıyoruz: görselli üç kart. Geniş ekranda görsel üstte; dar ekranda sorunun sağında, küçük. */
+  .bak {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .bak__kart {
+    display: grid;
+    grid-template-areas: 'cizim' 'soru' 'ornek' 'is';
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 2.2vw, 2rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+  }
+  .bak__kart:nth-child(2) {
+    background: var(--mavi-acik);
+  }
+  .bak__cizim {
+    grid-area: cizim;
+    width: min(56%, 11rem);
+    margin: -0.75rem 0 -0.25rem -0.75rem;
+  }
+  .bak__soru {
+    grid-area: soru;
+    font-size: clamp(1.3rem, 1.05rem + 0.95vw, 1.8rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+  }
+  .bak__ornek {
+    grid-area: ornek;
+    color: var(--ikincil);
+  }
+  .bak__is {
+    grid-area: is;
+    font-weight: 600;
+  }
+
+  /* İki kitle için kısa not: aynı kart dili, görsel solda. */
+  .bak--ikili {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-block-start: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .bak--ikili .bak__kart {
+    grid-template-columns: clamp(5.5rem, 9vw, 8rem) minmax(0, 1fr);
+    grid-template-areas:
+      'cizim soru'
+      'cizim ornek'
+      'cizim is';
+    grid-template-rows: auto auto 1fr;
+    column-gap: clamp(1rem, 2vw, 1.75rem);
+    align-items: start;
+  }
+  .bak--ikili .bak__kart:nth-child(1) {
+    background: var(--mavi-acik);
+  }
+  .bak--ikili .bak__kart:nth-child(2) {
+    background: var(--yuzey);
+  }
+  .bak--ikili .bak__cizim {
+    width: auto;
+    margin: -0.5rem 0 0 -0.5rem;
+  }
+  .bak--ikili .bak__ornek {
+    color: var(--murekkep-2);
+  }
+  .bak--ikili .bak__is {
+    justify-self: start;
+    margin-block-start: 0.35rem;
+  }
+
+  /* Temsili döküm: on mesaj dört kutuya dağılır; görüşmeye dönenler kırmızı kalemle sayılır. */
+  .dokum {
+    margin-block-start: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .dokum__izgara {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+    margin-block-start: 1.1rem;
+  }
+  .dokum__kutu {
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+    padding: clamp(0.9rem, 1.6vw, 1.35rem);
+    background: var(--beyaz);
+    border: 1.5px solid transparent;
+    border-radius: var(--kose);
+  }
+  .dokum__kutu--one {
+    border-color: var(--murekkep);
+    box-shadow: 0.35rem 0.35rem 0 var(--mavi-acik);
+  }
+  .dokum__adet {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(2rem, 1.6rem + 1.4vw, 2.75rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    line-height: 1;
+  }
+  .dokum__cetele {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .dokum__cetele i {
+    display: block;
+    width: 8px;
+    height: 1.5rem;
+    border-radius: 1px;
+    background: var(--murekkep);
+  }
+  .dokum__kutu--one .dokum__adet {
+    color: var(--kirmizi-koyu);
+  }
+  .dokum__kutu--one .dokum__cetele i {
+    background: var(--kirmizi);
+  }
+  .dokum__durum {
+    font-family: var(--yazi-baslik);
+    font-size: 1.125rem;
+    font-weight: 650;
+    font-stretch: 94%;
+    letter-spacing: -0.008em;
+    line-height: 1.22;
+  }
+  .dokum__sonraki {
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+
+  @media (max-width: 55.99rem) {
+    .bak {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .bak__kart {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'soru cizim'
+        'ornek ornek'
+        'is is';
+      grid-template-rows: auto;
+      column-gap: 0.75rem;
+      align-items: center;
+    }
+    .bak__cizim {
+      width: 5.75rem;
+      margin: -0.6rem -0.5rem -0.6rem 0;
+    }
+    .bak__ornek,
+    .bak__is {
+      max-width: 40em;
+    }
+    .bak--ikili .bak__kart {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'soru cizim'
+        'ornek ornek'
+        'is is';
+      grid-template-rows: auto;
+      column-gap: 0.75rem;
+      align-items: center;
+    }
+    .bak--ikili .bak__cizim {
+      width: 5.75rem;
+      margin: -0.6rem -0.5rem -0.6rem 0;
+    }
+    .bak--ikili a.bak__is {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+    .dokum__izgara {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* Telefonda her kutu tek satır: sayı solda, açıklama sağda. */
+  @media (max-width: 35.99rem) {
+    .dokum__izgara {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .dokum__kutu {
+      grid-template-columns: 5.25rem minmax(0, 1fr);
+      column-gap: 0.75rem;
+      align-items: start;
+    }
+    .dokum__adet {
+      grid-row: 1 / span 2;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.45rem;
+    }
+    .dokum__durum,
+    .dokum__sonraki {
+      grid-column: 2;
+    }
+  }
+</style>

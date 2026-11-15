@@ -1,0 +1,409 @@
+---
+/**
+ * Teşekkür sayfası. Sunucuda üretilir.
+ * Başarı yalnız az önce kaydedilmiş bir talep için gösterilir (tek kullanımlık sa_onay çerezi).
+ * Sayfayı doğrudan açmak, yenilemek ya da geri düğmesiyle dönmek yeni talep ya da dönüşüm üretmez.
+ *
+ * Görünüm (15 Kasım 2026): onay + kayıt fişi ve posta kutusu görseli > "Sırada ne var?" kartları > göz atılacak sayfalar.
+ * Doğrudan açıldığında: açıklama, görüşme çağrısı ve gidilebilecek sayfalar. Sunucu mantığı ve ölçüm kodu değişmedi.
+ */
+import Temel from '../layouts/Temel.astro';
+import IlgiliSayfalar from '../components/IlgiliSayfalar.astro';
+import Cizim from '../components/Cizim.astro';
+import Ikon from '../components/Ikon.astro';
+import Isaret from '../components/Isaret.astro';
+import { talepBul } from '../lib/talepler';
+import { whatsappMesaji } from '../lib/iletisim';
+
+import zarf from '../assets/cizimler/zarf.png';
+import soru from '../assets/cizimler/soru.png';
+import liste from '../assets/cizimler/liste.png';
+import telefon from '../assets/cizimler/telefon.png';
+import balon from '../assets/cizimler/balon.png';
+import mesaj from '../assets/cizimler/mesaj.png';
+import terazi from '../assets/cizimler/terazi.png';
+import defter from '../assets/cizimler/defter.png';
+import yapboz from '../assets/cizimler/yapboz.png';
+import kitaplik from '../assets/cizimler/kitaplik.png';
+import celikvillamEkran from '../assets/projeler/celikvillam-masaustu.jpg';
+
+export const prerender = false;
+
+const kimlik = Astro.cookies.get('sa_onay')?.value;
+let talep = null;
+if (kimlik) {
+  try {
+    talep = talepBul(kimlik) ?? null;
+  } catch {
+    talep = null;
+  }
+  Astro.cookies.delete('sa_onay', { path: '/tesekkurler/' });
+}
+const taze = talep && Date.now() - Date.parse(talep.olusturma) < 20 * 60_000;
+const onay = taze ? talep : null;
+Astro.response.headers.set('Cache-Control', 'no-store');
+
+const sonraki: Record<string, { soru: string; url: string }> = {
+  'google-ads': { soru: 'Google Ads’te tıklama var ama neden telefon gelmiyor?', url: '/blog/google-ads-tiklama-var-telefon-yok/' },
+  meta: { soru: 'Instagram reklamından mesaj geliyor ama neden satış olmuyor?', url: '/blog/instagram-reklam-mesajlari-satisa-donusmuyor/' },
+};
+const oneri = (onay && sonraki[onay.kanal]) || { soru: 'Google Ads mi, Instagram reklamı mı? İşletmem hangisiyle başlamalı?', url: '/blog/google-ads-mi-instagram-reklami-mi/' };
+const yol = onay?.yontem === 'eposta' ? 'e-postayla' : 'telefonla';
+// Beklemek istemeyen için: sohbet, talebin gönderildiğini söyleyen hazır cümleyle açılır.
+const hizliYol = whatsappMesaji('Merhaba, az önce sitenizden görüşme talebi gönderdim.');
+
+/* ---- Yalnız görünüm: kartların metni ve görselleri. ---- */
+const oneriCizimi = onay?.kanal === 'google-ads' ? telefon : onay?.kanal === 'meta' ? mesaj : terazi;
+const siradakiler = [
+  { ad: 'Talebinizi okuyoruz', metin: 'Yazdıklarınıza, eklediyseniz site ya da Instagram adresinize görüşmeden önce bakıyoruz.', cizim: liste },
+  { ad: 'Size dönüyoruz', metin: `Seçtiğiniz yoldan, ${yol} size ulaşıyoruz. Formu yeniden göndermeniz gerekmez.`, cizim: telefon },
+  { ad: 'Görüşüyoruz', metin: 'İşletmenizi dinliyor, hangi hizmetin işinize yarayacağını ve nereden başlanacağını birlikte konuşuyoruz.', cizim: balon },
+];
+const calismalar = {
+  tur: 'Projeler',
+  baslik: 'Çalıştığımız markalar',
+  metin: 'Canlı sitelerini açıp inceleyebileceğiniz projeler.',
+  url: '/calismalarimiz/',
+  gorsel: celikvillamEkran,
+  gorselAlt: 'ÇelikVillam web sitesinin masaüstündeki ilk ekranı',
+};
+---
+
+<Temel
+  baslik={onay ? 'Talebiniz bize ulaştı | Satışları Artır' : 'Görüşme talebi | Satışları Artır'}
+  aciklama="Görüşme talebinizin durumu."
+  sayfaTuru="sistem"
+  indeksle={false}
+  cagri={false}
+>
+  <section class="sonuc">
+    <div class="sarici">
+      {
+        onay ? (
+          <div
+            class="sonuc__ic"
+            data-talep-onayi
+            data-olay-kimligi={onay.kimlik}
+            data-kanal={onay.kanal}
+            data-kampanya-durumu={onay.kampanya_durumu}
+            data-tur={onay.tur}
+          >
+            <div class="sonuc__metin">
+              <p class="sonuc__isaret" aria-hidden="true">
+                <Ikon ad="check" boyut={26} />
+              </p>
+              <h1 class="baslik-1" tabindex="-1" data-odak>
+                Görüşme talebiniz <Isaret tip="alt">bize ulaştı.</Isaret>
+              </h1>
+              <p class="giris">Talebiniz kaydedildi. Seçtiğiniz iletişim yolundan, {yol} size döneceğiz.</p>
+
+              <dl class="sonuc__kayit yaprak">
+                <div>
+                  <dt>Kayıt numarası</dt>
+                  <dd class="rakam">{onay.kimlik}</dd>
+                </div>
+                <div>
+                  <dt>İşletme</dt>
+                  <dd>{onay.isletme}</dd>
+                </div>
+              </dl>
+              {hizliYol && (
+                <p class="sonuc__hizli">
+                  <Ikon ad="whatsapp-logo" boyut={20} />
+                  <span>
+                    Beklemek istemezseniz{' '}
+                    <a href={hizliYol} target="_blank" rel="noopener" data-yer="tesekkurler">
+                      WhatsApp’tan da yazabilirsiniz
+                    </a>
+                    .
+                  </span>
+                </p>
+              )}
+            </div>
+            <div class="sonuc__cizim" aria-hidden="true" data-gir>
+              <Cizim src={zarf} sizes="(max-width: 55.99rem) 50vw, 30vw" genislikler={[320, 480, 720, 1024]} oncelik />
+            </div>
+          </div>
+        ) : (
+          <div class="sonuc__ic">
+            <div class="sonuc__metin">
+              <h1 class="baslik-1 sonuc__baslik--uzun">Bu sayfa, gönderilen bir görüşme talebinden sonra açılır.</h1>
+              <p class="giris">
+                Şu anda adınıza kayıtlı yeni bir talep görünmüyor. Talebinizi az önce gönderdiyseniz kaydınız duruyor,
+                yeniden göndermeniz gerekmez.
+              </p>
+              <p>
+                <a class="dugme" href="/iletisim/" data-ana-cagri>
+                  Görüşme isteyin
+                  <Ikon ad="arrow-right" boyut={18} />
+                </a>
+              </p>
+            </div>
+            <div class="sonuc__cizim" aria-hidden="true" data-gir>
+              <Cizim src={soru} sizes="(max-width: 55.99rem) 50vw, 30vw" genislikler={[320, 480, 720, 1024]} oncelik />
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  {
+    onay && (
+      <section class="bolum bolum--beyaz bolum--siki">
+        <div class="sarici">
+          <h2 class="baslik-2 sira__baslik">Sırada ne var?</h2>
+          <ol class="sira">
+            {siradakiler.map((s, i) => (
+              <li class:list={['sira__kart', i === 1 && 'sira__kart--mavi']} data-gir style={`--gecikme:${i * 120}ms`}>
+                <div class="sira__cizim" aria-hidden="true">
+                  <Cizim src={s.cizim} sizes="(max-width: 47.99rem) 34vw, 12vw" genislikler={[240, 360, 520]} />
+                </div>
+                <h3 class="sira__ad">{s.ad}</h3>
+                <p class="sira__metin">{s.metin}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    onay ? (
+      <IlgiliSayfalar
+        baslik="Görüşmeden önce göz atmak isterseniz"
+        zemin="kagit"
+        sayfalar={[
+          { tur: 'Blog', baslik: oneri.soru, url: oneri.url, cizim: oneriCizimi },
+          calismalar,
+          { tur: 'Hakkımızda', baslik: 'Nasıl çalışıyoruz?', metin: 'Neye söz veriyoruz, neye vermiyoruz.', url: '/hakkimizda/', cizim: defter },
+        ]}
+      />
+    ) : (
+      <IlgiliSayfalar
+        baslik="Buradan nereye?"
+        sayfalar={[
+          { tur: 'Hizmetler', baslik: 'Dijital pazarlama hizmetleri', metin: 'Beş hizmet ve hangisinin size uygun olduğu.', url: '/hizmetler/', cizim: yapboz },
+          calismalar,
+          { tur: 'Blog', baslik: 'Reklam ve SEO yazıları', metin: 'Sık yaşanan sorunlar için adım adım kontroller.', url: '/blog/', cizim: kitaplik },
+        ]}
+      />
+    )
+  }
+</Temel>
+
+<script>
+  import { olay } from '../scripts/olcum';
+
+  // Dönüşüm olayı: yalnız sunucunun doğruladığı kayıt için, kayıt kimliği başına bir kez.
+  const kutu = document.querySelector<HTMLElement>('[data-talep-onayi]');
+  if (kutu?.dataset.olayKimligi) {
+    const kimlik = kutu.dataset.olayKimligi;
+    let gonderilenler: string[] = [];
+    try {
+      gonderilenler = JSON.parse(localStorage.getItem('sa_olaylar') || '[]');
+    } catch {
+      /* depolama kapalı: çerez tek kullanımlık olduğu için olay yine bir kez gider */
+    }
+    if (kutu.dataset.tur === 'gercek' && !gonderilenler.includes(kimlik)) {
+      olay('generate_lead', {
+        event_id: kimlik,
+        channel: kutu.dataset.kanal,
+        campaign_status: kutu.dataset.kampanyaDurumu,
+        page_type: 'tesekkur',
+      });
+      // Meta Piksel yüklüyse aynı olay kimliğiyle gönderilir (sunucu olayıyla tekilleştirme için).
+      window.fbq?.('track', 'Lead', {}, { eventID: kimlik });
+      try {
+        localStorage.setItem('sa_olaylar', JSON.stringify([...gonderilenler, kimlik].slice(-20)));
+      } catch {
+        /* yok */
+      }
+    }
+    document.querySelector<HTMLElement>('[data-odak]')?.focus({ preventScroll: true });
+  }
+</script>
+
+<style>
+  .sonuc {
+    padding-block: clamp(2.25rem, 5vw, 4.75rem) clamp(2.75rem, 6vw, 5.5rem);
+  }
+  .sonuc__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(1.5rem, 4vw, 4.5rem);
+    align-items: center;
+  }
+  .sonuc__metin {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: start;
+    min-width: 0;
+  }
+  .sonuc__metin h1 {
+    max-width: 12em;
+  }
+  .sonuc__metin h1:focus {
+    outline: none;
+  }
+  /* Altı çizili söz satır ortasında bölünmesin. */
+  .sonuc__metin h1 :global(.isaret) {
+    white-space: nowrap;
+  }
+  .sonuc__baslik--uzun {
+    font-size: clamp(2.05rem, 1.35rem + 2.5vw, 3.5rem);
+    line-height: 1.02;
+    max-width: 15em;
+  }
+  .sonuc__isaret {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--murekkep);
+    color: var(--beyaz);
+  }
+  /* Kayıt fişi: talebin numarası ve işletme adı. */
+  .sonuc__hizli {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-block-start: 1.25rem;
+    color: var(--murekkep-2);
+  }
+  .sonuc__hizli :global(svg) {
+    flex: none;
+    color: var(--mavi);
+  }
+  .sonuc__kayit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    max-width: 100%;
+    margin-block-start: 0.5rem;
+    padding: clamp(1.1rem, 2vw, 1.5rem) clamp(1.25rem, 2.4vw, 1.9rem);
+  }
+  .sonuc__kayit > div {
+    min-width: 0;
+  }
+  .sonuc__kayit dt {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 620;
+    color: var(--ikincil);
+  }
+  .sonuc__kayit dd {
+    font-family: var(--yazi-baslik);
+    font-size: 1.25rem;
+    font-weight: 640;
+    font-stretch: 94%;
+    margin-block-start: 0.15rem;
+    overflow-wrap: anywhere;
+  }
+  /* Çizimin kenarındaki beyaz pay zemine karışır; eksi boşluk nesneyi büyütür. */
+  .sonuc__cizim {
+    justify-self: end;
+    width: min(100%, 27rem);
+    margin: -2.5rem -2rem -2.5rem 0;
+  }
+  @media (max-width: 55.99rem) {
+    .sonuc__ic {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.25rem;
+    }
+    .sonuc__cizim {
+      order: -1;
+      justify-self: start;
+      width: min(58%, 14rem);
+      margin: -1.5rem 0 -1.5rem -1.25rem;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .sonuc__metin .dugme {
+      width: 100%;
+    }
+    .sonuc__metin > p:has(.dugme) {
+      width: 100%;
+    }
+  }
+
+  /* ---- Sırada ne var ----------------------------------------------------------------
+     Üç kart, sırası kırmızı kalemle yazılmış rakamla belli olur. */
+  .sira__baslik {
+    margin-block-end: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .sira {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+    counter-reset: sira;
+  }
+  .sira__kart {
+    counter-increment: sira;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 0.6rem;
+    padding: clamp(1.25rem, 2.4vw, 2.1rem);
+    background: var(--yuzey);
+    border-radius: var(--kose);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .sira__kart--mavi {
+    background: var(--mavi-acik);
+  }
+  .sira__kart::before {
+    content: counter(sira);
+    position: absolute;
+    top: clamp(1.1rem, 2.2vw, 1.9rem);
+    left: clamp(1.25rem, 2.4vw, 2.1rem);
+    font-family: var(--yazi-baslik);
+    font-size: clamp(2.6rem, 2rem + 2vw, 3.75rem);
+    font-weight: 740;
+    font-stretch: 82%;
+    line-height: 0.9;
+    color: var(--kirmizi);
+    font-variant-numeric: lining-nums;
+  }
+  .sira__cizim {
+    width: min(52%, 10.5rem);
+    margin: -0.75rem -0.75rem 0 auto;
+  }
+  .sira__ad {
+    font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.85rem);
+    font-weight: 700;
+    font-stretch: 87%;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+  }
+  .sira__metin {
+    max-width: 30em;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 47.99rem) {
+    .sira {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    /* Telefonda görsel sağda küçülür, kart kısalır. */
+    .sira__kart {
+      grid-template-columns: minmax(0, 1fr) 6.5rem;
+      grid-template-rows: auto 1fr;
+      column-gap: 0.5rem;
+      padding-block-start: 4.4rem;
+    }
+    .sira__cizim {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: center;
+      width: 7.5rem;
+      margin: -2.5rem -1rem -0.5rem -0.5rem;
+    }
+    .sira__ad,
+    .sira__metin {
+      grid-column: 1;
+    }
+  }
+</style>

@@ -1,0 +1,202 @@
+---
+/**
+ * Güven şeridi: çalışılan markaların logoları, tek renk ve eş görsel ağırlıkta, yavaşça kayar.
+ *
+ * Logolar markaların kendi sitelerinden alınır ve sitenin mürekkep rengine çevrilir
+ * (araclar/logo-topla.mjs, araclar/logo-isle.mjs). Kullanım izni marka sahibiyle teyit edilmelidir (TESLIM.md).
+ * Şerit 'birlikte çalıştığımız markalar' listesidir, reklam referansı değildir: hangi markada hangi işin yapıldığı
+ * çalışmalar sayfasında yazar. Şeritte yazı ve düğme yoktur (marka sahibinin kararı, 15 Kasım 2026).
+ * Kayan sıra süslemedir: ekran okuyucu aynı markaları düz liste olarak okur. İmleç üzerindeyken durur,
+ * hareket azaltma tercihinde logolar durağan dizilir.
+ */
+import type { ImageMetadata } from 'astro';
+import { PROJELER } from '../data/projeler';
+
+const dosyalar = import.meta.glob<{ default: ImageMetadata }>('../assets/logolar/*.png', { eager: true });
+
+/** Dizilim: geniş ve dar logolar sırayla, aynı adı taşıyan markalar birbirinden uzak. İkinci değer göz kararı ölçek düzeltmesi. */
+const SIRA: [kimlik: string, olcek?: number][] = [
+  ['hun-education'],
+  ['burger-engineer', 1.06],
+  ['tarum-havuz'],
+  ['celikvillam', 1.04],
+  ['belda-yurtseven-tuner', 1.1],
+  ['estika'],
+  ['yurt-disi-egitim-rehberim', 1.05],
+  ['1001-art', 0.84],
+  ['ilk-gunebakan', 1.08],
+  ['bodrum-olive-house', 1.08],
+  ['rotech-defense'],
+  ['esvia', 0.96],
+  ['pinar-tasdemir', 1.12],
+  ['white-earth-atelier', 1.04],
+  ['eduregist', 0.98],
+  ['rotech-danismanlik', 0.88],
+  ['emre-apaydin', 1.2],
+  ['suha-akyildiz', 1.12],
+];
+
+const ARALIK = 68;
+const logolar = SIRA.flatMap(([kimlik, olcek = 1]) => {
+  const proje = PROJELER.find((p) => p.kimlik === kimlik);
+  const dosya = dosyalar[`../assets/logolar/${kimlik}.png`]?.default;
+  if (!proje || !dosya) return [];
+  const oran = dosya.width / dosya.height;
+  // Eş görsel ağırlık: yükseklik en boy oranının kareköküyle ters orantılı, uçlarda sınırlı.
+  const boy = Math.round(Math.min(64, Math.max(34, 86 / Math.sqrt(oran))) * olcek);
+  return [{ kimlik, ad: proje.marka, src: dosya.src, genislik: dosya.width, yukseklik: dosya.height, boy, en: Math.round(boy * oran) }];
+});
+
+const yarisi = Math.ceil(logolar.length / 2);
+const siralar = [logolar, [...logolar.slice(yarisi), ...logolar.slice(0, yarisi)]];
+const sure = Math.round((logolar.reduce((t, l) => t + l.en, 0) + logolar.length * ARALIK) / 30);
+
+---
+
+<section class="serit" aria-label="Çalıştığımız markalar">
+  <div class="sarici serit__ic">
+    <div class="serit__akis" aria-hidden="true">
+      {
+        siralar.map((sira, s) => (
+          <div class:list={['serit__sira', `serit__sira--${s + 1}`]} style={`--sure:${sure}s`}>
+            {[0, 1].map(() => (
+              <div class="serit__grup">
+                {sira.map((l) => (
+                  <img src={l.src} width={l.genislik} height={l.yukseklik} alt="" decoding="async" fetchpriority="low" style={`--boy:${l.boy}`} />
+                ))}
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+
+    <ul class="gorunmez">
+      {logolar.map((l) => <li>{l.ad}</li>)}
+    </ul>
+  </div>
+</section>
+
+
+<style>
+  .serit {
+    --ara: 4.25rem;
+    --olcu: 1px;
+    position: relative;
+    z-index: 1;
+    padding-block: clamp(0.5rem, 1.4vw, 1rem) clamp(2rem, 3.4vw, 3rem);
+  }
+  .serit__akis {
+    display: grid;
+    gap: 1.1rem;
+    min-width: 0;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+  }
+  .serit__sira {
+    display: flex;
+    width: max-content;
+  }
+  .serit__sira--2 {
+    display: none;
+  }
+  .serit__grup {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--ara);
+    padding-inline-end: var(--ara);
+  }
+  .serit__grup img {
+    flex: none;
+    width: auto;
+    max-width: none;
+    height: calc(var(--boy) * var(--olcu));
+    opacity: 0.88;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .serit__sira {
+      animation: serit-kay var(--sure) linear infinite;
+    }
+    .serit__sira--2 {
+      animation-direction: reverse;
+    }
+    @media (hover: hover) {
+      .serit__akis:hover .serit__sira {
+        animation-play-state: paused;
+      }
+    }
+    @keyframes serit-kay {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+  }
+
+  /* Hareket azaltma: logolar kaymaz, satırlara dizilir. */
+  @media (prefers-reduced-motion: reduce) {
+    .serit__sira--2,
+    .serit__grup + .serit__grup {
+      display: none !important;
+    }
+    .serit__akis {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .serit__sira {
+      width: auto;
+    }
+    .serit__grup {
+      --ara: 2.75rem;
+      flex: 1 1 auto;
+      flex-wrap: wrap;
+      row-gap: 1.5rem;
+      padding-inline-end: 0;
+    }
+  }
+
+  @media (max-width: 61.99rem) {
+    .serit {
+      --ara: 3.25rem;
+      --olcu: 0.86px;
+    }
+    .serit__akis {
+      margin-inline: calc(var(--kenar) * -1);
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .serit {
+      --ara: 2.5rem;
+      --olcu: 0.74px;
+    }
+    .serit__sira--2 {
+      display: flex;
+    }
+  }
+  /* Telefonda hareket azaltma: logolar üç sütunlu, eş hücreli bir ızgaraya dizilir. */
+  @media (max-width: 47.99rem) and (prefers-reduced-motion: reduce) {
+    .serit__akis {
+      margin-inline: 0;
+    }
+    .serit__sira {
+      display: block;
+    }
+    .serit__grup {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem 1rem;
+      justify-items: center;
+      align-items: center;
+    }
+    .serit__grup img {
+      max-width: 100%;
+      height: auto;
+      max-height: calc(var(--boy) * var(--olcu));
+      object-fit: contain;
+    }
+  }
+</style>

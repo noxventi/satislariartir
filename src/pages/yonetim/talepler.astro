@@ -1,0 +1,275 @@
+---
+/**
+ * Erişimi sınırlı talep listesi (CRM yokken satış sorumlusunun kuyruğu).
+ * YONETIM_KULLANICI ve YONETIM_SIFRESI ortam değişkenleri tanımlı değilse sayfa kapalıdır (404).
+ * İnternete açık pano değildir: aramaya kapalı, önbelleğe alınmaz.
+ */
+import '../../styles/global.css';
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/source-sans-3/wght.css';
+import { timingSafeEqual } from 'node:crypto';
+import { DURUMLAR, DURUM_ETIKETLERI, durumGuncelle, ozetSayilar, talepleriListele, type Durum, type Tur } from '../../lib/talepler';
+import { KANALLAR } from '../../site.config';
+
+export const prerender = false;
+
+const kullanici = process.env.YONETIM_KULLANICI || '';
+const sifre = process.env.YONETIM_SIFRESI || '';
+if (!kullanici || !sifre) return new Response('Bulunamadı', { status: 404 });
+
+const esit = (a: string, b: string) => {
+  const x = Buffer.from(a);
+  const y = Buffer.from(b);
+  return x.length === y.length && timingSafeEqual(x, y);
+};
+const baslik = Astro.request.headers.get('authorization') || '';
+const [k = '', ...s] = baslik.startsWith('Basic ') ? Buffer.from(baslik.slice(6), 'base64').toString('utf8').split(':') : [];
+if (!esit(k, kullanici) || !esit(s.join(':'), sifre)) {
+  return new Response('Giriş gerekli', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="Talep listesi", charset="UTF-8"' },
+  });
+}
+
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+let bilgi = '';
+if (Astro.request.method === 'POST') {
+  const f = await Astro.request.formData();
+  try {
+    durumGuncelle(Number(f.get('id')), String(f.get('durum')) as Durum, String(f.get('aciklama') || ''), String(f.get('tur')) as Tur);
+    return Astro.redirect(`${Astro.url.pathname}${Astro.url.search}`, 303);
+  } catch (h) {
+    bilgi = h instanceof Error ? h.message : 'Güncellenemedi';
+  }
+}
+
+const tur = (Astro.url.searchParams.get('tur') || 'gercek') as Tur | 'hepsi';
+const durum = (Astro.url.searchParams.get('durum') || 'hepsi') as Durum | 'hepsi';
+const talepler = talepleriListele({ tur, durum });
+const sayilar = ozetSayilar();
+const kanalAdi = (d: string) => KANALLAR.find((x) => x.deger === d)?.etiket ?? d;
+const tarih = new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Istanbul' });
+const kaynakOzeti = (ham: string) => {
+  try {
+    const v = JSON.parse(ham);
+    const t = v.son || v.ilk;
+    if (!t) return { metin: 'Doğrudan ya da bilinmiyor', giris: v.giris_sayfasi || '' };
+    const parca = [t.utm_source, t.utm_medium, t.utm_campaign].filter(Boolean).join(' / ') || t.referrer || 'Doğrudan';
+    return { metin: parca, giris: v.giris_sayfasi || '', terim: t.utm_term || '' };
+  } catch {
+    return { metin: 'Okunamadı', giris: '' };
+  }
+};
+const TURLER: { deger: Tur | 'hepsi'; etiket: string }[] = [
+  { deger: 'gercek', etiket: 'Gerçek' },
+  { deger: 'test', etiket: 'Test' },
+  { deger: 'supheli', etiket: 'Şüpheli' },
+  { deger: 'hepsi', etiket: 'Hepsi' },
+];
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Talep listesi | Satışları Artır</title>
+  </head>
+  <body class="yon">
+    <header class="yon__ust">
+      <div class="sarici yon__ust-ic">
+        <h1 class="baslik-3">Talep listesi</h1>
+        <p class="kucuk ikincil">Yalnız yetkili ekip üyeleri içindir. Asıl rapor yalnız “Gerçek” kayıtları sayar.</p>
+      </div>
+    </header>
+
+    <main class="sarici yon__govde">
+      <ul class="yon__sayilar" aria-label="Gerçek taleplerin durum dağılımı">
+        {
+          DURUMLAR.map((d) => (
+            <li>
+              <span class="rakam">{sayilar[d]}</span>
+              <span class="mikro ikincil">{DURUM_ETIKETLERI[d]}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <form class="yon__suzgec" method="get">
+        <div class="alan">
+          <label for="s-tur">Tür</label>
+          <select class="girdi" id="s-tur" name="tur">
+            {TURLER.map((t) => <option value={t.deger} selected={t.deger === tur}>{t.etiket}</option>)}
+          </select>
+        </div>
+        <div class="alan">
+          <label for="s-durum">Durum</label>
+          <select class="girdi" id="s-durum" name="durum">
+            <option value="hepsi" selected={durum === 'hepsi'}>Hepsi</option>
+            {DURUMLAR.map((d) => <option value={d} selected={d === durum}>{DURUM_ETIKETLERI[d]}</option>)}
+          </select>
+        </div>
+        <button class="dugme dugme--kucuk dugme--murekkep" type="submit">Süz</button>
+      </form>
+
+      {bilgi && <p class="alan__hata" role="alert">{bilgi}</p>}
+
+      {
+        talepler.length === 0 ? (
+          <p class="yon__bos">Bu süzgeçte kayıt yok. Formdan bir deneme gönderdiğinizde burada görünür.</p>
+        ) : (
+          <ol class="yon__liste">
+            {talepler.map((t) => {
+              const k = kaynakOzeti(t.kaynak);
+              return (
+                <li class="yon__talep">
+                  <div class="yon__kim">
+                    <p class="baslik-4">{t.isletme}</p>
+                    <p>{t.ad}</p>
+                    <p class="rakam">
+                      {t.yontem === 'telefon' ? <a href={`tel:+${t.telefon}`}>+{t.telefon}</a> : <a href={`mailto:${t.eposta}`}>{t.eposta}</a>}
+                    </p>
+                    {t.adres && <p class="kucuk ikincil">{t.adres}</p>}
+                  </div>
+                  <div class="yon__ne kucuk">
+                    <p>
+                      <strong>{kanalAdi(t.kanal)}</strong>
+                      {t.kampanya_durumu === 'new' && ' · ilk kampanya'}
+                      {t.kampanya_durumu === 'existing' && ' · mevcut hesap'}
+                    </p>
+                    {t.mesaj && <p>{t.mesaj}</p>}
+                    <p class="ikincil">
+                      Kaynak: {k.metin}
+                      {k.terim && ` (${k.terim})`}
+                    </p>
+                    <p class="ikincil">Form: {t.sayfa || 'bilinmiyor'}{k.giris && `, giriş: ${k.giris}`}</p>
+                    <p class="ikincil rakam">{tarih.format(new Date(t.olusturma))} · {t.kimlik}</p>
+                  </div>
+                  <form class="yon__durum" method="post">
+                    <input type="hidden" name="id" value={t.id} />
+                    <label class="gorunmez" for={`d-${t.id}`}>Durum</label>
+                    <select class="girdi" id={`d-${t.id}`} name="durum">
+                      {DURUMLAR.map((d) => <option value={d} selected={d === t.durum}>{DURUM_ETIKETLERI[d]}</option>)}
+                    </select>
+                    <label class="gorunmez" for={`t-${t.id}`}>Tür</label>
+                    <select class="girdi" id={`t-${t.id}`} name="tur">
+                      {TURLER.filter((x) => x.deger !== 'hepsi').map((x) => <option value={x.deger} selected={x.deger === t.tur}>{x.etiket}</option>)}
+                    </select>
+                    <label class="gorunmez" for={`n-${t.id}`}>Not</label>
+                    <input class="girdi" id={`n-${t.id}`} name="aciklama" value={t.durum_notu} placeholder="Not" maxlength="500" />
+                    <button class="dugme dugme--kucuk dugme--cizgi" type="submit">Kaydet</button>
+                  </form>
+                </li>
+              );
+            })}
+          </ol>
+        )
+      }
+    </main>
+  </body>
+</html>
+
+<style>
+  .yon {
+    background: var(--kagit);
+  }
+  .yon__ust {
+    background: var(--beyaz);
+    border-block-end: 1px solid var(--cizgi);
+    padding-block: 1.25rem;
+  }
+  .yon__ust-ic {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1.5rem;
+  }
+  .yon__govde {
+    padding-block: 2rem 5rem;
+  }
+  .yon__sayilar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+    gap: 0.5rem;
+    margin-block-end: 1.75rem;
+  }
+  .yon__sayilar li {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.8rem 1rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0 0 0 1px var(--cizgi);
+  }
+  .yon__sayilar .rakam {
+    font-family: var(--yazi-baslik);
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-stretch: 88%;
+    line-height: 1;
+  }
+  .yon__suzgec {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.75rem;
+    margin-block-end: 1.5rem;
+  }
+  .yon__suzgec .girdi {
+    min-height: 2.75rem;
+    min-width: 10rem;
+    padding-block: 0.4rem;
+  }
+  .yon__bos {
+    padding: 2.5rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0 0 0 1px var(--cizgi);
+    color: var(--ikincil);
+  }
+  .yon__liste {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .yon__talep {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 1rem 2rem;
+    padding: 1.25rem;
+    background: var(--beyaz);
+    border-radius: var(--kose);
+    box-shadow: 0 0 0 1px var(--cizgi);
+  }
+  .yon__kim,
+  .yon__ne {
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+    overflow-wrap: anywhere;
+  }
+  .yon__durum {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    align-content: start;
+  }
+  .yon__durum .girdi {
+    min-height: 2.75rem;
+    padding-block: 0.4rem;
+    font-size: 0.9875rem;
+  }
+  .yon__durum input,
+  .yon__durum button {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 55.99rem) {
+    .yon__talep {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

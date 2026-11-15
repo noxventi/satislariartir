@@ -1,0 +1,70 @@
+---
+/**
+ * Kenar notu: yazının akışından ayrı durması gereken tek bir bilgi (ipucu ya da dikkat edilecek yer).
+ * Kullanım (MDX): <Not baslik="Hesap kimin adına açılmalı?" tur="dikkat">Metin...</Not>
+ * Bir yazıda en çok iki kez kullanılır; her paragrafı kutuya almak notu değersizleştirir.
+ */
+import Ikon from '../Ikon.astro';
+
+interface Props {
+  baslik: string;
+  tur?: 'ipucu' | 'dikkat';
+}
+const { baslik, tur = 'ipucu' } = Astro.props;
+---
+
+<aside class:list={['not', `not--${tur}`]}>
+  <span class="not__ikon" aria-hidden="true">
+    <Ikon ad={tur === 'dikkat' ? 'warning-circle' : 'pencil-simple-line'} boyut={22} />
+  </span>
+  <div class="not__govde">
+    <p class="not__baslik">{baslik}</p>
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .not {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.9rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    background: var(--mavi-acik);
+    border-radius: var(--kose);
+    box-shadow: inset 4px 0 0 var(--mavi);
+  }
+  .not--dikkat {
+    background: #f9e9ec;
+    box-shadow: inset 4px 0 0 var(--kirmizi);
+  }
+  .not__ikon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--beyaz);
+    color: var(--mavi);
+  }
+  .not--dikkat .not__ikon {
+    color: var(--kirmizi);
+  }
+  .not__govde {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 1.0625rem;
+    line-height: 1.52;
+    color: var(--murekkep-2);
+  }
+  .not__govde :global(p) {
+    margin: 0;
+  }
+  .not__baslik {
+    font-family: var(--yazi-baslik);
+    font-size: 1.125rem;
+    font-weight: 670;
+    font-stretch: 94%;
+    line-height: 1.25;
+    color: var(--murekkep);
+  }
+</style>

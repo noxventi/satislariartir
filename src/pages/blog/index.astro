@@ -1,0 +1,861 @@
+---
+/**
+ * Blog dizini (/blog/).
+ * Ana niyet: "dijital pazarlama blogu" ve yazıların kendi soruları (google reklam verme, seo nedir, instagram reklam verme...).
+ * Bölümler: üst alan (kitaplık görseli) > BuSayfada > kapak görselli yazı kartları ve konu süzgeci > iki okuma yolu
+ * (ilk kez reklam verecekler / reklam verip sonuç alamayanlar) > yazılar nasıl hazırlanıyor > ilgili hizmetler > görüşme.
+ *
+ * - Kartlar eş ölçülüdür ve üç sütunlu düz ızgarada durur; satırlar subgrid ile hizalanır.
+ * - Kapak görseli yazının ön bilgisindeki "kapak" alanından gelir; yazının kendi sayfasında da aynı görsel durur.
+ * - Konu süzgeci betikle kartları gizler. URL üretmez, indekslenecek arşiv doğurmaz.
+ *   Betik çalışmazsa süzgeç görünmez ve bütün yazılar listelenir.
+ */
+import Temel from '../../layouts/Temel.astro';
+import BuSayfada from '../../components/BuSayfada.astro';
+import IlgiliSayfalar from '../../components/IlgiliSayfalar.astro';
+import GorusmeBandi from '../../components/GorusmeBandi.astro';
+import Cizim from '../../components/Cizim.astro';
+import Gorsel from '../../components/Gorsel.astro';
+import Ikon from '../../components/Ikon.astro';
+import { hizmetBul, SITE } from '../../site.config';
+import { HIZMET_CIZIMI, HIZMET_ETIKETI, indekslenir, rehberCizimi, rehberKapagi, rehberleriGetir, rehberUrl } from '../../lib/rehberler';
+
+import kitaplik from '../../assets/cizimler/kitaplik.png';
+import defter from '../../assets/cizimler/defter.png';
+import yolAyrimi from '../../assets/cizimler/yol-ayrimi.png';
+import tabela from '../../assets/cizimler/tabela.png';
+
+const rehberler = await rehberleriGetir();
+const kirintilar = [{ ad: 'Blog', url: '/blog/' }];
+const BASLIK = 'Dijital pazarlama blogu';
+const ACIKLAMA =
+  'Google ve Instagram reklamları, SEO, yapay zekâ görünürlüğü ve web sitesi üzerine işletme sahipleri için sade anlatımlı yazılar, kontrol listeleri ve örnekler.';
+
+// Yalnız en az bir rehberi olan konular süzgeçte görünür.
+const SIRA = ['google-ads', 'meta', 'seo', 'geo', 'web', 'genel'];
+const konular = SIRA.filter((k) => rehberler.some((r) => r.data.hizmetler.includes(k as never))).map((k) => ({
+  deger: k,
+  etiket: HIZMET_ETIKETI[k],
+  adet: rehberler.filter((r) => r.data.hizmetler.includes(k as never)).length,
+}));
+
+const rehberBul = (slug: string) => rehberler.find((r) => r.id === slug);
+
+/** İki okuma yolu: her biri üç rehber, önerilen sırayla. Altı rehberin her biri bir yolda yer alır. */
+const yollar = [
+  {
+    kimlik: 'ilk-kez',
+    ton: 'acik',
+    cizim: yolAyrimi,
+    baslik: 'İlk kez reklam verecekler için',
+    metin: 'Hiç reklam vermediyseniz ya da bir kez deneyip bıraktıysanız üç kararı sırayla verin: hangi kanal, hangi hesaplar, başvuru hangi yoldan gelecek.',
+    adimlar: [
+      { slug: 'google-ads-mi-instagram-reklami-mi', neden: 'Önce kanalı seçin. Müşteriniz hizmetinizi arıyor mu, yoksa görünce mi istiyor?' },
+      { slug: 'meta-reklam-vermek-icin-gerekenler', neden: 'Instagram’la başlayacaksanız hesapları ve yetkileri yayından önce hazırlayın.' },
+      { slug: 'meta-reklam-formu-mu-whatsapp-mi', neden: 'Başvuruyu formla mı, mesajla mı alacağınıza reklamı kurmadan karar verin.' },
+    ],
+    cagri: { etiket: 'İlk reklamımı planlamak istiyorum', durum: 'new', yer: 'rehberler-ilk-kez' },
+  },
+  {
+    kimlik: 'sonuc-alamayanlar',
+    ton: 'beyaz',
+    cizim: tabela,
+    baslik: 'Reklam verip sonuç alamayanlar için',
+    metin: 'Reklamınız yayında ama telefon çalmıyor, mesajlar satışa dönmüyorsa bütçeyi artırmadan önce sorunun nerede olduğunu bulun.',
+    adimlar: [
+      { slug: 'google-reklamim-neden-gosterilmiyor', neden: 'Reklam gerçekten gösteriliyor mu? Kendi aramanıza değil, hesaptaki gösterim sayısına bakın.' },
+      { slug: 'google-ads-tiklama-var-telefon-yok', neden: 'Tıklama var ama arayan yoksa mobil sayfayı ve arama terimlerini inceleyin.' },
+      { slug: 'instagram-reklam-mesajlari-satisa-donusmuyor', neden: 'Mesaj geliyor ama satış olmuyorsa son mesajları aşama aşama sınıflayın.' },
+    ],
+    cagri: { etiket: 'Reklam hesabıma birlikte bakalım', durum: 'existing', yer: 'rehberler-sonuc-alamayanlar' },
+  },
+].map((y) => ({ ...y, adimlar: y.adimlar.flatMap((a) => (rehberBul(a.slug) ? [{ ...a, rehber: rehberBul(a.slug)! }] : [])) }));
+
+const yontem = [
+  { ad: 'Tek soru, kısa cevap', aciklama: 'Her yazı tek bir soruyla başlar ve en üstte doğrudan yanıt verir. Ayrıntıyı isteyen okumaya devam eder.' },
+  {
+    ad: 'Kendi hesabınızda uygulanır',
+    aciklama: 'Yazılarda adım listeleri, kontrol listeleri, karşılaştırmalar ve örnekler bulunur. İşaretleriniz yalnız kendi tarayıcınızda kalır.',
+  },
+  {
+    ad: 'Kaynağı açık',
+    aciklama: 'Platformla ilgili bilgilerin kaynağı, yazının sonunda bağlantısıyla ve son kontrol tarihiyle birlikte yazar.',
+  },
+  {
+    ad: 'Örnekler temsilidir',
+    aciklama: 'Yazılardaki kombi servisi, kafe ya da mobilyacı, gündelik hayattan seçilmiş temsili işletmelerdir. Gerçek bir müşterinin verisi kullanılmaz.',
+  },
+];
+
+const hizmetKarti = (kimlik: 'google-ads' | 'meta' | 'seo' | 'web', baslik: string) => {
+  const h = hizmetBul(kimlik);
+  return { tur: 'Hizmet', baslik, metin: h.ozet, url: h.url, cizim: HIZMET_CIZIMI[kimlik] };
+};
+
+// Arama motorlarına yalnız yayındaki (indekslenen) rehberler liste olarak bildirilir.
+const yayindakiler = rehberler.filter(indekslenir);
+const yapisalVeri = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE.url}/blog/#sayfa`,
+    name: BASLIK,
+    description: ACIKLAMA,
+    url: `${SITE.url}/blog/`,
+    inLanguage: 'tr-TR',
+    isPartOf: { '@id': `${SITE.url}/#site` },
+    publisher: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad },
+    ...(yayindakiler.length > 0 && {
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: yayindakiler.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: r.data.soru, url: `${SITE.url}${rehberUrl(r)}` })),
+      },
+    }),
+  },
+];
+---
+
+<Temel
+  baslik="Dijital Pazarlama Blogu | Satışları Artır"
+  aciklama={ACIKLAMA}
+  sayfaTuru="rehberler"
+  kirintilar={kirintilar}
+  yapisalVeri={yapisalVeri}
+  cagri={{ etiket: 'Görüşme isteyin', url: '#gorusme' }}
+>
+  <!-- Üst alan -->
+  <section class="rk">
+    <div class="sarici rk__ic">
+      <nav class="rk__kirinti" aria-label="Sayfa konumu">
+        <ol class="kirinti">
+          <li><a href="/">Ana sayfa</a></li>
+          <li><span aria-current="page">Blog</span></li>
+        </ol>
+      </nav>
+      <div class="rk__metin">
+        <h1 class="baslik-1 rk__baslik">{BASLIK}</h1>
+        <div class="giris akis rk__giris">
+          <p>
+            Bu blogda Google ve Instagram reklamları, SEO, yapay zekâ görünürlüğü ve web sitesi üzerine işletme
+            sahiplerinin en çok sorduğu soruları tek tek yanıtlıyoruz.
+          </p>
+          <p>
+            Her yazı tek bir soruyla başlar ve cevabı en üstte verir. İlk kez reklam verecekseniz neyi hazırlamanız
+            gerektiğini, reklam verip sonuç alamıyorsanız önce nereye bakacağınızı burada bulursunuz.
+          </p>
+        </div>
+      </div>
+      <div class="rk__cizim">
+        <Cizim
+          src={kitaplik}
+          alt="Kâğıttan mavi bir kitaplık; orta raftaki kitabın arasından kırmızı bir ayraç sarkıyor"
+          sizes="(max-width: 61.99rem) 46vw, 30vw"
+          genislikler={[280, 420, 640, 860, 1024]}
+          oncelik
+        />
+      </div>
+    </div>
+  </section>
+
+  <BuSayfada
+    bolumler={[
+      { etiket: 'Bütün yazılar', hedef: 'yazilar' },
+      { etiket: 'Nereden başlamalı?', hedef: 'nereden-baslamali' },
+      { etiket: 'Nasıl hazırlanıyor?', hedef: 'yontem' },
+      { etiket: 'İlgili hizmetler', hedef: 'hizmetler' },
+    ]}
+  />
+
+  <!-- Yazı kartları ve konu süzgeci -->
+  <section class="bolum bolum--beyaz" id="yazilar">
+    <div class="sarici">
+      <div class="dizin__ust">
+        <div class="bolum-ust dizin__baslik">
+          <h2 class="baslik-2">Reklam, SEO ve web sitesi hakkında en çok sorulanlar</h2>
+          <p class="giris">Her yazı tek bir soruya cevap verir. Konuya göre süzebilir ya da doğrudan kendi sorunuza gidebilirsiniz.</p>
+        </div>
+        {
+          konular.length > 1 && (
+            <div class="suzgec" data-suzgec>
+              <p class="suzgec__ad" id="suzgec-baslik">
+                Konuya göre
+              </p>
+              <div class="suzgec__dugmeler" role="group" aria-labelledby="suzgec-baslik">
+                <button type="button" class="suzgec__dugme" data-konu="hepsi" aria-pressed="true">
+                  Hepsi <span class="rakam">{rehberler.length}</span>
+                </button>
+                {konular.map((k) => (
+                  <button type="button" class="suzgec__dugme" data-konu={k.deger} aria-pressed="false">
+                    {k.etiket} <span class="rakam">{k.adet}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <ul class="kartlar" data-rehber-listesi>
+        {
+          rehberler.map((r, i) => {
+            const kapak = rehberKapagi(r);
+            return (
+              <li class="ykart" data-hizmetler={r.data.hizmetler.join(' ')} data-gir style={`--gecikme:${(i % 3) * 80}ms`}>
+                <div class:list={['ykart__gorsel', !kapak && 'ykart__gorsel--cizim']} aria-hidden="true">
+                  {kapak ? (
+                    <Gorsel src={kapak.gorsel} alt="" sizes="(max-width: 43.99rem) 30vw, (max-width: 61.99rem) 46vw, 30vw" genislikler={[240, 360, 480, 720, 960]} kalite={62} />
+                  ) : (
+                    <Cizim src={rehberCizimi(r).cizim} sizes="(max-width: 47.99rem) 30vw, 16vw" genislikler={[240, 360, 520]} />
+                  )}
+                </div>
+                <ul class="ykart__konular">
+                  {r.data.hizmetler.slice(0, 2).map((h) => (
+                    <li>{HIZMET_ETIKETI[h]}</li>
+                  ))}
+                </ul>
+                <h3 class="ykart__soru">
+                  <a href={rehberUrl(r)}>
+                    <span>{r.data.soru}</span>
+                  </a>
+                </h3>
+                <p class="ykart__gecen">{r.data.elinizeGecen}</p>
+                <p class="ykart__alt">
+                  <Ikon ad="clock" boyut={16} />
+                  {r.data.okumaDk} dakikalık okuma
+                  <span class="ykart__ok" aria-hidden="true">
+                    <Ikon ad="arrow-right" boyut={20} />
+                  </span>
+                </p>
+              </li>
+            );
+          })
+        }
+      </ul>
+      <p class="dizin__durum kucuk ikincil" role="status" aria-live="polite" data-suzgec-durumu></p>
+    </div>
+  </section>
+
+  <!-- İki okuma yolu -->
+  <section class="bolum" id="nereden-baslamali">
+    <div class="sarici">
+      <div class="bolum-ust">
+        <h2 class="baslik-2">Hangi yazıdan başlamalısınız?</h2>
+        <p class="giris">Durumunuza göre iki okuma sırası hazırladık. İkisi de üç yazıdan oluşur; her yazı bir sonrakine hazırlar.</p>
+      </div>
+      <div class="yollar">
+        {
+          yollar.map((y, i) => (
+            <article class:list={['okuma', `okuma--${y.ton}`]} id={y.kimlik} data-gir style={`--gecikme:${i * 110}ms`}>
+              <div class="okuma__cizim" aria-hidden="true">
+                <Cizim src={y.cizim} sizes="(max-width: 47.99rem) 30vw, 13vw" genislikler={[240, 360, 520, 760]} />
+              </div>
+              <h3 class="okuma__baslik">{y.baslik}</h3>
+              <p class="okuma__metin">{y.metin}</p>
+              <ol class="okuma__adimlar">
+                {y.adimlar.map((a) => (
+                  <li>
+                    <a href={rehberUrl(a.rehber)}>{a.rehber.data.soru}</a>
+                    <span>{a.neden}</span>
+                  </li>
+                ))}
+              </ol>
+              <a
+                class:list={['dugme', y.ton === 'acik' && 'dugme--murekkep']}
+                href="#gorusme"
+                data-kampanya-durumu={y.cagri.durum}
+                data-olay="cta_click"
+                data-yer={y.cagri.yer}
+              >
+                {y.cagri.etiket}
+                <Ikon ad="arrow-right" boyut={18} />
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Rehberler nasıl hazırlanıyor -->
+  <section class="bolum bolum--acik" id="yontem">
+    <div class="sarici konu konu--ust">
+      <div class="konu__baslik konu__baslik--cizimli">
+        <div>
+          <h2 class="baslik-2">Yazılar nasıl hazırlanıyor?</h2>
+          <div class="metin">
+            <p>
+              Soruları, işletmelerden en sık duyduklarımız arasından seçiyoruz. Amaç, sorunun nerede olduğunu kendi
+              hesabınızda görebilmeniz: önce inceleme, sonra bulguya dayanan düzeltme.
+            </p>
+          </div>
+        </div>
+        <Cizim src={defter} class="konu__cizim" sizes="(max-width: 55.99rem) 40vw, 16vw" />
+      </div>
+      <div class="konu__icerik">
+        <ul class="tikli tikli--ikili yontem">
+          {
+            yontem.map((y) => (
+              <li>
+                <strong>{y.ad}</strong>
+                <span>{y.aciklama}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div id="hizmetler">
+    <IlgiliSayfalar
+      baslik="Reklam yönetimi ve SEO hizmetlerimiz"
+      giris="Yazılardaki adımları kendiniz uygulayabilirsiniz. Vaktiniz yoksa incelemeyi, kurulumu ve düzenli optimizasyonu biz üstleniyoruz."
+      sayfalar={[
+        hizmetKarti('google-ads', 'Google Ads yönetimi'),
+        hizmetKarti('meta', 'Instagram ve Facebook reklam yönetimi'),
+        hizmetKarti('seo', 'SEO danışmanlığı'),
+        hizmetKarti('web', 'Kurumsal web tasarım'),
+      ]}
+    />
+  </div>
+
+  <GorusmeBandi
+    baslik="Sorunuz burada yoksa bize sorun."
+    metin="Reklamlarınızda ya da sitenizde takıldığınız yeri yazın. Görüşmeye buradan başlayalım."
+    kanal="belirsiz"
+    cagri="Görüşme isteyin"
+    konum="rehberler"
+  />
+</Temel>
+
+<script>
+  // Konu süzgeci: konuya uymayan kartları gizler. Betik çalışmazsa bütün yazılar görünür.
+  const kok = document.querySelector<HTMLElement>('[data-suzgec]');
+  const kartlar = [...document.querySelectorAll<HTMLElement>('[data-rehber-listesi] > li')];
+  const durum = document.querySelector<HTMLElement>('[data-suzgec-durumu]');
+  if (kok && kartlar.length) {
+    const dugmeler = [...kok.querySelectorAll<HTMLButtonElement>('[data-konu]')];
+    const hareketAz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const uygula = (konu: string) => {
+      let adet = 0;
+      kartlar.forEach((k) => {
+        const gorunur = konu === 'hepsi' || (k.dataset.hizmetler || '').split(' ').includes(konu);
+        k.hidden = !gorunur;
+        if (gorunur) {
+          adet++;
+          // Süzgeçten sonra kartlar beklemeden görünür.
+          k.classList.add('girdi-goruldu');
+        }
+      });
+      return adet;
+    };
+
+    kok.addEventListener('click', (e) => {
+      const dugme = (e.target as Element).closest<HTMLButtonElement>('[data-konu]');
+      if (!dugme || dugme.getAttribute('aria-pressed') === 'true') return;
+      const konu = dugme.dataset.konu!;
+      dugmeler.forEach((d) => d.setAttribute('aria-pressed', String(d === dugme)));
+      const yaz = (adet: number) => {
+        if (durum) durum.textContent = konu === 'hepsi' ? '' : `${dugme.firstChild?.textContent?.trim()} konusunda ${adet} yazı gösteriliyor.`;
+      };
+      // Destekleyen tarayıcıda kartlar yeni yerlerine kayarak geçer.
+      const gecis = (document as Document & { startViewTransition?: (f: () => void) => { finished: Promise<void> } }).startViewTransition;
+      if (gecis && !hareketAz) {
+        kartlar.forEach((k, i) => (k.style.viewTransitionName = `yazi-karti-${i}`));
+        const temizle = () => kartlar.forEach((k) => (k.style.viewTransitionName = ''));
+        gecis.call(document, () => yaz(uygula(konu))).finished.then(temizle, temizle);
+      } else {
+        yaz(uygula(konu));
+      }
+    });
+  }
+</script>
+
+<style>
+  /* ---- Üst alan: metin solda, kitaplık sağda ---------------------------------- */
+  .rk {
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(2rem, 4vw, 3.5rem);
+  }
+  .rk__ic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: clamp(1.25rem, 2.6vw, 2.25rem);
+    align-items: center;
+  }
+  .rk__kirinti {
+    grid-column: 1 / -1;
+  }
+  .rk__metin {
+    grid-column: 1 / span 7;
+    display: grid;
+    justify-items: start;
+  }
+  .rk__baslik {
+    max-width: 11em;
+  }
+  .rk__giris {
+    margin-block-start: clamp(1.1rem, 2vw, 1.6rem);
+    --ara: 0.9em;
+  }
+  .rk__cizim {
+    grid-column: 9 / -1;
+    margin: -2.5rem -0.5rem -2.5rem 0;
+  }
+  @media (max-width: 61.99rem) {
+    .rk__ic {
+      row-gap: 0.75rem;
+    }
+    .rk__metin {
+      grid-column: 1 / -1;
+    }
+    .rk__cizim {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: min(46%, 13rem);
+      margin: -0.75rem 0 -1rem -1rem;
+    }
+  }
+
+  /* ---- Yazı kartları ------------------------------------------------------------- */
+  .dizin__ust {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-block-end: clamp(1.75rem, 3.5vw, 3rem);
+  }
+  .dizin__baslik {
+    margin-block-end: 0;
+  }
+  /* Süzgeç yalnız betik çalışırken anlamlıdır. */
+  .suzgec {
+    display: none;
+    gap: 0.6rem;
+  }
+  :global(.js) .suzgec {
+    display: grid;
+  }
+  .suzgec__ad {
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 640;
+    color: var(--ikincil);
+  }
+  .suzgec__dugmeler {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .suzgec__dugme {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.4rem 1rem;
+    border: 1.5px solid var(--cizgi-koyu);
+    border-radius: 999px;
+    background: var(--beyaz);
+    font-family: var(--yazi-baslik);
+    font-size: 0.9875rem;
+    font-weight: 600;
+    font-stretch: 96%;
+    line-height: 1.1;
+    color: var(--murekkep);
+    transition:
+      background-color var(--hizli),
+      border-color var(--hizli),
+      color var(--hizli);
+  }
+  .suzgec__dugme .rakam {
+    font-weight: 500;
+    color: var(--ikincil);
+  }
+  .suzgec__dugme:hover {
+    border-color: var(--murekkep);
+  }
+  .suzgec__dugme[aria-pressed='true'] {
+    background: var(--murekkep);
+    border-color: var(--murekkep);
+    color: var(--beyaz);
+  }
+  .suzgec__dugme[aria-pressed='true'] .rakam {
+    color: rgb(255 255 255 / 0.72);
+  }
+
+  /* Kartlar: üç sütun, eş ölçü. Her kart beş satırdır (görsel, konu, soru, elinize geçen, süre) ve satırlar
+     subgrid ile komşu kartlarla aynı hizada durur. Satır arası ile kart içi boşluk eşit tutulur; kart sıraları
+     arasındaki fazladan boşluk alt kenar boşluğuyla verilir. */
+  .kartlar {
+    --kart-arasi: clamp(0.9rem, 1.6vw, 1.5rem);
+    --ic: clamp(1.05rem, 1.7vw, 1.5rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--kart-arasi);
+    row-gap: 0.7rem;
+  }
+  .ykart {
+    position: relative;
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+    justify-items: start;
+    align-items: start;
+    margin-block-end: calc(var(--kart-arasi) - 0.7rem);
+    padding-block-end: var(--ic);
+    border-radius: var(--kose);
+    background: var(--yuzey, var(--kagit));
+    overflow: hidden;
+    transition:
+      transform 240ms var(--yumusak),
+      box-shadow 240ms var(--yumusak);
+  }
+  .ykart[hidden] {
+    display: none;
+  }
+  .ykart > :not(.ykart__gorsel) {
+    margin-inline: var(--ic);
+  }
+  .ykart__gorsel {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    margin-block-end: 0.35rem;
+    overflow: hidden;
+    background: var(--mavi-acik);
+  }
+  .ykart__gorsel :global(picture),
+  .ykart__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .ykart__gorsel :global(img) {
+    object-fit: cover;
+    transition: transform 700ms var(--yumusak);
+  }
+  .ykart__gorsel--cizim {
+    display: grid;
+    place-items: center;
+  }
+  .ykart__gorsel--cizim :global(picture) {
+    width: 46%;
+    height: auto;
+  }
+  .ykart__gorsel--cizim :global(img) {
+    height: auto;
+    object-fit: contain;
+  }
+  .ykart__konular {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .ykart__konular li {
+    padding: 0.32em 0.65em 0.36em;
+    border-radius: 2px;
+    background: var(--mavi-acik);
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-mikro);
+    font-weight: 650;
+    line-height: 1;
+    color: var(--mavi-koyu);
+  }
+  .ykart__soru {
+    font-size: clamp(1.25rem, 1.08rem + 0.62vw, 1.6rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+  .ykart__soru a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Kartın tamamı tıklanır; bağlantının adı sorunun kendisidir. */
+  .ykart__soru a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .ykart__soru a:focus-visible {
+    outline: none;
+  }
+  .ykart:has(.ykart__soru a:focus-visible) {
+    outline: 2px solid var(--mavi);
+    outline-offset: 3px;
+  }
+  /* Üzerine gelince soru kırmızı kalemle çizilir. */
+  .ykart__soru span {
+    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 96% / 0 0.09em;
+    transition: background-size 520ms cubic-bezier(0.6, 0.05, 0.25, 1);
+  }
+  .ykart:hover .ykart__soru span,
+  .ykart:focus-within .ykart__soru span {
+    background-size: 100% 0.09em;
+  }
+  .ykart__gecen {
+    font-size: var(--b-kucuk);
+    line-height: 1.48;
+    color: var(--murekkep-2);
+  }
+  .ykart__alt {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    align-self: end;
+    width: calc(100% - 2 * var(--ic));
+    font-family: var(--yazi-baslik);
+    font-size: var(--b-kucuk);
+    font-weight: 600;
+    color: var(--ikincil);
+  }
+  .ykart__alt > :global(svg) {
+    flex: none;
+  }
+  .ykart__ok {
+    margin-inline-start: auto;
+    color: var(--kirmizi);
+  }
+  @media (hover: hover) {
+    .ykart:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0.4rem 0.4rem 0 rgb(23 61 166 / 0.2);
+    }
+    .ykart:hover .ykart__gorsel :global(img) {
+      transform: scale(1.045);
+    }
+    .ykart:hover .ykart__ok :global(svg) {
+      animation: ok-gec 460ms var(--yumusak);
+    }
+  }
+  .dizin__durum {
+    margin-block-start: 1rem;
+    min-height: 1.5em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ykart,
+    .ykart__gorsel :global(img),
+    .ykart__soru span {
+      transition: none;
+    }
+    .ykart:hover,
+    .ykart:hover .ykart__gorsel :global(img) {
+      transform: none;
+    }
+  }
+  @media (max-width: 61.99rem) {
+    .kartlar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* Telefonda kart yatay bir satıra döner: solda kare kapak, sağda konu, soru ve süre. Liste hızlı taranır. */
+  @media (max-width: 43.99rem) {
+    .kartlar {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 0.75rem;
+    }
+    .ykart {
+      grid-row: auto;
+      grid-template-columns: 6.25rem minmax(0, 1fr);
+      grid-template-rows: auto auto 1fr;
+      column-gap: 0.9rem;
+      row-gap: 0.4rem;
+      align-items: start;
+      margin-block-end: 0;
+      padding: 0.75rem;
+    }
+    .ykart > :not(.ykart__gorsel) {
+      margin-inline: 0;
+    }
+    .ykart__gorsel {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      aspect-ratio: 1;
+      margin: 0;
+      border-radius: 3px;
+    }
+    .ykart__konular,
+    .ykart__soru,
+    .ykart__alt {
+      grid-column: 2;
+    }
+    .ykart__soru {
+      font-size: 1.14rem;
+      line-height: 1.12;
+    }
+    .ykart__gecen {
+      display: none;
+    }
+    .ykart__alt {
+      width: 100%;
+      font-size: var(--b-mikro);
+    }
+    .suzgec,
+    .suzgec__dugmeler {
+      width: 100%;
+    }
+  }
+
+  /* ---- Yazılar nasıl hazırlanıyor: dört kart tek sırada, dar ekranda ikişer ---------- */
+  @media (min-width: 44rem) {
+    .yontem {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 75rem) {
+    .yontem {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* ---- İki okuma yolu ------------------------------------------------------------
+     Her panelde kırmızı kalem çizgisi üstünde üç rehber. Panelin rengi --panel ile verilir; numara halkaları aynı rengi alır. */
+  .yollar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.4rem);
+  }
+  .okuma {
+    --panel: var(--mavi-acik);
+    --bosluk: clamp(6.25rem, 11.5vw, 10.25rem);
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.9rem;
+    align-content: start;
+    justify-items: start;
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+    border-radius: var(--kose);
+    background: var(--panel);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .okuma--beyaz {
+    --panel: var(--beyaz);
+  }
+  /* Görsel sağ üst köşede durur. z-index verilmez: verilirse zemine karışmaz. */
+  .okuma__cizim {
+    position: absolute;
+    top: clamp(0.3rem, 1vw, 0.9rem);
+    right: clamp(0.2rem, 1vw, 0.9rem);
+    width: clamp(6.25rem, 11.5vw, 10.25rem);
+  }
+  .okuma > :not(.okuma__cizim) {
+    position: relative;
+  }
+  .okuma__baslik {
+    max-width: calc(100% - var(--bosluk));
+    font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.4rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.05;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+  .okuma__metin {
+    max-width: min(34em, calc(100% - var(--bosluk)));
+    color: var(--murekkep-2);
+  }
+  .okuma__adimlar {
+    position: relative;
+    display: grid;
+    gap: 1.35rem;
+    align-content: start;
+    width: 100%;
+    margin-block: 0.9rem 0.9rem;
+    counter-reset: okuma-adimi;
+  }
+  /* Kırmızı kalem çizgisi her halkadan bir sonrakine iner; son halkada biter. */
+  .okuma__adimlar li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: calc(1.15rem - 1.5px);
+    top: 2.1rem;
+    bottom: -1.2rem;
+    width: 3px;
+    background: var(--kirmizi);
+    filter: url(#kalem-dokusu);
+  }
+  .okuma__adimlar li {
+    counter-increment: okuma-adimi;
+    position: relative;
+    display: grid;
+    gap: 0.25rem;
+    min-height: 2.75rem;
+    padding-inline-start: 3.4rem;
+  }
+  .okuma__adimlar li::before {
+    content: counter(okuma-adimi);
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border: 3px solid var(--kirmizi);
+    border-radius: 50%;
+    background: var(--panel);
+    font-family: var(--yazi-baslik);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--kirmizi);
+    font-variant-numeric: lining-nums;
+  }
+  .okuma__adimlar li:last-child::before {
+    background: var(--kirmizi);
+    color: var(--beyaz);
+    box-shadow: 0 0 0 4px rgb(185 35 56 / 0.16);
+  }
+  .okuma__adimlar a {
+    justify-self: start;
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.32rem);
+    font-weight: 660;
+    font-stretch: 91%;
+    letter-spacing: -0.012em;
+    line-height: 1.18;
+    color: var(--murekkep);
+    text-decoration-color: var(--cizgi-koyu);
+    text-underline-offset: 0.22em;
+  }
+  /* Satırın tamamı tıklanır. */
+  .okuma__adimlar a::after {
+    content: '';
+    position: absolute;
+    inset: -0.4rem 0;
+  }
+  .okuma__adimlar a:hover {
+    text-decoration-color: var(--kirmizi);
+  }
+  .okuma__adimlar span {
+    max-width: 34em;
+    font-size: var(--b-kucuk);
+    line-height: 1.45;
+    color: var(--murekkep-2);
+  }
+  @media (max-width: 55.99rem) {
+    .yollar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .okuma {
+      --bosluk: 5.25rem;
+    }
+    .okuma__cizim {
+      width: 5.5rem;
+    }
+    .okuma__metin {
+      max-width: none;
+    }
+    .okuma .dugme {
+      width: 100%;
+    }
+  }
+</style>

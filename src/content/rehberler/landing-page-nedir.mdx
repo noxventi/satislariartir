@@ -1,0 +1,233 @@
+---
+no: 17
+kapak: landing-page
+kapakAlt: "Piste inmiş kâğıttan bir uçak; pistin kırmızı kalemle çizilmiş orta çizgisini izleyen yolcular, görevlisi form uzatan küçük bir büfeye doğru yürüyor"
+soru: "Landing page (açılış sayfası) nedir, nasıl olmalı?"
+baslik: Landing Page (Açılış Sayfası) Nedir?
+aciklama: >-
+  Landing page (açılış sayfası) nedir, ana sayfadan farkı ne? Reklama tıklayan kişinin indiği sayfanın bölümleri,
+  ilk ekran örneği ve telefonda kontrol listesi.
+aramalar:
+  - landing page nedir
+  - açılış sayfası nedir
+  - landing page örnekleri
+kisaCevap: >-
+  Landing page (açılış sayfası), bir reklama ya da bağlantıya tıklayan kişinin ulaştığı sayfadır. Ana sayfadan farkı,
+  tek bir aramaya cevap vermesi ve ziyaretçiden tek bir işlem istemesidir: aramak, form doldurmak ya da satın almak.
+  İlk ekranı reklamdaki sözü sürdürür, ardından hizmeti, kanıtı ve çağrıyı gösterir. Google Ads’te açılış sayfası
+  deneyimi, kalite puanını oluşturan üç bileşenden biridir.
+elinizeGecen: Ana sayfa karşılaştırması, sayfanın beş bölümü, ilk ekran örneği ve mobil kontrol
+hizmetler: [web, google-ads]
+hizmetBaglantisi:
+  etiket: Reklam açılış sayfaları ve web tasarım
+  url: /hizmetler/web-tasarim/
+sonraki: google-ads-tiklama-var-telefon-yok
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: inceleme
+okumaDk: 7
+kaynaklar:
+  - ad: Google Ads Yardım, Açılış sayfası
+    url: https://support.google.com/google-ads/answer/14086?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Arama Ağı kampanyaları için kalite puanı hakkında
+    url: https://support.google.com/google-ads/answer/6167118?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Performansınızı artırmak için kalite puanını kullanmanın 5 yolu
+    url: https://support.google.com/google-ads/answer/6167130?hl=tr
+    tur: resmi
+  - ad: Google Ads Reklam Politikaları Yardım, Hedefle ilgili koşullar
+    url: https://support.google.com/adspolicy/answer/6368661?hl=tr
+    tur: resmi
+  - ad: Google Ads Yardım, Reklam sıralaması hakkında
+    url: https://support.google.com/google-ads/answer/1722122?hl=tr
+    tur: resmi
+---
+
+import Akis from '../../components/blog/Akis.astro';
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+import KontrolListesi from '../../components/rehber/KontrolListesi.astro';
+
+Karşıyaka’da bir pilates stüdyosu “reformer pilates deneme dersi” aramasına reklam veriyor. Reklama tıklayan kişinin önüne stüdyonun ana sayfası açılıyor: hakkımızda, eğitmenler, galeri, blog. Deneme dersinin nerede yazdığını ilk ekranda göremeyen kişi geri tuşuna basıyor.
+
+Açılış sayfası (landing page) bu boşluğu kapatan sayfadır. Reklamda verilen sözün devamını ilk ekranda gösterir ve ziyaretçiden tek bir şey ister.
+
+<Akis
+  asamalar={[
+    { ad: 'Arama', aciklama: 'Kişi ihtiyacını Google’a yazar.' },
+    { ad: 'Reklam', aciklama: 'Reklam o aramaya bir söz verir.', olcu: 'Reklam alaka düzeyi' },
+    { ad: 'İlk ekran', aciklama: 'Sayfa aynı sözü sürdürür.', olcu: 'Açılış sayfası deneyimi' },
+    { ad: 'Talep', aciklama: 'Kişi arar ya da formu doldurur.', olcu: 'Dönüşüm oranı' },
+  ]}
+/>
+
+## Landing page (açılış sayfası) nedir?
+
+Google Ads’in sözlüğüne göre açılış sayfası, reklama tıklayan kişinin ulaştığı web sayfasıdır. Reklamı kurarken her reklam için bir nihai URL yazarsınız ve tıklayan kişi o adrese gider. Google’ın politikasına göre bu sayfa, reklamda görünen adresle aynı alan adında olmalıdır. Bu tanıma göre ana sayfanız da bir açılış sayfası olabilir. Gündelik kullanımda ise terim, tek bir reklam ya da kampanya için hazırlanmış ayrı sayfayı anlatır.
+
+Terim yalnız Google reklamlarına özgü değildir. Instagram reklamından, bir e-postadan ya da broşürdeki karekoddan gelen kişinin indiği sayfa da açılış sayfasıdır. Ortak nokta, ziyaretçinin belli bir beklentiyle gelmesidir.
+
+## Landing page örnekleri nelerdir?
+
+Bir işletmenin aynı anda birkaç açılış sayfası olabilir. Küçük işletmelerde en sık üç tür görülür:
+
+- **Hizmet ve bölge sayfası.** “Karşıyaka koltuk yıkama” aramasına, yalnız o hizmeti ve o bölgeyi anlatan sayfa.
+- **Kampanya sayfası.** Belli bir dönemin teklifini anlatan sayfa: deneme dersi, sezon açılışı, yeni ürün.
+- **Form sayfası.** Keşif ya da teklif isteyen kişiden bilgi alan, başka hiçbir yere götürmeyen sayfa.
+
+Üçünün ortak yanı, sayfaya gelen kişinin ne aradığının önceden bilinmesidir. Sayfa o aramanın cevabıyla açılır; işletmenin geri kalanını anlatmak ana sayfanın işidir.
+
+Her reklamın bir açılış sayfasına ihtiyacı da yoktur. Instagram reklamı kişiyi WhatsApp’a ya da Meta’nın kendi formuna götürüyorsa site devreye girmez. O durumun hazırlığını [Instagram’da reklam vermek için gerekenler](/blog/meta-reklam-vermek-icin-gerekenler/) yazısında bulursunuz.
+
+## Açılış sayfası ile ana sayfa arasındaki fark nedir?
+
+Ana sayfa işletmeyi bütün yönleriyle tanıtır ve her ziyaretçiye ayrı bir kapı açar. Açılış sayfası tek bir aramaya cevap verir.
+
+<Karsilastirma
+  uygunEtiketi="Kim gelir"
+  sol={{
+    ust: 'Herkes için',
+    baslik: 'Ana sayfa',
+    maddeler: [
+      'Bütün hizmetleri ve işletmeyi tanıtır.',
+      'Menü, alt sayfalar ve birçok bağlantı içerir.',
+      'Ziyaretçi nereye gideceğini kendi seçer.',
+    ],
+    uygun: 'İşletmeyi adıyla arayan, tanımak isteyen kişi',
+  }}
+  sag={{
+    ust: 'Tek arama için',
+    baslik: 'Açılış sayfası',
+    maddeler: [
+      'Tek bir hizmeti ya da teklifi anlatır.',
+      'Reklamdaki sözü ilk ekranda sürdürür.',
+      'Tek bir işlem ister: arama, form ya da satın alma.',
+    ],
+    uygun: 'Reklama tıklayan, belli bir hizmeti arayan kişi',
+  }}
+/>
+
+Her kampanya için ayrı bir sayfa kurmak şart değildir. Hizmet sayfanız aramaya doğrudan cevap veriyorsa ve çağrı ilk ekrandaysa o sayfa açılış sayfası işini görür. Ayrı sayfa, hizmet sayfasının genel kaldığı durumlarda gerekir: tek bir ilçe, tek bir kampanya dönemi, tek bir ürün.
+
+## Açılış sayfası nasıl olmalı?
+
+Bir açılış sayfası yukarıdan aşağıya beş bölümden oluşur. Sıra, ziyaretçinin aklından geçen soruların sırasıdır: doğru yere mi geldim, bu iş bana göre mi, bunlara güvenebilir miyim, şimdi ne yapacağım?
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Başlık',
+      aciklama: 'Reklamdaki sözü, arayan kişinin kelimeleriyle sürdürür. Kaydırmadan, ilk ekranda okunur.',
+    },
+    {
+      ad: 'Tek çağrı',
+      aciklama: 'İlk ekranda tek bir düğme durur: ara, WhatsApp’tan yaz ya da formu doldur. Sayfanın devamında aynı çağrı yinelenir.',
+      not: 'Telefonda numaraya dokununca arama ekranı açılmalı.',
+    },
+    {
+      ad: 'Ne sunduğunuz',
+      aciklama: 'Hizmetin kapsamı, nasıl ilerlediği ve kimler için uygun olduğu; birkaç kısa madde ya da görselle.',
+    },
+    {
+      ad: 'Kanıt',
+      aciklama: 'Yaptığınız işlerin fotoğrafı, gerçek müşteri yorumu ya da belge. Ziyaretçi sözünüzü buradan sınar.',
+      not: 'Hazır fotoğraf ve uydurma yorum güveni düşürür; az ama gerçek malzeme kullanın.',
+    },
+    {
+      ad: 'Form ya da telefon',
+      aciklama: 'Yalnız gerekli alanları soran kısa bir form ve yanında telefon numarası. Gönderince ne olacağı yazılır.',
+    },
+  ]}
+/>
+
+Sayfada neyin bulunmadığı da bir karardır. Ziyaretçiyi çağrıdan uzaklaştıran her bağlantı bir çıkış kapısıdır. Google da açılış sayfası deneyimini değerlendirirken sayfadaki bağlantı sayısına ve sayfada gezinmenin kolaylığına baktığını yazar. Üst menüyü sadeleştirmek, alt sayfalara giden bağlantıları azaltmak bu yüzden yaygın bir tercihtir.
+
+Aşağıdaki örnek, beş bölümün ilk ikisini aynı reklam için iki ayrı sayfada gösterir.
+
+<Ornek
+  baslik="“reformer pilates deneme dersi” reklamının açtığı iki ilk ekran"
+  not="Stüdyo ve metinler temsilidir. Kendi reklam metninizi yanınıza alıp sayfanızın ilk ekranıyla aynı karşılaştırmayı yapabilirsiniz."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">İlk ekrandaki öğe</th>
+        <th scope="col">Reklam ana sayfayı açarsa</th>
+        <th scope="col">Reklam açılış sayfasını açarsa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="İlk ekrandaki öğe"><strong>Başlık</strong></td>
+        <td data-baslik="Ana sayfa">“Sağlıklı yaşamın adresi”</td>
+        <td data-baslik="Açılış sayfası">“Reformer pilatesi bir deneme dersiyle tanıyın”</td>
+      </tr>
+      <tr>
+        <td data-baslik="İlk ekrandaki öğe"><strong>Alt satır</strong></td>
+        <td data-baslik="Ana sayfa">“Stüdyomuz, eğitmenlerimiz ve derslerimiz”</td>
+        <td data-baslik="Açılış sayfası">“Karşıyaka’da, dört kişilik gruplarla, eğitmen eşliğinde”</td>
+      </tr>
+      <tr>
+        <td data-baslik="İlk ekrandaki öğe"><strong>Düğme</strong></td>
+        <td data-baslik="Ana sayfa">“Hakkımızda”</td>
+        <td data-baslik="Açılış sayfası">“Deneme dersi için gün seçin”</td>
+      </tr>
+      <tr>
+        <td data-baslik="İlk ekrandaki öğe"><strong>Ziyaretçinin gördüğü</strong></td>
+        <td data-baslik="Ana sayfa"><span class="hukum hukum--hayir">Aradığı söz yok</span></td>
+        <td data-baslik="Açılış sayfası"><span class="hukum hukum--evet">Aradığı söz ilk satırda</span></td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+İki ekranın tasarımı aynı olabilir; sonucu söz değiştirir. Ana sayfa işletmeyi anlatır; açılış sayfası arayan kişinin yazdığı cümleyi geri söyler ve bir sonraki adımı gösterir.
+
+## Açılış sayfası Google Ads’te reklamı nasıl etkiler?
+
+Google, reklam sıralamasını belirleyen etkenler arasında reklamın ve açılış sayfasının kalitesini de sayar. Bu değerlendirmenin hesaptaki özeti kalite puanıdır: her anahtar kelime için 1 ile 10 arasında bir değer. Puan üç bileşenden hesaplanır: beklenen tıklama oranı, reklam alaka düzeyi ve açılış sayfası deneyimi. Her bileşen “Ortalamanın üstünde”, “Ortalama” ya da “Ortalamanın altında” olarak gösterilir. Kalite puanının ayrıntısı [Google Ads nedir](/blog/google-ads-nedir/) yazısındadır.
+
+Google açılış sayfası deneyimini, sayfanın reklama tıklayan kişi için ne kadar alakalı ve yararlı olduğu diye tanımlar. İyileştirmek için saydığı adımlar kısadır:
+
+- **Aradığını sunun.** Koltuk yıkama reklamına tıklayan kişi koltuk yıkamayı anlatan sayfaya inmeli.
+- **Mesajı sürdürün.** Sayfa, reklamdaki teklifin ya da çağrının devamı olmalı.
+- **Mobil uyumlu yapın.** Telefonda gezinmenin kolaylığı ayrıca değerlendirilir.
+- **Hızlandırın.** Geç açılan sayfada ziyaretçi beklemeden çıkar.
+
+Arama terimindeki kelimelerin sayfada harfi harfine geçmesi gerekmez; aranan şeyin sayfada bulunması yeter. Bir de alt sınır vardır. Google’ın reklam politikası, reklamın açtığı sayfanın çalışmasını ve kolay gezinilebilir olmasını şart koşar. Hata veren ya da “yapım aşamasında” yazan bir sayfaya giden reklam onaylanmaz.
+
+<Not baslik="Kalite puanı bir teşhis aracıdır" tur="ipucu">
+  Google kalite puanını bir performans göstergesi olarak sunmaz; reklamın, anahtar kelimenin ya da sayfanın nerede
+  geliştirilebileceğini gösteren bir teşhis aracı olarak tanımlar. Açılış sayfası deneyimi “Ortalamanın altında”
+  görünüyorsa bakılacak yer sayfanın kendisidir: ilk ekran, hız ve telefondaki kullanım.
+</Not>
+
+## Açılış sayfası mobilde nasıl kontrol edilir?
+
+Reklama tıklayan kişinin elinde büyük ihtimalle telefon vardır. Sayfayı bilgisayarda hazırlayıp telefonda hiç açmamak sık yapılan bir hatadır. Aşağıdaki kontrolü Wi-Fi’yi kapatıp mobil veriyle yapın.
+
+Hız için Google’ın ücretsiz aracı PageSpeed Insights’a sayfanın adresini yazın. Araç, sayfanın mobil ve masaüstündeki kullanıcı deneyimini raporlar ve iyileştirme önerilerini sıralar. Sonuçtaki her maddeyi anlamanız gerekmez; listeyi sitenizi yapan kişiye iletmeniz yeter.
+
+<AraGorsel cizim="taslak" alt="Yan yana duran dizüstü bilgisayar ile telefonun tel kafes çizimi">
+  Sayfanızı bilgisayar ekranında onaylamayın; reklama tıklayan kişinin gördüğü ekran, elinizdeki telefonun ekranıdır.
+</AraGorsel>
+
+<KontrolListesi
+  kimlik="acilis-sayfasi-mobil"
+  baslik="Telefonda açılış sayfası kontrolü"
+  adimlar={[
+    'Sayfa mobil veriyle açıldığında başlık ve çağrı düğmesi kaydırmadan görünüyor.',
+    'Başlık, reklam metnindeki sözü aynı kelimelerle sürdürüyor.',
+    'Telefon numarasına dokununca arama ekranı açılıyor; WhatsApp düğmesi doğru hatta gidiyor.',
+    'Formu telefonda doldurup gönderdim; başvuru bana ulaştı ve teşekkür ekranı açıldı.',
+    'Sayfada ziyaretçiyi başka yere götüren gereksiz menü ve bağlantı yok.',
+    'Sayfayı PageSpeed Insights’ta test ettim ve mobil sonuçtaki önerileri not aldım.',
+  ]}
+  not="Bir madde takılıyorsa reklam ayarlarına dokunmadan önce onu düzeltin; sayfadaki açığı kampanya değişikliği kapatmaz."
+/>
+
+Reklamınız yayındaysa en çok tıklama alan reklamı açın, açtığı sayfayı telefonunuzda yanına koyun ve iki metni karşılaştırın. Söz ile ilk ekran örtüşmüyorsa düzeltilecek ilk yer orasıdır. Sayfa baştan kurulacaksa [web tasarım](/hizmetler/web-tasarim/) hizmetimizde açılış sayfalarını reklamdaki sözle aynı başlıkla ve tek bir talebe götürecek şekilde hazırlıyoruz. Henüz reklam vermediyseniz [Google’a reklam nasıl verilir](/blog/google-reklam-nasil-verilir/) yazısı kurulum sırasını anlatır; tıklama alıp talep alamıyorsanız sıradaki yazı [tıklama var, telefon yok](/blog/google-ads-tiklama-var-telefon-yok/) durumunu inceler.
