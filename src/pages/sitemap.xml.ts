@@ -9,6 +9,7 @@ import { PROJELER } from '../data/projeler';
 import { indekslenir, rehberleriGetir, rehberUrl } from '../lib/rehberler';
 import { SEKTORLER, sektorUrl } from '../data/sektorler';
 import { YEREL_SAYFALAR, yerelUrl } from '../data/yerel';
+import { SOZLUK_SON_KONTROL } from '../data/sozluk';
 
 export const GET: APIRoute = async () => {
   const rehberler = (await rehberleriGetir()).filter(indekslenir);
@@ -26,6 +27,7 @@ export const GET: APIRoute = async () => {
     ...PROJELER.filter((p) => p.dosya).map((p) => ({ yol: p.dosya! })),
     { yol: '/blog/' },
     ...rehberler.map((r) => ({ yol: rehberUrl(r), degisim: r.data.sonKontrol.toISOString().slice(0, 10) })),
+    { yol: '/sozluk/', degisim: SOZLUK_SON_KONTROL.toISOString().slice(0, 10) },
     { yol: '/hakkimizda/' },
     { yol: '/iletisim/' },
     ...(yasalYayinda ? [{ yol: '/gizlilik/' }, { yol: '/aydinlatma/' }, { yol: '/cerez-tercihleri/' }, { yol: '/kullanim-kosullari/' }] : []),

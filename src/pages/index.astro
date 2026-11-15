@@ -324,13 +324,58 @@ const yapisalVeri = [
     '@type': 'Organization',
     '@id': `${SITE.url}/#kurum`,
     name: SITE.ad,
+    alternateName: 'Satislari Artir',
     url: `${SITE.url}/`,
-    logo: `${SITE.url}/logo.png`,
-    description: SITE.aciklama,
+    logo: {
+      '@type': 'ImageObject',
+      '@id': `${SITE.url}/#logo`,
+      url: `${SITE.url}/logo-kare.png`,
+      contentUrl: `${SITE.url}/logo-kare.png`,
+      width: 600,
+      height: 600,
+      caption: SITE.ad,
+    },
+    image: { '@id': `${SITE.url}/#logo` },
+    // Görünen tanım cümlesiyle aynı: yapay zekâ yanıtları markayı tek ve tutarlı bir cümleyle anlatsın.
+    description:
+      'Satışları Artır, Google Ads ve Instagram reklam yönetimini, SEO’yu, yapay zekâ görünürlüğünü (GEO) ve web tasarımını ayrıntılı bir incelemeyle kurup düzenli optimizasyonla geliştirerek işletmelerin satışlarını artırmak için çalışan bir dijital pazarlama ajansıdır.',
     ...(SITE.iletisim.telefon && { telephone: SITE.iletisim.telefon.replace(/\s/g, '') }),
     ...(SITE.iletisim.eposta && { email: SITE.iletisim.eposta }),
+    ...(SITE.iletisim.telefon && {
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          telephone: SITE.iletisim.telefon.replace(/\s/g, ''),
+          ...(SITE.iletisim.eposta && { email: SITE.iletisim.eposta }),
+          contactType: 'customer service',
+          availableLanguage: ['Turkish'],
+          areaServed: 'TR',
+        },
+      ],
+    }),
     areaServed: { '@type': 'Country', name: 'Türkiye' },
-    knowsAbout: ['Dijital pazarlama', 'Google Ads yönetimi', 'Meta reklam yönetimi', 'SEO danışmanlığı', 'GEO ve AEO', 'Web tasarımı'],
+    knowsAbout: [
+      'Dijital pazarlama',
+      'Google Ads yönetimi',
+      'Meta reklam yönetimi',
+      'Instagram reklamları',
+      'SEO danışmanlığı',
+      'Yerel SEO',
+      'GEO ve AEO',
+      'Yapay zekâ arama görünürlüğü',
+      'Dönüşüm takibi',
+      'Kurumsal web tasarımı',
+      'Açılış sayfası tasarımı',
+    ],
+    // Fiyatsız hizmet kataloğu: hangi hizmetin hangi sayfada anlatıldığını makinelere açıkça söyler.
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Dijital pazarlama hizmetleri',
+      itemListElement: HIZMETLER.map((h) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: h.ad, url: `${SITE.url}${h.url}` },
+      })),
+    },
   },
   {
     '@context': 'https://schema.org',

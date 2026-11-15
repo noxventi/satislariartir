@@ -39,7 +39,12 @@ const gruplar = [
   ...(sehirBaglantilari.length ? [{ ad: 'Şehirler', baglantilar: [...sehirBaglantilari, { etiket: 'Bütün şehirler', url: '/sehirler/' }] }] : []),
   {
     ad: 'Satışları Artır',
-    baglantilar: [...ANA_MENU.map((m) => ({ etiket: m.etiket, url: m.url })), { etiket: 'Tüm hizmetler', url: '/hizmetler/' }, { etiket: 'İletişim', url: '/iletisim/' }],
+    // Sözlük, Blog bağlantısının hemen altında durur.
+    baglantilar: [
+      ...ANA_MENU.flatMap((m) => [{ etiket: m.etiket, url: m.url }, ...(m.url === '/blog/' ? [{ etiket: 'Sözlük', url: '/sozluk/' }] : [])]),
+      { etiket: 'Tüm hizmetler', url: '/hizmetler/' },
+      { etiket: 'İletişim', url: '/iletisim/' },
+    ],
   },
 ];
 ---

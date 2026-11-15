@@ -144,6 +144,10 @@ const yapisalVeri = [
             gerektiğini, reklam verip sonuç alamıyorsanız önce nereye bakacağınızı burada bulursunuz.
           </p>
         </div>
+        <a class="ok-bag rk__sozluk" href="/sozluk/">
+          Terimlerin kısa tanımları için sözlük
+          <Ikon ad="arrow-right" boyut={16} />
+        </a>
       </div>
       <div class="rk__cizim">
         <Cizim
@@ -398,6 +402,11 @@ const yapisalVeri = [
   .rk__giris {
     margin-block-start: clamp(1.1rem, 2vw, 1.6rem);
     --ara: 0.9em;
+  }
+  .rk__sozluk {
+    margin-block-start: clamp(1rem, 1.8vw, 1.4rem);
+    min-height: 2.75rem;
+    align-items: center;
   }
   .rk__cizim {
     grid-column: 9 / -1;

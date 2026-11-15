@@ -68,17 +68,10 @@ const yapisalVeri = [
     name: 'Satışları Artır iletişim',
     url: `${SITE.url}/iletisim/`,
     inLanguage: 'tr-TR',
-    about: {
-      '@type': 'Organization',
-      '@id': `${SITE.url}/#kurum`,
-      name: SITE.ad,
-      url: `${SITE.url}/`,
-      ...(telefon && { telephone: telefon.replace(/\s/g, '') }),
-      ...(eposta && { email: eposta }),
-      ...(telefon && {
-        contactPoint: [{ '@type': 'ContactPoint', telephone: telefon.replace(/\s/g, ''), ...(eposta && { email: eposta }), contactType: 'customer service', availableLanguage: 'Turkish', areaServed: 'TR' }],
-      }),
-    },
+    isPartOf: { '@id': `${SITE.url}/#site` },
+    // Kurumun tam tanımı ana sayfada (#kurum); burada yalnız ona bağlanır ki tek bir varlık olarak okunsun.
+    about: { '@id': `${SITE.url}/#kurum` },
+    mainEntity: { '@id': `${SITE.url}/#kurum` },
   },
 ];
 ---

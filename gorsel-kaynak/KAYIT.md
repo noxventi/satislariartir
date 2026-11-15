@@ -303,3 +303,4 @@ görseli. Üçü de ilk üretimde kabul edildi; yazı, logo ve marka işareti yo
 | seo-ajansi-nasil-secilir | `dd7fde92-0537-4233-8081-5f2dadd12fc8` | Yan yana üç ajans vitrini, büyüteç ve kontrol listesi tutan esnaf, masada kırmızı halka |
 | reklam-ajansi-nedir | `33a52828-06c1-4b44-b2ed-afd045ee4905` | Yol ayrımı: solda baskı atölyesi ve boş pano, sağda telefon ve arama kutusu; müşteriler kırmızı çizgiyle dükkâna |
 | meta-reklam-yoneticisi-nasil-kullanilir | `5a9ac3a1-5f3d-44ca-bcb3-21fc82697a74` | Kaydırıcılı kumanda masası ve dosya rafı, boş ekranlı telefon, kırmızı çizgi dükkâna |
+| turkiye-dijital-pazarlama-arama-verileri-2026 | `6f7235e3-8d30-4570-a647-f2598443577a` | Çubuk grafik gibi soldan sağa yükselen beş dükkân, büyüteçli esnaf, çatılar boyunca kırmızı eğri |

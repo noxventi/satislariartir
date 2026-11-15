@@ -26,7 +26,7 @@ import Gorsel from '../components/Gorsel.astro';
 import Cizim from '../components/Cizim.astro';
 import Isaret from '../components/Isaret.astro';
 import Ikon from '../components/Ikon.astro';
-import { hizmetBul, SITE } from '../site.config';
+import { HIZMETLER, hizmetBul, SITE } from '../site.config';
 import { MUSTERI_SOZLERI, PROJELER, projeBul } from '../data/projeler';
 
 import atolye from '../assets/gorseller/atolye.jpg';
@@ -167,8 +167,28 @@ const yapisalVeri = [
     name: 'Satışları Artır hakkında',
     url: `${SITE.url}/hakkimizda/`,
     inLanguage: 'tr-TR',
-    about: { '@type': 'Organization', '@id': `${SITE.url}/#kurum`, name: SITE.ad, url: `${SITE.url}/` },
+    isPartOf: { '@id': `${SITE.url}/#site` },
+    about: { '@id': `${SITE.url}/#kurum` },
+    mainEntity: { '@id': `${SITE.url}/#kurum` },
   },
+];
+
+/**
+ * Kısaca Satışları Artır: insanın ve yapay zekâ yanıtlarının markayı tek bakışta, bağlamdan bağımsız okuyabileceği
+ * bilgi kartı. Yalnız sitede başka yerde zaten yazan olgular girer; yeni söz, yıl, kişi ya da sayı eklenmez.
+ */
+const KISACA: { soru: string; cevap: string; bag?: { etiket: string; url: string }[] }[] = [
+  {
+    soru: 'Ne yapar?',
+    cevap: 'Google Ads, Instagram ve Facebook reklam yönetimi, SEO danışmanlığı, yapay zekâ görünürlüğü (GEO ve AEO) ve kurumsal web tasarım.',
+    bag: HIZMETLER.map((h) => ({ etiket: h.menuAdi, url: h.url })),
+  },
+  { soru: 'Kimlerle çalışır?', cevap: 'Türkiye’nin her şehrinden işletmelerle: ilk kez reklam verecek olanlarla da, reklam hesabı ve sitesi olanlarla da.' },
+  { soru: 'Nasıl çalışır?', cevap: 'Önce hesabı, siteyi ve müşterinin aramalarını ayrıntılı inceler; kurulumu bulgulara göre yapar ve düzenli optimizasyonla geliştirir. Ölçüt, gelen talep ve satıştır.' },
+  { soru: 'Nereden çalışır?', cevap: 'Uzaktan. Görüşmeler telefonla ya da görüntülü yapılır; taslaklar ve raporlar yazılı paylaşılır.' },
+  { soru: 'Hesaplar kimde kalır?', cevap: 'Reklam hesabı, ölçüm hesapları ve site işletmenin adına açılır ve işletmede kalır; ajans erişimle çalışır.' },
+  { soru: 'Neye söz vermez?', cevap: 'Google’da sıralama, belli bir satış ya da belli bir tarih garantisi vermez.' },
+  { soru: 'Neyi yapmaz?', cevap: 'Tabela, matbaa, afiş ve açık hava reklamı; sosyal medya hesap yönetimi ve içerik üretimi; e-ticaret altyapısı kurulumu.' },
 ];
 ---
 
@@ -198,6 +218,7 @@ const yapisalVeri = [
 
   <BuSayfada
     bolumler={[
+      { etiket: 'Kısaca', hedef: 'kisaca' },
       { etiket: 'Hikâyemiz', hedef: 'hikaye' },
       { etiket: 'Çalışma ilkelerimiz', hedef: 'ilkeler' },
       { etiket: 'Nasıl ilerliyoruz?', hedef: 'yontem' },
@@ -206,6 +227,55 @@ const yapisalVeri = [
       { etiket: 'Sık sorulanlar', hedef: 'sss' },
     ]}
   />
+
+  <!-- Kısaca: bağlamdan bağımsız okunabilen bilgi kartı -->
+  <section class="bolum bolum--beyaz ks" id="kisaca" aria-labelledby="kisaca-baslik">
+    <div class="sarici ks__ic">
+      <div class="ks__ust">
+        <h2 class="baslik-2" id="kisaca-baslik">Kısaca Satışları Artır</h2>
+        <p class="giris">
+          Satışları Artır, işletmelerin internetten müşteri bulması ve satışlarını artırması için çalışan bir dijital
+          pazarlama ajansıdır.
+        </p>
+      </div>
+      <dl class="ks__liste">
+        {
+          KISACA.map((k) => (
+            <div class="ks__satir">
+              <dt>{k.soru}</dt>
+              <dd>
+                <p>{k.cevap}</p>
+                {k.bag && (
+                  <ul class="ks__bag">
+                    {k.bag.map((b) => (
+                      <li>
+                        <a href={b.url}>{b.etiket}</a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </dd>
+            </div>
+          ))
+        }
+        <div class="ks__satir">
+          <dt>Nasıl ulaşılır?</dt>
+          <dd>
+            {SITE.iletisim.telefon && (
+              <p>
+                Telefon ve WhatsApp: <a href={`tel:${SITE.iletisim.telefon.replace(/\s/g, '')}`}>{SITE.iletisim.telefon.replace(/^\+90 /, '0')}</a>
+              </p>
+            )}
+            {SITE.iletisim.eposta && (
+              <p>
+                E-posta: <a href={`mailto:${SITE.iletisim.eposta}`}>{SITE.iletisim.eposta}</a>
+              </p>
+            )}
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
 
   <!-- Hikâyemiz -->
   <section class="bolum hy" id="hikaye">
@@ -427,6 +497,68 @@ const yapisalVeri = [
 </Temel>
 
 <style>
+  /* ---- Kısaca: solda başlık ve tek cümlelik tanım, sağda soru ve cevap satırları (künye düzeni). */
+  .ks__ic {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(1.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .ks__ust .giris {
+    margin-top: 1rem;
+  }
+  .ks__liste {
+    margin: 0;
+    border-top: 2px solid var(--murekkep);
+  }
+  .ks__satir {
+    display: grid;
+    grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr);
+    gap: 0.5rem 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--cizgi);
+  }
+  .ks__satir dt {
+    font-family: var(--yazi-baslik);
+    font-weight: 700;
+    color: var(--murekkep);
+  }
+  .ks__satir dd {
+    margin: 0;
+  }
+  .ks__satir dd p {
+    margin: 0;
+  }
+  .ks__satir dd p + p {
+    margin-top: 0.35rem;
+  }
+  .ks__satir a {
+    color: var(--mavi);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .ks__bag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--b-kucuk);
+  }
+  @media (max-width: 55.99rem) {
+    .ks__ic {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 35.99rem) {
+    .ks__satir {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+
   /* ---- Hikâyemiz: solda açılır kitap sahnesi (4:5, lacivert sert gölge), sağda başlık, iki söz ve üç paragraf. */
   .hy__ic {
     display: grid;
