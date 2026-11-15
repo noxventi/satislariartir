@@ -1,0 +1,344 @@
+---
+no: 46
+kapak: meta-reklam-yoneticisi-nasil-kullanilir
+kapakAlt: "Kâğıttan bir kumanda masası: kaydırıcılar, çevirmeli düğmeler ve üç katlı dosya rafı; masadan çıkan kırmızı kalem çizgisi dev bir telefonun ekranından geçip ışıkları yanan bir dükkâna ulaşıyor."
+soru: Meta Reklam Yöneticisi nedir, nasıl kullanılır?
+baslik: Meta Reklam Yöneticisi Nasıl Kullanılır?
+aciklama: >-
+  Meta Reklam Yöneticisi nedir, nasıl kullanılır? Kampanya yapısı, amaç seçimi, bütçe, piksel, reklam
+  değerlendirmesi ve ilk kampanyada yapılan hatalar.
+aramalar:
+  - meta reklam yöneticisi
+  - meta reklam nedir
+  - meta ads nedir
+  - reklam yöneticisi nasıl kullanılır
+kisaCevap: >-
+  Meta Reklam Yöneticisi, Facebook, Instagram ve diğer Meta teknolojilerinde reklam kampanyası kurmak, yönetmek ve
+  sonuçlarını görmek için kullanılan araçtır. Düzenli reklam veren işletmeler, reklamı yöneten çalışanlar ve ajanslar
+  kullanır. Business Suite’teki reklam aracı ve gönderiyi öne çıkarma seçeneği birkaç ayarla tek bir reklam açar;
+  Reklam Yöneticisi’nde amaç, hedef kitle, bütçe, reklam alanı ve ölçüm ayrı ayrı belirlenir.
+elinizeGecen: Hesap yapısının temsili örneği, altı kampanya amacının kartları, piksel kurulum sırası ve ilk kampanya hataları tablosu
+hizmetler: [meta]
+hizmetBaglantisi:
+  etiket: Reklam Yöneticisi’nde ilk kampanyanızı kuracaksanız
+  url: /hizmetler/meta-reklam-yonetimi/#ilk-kampanya
+sonraki: instagram-reklam-ucretleri
+yayinTarihi: 2026-11-15
+sonKontrol: 2026-11-15
+durum: yayinda
+okumaDk: 9
+kaynaklar:
+  - ad: Meta İşletme Yardım Merkezi, Meta Reklam Yöneticisi hakkında
+    url: https://www.facebook.com/business/help/200000840044554
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, Meta Reklam Yöneticisi’ndeki kampanyalar, reklam setleri ve reklamlar hakkında
+    url: https://www.facebook.com/business/help/706063442820839
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, Meta Reklam Yöneticisi’nde reklam verme amacı seçme
+    url: https://www.facebook.com/business/help/1438417719786914
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, Bütçeler hakkında
+    url: https://www.facebook.com/business/help/214319341922580
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, İnternet sitenizde Meta Pikselini ve olayları ayarlama
+    url: https://www.facebook.com/business/help/952192354843755
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, Dönüşümler API’si hakkında
+    url: https://www.facebook.com/business/help/2041148702652965
+    tur: resmi
+  - ad: Meta İşletme Yardım Merkezi, Değerlendirmede görünen reklamlar hakkında
+    url: https://www.facebook.com/business/help/204798856225114
+    tur: resmi
+---
+
+import AraGorsel from '../../components/blog/AraGorsel.astro';
+import Terimler from '../../components/blog/Terimler.astro';
+import Akis from '../../components/blog/Akis.astro';
+import Karsilastirma from '../../components/blog/Karsilastirma.astro';
+import AdimListesi from '../../components/blog/AdimListesi.astro';
+import Not from '../../components/blog/Not.astro';
+import Ornek from '../../components/rehber/Ornek.astro';
+
+Meta reklamı, Facebook’ta, Instagram’da ve diğer Meta teknolojilerinde “Sponsorlu” etiketiyle görünen reklamdır; aramalarda “Meta Ads” diye de geçer. Meta Reklam Yöneticisi bu reklamların kurulduğu ve yönetildiği ana araçtır. Kampanyaları, reklam setlerini ve reklamları tek yerden görür, değiştirir ve sonuçlarını okursunuz. Hesabını kendisi yöneten işletme sahibi de reklamı yürüten ajans da aynı paneli kullanır.
+
+> Aracın kendisini arıyorsanız giriş adresi [facebook.com/adsmanager](https://www.facebook.com/adsmanager/). İlk girişte Hesaba genel bakış sayfası sizi reklam hesabı oluşturma adımlarına yönlendirir. Android ve iOS için Reklam Yöneticisi uygulaması da var; Meta’ya göre bazı özellikler telefonda kullanılamıyor.
+
+<AraGorsel cizim="alet" alt="Kâğıttan mavi bir alet çantası; içinde İngiliz anahtarı, çark ve tornavida, önünde kırmızı tikli bir çark">
+  Reklam Yöneticisi’nde her ayarı siz seçersiniz. Bu yüzden hangi ayarın neyi değiştirdiğini bilmek, ilk kampanyayı
+  kurmaktan önce gelir.
+</AraGorsel>
+
+Bu yazı paneli bölüm bölüm anlatıyor: hesap yapısı, amaç, reklam seti ayarları, ölçüm, Meta’nın reklam değerlendirmesi ve ilk kampanyada en sık görülen hatalar. Arayüzdeki adları Meta’nın Türkçe yardım sayfalarında geçtiği gibi yazdık; menülerin yeri zamanla değişebilir.
+
+## Meta Reklam Yöneticisi ile Business Suite ve öne çıkarma arasındaki fark nedir?
+
+Üç yol da aynı reklam sistemine çıkar. Ayrıldıkları yer, kararların ne kadarını size bıraktıklarıdır.
+
+- Gönderiyi öne çıkarmada paylaştığınız gönderi reklama dönüşür; hedefi, kitleyi, bütçeyi ve süreyi seçersiniz.
+- Meta Business Suite’te gönderi planladığınız ekrandan standart ayarlarla reklam da açabilirsiniz.
+- Reklam Yöneticisi’nde kampanyayı amaçtan başlayarak kurar, her ayarı ayrı ayrı belirlersiniz.
+
+Meta farkı kendi yardım sayfasında şöyle anlatıyor: Business Suite’te ya da Instagram’da gördüğünüz “Daha fazla mesaj al” veya “Daha fazla internet sitesi ziyaretçisi edin” gibi reklam hedefleri, kampanya amacını, dönüşüm konumunu ve performans hedefini arka planda kendiliğinden ayarlayan hazır paketlerdir. Reklam Yöneticisi’ne geçtiğinizde bu ayarları siz seçersiniz.
+
+Ayda birkaç gönderiyi öne çıkaran bir işletme için kısa yol yeter. İki bölgeyi ya da iki görseli aynı anda denemek, bütçeyi reklam setleri arasında paylaştırmak ya da siteden gelen satışı ölçmek istediğinizde Reklam Yöneticisi’ne geçersiniz. Araçların hesap düzenindeki yerini [Meta Business Suite nedir](/blog/meta-business-suite-nedir/) yazısında, öne çıkarma ile kampanya kurmanın karşılaştırmasını [Instagram’da reklam nasıl verilir](/blog/instagram-reklam-nasil-verilir/) yazısında anlattık.
+
+## Reklam Yöneticisi’nde kampanya, reklam seti ve reklam düzeyinde ne ayarlanır?
+
+Meta’ya göre Reklam Yöneticisi’nde yayınlanan her reklamın üç parçası vardır: kampanya, reklam seti ve reklam. Bir kampanyanın içinde bir ya da daha fazla reklam seti, her reklam setinin içinde bir ya da daha fazla reklam durur. Panelde “Oluştur” düğmesine bastığınızda akış sizi bu düzeylerden sırayla geçirir.
+
+- Kampanya düzeyinde reklam verme amacını seçersiniz. Bütçeyi kampanyanın tamamı için tek kalem tutmaya karar verdiyseniz o da burada belirlenir.
+- Reklam seti düzeyinde hedef kitleyi, bütçeyi, planı ve reklam alanlarını, yani reklamın görüneceği yerleri ayarlarsınız. Teklif belirlemek isteğe bağlıdır.
+- Reklam düzeyinde insanların göreceği kreatifi kurarsınız: görsel ya da video, metin, başlık ve eylem çağrısı düğmesi.
+
+Aşağıdaki temsili örnekte bu düzen, Bursa’da ilk kampanyasını açan bir döşeme atölyesi üzerinden gösteriliyor.
+
+<Ornek
+  baslik="Bir döşeme atölyesinin ilk kampanyası"
+  not="Atölye, ilçeler ve kitle temsilidir. Bütçe tutarı yazılmadı; tutarı hedefinize ve hizmet bölgenize göre siz belirlersiniz."
+>
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Düzey</th>
+        <th scope="col">Temsili ad</th>
+        <th scope="col">Bu düzeyde seçilen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Düzey"><strong>Kampanya</strong></td>
+        <td data-baslik="Temsili ad">Döşeme başvuruları</td>
+        <td data-baslik="Bu düzeyde seçilen">Amaç: Potansiyel Müşteriler. Atölye mesajla ve formla başvuru istiyor.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Düzey"><strong>Reklam seti 1</strong></td>
+        <td data-baslik="Temsili ad">Nilüfer, 30 yaş üstü</td>
+        <td data-baslik="Bu düzeyde seçilen">Konum, yaş aralığı, günlük bütçe, başlangıç tarihi ve reklam alanları.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Düzey"><strong>Reklam seti 2</strong></td>
+        <td data-baslik="Temsili ad">Osmangazi, 30 yaş üstü</td>
+        <td data-baslik="Bu düzeyde seçilen">Aynı ayarlar, başka ilçe. İki bölge yan yana karşılaştırılır.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Düzey"><strong>Reklam A</strong></td>
+        <td data-baslik="Temsili ad">Önce ve sonra fotoğrafı</td>
+        <td data-baslik="Bu düzeyde seçilen">Görsel, metin, başlık ve eylem çağrısı düğmesi. İki reklam setinde de yer alır.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Düzey"><strong>Reklam B</strong></td>
+        <td data-baslik="Temsili ad">Atölyede kısa video</td>
+        <td data-baslik="Bu düzeyde seçilen">Aynı metin, farklı kreatif. Hangisinin başvuru getirdiği ayrı ayrı görülür.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+İki reklam seti aynı reklamları taşıyor, yalnız ilçe değişiyor. Bir hafta sonra hangi ilçeden ve hangi kreatiften daha çok başvuru geldiğini ayrı ayrı görürsünüz.
+
+Her düzeye ne olduğunu söyleyen bir ad verin: kampanyaya amacı, reklam setine bölgeyi ve kitleyi, reklama kreatifi. Üç ay sonra rapora baktığınızda neyin ne olduğunu sizin verdiğiniz ad söyler.
+
+## Meta reklamlarında kampanya amacı nasıl seçilir?
+
+Amaç, yayın sistemine ne aradığınızı söyler. Meta her amaç için o sonucu verme olasılığı yüksek kişileri bulmaya çalışır. Reklam Yöneticisi’nde bugün altı amaç var:
+
+<Terimler
+  sutun={3}
+  terimler={[
+    {
+      ad: 'Bilinirlik',
+      tanim: 'Reklamı hatırlama olasılığı en yüksek olan en fazla sayıda kişiye ulaşmak için.',
+      ornek: 'Yeni açılan ya da adını değiştiren bir işletme.',
+    },
+    {
+      ad: 'Trafik',
+      tanim: 'İnsanları sitenize, uygulamanıza ya da Instagram’daki mağazanız gibi bir yönlendirme hedefine göndermek için.',
+      ornek: 'Hizmetlerinizi anlatan sayfaya ziyaretçi çekmek.',
+    },
+    {
+      ad: 'Etkileşim',
+      tanim: 'Mesaj gönderme, gönderiyle etkileşim kurma ya da reklamda istenen eylemi yapma olasılığı yüksek kişileri bulmak için.',
+      ornek: 'Ürünle ilgilenenlerin Messenger’da sohbet başlatması.',
+    },
+    {
+      ad: 'Potansiyel Müşteriler',
+      tanim: 'Mesaj, telefon araması ya da kayıt yoluyla başvuru toplamak için.',
+      ornek: 'Teklif ya da keşif isteyen kişilerin bilgisini almak.',
+    },
+    {
+      ad: 'Uygulama tanıtımı',
+      tanim: 'Uygulamanızın yüklenmesi ya da uygulamada belirli bir işlemin yapılması için.',
+      ornek: 'Uygulamasından sipariş alan bir işletme.',
+    },
+    {
+      ad: 'Satışlar',
+      tanim: 'Ürün ya da hizmeti satın alma olasılığı yüksek kişileri bulmak için. Sepete ekleme gibi eylemler de hedeflenebilir.',
+      ornek: 'E-ticaret sitesinden satış.',
+    },
+  ]}
+/>
+
+Seçerken tek bir soruya cevap verin: reklam bittiğinde elinizde ne olsun istiyorsunuz? Başvuru bekleyen bir işletme Bilinirlik amacını seçerse reklam çok kişiye ulaşır ve hatırlanmayı hedefler, ama başvuru toplamak için kurulmamıştır. Amaç ile beklenti uyuşmadığında panel dolu görünür, telefon sessiz kalır.
+
+Amacı seçtikten sonra iki ayar daha gelir. Meta üçünü şöyle tanımlar:
+
+<Akis
+  asamalar={[
+    { ad: 'Kampanya amacı', aciklama: 'Kampanyadan elde etmek istediğiniz genel sonuç.', olcu: 'Ne istiyorsunuz?' },
+    { ad: 'Dönüşüm konumu', aciklama: 'İnsanların eylemi gerçekleştireceği yer: siteniz ya da bir mesajlaşma uygulaması gibi.', olcu: 'Nerede?' },
+    { ad: 'Performans hedefi', aciklama: 'Reklam yayınının optimize edildiği belirli sonuç.', olcu: 'Neye göre?' },
+  ]}
+/>
+
+Mesaj, form ya da site arasındaki seçim dönüşüm konumunu belirler ve ekibinizin iş düzenine bağlıdır: mesajlara gün içinde dönebilen bir ekiple akşam topluca arama yapan bir ekip aynı yolu seçmez. İkisini aynı hizmet üzerinde [form mu, WhatsApp mesajı mı](/blog/meta-reklam-formu-mu-whatsapp-mi/) yazısında karşılaştırdık.
+
+## Hedef kitle, reklam alanları, bütçe ve takvim nasıl belirlenir?
+
+Bu ayarlar reklam seti düzeyindedir. Bütçe için kampanya düzeyi de seçilebilir.
+
+Hedef kitleyi konum, yaş ve cinsiyet gibi özelliklerle tanımlarsınız. Yerel hizmet veren bir işletme için en önemli ayar konumdur. Gidemeyeceğiniz ilçeden gelen başvuru, bütçeden harcanmış ama işe dönmeyecek bir sonuçtur. Reklam alanlarını tek tek seçebilir ya da seçimi Meta’nın yayın sistemine bırakabilirsiniz. İlk kampanyada belirli alanları kapatmanızı gerektiren bir veriniz yoksa seçimi sisteme bırakıp sonuçlara göre karar vermek makul bir başlangıçtır.
+
+Bütçede ilk karar, onu hangi düzeyde tutacağınızdır:
+
+<Karsilastirma
+  sol={{
+    ust: 'Kampanya düzeyinde',
+    baslik: 'Advantage+ kampanya bütçesi',
+    maddeler: [
+      'Kampanyanın tamamı için tek bütçe belirlenir.',
+      'Meta bütçeyi o an daha iyi fırsatı olan reklam setlerine sürekli dağıtır.',
+      'Yönetilecek bütçe sayısı azalır, kurulum sadeleşir.',
+    ],
+    uygun: 'Bütçenin reklam setleri arasında nasıl dağılacağı konusunda esnek olanlar',
+  }}
+  sag={{
+    ust: 'Reklam seti düzeyinde',
+    baslik: 'Reklam seti bütçesi',
+    maddeler: [
+      'Her reklam setine ayrı bütçe yazılır.',
+      'Hangi kitleye ne kadar harcanacağına siz karar verirsiniz.',
+      'Reklam setlerinin hedefleri ya da kitle büyüklükleri çok farklıysa işe yarar.',
+    ],
+    uygun: 'Belirli bir reklam setinin harcamasını kendisi kontrol etmek isteyenler',
+  }}
+/>
+
+İkinci karar, bütçenin günlük mü toplam mı olacağıdır. Meta’ya göre günlük bütçe net bir üst sınır sayılmaz, haftalık bir ortalamadır: bazı günler bütçenin üstüne çıkılabilir, bir takvim haftasında ise günlük bütçenin yedi katı aşılmaz. Toplam bütçe, kampanyanın ya da reklam setinin bütün süresi için net üst sınırdır. Ne kadar bütçe ayrılacağını neyin belirlediğini [Instagram reklam ücretleri](/blog/instagram-reklam-ucretleri/) yazısında ele aldık.
+
+Takvimde başlangıç ve bitiş tarihini girersiniz. Reklam, gönderildiği andan itibaren Meta’nın değerlendirmesine girer ama başlangıç tarihine kadar yayınlanmaz. Kampanyayı yayın gününden bir gün önce kurup gönderirseniz değerlendirme çoğu zaman o gün gelmeden tamamlanmış olur.
+
+## Meta pikseli ve Dönüşümler API’si ne işe yarar?
+
+Reklamı mesaja ya da Meta’nın formuna yönlendiriyorsanız başvuru Meta’nın içinde gerçekleşir ve sonuç panelde görünür. Kişiyi sitenize gönderdiğinizde ise sitede ne yaptığını Meta’ya bildiren bir bağlantı gerekir. Bunun iki parçası var.
+
+Meta Pikseli, sitenize yerleştirilen bir kod parçasıdır. İnsanların sitede yaptığı işlemleri ölçer ve reklamın ne kadar etkili olduğunu görmenizi sağlar. Dönüşümler API’si ise sitenizin sunucusu, site altyapınız ya da müşteri kayıt sisteminiz ile Meta arasında doğrudan bir bağlantıdır. Meta, olayları pikselle paylaşıyorsanız Dönüşümler API’sini de kullanmanızı tavsiye ediyor; ikisi birlikte çalışarak kampanyanın ölçümünü geliştirmeye yardımcı olur.
+
+<AdimListesi
+  adimlar={[
+    {
+      ad: 'Ölçeceğiniz işlemi seçin',
+      aciklama: 'Sitede sizin için sonuç sayılan işlemi belirleyin: form gönderimi, arama düğmesine dokunma ya da satın alma.',
+    },
+    {
+      ad: 'Pikseli Olay Yöneticisi’nde oluşturun',
+      aciklama: 'Meta Olay Yöneticisi’nde “Veriyi bağlayın” adımından “İnternet”i seçin, piksele bir ad verin ve “Piksel oluştur”a basın.',
+    },
+    {
+      ad: 'Kurulum yolunu seçin',
+      aciklama: 'Site altyapınız için bir ortak entegrasyonu varsa kurulum ekrandaki adımlarla yapılır. Yoksa kod siteye elle eklenir; bunun için çoğu zaman bir geliştirici gerekir.',
+      not: 'Kurulum ekranında Dönüşümler API’sini ve pikseli birlikte seçmek mümkün.',
+    },
+    {
+      ad: 'Olayları ayarlayın',
+      aciklama: 'Alışveriş ya da form gönderimi gibi işlemleri ölçmek için olayları tanımlayın. Ortak entegrasyonu, tıklanabilir olay kurulum aracı ya da kodla yapılabilir.',
+    },
+    {
+      ad: 'Kendiniz deneyin',
+      aciklama: 'Formu kendi telefonunuzdan gönderin ya da bir deneme işlemi yapın. İşlemin Olay Yöneticisi’nde bir kez göründüğünü kontrol edin.',
+    },
+  ]}
+/>
+
+<Not baslik="Piksel ve çerez tercihi" tur="dikkat">
+  Piksel, ziyaretçinin çerez tercihine göre çalışacak şekilde kurulmalı. Sitenizdeki çerez bildirimi ve aydınlatma
+  metni de bu veri aktarımını anlatmalı. Kurulumu kim yapıyorsa bunu onunla ayrıca konuşun.
+</Not>
+
+Siteniz yoksa ya da mesajla çalışıyorsanız bu bölümü şimdilik atlayabilirsiniz. Hangi durumda neyin gerektiğini [reklam vermek için gerekenler](/blog/meta-reklam-vermek-icin-gerekenler/) yazısındaki tablo gösteriyor.
+
+## Reklam neden değerlendirmede bekler, reddedilirse ne yapılır?
+
+Meta, reklamları Facebook ya da Instagram’da yayınlamadan önce Meta Reklam Standartları’na uyup uymadıklarına bakar. Değerlendirme, reklamı oluşturduğunuzda ya da düzenlediğinizde kendiliğinden başlar; durumu Reklam Yöneticisi’ndeki Yayın sütununda görürsünüz. İşin çoğunu otomatik sistemler yapar, bazı reklamlara değerlendirme uzmanları da bakar. Meta’ya göre çoğu reklam 24 saat içinde değerlendirilir, bazen bu süre uzar. Yayına giren bir reklam da sonradan yeniden değerlendirilebilir.
+
+İncelenen yalnız görsel olmaz. Metin, video, hedefleme ve reklamın insanları gönderdiği sayfa da değerlendirmeye girebilir. Yayındaki ya da planlanmış bir reklamda şu değişiklikler yeni bir değerlendirme başlatır:
+
+- hedefleme,
+- kreatif: görsel, metin, bağlantı ya da video,
+- optimizasyon,
+- fatura olayı.
+
+Bütçe, teklif tutarı ya da reklam seti planı değiştiğinde yeniden değerlendirme başlamaz. Pratikteki karşılığı şu: kreatifte küçük bir düzeltme bile reklamı bir süre yeniden bekletebilir. Değişiklikleri gün içine yaymak yerine bir seferde yapın.
+
+Reklam reddedilirse önce gerekçeyi okuyun ve reklamın o kısmını düzeltin. Reddin yanlış olduğunu düşünüyorsanız Meta’nın işletme desteği ana sayfasından yeni bir değerlendirme isteyebilirsiniz. Aynı reklamı çoğaltıp olduğu gibi yeniden göndermek iyi bir yol olmaz: Meta, bir reklamverenin kurallara geçmişteki uyumunu değerlendirmede dikkate alabildiğini söylüyor.
+
+<Not baslik="Sağlık ve hukuk alanında çalışıyorsanız" tur="dikkat">
+  Bu alanlarda reklam, Meta Reklam Standartları’nın yanında meslek kuralları ve mevzuatla da sınırlıdır. Bu yazıdaki
+  kurulum adımlarını o alanlar için bir öneri olarak okumayın; reklamı düşünmeden önce bağlı olduğunuz meslek
+  kuruluşunun kurallarına bakın.
+</Not>
+
+## İlk kampanyada sık yapılan hatalar nelerdir, sonuçlar nasıl okunur?
+
+İlk kampanyadaki hataların çoğu panelde aynı görüntüyü verir: harcama var, istenen sonuç yok. Aşağıdaki tablo her birinin nereden anlaşıldığını ve ne yapılacağını gösteriyor.
+
+<Ornek baslik="İlk kampanyada sık görülen hatalar" etiket="Genel liste">
+  <table class="tablo tablo--yigin">
+    <thead>
+      <tr>
+        <th scope="col">Hata</th>
+        <th scope="col">Panelde nasıl görünür?</th>
+        <th scope="col">Ne yapılır?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-baslik="Hata"><strong>Amaç ile beklenen sonuç farklı</strong></td>
+        <td data-baslik="Panelde">Erişim ya da etkileşim yüksek, başvuru yok.</td>
+        <td data-baslik="Ne yapılır?">Amacı istediğiniz sonuca göre seçip yeni bir kampanya kurun.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Hata"><strong>Konum geniş bırakılmış</strong></td>
+        <td data-baslik="Panelde">Hizmet vermediğiniz yerlerden mesaj ve form geliyor.</td>
+        <td data-baslik="Ne yapılır?">Konumu hizmet bölgenize daraltın.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Hata"><strong>Her gün ayar değiştirmek</strong></td>
+        <td data-baslik="Panelde">Sonuçlar oturmuyor, reklam sık sık yeniden değerlendirmeye giriyor.</td>
+        <td data-baslik="Ne yapılır?">Değişiklikleri haftada bir güne toplayın.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Hata"><strong>Bütçeyi çok sayıda reklam setine bölmek</strong></td>
+        <td data-baslik="Panelde">Her reklam setinde birkaç sonuç var, hangisinin iyi olduğu anlaşılmıyor.</td>
+        <td data-baslik="Ne yapılır?">Az sayıda reklam setiyle başlayın, işe yarayanı sonra genişletin.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Hata"><strong>Siteye trafik gönderip ölçüm kurmamak</strong></td>
+        <td data-baslik="Panelde">Tıklama var, satış ya da başvuru görünmüyor.</td>
+        <td data-baslik="Ne yapılır?">Pikseli ve olayları kurun, işlemi kendiniz deneyin.</td>
+      </tr>
+      <tr>
+        <td data-baslik="Hata"><strong>Reklamın sözü ile ilk ekran farklı</strong></td>
+        <td data-baslik="Panelde">Tıklama ya da mesaj var, görüşme yok.</td>
+        <td data-baslik="Ne yapılır?">Reklamda verilen sözü açılan sayfada ya da ilk yanıtta tekrarlayın.</td>
+      </tr>
+    </tbody>
+  </table>
+</Ornek>
+
+Yayının ilk günlerinde sonuçların inip çıkması olağandır; Meta bu döneme öğrenme aşaması der. O haftayı nasıl okuyacağınızı [Instagram’da reklam nasıl verilir](/blog/instagram-reklam-nasil-verilir/) yazısının son bölümünde anlattık.
+
+Sonuçları okurken ilk bakılacak yer, kampanyanın amacına göre sayılan sonuç ve sonuç başına ücrettir. Gösterim, tıklama oranı ve tıklama başına maliyet bu sonucun neden iyi ya da kötü olduğunu açıklar; tek başlarına karar verdirmez. Terimlerin ne anlama geldiğini ve bir raporun hangi sırayla okunacağını [ROAS, CTR ve TBM nedir](/blog/roas-ctr-tbm-nedir/) yazısında anlattık.
+
+Reklam Yöneticisi’nde sonuçlara kırılım uygulayabilir, reklam raporlarını planlayıp düzenli olarak alabilirsiniz. Kampanyalar sekmesinde tablonun üstünde bir de fırsat puanı görürsünüz. Meta’nın 0 ile 100 arasında verdiği bu puan, kampanyalarınızın ne kadar optimize edildiğini Meta’nın tavsiyelerine göre gösterir; tavsiyeler Eylemler sütununda listelenir. Tavsiyeleri tek tek okuyun ve işinize uyanları uygulayın. Puan ayarların Meta’nın önerilerine ne kadar yakın olduğunu söyler; reklamdan kaç başvuru ve satış geldiğini ise kendi kayıtlarınızdan izlersiniz.
+
+İlk kampanyayı açmadan önce amacın ve ölçümün yerinde olduğundan emin olmak isterseniz [ilk kampanyayı hazırlığıyla birlikte nasıl kurduğumuza](/hizmetler/meta-reklam-yonetimi/#ilk-kampanya) bakabilirsiniz.
