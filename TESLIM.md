@@ -408,6 +408,14 @@ yap gördüm olarak varsay ve websitesini buraya commitle, hostinger aracılığ
 - Yasal sayfalar, aydınlatma tablosu (telefonda dahil), kullanım koşulları, alt bilgi ve fiyat tablosu 1440 ve 390
   genişlikte kontrol edildi.
 - Depo: https://github.com/noxventi/satislariartir (`main`). İlk commit `3a4716c`; fiyat güncellemesi ikinci commit.
+- **Canlı (15 Kasım 2026, 20:50):** ilk dağıtımda Hostinger'da Giriş dosyası boş kaldığı için site statik yayımlanmıştı
+  (ana sayfa 403, sayfalar `/client/` altında, sunucu dosyası herkese açık). Ayar düzeltildi: Framework Astro, Node 24.x,
+  Çıktı dizini `dist`, Giriş dosyası `server/entry.mjs`. Sonrasında canlıda kontrol edilenler: ana sayfa, blog, şehir,
+  sektör, iletişim ve kullanım koşulları 200; site haritası 57 adres; robots.txt aramaya açık; `/api/talep/` yalnız
+  gönderim kabul ediyor (405); `/yonetim/talepler/` şifre tanımlı olmadığı için kapalı (404); `/server/entry.mjs` ve
+  `/client/` artık 404; eski `/rehberler/` adresi 301; www adresi açılıyor.
+- **Henüz denenmeyen:** canlıda gerçek bir form gönderimi (kayıt açacağı için yapılmadı). Yönetim şifresi tanımlandıktan
+  sonra bir deneme başvurusu gönderip `/yonetim/talepler/` sayfasında görünmesini kontrol edin.
 
 ## 1. Durum
 
