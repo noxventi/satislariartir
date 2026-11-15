@@ -6,12 +6,14 @@
  * - Genel kimlik (ör. T-7K2M9QXA4B) kişisel bilgi içermez; ölçümde olay kimliği olarak kullanılır.
  * - Bildirim gönderilemese de kayıt durur, bildirim yeniden denenir.
  *
- * Veri klasörü: VERI_KLASORU ortam değişkeni (varsayılan ./veri). Yedeklenmeli, depoya girmemeli.
+ * Veri klasörü: VERI_KLASORU ortam değişkeni. Tanımlı değilse üretimde ~/satislariartir-veri, geliştirmede ./veri.
+ * Yedeklenmeli, depoya girmemeli.
  */
 import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { createHash, randomInt } from 'node:crypto';
 import path from 'node:path';
+import os from 'node:os';
 import type { TalepGirdisi } from './dogrulama';
 import { telefonDuzenle } from './dogrulama';
 
@@ -53,7 +55,9 @@ export interface Talep {
   bildirim_deneme: number;
 }
 
-const KLASOR = process.env.VERI_KLASORU || path.resolve('veri');
+// Üretimde varsayılan klasör ev dizinindedir: barındırma her dağıtımda uygulama klasörünü yenilediği için (ör. Hostinger)
+// kayıtlar uygulamanın içinde tutulursa her push'ta silinir. Geliştirmede proje içindeki ./veri kullanılır.
+const KLASOR = process.env.VERI_KLASORU || (import.meta.env.PROD ? path.join(os.homedir(), 'satislariartir-veri') : path.resolve('veri'));
 const TEKRAR_PENCERESI_DK = 10;
 
 const kure = globalThis as unknown as { __saVeritabani?: DatabaseSync };

@@ -30,13 +30,25 @@ sunucuda çalışır. Bu yüzden Hostinger'da **Node.js uygulaması** olarak kur
 yalnız statik barındırmada form çalışmaz).
 
 1. hPanel > Web siteleri > yeni web sitesi > **Node.js** seçin, GitHub'ı bağlayıp bu depoyu ve `main` dalını seçin.
-2. Ayarlar:
-   - Node.js sürümü: **22 ya da üstü** (Astro'nun alt sınırı ve formun kullandığı yerleşik SQLite için).
-   - Derleme komutu: `npm run build`
-   - Başlatma komutu: `npm run start` (`node ./dist/server/entry.mjs`)
+2. Derleme ve dağıtım ayarları (Settings and redeploy):
+
+   | Alan | Değer |
+   |---|---|
+   | Application type (framework) | `Astro` |
+   | Root directory | boş ya da `/` |
+   | Build script | `build` |
+   | Output directory | `dist` |
+   | **Entry file** | **`server/entry.mjs`** (çıktı klasörüne göre yazılır; `dist/` tekrar yazılmaz) |
+   | Node.js version | **24** (en az 22.23.4) |
+   | Package manager | npm |
+
+   **Entry file boş bırakılırsa Hostinger siteyi statik dosya olarak yayımlar ve Node sunucusu hiç çalışmaz:** ana
+   sayfa 403 verir, sayfalar `/client/` altında görünür, form çalışmaz. (15 Kasım 2026'daki ilk dağıtımda olan buydu.)
+   Kaynak: Hostinger, Node.js build settings (docs.hostinger.com/node.js/build-settings).
 3. Ortam değişkenleri (hPanel > Environment variables; derleme ve çalışma sırasında okunur):
-   - `VERI_KLASORU`: talep veritabanının klasörü. **Uygulama klasörünün dışında, kalıcı bir yol olmalı** (ör. ev dizininde
-     `satislariartir-veri`). Hostinger her dağıtımda uygulama klasörünü yeniler; içeride kalan kayıtlar silinir.
+   - `VERI_KLASORU`: talep veritabanının klasörü. **Uygulama klasörünün dışında, kalıcı bir yol olmalı.** Hostinger her
+     dağıtımda uygulama klasörünü yeniler; içeride kalan kayıtlar silinir. Tanımlanmazsa üretimde ev dizinindeki
+     `satislariartir-veri` klasörü kullanılır (uygulama klasörünün dışında olduğu için güvenli varsayılan).
    - `YONETIM_KULLANICI`, `YONETIM_SIFRESI`: talep listesinin girişi. Tanımlı değilse sayfa kapalıdır.
    - `BILDIRIM_WEBHOOK_URL`: yeni talebin iletileceği adres (e-posta köprüsü, CRM ya da otomasyon aracı). Önerilir.
    - `PUBLIC_GTM_ID`, `PUBLIC_META_PIXEL_ID`: ölçüm etiketleri. Boşken hiçbir üçüncü taraf betiği yüklenmez ve çerez bandı
