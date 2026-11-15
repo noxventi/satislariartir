@@ -335,7 +335,7 @@ const yapisalVeri = [
             {
               verilmeyenler.map((v, i) => (
                 <li>
-                  <strong><s class="soz__cizili" style={`--sira:${i}`}>“{v.vaat}”</s></strong>
+                  <strong class="soz__vaat">“{v.vaat}”</strong>
                   <span>{v.aciklama}</span>
                 </li>
               ))
@@ -682,21 +682,9 @@ const yapisalVeri = [
     transform: rotate(-48deg);
     transform-origin: left bottom;
   }
-  /* Verilmeyen söz: vaadin üstü kırmızı kalemle çizilir. */
-  .soz__cizili {
-    text-decoration: none;
+  /* Verilmeyen söz: tırnak içinde, çizilmeden yazılır (üstü çizme yalnız ana sayfadaki arama kutusunda kullanılır). */
+  .soz__vaat {
     color: rgb(255 255 255 / 0.9);
-    background: linear-gradient(#ff6b7f, #ff6b7f) no-repeat 0 58% / 100% 0.11em;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .soz__cizili {
-      transition: background-size 620ms cubic-bezier(0.6, 0.05, 0.25, 1) calc(420ms + var(--sira, 0) * 180ms);
-    }
-    :global(.js .soz__panel[data-gir]:not(.girdi-goruldu) .soz__cizili) {
-      background-size: 0 0.11em;
-    }
   }
   @media (max-width: 55.99rem) {
     .soz__izgara {

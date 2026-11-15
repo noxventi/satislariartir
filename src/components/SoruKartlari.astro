@@ -3,7 +3,7 @@
  * Soru kartları: işletmelerin kendi sorusu (başlık), nedenin gündelik bir örneği ve yaptığımız iş.
  * Kartlar düz bir ızgarada, aynı ölçüde durur (kart sayısı üçe bölünüyorsa üç, değilse iki sütun). Satırlar ortaktır:
  * görsel, soru, örnek, yapılan iş ve bağlantı her kartta aynı hizada başlar. Kartın tamamı tıklanır,
- * üzerine gelince soru kırmızı kalemle çizilir.
+ * üzerine gelince sorunun altı kırmızı kalemle çizilir (üstü çizilmez).
  * Başlıklar insanların aramaya yazdığı biçimde soru olmalı; örnekler temsili gündelik işletmelerdir.
  */
 import type { ImageMetadata } from 'astro';
@@ -110,12 +110,12 @@ const maviMi = (i: number) => (sutun === 3 ? i % 2 === 1 : [1, 2].includes(i % 4
     text-wrap: balance;
   }
   .sk__soru span {
-    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 56% / 0 0.09em;
+    background: linear-gradient(var(--kirmizi), var(--kirmizi)) no-repeat 0 96% / 0 0.08em;
     transition: background-size 520ms cubic-bezier(0.6, 0.05, 0.25, 1);
   }
   .sk__kart:hover .sk__soru span,
   .sk__kart:focus-within .sk__soru span {
-    background-size: 100% 0.09em;
+    background-size: 100% 0.08em;
   }
   .sk__ornek {
     color: var(--ikincil);
