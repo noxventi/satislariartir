@@ -397,9 +397,17 @@ yap gördüm olarak varsay ve websitesini buraya commitle, hostinger aracılığ
    (alındı sayıyoruz; izni olmayanı `src/data/projeler.ts` ve `src/components/MarkaSeridi.astro` içinden çıkarın).
 5. **Blog yazıları** şu an `durum: inceleme` (aramaya kapalı). Yayına açma kararı bekleniyor.
 
+6. **Fiyat tablosu eskir.** `/blog/web-sitesi-fiyatlari/` tablosundaki rakamlar 15 Kasım 2026'da açılan sayfalardan
+   (Armut, ikas, Ticimax, İsimtescil, Hostinger, Natro, Let's Encrypt) alındı; Ticimax ve Natro rakamları Kasım kampanya
+   fiyatı. Tablo en az üç ayda bir yenilenmeli. Yazı denetimde bilerek istisna (`araclar/yazi-denetle.mjs` > `FIYAT_ISTISNASI`).
+
 ### Doğrulama
 
-- Bkz. aşağıdaki "Son durum".
+- `npx astro build` tamamlanıyor (106 sayfa); `node araclar/denetim.mjs` "Sorun bulunmadı"; site haritasında 57 adres
+  (yasal sayfalar ve incelemedeki blog yazıları hariç).
+- Yasal sayfalar, aydınlatma tablosu (telefonda dahil), kullanım koşulları, alt bilgi ve fiyat tablosu 1440 ve 390
+  genişlikte kontrol edildi.
+- Depo: https://github.com/noxventi/satislariartir (`main`). İlk commit `3a4716c`; fiyat güncellemesi ikinci commit.
 
 ## 1. Durum
 

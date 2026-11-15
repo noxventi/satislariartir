@@ -61,7 +61,9 @@ for (const ad of adlar) {
   const duzKesme = metin.replace(/https?:\/\/\S+/g, '').match(/[A-Za-zÇĞİÖŞÜçğıöşü]'[A-Za-zÇĞİÖŞÜçğıöşü]/g);
   if (duzKesme) sorunlar.push(`düz kesme işareti (') var: ${[...new Set(duzKesme)].slice(0, 4).join(' ')} (’ kullanın)`);
   if (/Obrandy/i.test(metin)) sorunlar.push('Obrandy adı geçiyor');
-  if (/\b\d[\d.]*\s?(TL|₺|lira)\b/i.test(metin)) sorunlar.push('TL tutarı var (fiyat ve bütçe rakamı yasak)');
+  // Tek istisna: fiyatlar yazısı kaynaklı piyasa aralıkları verir (marka sahibinin kararı, 15 Kasım 2026). Kendi fiyatımız hiçbir yerde yazılmaz.
+  const FIYAT_ISTISNASI = new Set(['web-sitesi-fiyatlari']);
+  if (!FIYAT_ISTISNASI.has(ad) && /\b\d[\d.]*\s?(TL|₺|lira)\b/i.test(metin)) sorunlar.push('TL tutarı var (fiyat ve bütçe rakamı yasak)');
   if (/ücretsiz analiz|garanti ediyoruz|garantili|1\. sıra garantisi/i.test(metin)) sorunlar.push('yasak vaat ifadesi var');
   if (/^# /m.test(govde)) sorunlar.push('gövdede H1 (#) var; H1 ön bilgideki sorudur');
 
