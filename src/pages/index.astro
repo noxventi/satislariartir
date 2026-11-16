@@ -325,6 +325,16 @@ const yapisalVeri = [
     '@id': `${SITE.url}/#kurum`,
     name: SITE.ad,
     alternateName: 'Satislari Artir',
+    ...(SITE.veriSorumlusu.unvan && { legalName: SITE.veriSorumlusu.unvan }),
+    ...(SITE.veriSorumlusu.adres && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: SITE.veriSorumlusu.adresParcalari.sokak,
+        addressLocality: SITE.veriSorumlusu.adresParcalari.ilce,
+        addressRegion: SITE.veriSorumlusu.adresParcalari.il,
+        addressCountry: SITE.veriSorumlusu.adresParcalari.ulke,
+      },
+    }),
     url: `${SITE.url}/`,
     logo: {
       '@type': 'ImageObject',

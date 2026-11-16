@@ -27,9 +27,17 @@ export const SITE = {
   /** KVKK kapsamında veri sorumlusu. Dolana kadar yasal sayfalar taslak sayılır. */
   veriSorumlusu: {
     /** Ticaret unvanı (şirket) ya da şahıs işletmesinde ad soyad ve işletme adı. Doldurulunca yasal sayfalar yayına girer. */
-    unvan: '',
+    // Marka sahibinin verdiği bilgiler (16 Kasım 2026).
+    unvan: 'Adra Yazılım Ltd. Şti.',
     /** Tebligat adresi (ticaret sicilindeki adres). */
-    adres: '',
+    adres: 'Aziziye Mahallesi, Portakal Çiçeği Sokak, Ansera AVM No: 17/91, Çankaya/Ankara',
+    /** Aynı adresin yapılandırılmış veri (PostalAddress) için parçaları. Posta kodu verilmedi; tahminle yazılmaz. */
+    adresParcalari: {
+      sokak: 'Aziziye Mahallesi, Portakal Çiçeği Sokak, Ansera AVM No: 17/91',
+      ilce: 'Çankaya',
+      il: 'Ankara',
+      ulke: 'TR',
+    },
     /** KVKK başvurularının alınacağı e-posta adresi. */
     eposta: '',
     /** Varsa kayıtlı elektronik posta (KEP) adresi. */

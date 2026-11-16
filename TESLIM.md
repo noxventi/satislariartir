@@ -384,10 +384,10 @@ yap gördüm olarak varsay ve websitesini buraya commitle, hostinger aracılığ
 
 ### Yayından önce mutlaka yapılması gerekenler
 
-1. **Veri sorumlusu bilgileri** (`src/site.config.ts` > `SITE.veriSorumlusu`): ticaret unvanı (şahıs işletmesinde ad
-   soyad ve işletme adı), tebligat adresi, KVKK başvuru e-postası, varsa KEP, MERSİS ya da vergi dairesi ve numarası. Bu
-   alanlar boşken aydınlatma metni, gizlilik ve kullanım koşulları "taslak" uyarısıyla görünür ve aramaya kapalı kalır.
-   KVKK, aydınlatmada veri sorumlusunun kimliğinin yazılmasını şart koşar; form bu bilgi olmadan veri toplamamalı.
+1. **Veri sorumlusu bilgileri** (`src/site.config.ts` > `SITE.veriSorumlusu`): 16 Kasım 2026'da unvan (Adra Yazılım
+   Ltd. Şti.) ve tebligat adresi (Çankaya/Ankara) girildi; yasal sayfalar taslaktan çıktı ve aramaya açıldı. KVKK başvuru
+   e-postası ayrıca verilmediği için sayfalar info@satislariartir.com adresini kullanıyor. MERSİS, vergi dairesi ve
+   numarası, KEP henüz verilmedi; girilince künyede ve yasal sayfalarda kendiliğinden görünür.
 2. **Yurt dışına aktarım:** Hostinger'da sunucu konumunu seçerken Türkiye dışındaki bir veri merkezi seçilirse talep
    kayıtları yurt dışına aktarılmış olur. KVKK m. 9 kapsamında barındırma şirketiyle standart sözleşme imzalanıp beş iş
    günü içinde Kurul'a bildirilmesi gerekebilir. Bunu hukuk danışmanınızla netleştirin.
@@ -457,7 +457,7 @@ Ortam değişkenleri `.env.example` dosyasında açıklanmıştır. Sunucu Node 
 | Blog yazıları (43) | `/blog/…/` | **Açık (index)** | 15 Kasım 2026'da yayına alındı; site haritasında |
 | Hakkımızda, İletişim | `/hakkimizda/`, `/iletisim/` | Açık | Ekip adları ve iletişim bilgisi bekliyor |
 | Reklam açılış sayfaları | `/lp/google-ads-hesap-inceleme/`, `/lp/meta-reklam-inceleme/` | Kapalı (noindex, taranabilir) | Site haritasında yok, AdsBot erişebilir |
-| Gizlilik, Aydınlatma, Çerez tercihleri | `/gizlilik/`, `/aydinlatma/`, `/cerez-tercihleri/` | **Kapalı (taslak)** | Veri sorumlusu bilgisi girilince kendiliğinden açılır |
+| Gizlilik, Aydınlatma, Çerez tercihleri | `/gizlilik/`, `/aydinlatma/`, `/cerez-tercihleri/` | **Açık (index)** | 16 Kasım 2026'da veri sorumlusu bilgisi girildi |
 | Teşekkür, 404 | `/tesekkurler/` | Kapalı | |
 | Talep listesi | `/yonetim/talepler/` | Kapalı, şifreli | Şifre tanımlı değilse sayfa yoktur |
 
