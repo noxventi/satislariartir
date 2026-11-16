@@ -4,7 +4,8 @@
  * Başarı yalnız az önce kaydedilmiş bir talep için gösterilir (tek kullanımlık sa_onay çerezi).
  * Sayfayı doğrudan açmak, yenilemek ya da geri düğmesiyle dönmek yeni talep ya da dönüşüm üretmez.
  *
- * Görünüm (15 Kasım 2026): onay + kayıt fişi ve posta kutusu görseli > "Sırada ne var?" kartları > göz atılacak sayfalar.
+ * Görünüm (15 Kasım 2026): onay ve posta kutusu görseli > "Sırada ne var?" kartları > göz atılacak sayfalar.
+ * Kayıt numarası ve işletme adını gösteren fiş 16 Kasım 2026'da marka sahibinin isteğiyle kaldırıldı.
  * Doğrudan açıldığında: açıklama, görüşme çağrısı ve gidilebilecek sayfalar. Sunucu mantığı ve ölçüm kodu değişmedi.
  */
 import Temel from '../layouts/Temel.astro';
@@ -97,16 +98,6 @@ const calismalar = {
               </h1>
               <p class="giris">Talebiniz kaydedildi. Seçtiğiniz iletişim yolundan, {yol} size döneceğiz.</p>
 
-              <dl class="sonuc__kayit yaprak">
-                <div>
-                  <dt>Kayıt numarası</dt>
-                  <dd class="rakam">{onay.kimlik}</dd>
-                </div>
-                <div>
-                  <dt>İşletme</dt>
-                  <dd>{onay.isletme}</dd>
-                </div>
-              </dl>
               {hizliYol && (
                 <p class="sonuc__hizli">
                   <Ikon ad="whatsapp-logo" boyut={20} />
@@ -276,31 +267,6 @@ const calismalar = {
   .sonuc__hizli :global(svg) {
     flex: none;
     color: var(--mavi);
-  }
-  .sonuc__kayit {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem 3rem;
-    max-width: 100%;
-    margin-block-start: 0.5rem;
-    padding: clamp(1.1rem, 2vw, 1.5rem) clamp(1.25rem, 2.4vw, 1.9rem);
-  }
-  .sonuc__kayit > div {
-    min-width: 0;
-  }
-  .sonuc__kayit dt {
-    font-family: var(--yazi-baslik);
-    font-size: var(--b-mikro);
-    font-weight: 620;
-    color: var(--ikincil);
-  }
-  .sonuc__kayit dd {
-    font-family: var(--yazi-baslik);
-    font-size: 1.25rem;
-    font-weight: 640;
-    font-stretch: 94%;
-    margin-block-start: 0.15rem;
-    overflow-wrap: anywhere;
   }
   /* Çizimin kenarındaki beyaz pay zemine karışır; eksi boşluk nesneyi büyütür. */
   .sonuc__cizim {
