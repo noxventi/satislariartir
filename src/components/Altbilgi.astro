@@ -91,6 +91,15 @@ const gruplar = [
                     </a>
                   </li>
                 )}
+                {SITE.sosyal.instagram && (
+                  <li>
+                    <a href={SITE.sosyal.instagram} rel="me noopener" data-olay="instagram_click" data-yer="alt-bilgi">
+                      <Ikon ad="instagram-logo" boyut={18} />
+                      <span class="alt__yol-ad">Instagram</span>
+                      <span class="alt__yol-deger">@{SITE.sosyal.instagramKullanici}</span>
+                    </a>
+                  </li>
+                )}
                 {adres && <li class="alt__adres">{adres}</li>}
               </ul>
             )}

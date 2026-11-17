@@ -15,7 +15,8 @@ export type OlayAdi =
   | 'form_error'
   | 'generate_lead'
   | 'whatsapp_click'
-  | 'phone_click';
+  | 'phone_click'
+  | 'instagram_click';
 
 const IZINLI = new Set([
   'page_type',

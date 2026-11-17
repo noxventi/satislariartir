@@ -363,6 +363,8 @@ const yapisalVeri = [
         },
       ],
     }),
+    // Kurumun resmî hesapları: Google ve yapay zekâ araçları siteyle hesabı aynı kurum olarak eşleştirsin.
+    ...(SITE.sosyal.instagram && { sameAs: [SITE.sosyal.instagram] }),
     areaServed: { '@type': 'Country', name: 'Türkiye' },
     knowsAbout: [
       'Dijital pazarlama',

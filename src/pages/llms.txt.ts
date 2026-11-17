@@ -32,6 +32,7 @@ export const GET: APIRoute = async () => {
     '- Yapılmayan işler: tabela, matbaa, afiş ve açık hava reklamı; sosyal medya hesap yönetimi ve içerik üretimi; e-ticaret altyapısı kurulumu.',
     ...(telefon ? [`- Telefon ve WhatsApp: ${telefon}`] : []),
     ...(eposta ? [`- E-posta: ${eposta}`] : []),
+    ...(SITE.sosyal.instagram ? [`- Instagram: ${SITE.sosyal.instagram}`] : []),
     `- İletişim sayfası: ${tamUrl('/iletisim/')}`,
     '',
     '## Hizmetler',

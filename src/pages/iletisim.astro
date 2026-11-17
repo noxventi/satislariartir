@@ -39,7 +39,8 @@ const yollar = [
   telefon && { ikon: 'phone', ad: 'Telefon', deger: telefon, eylem: 'Arayın', url: telefonAdresi, dis: false },
   whatsapp && { ikon: 'whatsapp-logo', ad: 'WhatsApp', deger: telefon || `+${whatsapp}`, eylem: 'Yazın', url: whatsappBaglantisi(), dis: true },
   eposta && { ikon: 'envelope-simple', ad: 'E-posta', deger: eposta, eylem: 'Gönderin', url: `mailto:${eposta}`, dis: false },
-].filter(Boolean) as { ikon: 'phone' | 'whatsapp-logo' | 'envelope-simple'; ad: string; deger: string; eylem: string; url: string; dis: boolean }[];
+  SITE.sosyal.instagram && { ikon: 'instagram-logo', ad: 'Instagram', deger: `@${SITE.sosyal.instagramKullanici}`, eylem: 'İnceleyin', url: SITE.sosyal.instagram, dis: true },
+].filter(Boolean) as { ikon: 'phone' | 'whatsapp-logo' | 'envelope-simple' | 'instagram-logo'; ad: string; deger: string; eylem: string; url: string; dis: boolean }[];
 
 /** İki kitleye, formu doldurmadan önce bilmeleri gereken tek şey. */
 const notlar = [
@@ -120,7 +121,13 @@ const yapisalVeri = [
             <ul class="it__yollar">
               {yollar.map((y, i) => (
                 <li data-gir style={`--gecikme:${i * 90}ms`}>
-                  <a class="it__yol" href={y.url} rel={y.dis ? 'noopener' : undefined} data-yer="iletisim">
+                  <a
+                    class="it__yol"
+                    href={y.url}
+                    rel={y.dis ? 'noopener' : undefined}
+                    data-yer="iletisim"
+                    data-olay={y.ikon === 'instagram-logo' ? 'instagram_click' : undefined}
+                  >
                     <span class="it__ikon" aria-hidden="true">
                       <Ikon ad={y.ikon} boyut={24} />
                     </span>

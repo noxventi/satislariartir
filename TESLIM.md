@@ -499,7 +499,7 @@ yüklenmiyor ve Google Ads, GA4 ya da Meta tarafında uçtan uca doğrulama yap�
 |---|---|
 | `form_error` | Yalnız alan adı ve hata türü yazıldı (ör. `ad / bos`). Alan değeri yok |
 | `generate_lead` | Yalnız sunucunun doğruladığı gerçek kayıtta, kayıt numarasıyla bir kez yazıldı. Yenilemede tekrarlanmadı. Test ve şüpheli kayıtlarda yazılmadı |
-| `cta_click`, `service_view`, `case_view`, `form_start`, `whatsapp_click`, `phone_click` | Kodda tanımlı, tarayıcıda tek tek doğrulanmadı |
+| `cta_click`, `service_view`, `case_view`, `form_start`, `whatsapp_click`, `phone_click`, `instagram_click` | Kodda tanımlı, tarayıcıda tek tek doğrulanmadı. `instagram_click` alt bilgideki ve iletişim sayfasındaki Instagram bağlantısında (18 Kasım 2026) |
 
 Kişisel veri (ad, telefon, e-posta, not) hiçbir olaya yazılmaz: yalnız izinli anahtarlar geçer (`src/scripts/olcum.ts`).
 Kimlikler tanımlandığında yapılacaklar: GTM'de etiketleri kurmak, aynı Google Ads hedefini GA4 aktarımı ve yerel etiketle

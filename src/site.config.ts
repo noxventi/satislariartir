@@ -24,6 +24,12 @@ export const SITE = {
     calismaSaatleri: '',
   },
 
+  /** Kurumun resmî sosyal medya hesapları (18 Kasım 2026). Alt bilgi, iletişim sayfası ve kurum şemasındaki sameAs buradan okur. */
+  sosyal: {
+    instagram: 'https://www.instagram.com/satislariartir/',
+    instagramKullanici: 'satislariartir',
+  },
+
   /** KVKK kapsamında veri sorumlusu. Dolana kadar yasal sayfalar taslak sayılır. */
   veriSorumlusu: {
     /** Ticaret unvanı (şirket) ya da şahıs işletmesinde ad soyad ve işletme adı. Doldurulunca yasal sayfalar yayına girer. */
