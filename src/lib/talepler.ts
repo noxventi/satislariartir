@@ -16,6 +16,7 @@ import path from 'node:path';
 import os from 'node:os';
 import type { TalepGirdisi } from './dogrulama';
 import { telefonDuzenle } from './dogrulama';
+import { epostaTanimli, talepEpostasiGonder } from './eposta-bildirimi';
 
 export const DURUMLAR = ['yeni', 'ulasildi', 'uygun', 'gorusme', 'teklif', 'kazanildi', 'kapandi'] as const;
 export type Durum = (typeof DURUMLAR)[number];
@@ -53,6 +54,10 @@ export interface Talep {
   durum_notu: string;
   bildirim: 'bekliyor' | 'gonderildi' | 'tanimsiz' | 'basarisiz';
   bildirim_deneme: number;
+  eposta_bildirim: 'tanimsiz' | 'bekliyor' | 'gonderiliyor' | 'gonderildi' | 'basarisiz';
+  eposta_deneme: number;
+  eposta_son_deneme: string | null;
+  eposta_hata: string;
 }
 
 // Üretimde varsayılan klasör ev dizinindedir: barındırma her dağıtımda uygulama klasörünü yenilediği için (ör. Hostinger)
@@ -102,8 +107,29 @@ function baglan(): DatabaseSync {
       aciklama TEXT NOT NULL DEFAULT ''
     );
   `);
+  sutunlariTamamla(db);
   kure.__saVeritabani = db;
   return db;
+}
+
+/** Var olan veritabanına e-posta bildirimi sütunlarını ekler. Eski kayıtlar için geriye dönük e-posta gönderilmez. */
+function sutunlariTamamla(db: DatabaseSync) {
+  const mevcut = new Set((db.prepare('PRAGMA table_info(talepler)').all() as unknown as { name: string }[]).map((s) => s.name));
+  const eklenecek: [string, string][] = [
+    ['eposta_bildirim', `TEXT NOT NULL DEFAULT 'tanimsiz'`],
+    ['eposta_deneme', 'INTEGER NOT NULL DEFAULT 0'],
+    ['eposta_son_deneme', 'TEXT'],
+    ['eposta_hata', `TEXT NOT NULL DEFAULT ''`],
+  ];
+  for (const [ad, tanim] of eklenecek) {
+    if (mevcut.has(ad)) continue;
+    try {
+      db.exec(`ALTER TABLE talepler ADD COLUMN ${ad} ${tanim}`);
+    } catch (hata) {
+      // Aynı anda açılan başka bir süreç sütunu eklemiş olabilir.
+      if (!(hata instanceof Error && hata.message.includes('duplicate column'))) throw hata;
+    }
+  }
 }
 
 const ALFABE = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
@@ -156,8 +182,8 @@ export function talepKaydet(
     const sonuc = db
       .prepare(
         `INSERT INTO talepler (kimlik, istemci_anahtari, ozet_izi, olusturma, ad, isletme, yontem, telefon, eposta,
-           kanal, kampanya_durumu, mesaj, adres, sayfa, kaynak, tur, bildirim)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+           kanal, kampanya_durumu, mesaj, adres, sayfa, kaynak, tur, bildirim, eposta_bildirim)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         kimlik,
@@ -177,6 +203,7 @@ export function talepKaydet(
         ek.kaynak.slice(0, 2000),
         ek.tur,
         process.env.BILDIRIM_WEBHOOK_URL ? 'bekliyor' : 'tanimsiz',
+        epostaTanimli() ? 'bekliyor' : 'tanimsiz',
       );
     db.prepare('INSERT INTO durum_gecmisi (talep_id, durum, zaman, aciklama) VALUES (?, ?, ?, ?)').run(
       Number(sonuc.lastInsertRowid),
@@ -244,6 +271,7 @@ export function ozetSayilar() {
 /* ---- Bildirim -------------------------------------------------------------------- */
 
 const AZAMI_DENEME = 12;
+const TAKILMA_SURESI_DK = 5;
 
 async function bildirimGonder(t: Talep): Promise<boolean> {
   const url = process.env.BILDIRIM_WEBHOOK_URL;
@@ -275,8 +303,8 @@ async function bildirimGonder(t: Talep): Promise<boolean> {
   }
 }
 
-/** Bekleyen bildirimleri dener. Kayıt, bildirimin sonucundan bağımsız olarak korunur. */
-export async function bildirimleriIsle() {
+async function webhooklariIsle() {
+  if (!process.env.BILDIRIM_WEBHOOK_URL) return;
   const db = baglan();
   const bekleyen = db
     .prepare(`SELECT * FROM talepler WHERE bildirim = 'bekliyor' AND bildirim_deneme < ? ORDER BY id LIMIT 20`)
@@ -292,8 +320,53 @@ export async function bildirimleriIsle() {
   }
 }
 
+async function epostalariIsle() {
+  if (!epostaTanimli()) return;
+  const db = baglan();
+
+  // Gönderim sırasında süreç kapandıysa kayıt "gonderiliyor"da kalmış olabilir: yeniden sıraya alınır.
+  const esik = new Date(Date.now() - TAKILMA_SURESI_DK * 60_000).toISOString();
+  db.prepare(
+    `UPDATE talepler SET eposta_bildirim = CASE WHEN eposta_deneme >= ? THEN 'basarisiz' ELSE 'bekliyor' END
+     WHERE eposta_bildirim = 'gonderiliyor' AND eposta_son_deneme < ?`,
+  ).run(AZAMI_DENEME, esik);
+
+  const bekleyen = db
+    .prepare(`SELECT * FROM talepler WHERE eposta_bildirim = 'bekliyor' AND eposta_deneme < ? ORDER BY id LIMIT 20`)
+    .all(AZAMI_DENEME) as unknown as Talep[];
+
+  for (const t of bekleyen) {
+    // Kayıt önce üzerine alınır: aynı anda çalışan başka bir tur aynı e-postayı ikinci kez göndermez.
+    const alindi = db
+      .prepare(
+        `UPDATE talepler SET eposta_bildirim = 'gonderiliyor', eposta_deneme = eposta_deneme + 1, eposta_son_deneme = ?
+         WHERE id = ? AND eposta_bildirim = 'bekliyor'`,
+      )
+      .run(new Date().toISOString(), t.id);
+    if (alindi.changes !== 1) continue;
+
+    const sonuc = await talepEpostasiGonder(t);
+    const deneme = t.eposta_deneme + 1;
+    db.prepare('UPDATE talepler SET eposta_bildirim = ?, eposta_hata = ? WHERE id = ?').run(
+      sonuc.tamam ? 'gonderildi' : deneme >= AZAMI_DENEME ? 'basarisiz' : 'bekliyor',
+      sonuc.tamam ? '' : sonuc.kod,
+      t.id,
+    );
+    // Şifre ya da bağlantı sorunu bütün kayıtları etkiler; aynı hatayla sunucuyu yormamak için tur burada biter.
+    if (!sonuc.tamam && sonuc.altyapi) break;
+  }
+}
+
+/** Bekleyen bildirimleri dener. Kayıt, bildirimin sonucundan bağımsız olarak korunur. */
+export async function bildirimleriIsle() {
+  const sonuclar = await Promise.allSettled([webhooklariIsle(), epostalariIsle()]);
+  for (const s of sonuclar) {
+    if (s.status === 'rejected') console.error('[talep] bildirim hatası', s.reason instanceof Error ? s.reason.message : s.reason);
+  }
+}
+
 const zamanlayici = globalThis as unknown as { __saBildirimZamanlayici?: NodeJS.Timeout };
-if (!zamanlayici.__saBildirimZamanlayici && process.env.BILDIRIM_WEBHOOK_URL) {
+if (!zamanlayici.__saBildirimZamanlayici && (process.env.BILDIRIM_WEBHOOK_URL || epostaTanimli())) {
   zamanlayici.__saBildirimZamanlayici = setInterval(() => void bildirimleriIsle().catch(() => {}), 5 * 60_000);
   zamanlayici.__saBildirimZamanlayici.unref?.();
 }

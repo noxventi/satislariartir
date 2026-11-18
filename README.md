@@ -50,7 +50,9 @@ yalnız statik barındırmada form çalışmaz).
      dağıtımda uygulama klasörünü yeniler; içeride kalan kayıtlar silinir. Tanımlanmazsa üretimde ev dizinindeki
      `satislariartir-veri` klasörü kullanılır (uygulama klasörünün dışında olduğu için güvenli varsayılan).
    - `YONETIM_KULLANICI`, `YONETIM_SIFRESI`: talep listesinin girişi. Tanımlı değilse sayfa kapalıdır.
-   - `BILDIRIM_WEBHOOK_URL`: yeni talebin iletileceği adres (e-posta köprüsü, CRM ya da otomasyon aracı). Önerilir.
+   - `SMTP_KULLANICI`, `SMTP_SIFRESI`: yeni talep e-postasını gönderecek posta kutusu ve şifresi. İkisi tanımlı değilse
+     e-posta gönderilmez. `BILDIRIM_EPOSTA` alıcıdır, boşsa aynı kutuya gider. Sunucu varsayılanı `smtp.hostinger.com:465`.
+   - `BILDIRIM_WEBHOOK_URL`: yeni talebin JSON olarak iletileceği adres (CRM ya da otomasyon aracı). İsteğe bağlı.
    - `PUBLIC_GTM_ID`, `PUBLIC_META_PIXEL_ID`: ölçüm etiketleri. Boşken hiçbir üçüncü taraf betiği yüklenmez ve çerez bandı
      çıkmaz. Derlemede okunduğu için değiştirince yeniden dağıtım gerekir.
    - `PORT` ve `HOST`: Hostinger kendisi veriyorsa dokunmayın. Uygulama `PORT` ortam değişkenini okur.

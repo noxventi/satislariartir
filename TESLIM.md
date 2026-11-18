@@ -468,7 +468,7 @@ Yazılmayan içerik: PRD'deki 36 rehberin 30'u (07-36). Rehber dizini yalnız va
 1. Ziyaretçi formu doldurur. Hatalar alanın altında Türkçe görünür, odak ilk hataya gider.
 2. `POST /api/talep/` sunucuda yeniden doğrular ve kaydı `veri/talepler.sqlite` dosyasına yazar.
 3. Kayıt yazıldıktan sonra ziyaretçi `/tesekkurler/` sayfasında kayıt numarasını görür. Kayıt yazılamazsa alanlar korunur ve yeniden deneme sunulur.
-4. `BILDIRIM_WEBHOOK_URL` tanımlıysa yeni talep o adrese gönderilir. Gönderim başarısız olursa kayıt durur, bildirim 5 dakikada bir en çok 12 kez yeniden denenir.
+4. `SMTP_KULLANICI` ve `SMTP_SIFRESI` tanımlıysa yeni talep e-postayla iletilir (alıcı `BILDIRIM_EPOSTA`, boşsa aynı kutu). `BILDIRIM_WEBHOOK_URL` tanımlıysa ayrıca o adrese gönderilir. Gönderim başarısız olursa kayıt durur, bildirim 5 dakikada bir en çok 12 kez yeniden denenir. E-posta durumu talep listesinde her kaydın altında görünür.
 5. Satış sorumlusu `/yonetim/talepler/` sayfasında talepleri görür ve durumu günceller: yeni, ulaşıldı, uygun, görüşme, teklif, kazanıldı, kapandı.
 
 **Test sonucu (14 Kasım 2026, geliştirme ve üretim derlemesi):**
@@ -487,7 +487,8 @@ Yazılmayan içerik: PRD'deki 36 rehberin 30'u (07-36). Rehber dizini yalnız va
 
 Test kayıtları veritabanında `test` türüyle duruyor ve asıl rapora girmiyor. Canlıya çıkmadan önce `veri/` klasörü boşaltılabilir.
 
-**Eksik olan:** e-posta bildirimi. Bugün yalnız webhook var; talebin kime, hangi sistemle iletileceği belli olduğunda bağlanmalı.
+**E-posta bildirimi (18 Kasım 2026):** Hostinger Mail SMTP'si ile eklendi. Etkin olması için hPanel ortam değişkenlerine
+`SMTP_KULLANICI` ve `SMTP_SIFRESI` girilip yeniden dağıtım yapılmalı. Bu tarihten önceki kayıtlar için geriye dönük e-posta gönderilmez.
 Kampanya yayına girmeden önce bir gerçek test başvurusunun sorumlunun gördüğü kuyruğa düştüğü ayrıca doğrulanmalı.
 
 ## 4. Ölçüm nasıl test edildi?
@@ -567,8 +568,8 @@ Son denetim: 25 sayfa, sorun yok. 360, 390, 768, 1024 ve 1440 px'te yatay taşma
   solda H1'i "Görüşme isteyin" olan form fişi, sağda telefon, WhatsApp ve e-posta satırları ile görüşme sahnesi.
   Telefonda sıra form, iletişim yolları, sahne. Telefon ve WhatsApp tıklamaları `phone_click` ve `whatsapp_click` olarak
   ölçülür; bunlar talep sayılmaz. Arama, WhatsApp ve e-posta bağlantıları gerçek cihazda denenmedi.
-- **Form bildirimi:** formdan gelen talepler hâlâ yalnız sunucudaki kayda düşüyor (bölüm 3). info@satislariartir.com adresine
-  bildirim gitmesi isteniyorsa bildirim adresinin tanımlanması gerekir.
+- **Form bildirimi:** e-posta kodu hazır (bölüm 3). Çalışması için posta kutusu bilgilerinin hPanel ortam değişkenlerine
+  girilmesi gerekir.
 - **Veri sorumlusu:** unvan, adres, başvuru e-postası, varsa MERSİS. Girilince yasal sayfalar taslaktan çıkar.
 - **Hukuk onayı:** aydınlatma metnindeki hukuki sebepler ve saklama süresi ifadesi bir hukukçu tarafından gözden geçirilmeli.
 - **Formun teslim edileceği kişi ya da sistem:** CRM ya da bildirim adresi, talep listesi kullanıcı adı ve şifresi.

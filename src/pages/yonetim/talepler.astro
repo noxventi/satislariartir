@@ -8,7 +8,7 @@ import '../../styles/global.css';
 import '@fontsource-variable/archivo/wdth.css';
 import '@fontsource-variable/source-sans-3/wght.css';
 import { timingSafeEqual } from 'node:crypto';
-import { DURUMLAR, DURUM_ETIKETLERI, durumGuncelle, ozetSayilar, talepleriListele, type Durum, type Tur } from '../../lib/talepler';
+import { DURUMLAR, DURUM_ETIKETLERI, durumGuncelle, ozetSayilar, talepleriListele, type Durum, type Talep, type Tur } from '../../lib/talepler';
 import { KANALLAR } from '../../site.config';
 
 export const prerender = false;
@@ -61,6 +61,14 @@ const kaynakOzeti = (ham: string) => {
   } catch {
     return { metin: 'Okunamadı', giris: '' };
   }
+};
+const epostaDurumu = (t: Talep) => {
+  const hata = t.eposta_hata ? `, ${t.eposta_hata}` : '';
+  if (t.eposta_bildirim === 'gonderildi') return 'gönderildi';
+  if (t.eposta_bildirim === 'gonderiliyor') return 'gönderiliyor';
+  if (t.eposta_bildirim === 'basarisiz') return `gönderilemedi (${t.eposta_deneme} deneme${hata})`;
+  if (t.eposta_bildirim === 'bekliyor') return t.eposta_deneme ? `yeniden denenecek (${t.eposta_deneme} deneme${hata})` : 'sırada';
+  return 'gönderilmedi (bildirim kapalıydı)';
 };
 const TURLER: { deger: Tur | 'hepsi'; etiket: string }[] = [
   { deger: 'gercek', etiket: 'Gerçek' },
@@ -147,6 +155,7 @@ const TURLER: { deger: Tur | 'hepsi'; etiket: string }[] = [
                     </p>
                     <p class="ikincil">Form: {t.sayfa || 'bilinmiyor'}{k.giris && `, giriş: ${k.giris}`}</p>
                     <p class="ikincil rakam">{tarih.format(new Date(t.olusturma))} · {t.kimlik}</p>
+                    <p class="ikincil">E-posta: {epostaDurumu(t)}</p>
                   </div>
                   <form class="yon__durum" method="post">
                     <input type="hidden" name="id" value={t.id} />

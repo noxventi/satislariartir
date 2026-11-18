@@ -24,10 +24,12 @@
     "@fontsource-variable/source-sans-3": "^5.3.1",
     "@iconify-json/ph": "^1.2.2",
     "astro": "^7.4.12",
+    "nodemailer": "^10.6.0",
     "sharp": "^0.35.5"
   },
   "private": true,
   "devDependencies": {
+    "@types/nodemailer": "^8.0.2",
     "puppeteer-core": "^25.17.0"
   }
 }
