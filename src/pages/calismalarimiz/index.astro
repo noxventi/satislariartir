@@ -1,25 +1,37 @@
 ---
 /**
- * Çalışmalar: gerçek site görüntülerinden oluşan bir duvar.
+ * Çalışmalar sayfası. Sıra: kısa başlık, sağlık vitrini (sayfanın odağı), diğer sektörlerin iki ayrıntılı dosyası,
+ * yayındaki sitelerin duvarı.
  *
- * - Görüntüler canlı sitelerin ilk ekranlarıdır (araclar/proje-ekran.mjs), üretilmiş ya da taklit edilmiş değildir.
+ * - Görüntüler canlı sitelerin kendisidir (araclar/proje-ekran.mjs), üretilmiş ya da taklit edilmiş değildir.
  * - Web tasarımı yapılmayan projelerde (yalnız reklam ya da SEO) site görüntüsü kullanılmaz: tasarım ekibe atfedilmez.
- *   Avukat ve hekim sitelerinde de kişi portresi içerdiği için görüntü yerine yazı karosu kullanılır.
- * - Sağlık markalarında reklam yönetimi satırı yoktur. Ölçülmüş sonuç hiçbir kayıtta yer almaz.
+ * - Kişi portresi gösterilmez. Doç. Dr. Pınar Taşdemir'in sitesinden yalnız portre içermeyen iki kesit kullanılır:
+ *   masaüstü ilk ekranın yazı tarafı ve telefondaki uygulamalar bölümü (alındığı gün: SAGLIK_EKRAN_TARIHI).
+ *   Avukat sitesi duvarda yazı karosuyla durur.
+ * - Sağlık markalarında reklam yönetimi satırı yoktur. Hekim sözleri MUSTERI_YORUMLARI kaydından kelimesi kelimesine gelir.
+ * - Ölçülmüş sonuç hiçbir kayıtta yer almaz.
  */
 import type { ImageMetadata } from 'astro';
 import Temel from '../../layouts/Temel.astro';
 import GorusmeBandi from '../../components/GorusmeBandi.astro';
 import Gorsel from '../../components/Gorsel.astro';
 import Ikon from '../../components/Ikon.astro';
-import { KAYNAK_KONTROL_TARIHI, MUSTERI_SOZLERI, PROJELER, projeBul, type Proje } from '../../data/projeler';
+import Isaret from '../../components/Isaret.astro';
+import { KAYNAK_KONTROL_TARIHI, MUSTERI_SOZLERI, MUSTERI_YORUMLARI, PROJELER, projeBul, type Proje } from '../../data/projeler';
+import { SEKTORLER, sektorGorseli, sektorUrl } from '../../data/sektorler';
+import pinarIlkEkran from '../../assets/projeler/kayseridermatolog-ayrinti.jpg';
+import pinarTelefon from '../../assets/projeler/kayseridermatolog-uygulamalar.jpg';
 
 const CAGRI = 'Benzer bir projeyi görüşelim';
+const SAGLIK = 'Sağlık';
+const SAGLIK_EKRAN_TARIHI = '19 Kasım 2026';
 const kirintilar = [{ ad: 'Çalışmalarımız', url: '/calismalarimiz/' }];
 const sektorSayisi = new Set(PROJELER.map((p) => p.sektor)).size;
 
 const ekranlar = import.meta.glob<{ default: ImageMetadata }>('../../assets/projeler/*.jpg', { eager: true });
 const ekranBul = (p: Proje, tur: 'masaustu' | 'mobil') => ekranlar[`../../assets/projeler/${p.alanAdi.split('.')[0]}-${tur}.jpg`]?.default;
+const logolar = import.meta.glob<{ default: ImageMetadata }>('../../assets/logolar/*.png', { eager: true });
+const logoBul = (kimlik: string) => logolar[`../../assets/logolar/${kimlik}.png`]?.default;
 
 const isler = (p: Proje) => [
   ...p.obrandyKapsami,
@@ -33,13 +45,39 @@ const turler = (p: Proje) =>
     p.reklamYonetimi === 'beyan' && 'reklam',
   ].filter(Boolean) as string[];
 
+// ---- Sağlık vitrini -------------------------------------------------------------------------------
+const hekimler = PROJELER.filter((p) => p.sektor === SAGLIK);
+const SAYI_ADLARI = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+const hekimSayisi = SAYI_ADLARI[hekimler.length] ?? String(hekimler.length);
+const pinar = projeBul('pinar-tasdemir');
+const pinarLogo = logoBul(pinar.kimlik);
+/** İki hekimin kayıtlı sözü. Kısa söz büyük, uzun söz küçük dizilir; kartlar aynı yükseklikte kalır. */
+const hekimSozleri = ['emre-apaydin', 'belda-yurtseven-tuner'].map((kimlik) => {
+  const p = projeBul(kimlik);
+  const y = MUSTERI_YORUMLARI.find((x) => x.kimlik === kimlik);
+  if (!y) throw new Error(`Çalışmalar: "${kimlik}" için kayıtlı müşteri sözü yok.`);
+  return { p, y, logo: logoBul(kimlik), boy: y.soz.length < 160 ? 'buyuk' : 'kucuk' };
+});
+/** Sağlıkta çalıştığımız iki alanın sektör sayfası. */
+const saglikAlanlari = [
+  { kimlik: 'saglik-ve-klinikler', ust: 'Hekim, muayenehane, klinik, diş hekimi' },
+  { kimlik: 'saglik-turizmi', ust: 'Yetki belgeli klinik ve hastaneler' },
+].map(({ kimlik, ust }) => {
+  const s = SEKTORLER.find((x) => x.kimlik === kimlik);
+  if (!s) throw new Error(`Çalışmalar: "${kimlik}" sektör kaydı yok.`);
+  return { ust, ad: s.ad, ozet: s.ozet, url: sektorUrl(s), gorsel: sektorGorseli(kimlik) };
+});
+
+// ---- Diğer sektörler ----------------------------------------------------------------------------
+const digerleri = PROJELER.filter((p) => p.sektor !== SAGLIK);
+const digerSektorSayisi = new Set(digerleri.map((p) => p.sektor)).size;
 const celik = projeBul('celikvillam');
 const hun = projeBul('hun-education');
 const soz = MUSTERI_SOZLERI['hun-education'];
 
 /**
  * Duvarın dizilişi. G: masaüstü görüntüsü (geniş), D: telefon görüntüsü (dar), T: yazı karosu.
- * Her satır 12 sütunu doldurur: G D D / D G T / T D G / G D D / D T T T.
+ * Her satır 12 sütunu doldurur: G D D / D G T / T D G / D D D D. Sağlık projeleri yukarıdaki vitrinde durur.
  */
 const dizilis: [string, 'G' | 'D' | 'T'][] = [
   ['burger-engineer', 'G'],
@@ -51,15 +89,12 @@ const dizilis: [string, 'G' | 'D' | 'T'][] = [
   ['suha-akyildiz', 'T'],
   ['rotech-danismanlik', 'D'],
   ['rotech-defense', 'G'],
-  ['bodrum-olive-house', 'G'],
+  ['bodrum-olive-house', 'D'],
   ['yurt-disi-egitim-rehberim', 'D'],
   ['eduregist', 'D'],
   ['ilk-gunebakan', 'D'],
-  ['pinar-tasdemir', 'T'],
-  ['emre-apaydin', 'T'],
-  ['belda-yurtseven-tuner', 'T'],
 ];
-const RENKLER = ['mavi', 'acik', 'murekkep', 'acik', 'mavi'];
+const RENKLER = ['mavi', 'acik', 'murekkep'];
 let yaziSirasi = 0;
 const duvar = dizilis.map(([kimlik, istenen]) => {
   const p = projeBul(kimlik);
@@ -78,7 +113,7 @@ const suzgecler = [
 
 <Temel
   baslik="Projeler ve Müşteri Görüşleri | Satışları Artır"
-  aciklama={`Yürüttüğümüz seçili projeler: ${sektorSayisi} sektörden ${PROJELER.length} marka, canlı site görüntüleri ve yapılan işle birlikte.`}
+  aciklama={`Hekim sitelerinden üretime yürüttüğümüz seçili projeler: sağlıkta web tasarım, SEO ve GEO çalışmaları ve ${sektorSayisi} sektörden ${PROJELER.length} marka.`}
   sayfaTuru="projeler"
   kirintilar={kirintilar}
   cagri={{ etiket: CAGRI, url: '#gorusme' }}
@@ -95,64 +130,207 @@ const suzgecler = [
       <div class="cb__ic">
         <h1 class="dev cb__baslik">Çalıştığımız markalar</h1>
         <p class="giris cb__giris">
-          Yapıdan eğitime, yeme içmeden üretime {sektorSayisi} sektörden {PROJELER.length} marka. Aşağıdaki görüntüler
-          yayındaki sitelerin kendisi: dokunun, canlı siteyi açıp kendiniz inceleyin.
+          Sağlıktan eğitime, yapıdan üretime {sektorSayisi} sektörden {PROJELER.length} marka. Görüntüler yayındaki
+          sitelerin kendisi: dokunun, canlı siteyi açıp kendiniz inceleyin.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Ayrıntılı iki dosya -->
-  <section class="one-cikan">
+  <!-- Sağlık vitrini -->
+  <section class="saglik koyu-zemin" id="saglik" aria-labelledby="saglik-baslik">
     <div class="sarici">
-      <h2 class="gorunmez">Ayrıntılı proje dosyaları</h2>
+      <header class="saglik__bas">
+        <p class="etiket saglik__etiket">Sağlık ve klinikler</p>
+        <h2 class="saglik__baslik" id="saglik-baslik">
+          <Isaret tip="alt">Hekimlerle</Isaret> yürüttüğümüz çalışmalar
+        </h2>
+        <p class="giris saglik__giris">
+          Ankara, Eskişehir ve Kayseri’de {hekimSayisi} hekimin yayındaki sitesi. Tanıtımın kurallara bağlı olduğu bu
+          alanda web tasarım, SEO ve GEO üzerinde çalıştık.
+        </p>
+      </header>
 
-      <article class="dosya dosya--celik">
-        <div class="dosya__metin">
-          <p class="etiket">{celik.sektor}</p>
-          <h3 class="dosya__ad">{celik.siteAdi}</h3>
-          <p class="dosya__karar">{celik.karar}</p>
-          <ul class="cipler" aria-label="Yapılan iş">
-            {isler(celik).map((i) => <li>{i}</li>)}
-          </ul>
-          <a class="dugme dugme--murekkep" href={celik.dosya} data-olay="cta_click" data-yer="projeler-dosya">
-            Projeyi inceleyin
-            <Ikon ad="arrow-right" boyut={18} />
+      <!-- Sıra marka sahibinin isteğiyle: önce Emre Apaydın, sonra Belda Yurtseven Tüner, sonra Pınar Taşdemir. -->
+      <!-- İki hekimin sözü -->
+      <div class="hekim-sozleri">
+        <h3 class="gorunmez">Hekimlerin sözleri</h3>
+        {
+          hekimSozleri.map(({ p, y, logo, boy }) => (
+            <figure class="hs">
+              <span class="hs__tirnak" aria-hidden="true">
+                “
+              </span>
+              <blockquote class:list={['hs__soz', `hs__soz--${boy}`]}>
+                <p>{y.soz}</p>
+              </blockquote>
+              <figcaption class="hs__kim">
+                {logo && <img class="hs__logo" src={logo.src} width={logo.width} height={logo.height} alt="" loading="lazy" decoding="async" />}
+                <p class="hs__ad">
+                  <strong>{y.kisi}</strong>
+                  <span>{y.kurum}</span>
+                </p>
+                <p class="mikro hs__bilgi">
+                  {p.brans}, {p.il}. Yapılan iş: {y.is}
+                </p>
+                <a class="hs__bag mikro" href={`https://${p.alanAdi}/`} rel="noopener">
+                  {p.alanAdi}
+                  <Ikon ad="arrow-up-right" boyut={13} />
+                </a>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      <!-- Web tasarımı da ekibimize ait olan hekim sitesi -->
+      <article class="hekim">
+        <figure class="hekim__gorsel">
+          <a class="hekim__ekran" href={`https://${pinar.alanAdi}/`} rel="noopener" tabindex="-1" aria-hidden="true">
+            <Gorsel
+              src={pinarIlkEkran}
+              alt=""
+              sizes="(max-width: 47.99rem) 56vw, (max-width: 61.99rem) 48vw, 34vw"
+              genislikler={[480, 720, 960, 1200, 1660]}
+              kalite={74}
+            />
           </a>
-        </div>
-        <a class="dosya__ekran" href={celik.dosya} tabindex="-1" aria-hidden="true">
-          <span class="dosya__masaustu">
-            <Gorsel src={ekranBul(celik, 'masaustu')!} alt="" sizes="(max-width: 55.99rem) 92vw, 50vw" genislikler={[640, 960, 1280, 1440]} kalite={72} oncelik />
+          <span class="hekim__telefon">
+            <Gorsel src={pinarTelefon} alt="" sizes="(max-width: 47.99rem) 36vw, (max-width: 61.99rem) 24vw, 16vw" genislikler={[240, 360, 480, 780]} kalite={74} />
           </span>
-          <span class="dosya__telefon">
-            <Gorsel src={ekranBul(celik, 'mobil')!} alt="" sizes="(max-width: 55.99rem) 30vw, 14vw" genislikler={[240, 360, 480, 780]} kalite={72} oncelik />
-          </span>
-        </a>
-      </article>
-
-      <article class="dosya dosya--hun koyu-zemin">
-        <figure class="dosya__soz">
-          <blockquote>
-            <p>“{soz.soz}”</p>
-          </blockquote>
-          <figcaption>
-            <strong>{soz.kisi}</strong>, {soz.kurum}
+          <figcaption class="mikro hekim__kaynak">
+            {pinar.alanAdi}: masaüstünde ilk ekran, telefonda uygulamalar bölümü ({SAGLIK_EKRAN_TARIHI})
           </figcaption>
         </figure>
-        <div class="dosya__metin">
-          <p class="etiket">{hun.sektor}</p>
-          <h3 class="dosya__ad">{hun.marka}</h3>
-          <p class="dosya__karar">{hun.karar}</p>
-          <ul class="cipler" aria-label="Yapılan iş">
-            {isler(hun).map((i) => <li>{i}</li>)}
+
+        <div class="hekim__metin">
+          {pinarLogo && <img class="hekim__logo" src={pinarLogo.src} width={pinarLogo.width} height={pinarLogo.height} alt="Pınar Este-Clinic" loading="lazy" decoding="async" />}
+          <p class="etiket hekim__brans">
+            <Ikon ad="map-pin" boyut={15} />
+            {pinar.brans}, {pinar.il}
+          </p>
+          <h3 class="hekim__ad">{pinar.marka}</h3>
+          <p class="hekim__soru">{pinar.karar}</p>
+          <p class="hekim__aciklama">
+            Sitenin tasarımını ve sayfa planını bu soruya göre kurduk. SEO ve GEO çalışması aynı plan üzerinde yürüdü.
+          </p>
+          <ul class="cipler cipler--koyu" aria-label="Yapılan iş">
+            {isler(pinar).map((i) => <li>{i}</li>)}
           </ul>
-          <a class="dugme dosya__dugme" href={hun.dosya} data-olay="cta_click" data-yer="projeler-dosya">
-            Projeyi inceleyin
-            <Ikon ad="arrow-right" boyut={18} />
+          <a class="dugme dugme--beyaz" href={`https://${pinar.alanAdi}/`} rel="noopener" data-olay="cta_click" data-yer="projeler-saglik-site">
+            Canlı siteyi açın
+            <Ikon ad="arrow-up-right" boyut={18} />
           </a>
-          <p class="mikro dosya__not">{hun.tasarimNotu}</p>
         </div>
       </article>
+
+      <!-- Sağlıkta çalışma biçimi ve iki alanın sayfası -->
+      <div class="saglik__alt">
+        <div class="ilke">
+          <h3 class="ilke__baslik">Sağlıkta nasıl çalışıyoruz?</h3>
+          <ul class="ilke__liste">
+            <li>
+              <strong>Kuralları baştan okuyoruz.</strong>
+              <span>Sayfa planını hekimlerin tanıtım kurallarına bakarak, sizinle birlikte çıkarıyoruz.</span>
+            </li>
+            <li>
+              <strong>Metni hekim onaylar.</strong>
+              <span>Tıbbi bilgi içeren her sayfa yayından önce hekimin onayına sunulur.</span>
+            </li>
+            <li>
+              <strong>Sonuç sözü vermiyoruz.</strong>
+              <span>Hasta sayısı ya da sıralama için söz vermiyoruz. Hedefimiz, hastanın sizi doğru bilgiyle bulması.</span>
+            </li>
+          </ul>
+          <a class="dugme dugme--beyaz" href="#gorusme" data-olay="cta_click" data-yer="projeler-saglik">
+            Kliniğiniz için görüşelim
+            <Ikon ad="arrow-right" boyut={18} />
+          </a>
+        </div>
+
+        <ul class="alanlar" aria-label="Sağlıkta çalıştığımız alanlar">
+          {
+            saglikAlanlari.map((a) => (
+              <li>
+                <a class="alan-kart" href={a.url}>
+                  <span class="alan-kart__gorsel">
+                    <Gorsel src={a.gorsel} alt="" sizes="(max-width: 47.99rem) 92vw, (max-width: 61.99rem) 46vw, 28vw" genislikler={[480, 720, 960]} kalite={66} />
+                  </span>
+                  <span class="etiket alan-kart__ust">{a.ust}</span>
+                  <span class="alan-kart__ad">{a.ad}</span>
+                  <span class="alan-kart__ozet">{a.ozet}</span>
+                  <span class="alan-kart__ok">
+                    Nasıl çalıştığımızı okuyun
+                    <Ikon ad="arrow-right" boyut={16} />
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Diğer sektörler: iki ayrıntılı dosya -->
+  <section class="bolum diger" id="diger-sektorler" aria-labelledby="diger-baslik">
+    <div class="sarici">
+      <div class="diger__bas">
+        <h2 class="baslik-2" id="diger-baslik">Diğer sektörlerden çalışmalar</h2>
+        <p class="giris">
+          Yapıdan eğitime, yeme içmeden üretime {digerSektorSayisi} sektörden {digerleri.length} marka. İkisini ayrıntılı
+          dosyasıyla anlatıyoruz.
+        </p>
+      </div>
+
+      <div class="dosyalar">
+        <article class="dosya dosya--celik">
+          <div class="dosya__metin">
+            <p class="etiket">{celik.sektor}</p>
+            <h3 class="dosya__ad">{celik.siteAdi}</h3>
+            <p class="dosya__karar">{celik.karar}</p>
+            <ul class="cipler" aria-label="Yapılan iş">
+              {isler(celik).map((i) => <li>{i}</li>)}
+            </ul>
+            <a class="dugme dugme--murekkep" href={celik.dosya} data-olay="cta_click" data-yer="projeler-dosya">
+              Projeyi inceleyin
+              <Ikon ad="arrow-right" boyut={18} />
+            </a>
+          </div>
+          <a class="dosya__ekran" href={celik.dosya} tabindex="-1" aria-hidden="true">
+            <span class="dosya__masaustu">
+              <Gorsel src={ekranBul(celik, 'masaustu')!} alt="" sizes="(max-width: 55.99rem) 92vw, 50vw" genislikler={[640, 960, 1280, 1440]} kalite={72} />
+            </span>
+            <span class="dosya__telefon">
+              <Gorsel src={ekranBul(celik, 'mobil')!} alt="" sizes="(max-width: 55.99rem) 30vw, 14vw" genislikler={[240, 360, 480, 780]} kalite={72} />
+            </span>
+          </a>
+        </article>
+
+        <article class="dosya dosya--hun koyu-zemin">
+          <figure class="dosya__soz">
+            <blockquote>
+              <p>“{soz.soz}”</p>
+            </blockquote>
+            <figcaption>
+              <strong>{soz.kisi}</strong>, {soz.kurum}
+            </figcaption>
+          </figure>
+          <div class="dosya__metin">
+            <p class="etiket">{hun.sektor}</p>
+            <h3 class="dosya__ad">{hun.marka}</h3>
+            <p class="dosya__karar">{hun.karar}</p>
+            <ul class="cipler" aria-label="Yapılan iş">
+              {isler(hun).map((i) => <li>{i}</li>)}
+            </ul>
+            <a class="dugme dugme--beyaz" href={hun.dosya} data-olay="cta_click" data-yer="projeler-dosya">
+              Projeyi inceleyin
+              <Ikon ad="arrow-right" boyut={18} />
+            </a>
+            <p class="mikro dosya__not">{hun.tasarimNotu}</p>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -268,7 +446,7 @@ const suzgecler = [
 <style>
   /* ---- Başlık ------------------------------------------------------------- */
   .cb {
-    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(2rem, 4vw, 3.5rem);
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(2.25rem, 4.4vw, 4rem);
   }
   .cb__ic {
     display: grid;
@@ -293,11 +471,466 @@ const suzgecler = [
     }
   }
 
-  /* ---- İki dosya ------------------------------------------------------------ */
-  .one-cikan {
-    padding-block-end: var(--bolum);
+  /* ---- Sağlık vitrini ----------------------------------------------------------
+     Lacivert bant. Kırmızı kalem ve tırnak bu zeminde açık tonla çizilir (koyu kırmızı lacivertte kaybolur). */
+  .saglik {
+    --acik-kirmizi: #ff6b7f;
+    --sutun-ara: clamp(1rem, 2.4vw, 2.5rem);
+    position: relative;
+    padding-block: clamp(3.5rem, 7.5vw, 7.5rem) clamp(4rem, 8vw, 8rem);
+    background: var(--murekkep);
+    color: var(--beyaz);
+    overflow: clip;
   }
-  .one-cikan .sarici {
+  .saglik :global(.isaret__cizim path) {
+    stroke: var(--acik-kirmizi);
+  }
+
+  /* Bölüm başı */
+  .saglik__bas {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--sutun-ara);
+    row-gap: 1.25rem;
+    align-items: end;
+  }
+  .saglik__etiket {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgb(255 255 255 / 0.74);
+  }
+  .saglik__etiket::before {
+    content: '';
+    width: 2.25rem;
+    height: 2px;
+    background: var(--acik-kirmizi);
+  }
+  .saglik__baslik {
+    grid-column: 1 / span 8;
+    font-size: clamp(2.45rem, 1rem + 4.9vw, 5.6rem);
+    font-weight: 730;
+    font-stretch: 82%;
+    line-height: 0.96;
+    letter-spacing: -0.032em;
+  }
+  .saglik__giris {
+    grid-column: 9 / -1;
+    padding-block-end: 0.45rem;
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  /* Öne çıkan hekim sitesi: masaüstü ve telefon kesiti yan yana, aynı yükseklikte; yazı sağda.
+     Sütun oranları görüntülerin en boy oranıdır (1660/1672 ve 390/844), böylece iki görüntünün boyu eşit kalır. */
+  .hekim {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--sutun-ara);
+    row-gap: 2.25rem;
+    align-items: center;
+    margin-block-start: clamp(3.5rem, 7vw, 6.5rem);
+  }
+  .hekim__gorsel {
+    --oran-ekran: 1660 / 1672;
+    grid-column: 1 / span 7;
+    display: grid;
+    grid-template-columns: minmax(0, 99.3fr) minmax(0, 46.2fr);
+    column-gap: clamp(0.6rem, 1.2vw, 1.1rem);
+    row-gap: 0.9rem;
+  }
+  .hekim__ekran,
+  .hekim__telefon {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--kose);
+    background: #f3eee6;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.1),
+      0 40px 72px -34px rgb(0 0 0 / 0.75);
+  }
+  .hekim__telefon {
+    background: #1c1714;
+  }
+  .hekim__ekran :global(picture),
+  .hekim__telefon :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .hekim__ekran :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--oran-ekran);
+    object-fit: cover;
+    object-position: top left;
+    transition: transform 900ms var(--yumusak);
+  }
+  .hekim__telefon :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 390 / 844;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .hekim:hover .hekim__ekran :global(img) {
+    transform: scale(1.015);
+  }
+  .hekim__kaynak {
+    grid-column: 1 / -1;
+    color: rgb(255 255 255 / 0.56);
+    line-height: 1.35;
+  }
+
+  .hekim__metin {
+    grid-column: 8 / -1;
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  /* Logolar tek renk koyu çizimdir; laciverde beyaz düşer. */
+  .hekim__logo {
+    width: auto;
+    height: auto;
+    max-width: min(18rem, 100%);
+    max-height: 2.4rem;
+    margin-block-end: 0.75rem;
+    filter: brightness(0) invert(1);
+    opacity: 0.94;
+  }
+  .hekim__brans {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--acik-kirmizi);
+  }
+  .hekim__ad {
+    font-size: clamp(2rem, 1.25rem + 2.6vw, 3.4rem);
+    font-weight: 720;
+    font-stretch: 84%;
+    line-height: 0.98;
+    letter-spacing: -0.028em;
+  }
+  .hekim__soru {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.55rem);
+    font-weight: 560;
+    font-stretch: 94%;
+    line-height: 1.24;
+    letter-spacing: -0.012em;
+    max-width: 22em;
+    color: rgb(255 255 255 / 0.94);
+  }
+  .hekim__aciklama {
+    max-width: 30em;
+    color: rgb(255 255 255 / 0.74);
+  }
+  .hekim__metin .dugme {
+    margin-block-start: 0.5rem;
+  }
+
+  /* İki hekimin sözü: kâğıt kartlar, ana sayfadaki yorumlarla aynı dil. */
+  .hekim-sozleri {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.8vw, 1.6rem);
+    margin-block-start: clamp(2.75rem, 6vw, 5.5rem);
+  }
+  .hs {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+    padding: clamp(1.5rem, 2.8vw, 2.6rem);
+    background: var(--kagit);
+    border-radius: var(--kose);
+    box-shadow: 0.45rem 0.45rem 0 rgb(0 0 0 / 0.3);
+    color: var(--murekkep);
+  }
+  .hs__tirnak {
+    display: block;
+    height: 2.2rem;
+    font-family: var(--yazi-baslik);
+    font-size: 5.5rem;
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--kirmizi);
+  }
+  .hs__soz p {
+    font-family: var(--yazi-baslik);
+    font-weight: 580;
+    font-stretch: 92%;
+    letter-spacing: -0.016em;
+    text-wrap: pretty;
+  }
+  .hs__soz--buyuk p {
+    font-size: clamp(1.45rem, 1.15rem + 1.1vw, 2.05rem);
+    line-height: 1.18;
+  }
+  .hs__soz--kucuk p {
+    font-size: clamp(1.15rem, 1.04rem + 0.45vw, 1.4rem);
+    line-height: 1.3;
+  }
+  .hs__kim {
+    display: grid;
+    gap: 0.45rem;
+    justify-items: start;
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--cizgi);
+  }
+  .hs__logo {
+    width: auto;
+    height: auto;
+    max-width: 12rem;
+    max-height: 2.1rem;
+    margin-block-end: 0.4rem;
+  }
+  .hs__ad {
+    display: grid;
+    line-height: 1.3;
+  }
+  .hs__ad strong {
+    font-family: var(--yazi-baslik);
+    font-weight: 680;
+    font-stretch: 94%;
+  }
+  .hs__ad span {
+    color: var(--murekkep-2);
+  }
+  .hs__bilgi {
+    color: var(--ikincil);
+  }
+  .hs__bag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 2.75rem;
+    font-family: var(--yazi-baslik);
+    font-weight: 620;
+    color: var(--murekkep);
+    text-decoration-color: var(--cizgi-koyu);
+  }
+  .hs__bag:hover {
+    text-decoration-color: var(--kirmizi);
+  }
+
+  /* Çalışma biçimi ve iki alanın sayfası */
+  .saglik__alt {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--sutun-ara);
+    row-gap: 3rem;
+    margin-block-start: clamp(3.5rem, 7vw, 6.5rem);
+    padding-block-start: clamp(2.5rem, 5vw, 4rem);
+    border-block-start: 1px solid rgb(255 255 255 / 0.16);
+  }
+  .ilke {
+    grid-column: 1 / span 4;
+    display: grid;
+    gap: 1.75rem;
+    align-content: start;
+    justify-items: start;
+  }
+  .ilke__baslik {
+    font-size: var(--b-2);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.02;
+    letter-spacing: -0.024em;
+  }
+  .ilke__liste {
+    display: grid;
+    gap: 1.35rem;
+  }
+  .ilke__liste li {
+    position: relative;
+    display: grid;
+    gap: 0.2rem;
+    padding-inline-start: 2.4rem;
+  }
+  /* Kırmızı kalem tiki */
+  .ilke__liste li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.6rem;
+    width: 1.15rem;
+    height: 0.58rem;
+    border-left: 3px solid var(--acik-kirmizi);
+    border-bottom: 3px solid var(--acik-kirmizi);
+    transform: rotate(-48deg);
+    transform-origin: left bottom;
+    border-radius: 1px;
+  }
+  .ilke__liste strong {
+    font-family: var(--yazi-baslik);
+    font-size: 1.1875rem;
+    font-weight: 660;
+    font-stretch: 92%;
+    letter-spacing: -0.012em;
+  }
+  .ilke__liste span {
+    color: rgb(255 255 255 / 0.74);
+  }
+
+  .alanlar {
+    grid-column: 6 / -1;
+    align-self: start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.8vw, 1.6rem);
+  }
+  .alanlar li {
+    display: grid;
+  }
+  .alan-kart {
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 0.45rem;
+    align-content: start;
+    color: var(--beyaz);
+    text-decoration: none;
+  }
+  .alan-kart__gorsel {
+    display: block;
+    overflow: hidden;
+    margin-block-end: 0.75rem;
+    border-radius: var(--kose);
+    background: #c9d4ea;
+  }
+  .alan-kart__gorsel :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    transition: transform 900ms var(--yumusak);
+  }
+  .alan-kart__ust {
+    color: rgb(255 255 255 / 0.66);
+  }
+  .alan-kart__ad {
+    font-family: var(--yazi-baslik);
+    font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.85rem);
+    font-weight: 700;
+    font-stretch: 86%;
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+  }
+  .alan-kart__ozet {
+    color: rgb(255 255 255 / 0.76);
+    font-size: var(--b-kucuk);
+    line-height: 1.5;
+  }
+  .alan-kart__ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    margin-block-start: 0.35rem;
+    font-family: var(--yazi-baslik);
+    font-weight: 640;
+    font-stretch: 96%;
+    text-decoration: underline;
+    text-decoration-thickness: 0.07em;
+    text-underline-offset: 0.28em;
+    text-decoration-color: rgb(255 255 255 / 0.4);
+    transition: text-decoration-color var(--hizli);
+  }
+  .alan-kart:hover .alan-kart__gorsel :global(img) {
+    transform: scale(1.035);
+  }
+  .alan-kart:hover .alan-kart__ok {
+    text-decoration-color: var(--acik-kirmizi);
+  }
+  .alan-kart:focus-visible {
+    outline-offset: 6px;
+  }
+
+  @media (max-width: 61.99rem) {
+    .saglik__baslik,
+    .saglik__giris {
+      grid-column: 1 / -1;
+    }
+    .saglik__giris {
+      max-width: 34em;
+    }
+    .hekim__gorsel {
+      grid-column: 1 / span 12;
+      max-width: 44rem;
+    }
+    .hekim__metin {
+      grid-column: 1 / -1;
+    }
+    .ilke,
+    .alanlar {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .hekim {
+      row-gap: 2rem;
+    }
+    /* Telefonda masaüstü kesiti 3:4 kadrajla, başlığın durduğu sol taraftan gösterilir; telefon görüntüsü büyür. */
+    .hekim__gorsel {
+      --oran-ekran: 3 / 4;
+      grid-template-columns: minmax(0, 75fr) minmax(0, 46.2fr);
+      column-gap: 0.5rem;
+    }
+    .hekim__logo {
+      max-height: 2rem;
+      margin-block-end: 0.25rem;
+    }
+    .hekim__metin .dugme {
+      width: 100%;
+    }
+    .hekim-sozleri {
+      grid-template-columns: 1fr;
+    }
+    .alanlar {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .ilke .dugme {
+      width: 100%;
+    }
+  }
+
+  /* Beyaz düğme: lacivert zeminde. */
+  .dugme--beyaz {
+    --dz: var(--beyaz);
+    --dz-uzeri: #e8edf8;
+    --dy: var(--murekkep);
+    --dg: var(--kirmizi);
+    --dk: var(--beyaz);
+  }
+  .cipler.cipler--koyu li {
+    color: var(--beyaz);
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
+  }
+
+  /* ---- Diğer sektörler: başlık ve iki dosya -------------------------------------- */
+  .diger__bas {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 1rem;
+    align-items: end;
+    margin-block-end: clamp(1.75rem, 3.5vw, 3rem);
+  }
+  .diger__bas h2 {
+    grid-column: 1 / span 6;
+  }
+  .diger__bas .giris {
+    grid-column: 7 / -1;
+  }
+  @media (max-width: 55.99rem) {
+    .diger__bas h2,
+    .diger__bas .giris {
+      grid-column: 1 / -1;
+    }
+  }
+  .dosyalar {
     display: grid;
     gap: clamp(0.75rem, 1.5vw, 1.4rem);
   }
@@ -370,13 +1003,6 @@ const suzgecler = [
     color: var(--beyaz);
     background: transparent;
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
-  }
-  .dosya__dugme {
-    --dz: var(--beyaz);
-    --dz-uzeri: #e8edf8;
-    --dy: var(--murekkep);
-    --dg: var(--kirmizi);
-    --dk: var(--beyaz);
   }
   .dosya__not {
     color: rgb(255 255 255 / 0.62);
@@ -618,7 +1244,7 @@ const suzgecler = [
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    min-height: 1.75rem;
+    min-height: 2.75rem;
     font-family: var(--yazi-baslik);
     font-weight: 620;
     color: var(--murekkep);
@@ -633,17 +1259,26 @@ const suzgecler = [
   .duvar__bos {
     padding-block: 2rem;
   }
+  /* Tablette yazı karoları da geniş durur; böylece 13 karo boşluksuz altı satıra dizilir. */
   @media (max-width: 61.99rem) {
     .kare {
       grid-column: span 4;
     }
-    .kare--g {
+    .kare--g,
+    .kare--t {
       grid-column: span 8;
+    }
+    .kare--t .kare__yazi {
+      aspect-ratio: 16 / 10.4;
     }
   }
   @media (max-width: 47.99rem) {
-    .kare {
+    .kare,
+    .kare--t {
       grid-column: span 6;
+    }
+    .kare--t .kare__yazi {
+      aspect-ratio: 3 / 4;
     }
     .kare--g {
       grid-column: span 12;
@@ -655,7 +1290,9 @@ const suzgecler = [
   @media (prefers-reduced-motion: reduce) {
     .kare__gorsel :global(img),
     .kare__yazi,
-    .dosya__ekran :global(img) {
+    .dosya__ekran :global(img),
+    .hekim__ekran :global(img),
+    .alan-kart__gorsel :global(img) {
       transition: none;
     }
   }

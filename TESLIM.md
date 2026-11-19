@@ -575,7 +575,10 @@ Son denetim: 25 sayfa, sorun yok. 360, 390, 768, 1024 ve 1440 px'te yatay taşma
 - **Formun teslim edileceği kişi ya da sistem:** CRM ya da bildirim adresi, talep listesi kullanıcı adı ve şifresi.
 - **Yetkili ekip adları:** `src/pages/hakkimizda.astro` içindeki `EKIP` listesi. Rehberlerde yazar ve inceleyen.
 - **Ölçüm kimlikleri:** `PUBLIC_GTM_ID`, `PUBLIC_META_PIXEL_ID`.
-- **Proje ekran görüntüleri için izin:** çalışmalar sayfasındaki on iki site (liste `gorsel-kaynak/KAYIT.md` dosyasında).
+- **Proje ekran görüntüleri için izin:** çalışmalar sayfasındaki on iki site (liste `gorsel-kaynak/KAYIT.md` dosyasında)
+  ve sağlık vitrinindeki kayseridermatolog.com kesitleri (19 Kasım 2026: masaüstü ilk ekranın yazı tarafı ve telefondaki
+  uygulamalar bölümü; hekimin portresi kadraj dışında bırakıldı, dosyalar `src/assets/projeler/kayseridermatolog-ayrinti.jpg`
+  ve `kayseridermatolog-uygulamalar.jpg`).
 - **Müşteri yorumları için onay:** ana sayfadaki dokuz yorum (Lütfi Bey, Ejder Bey, Cemile Hanım, Bahri Bey, Kemal Bey,
   Enver Bey, Emek Hanım, Belda Hanım, Emre Bey). Onay vermeyenin kaydı `MUSTERI_YORUMLARI` listesinden silinir.
 - **İç sayfalardaki yeni taahhüt cümleleri:** sayfalar yeniden yazılırken çalışma biçimine dair cümleler eklendi

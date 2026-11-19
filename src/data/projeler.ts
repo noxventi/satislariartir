@@ -29,6 +29,9 @@ export interface Proje {
   /** Site tasarımı ekibe ait değilse not. */
   tasarimNotu?: string;
   oncelik?: boolean;
+  /** Sağlıkta hekimin uzmanlık alanı ve hasta kabul ettiği il. Kaynak: hekimin kendi sitesi (kontrol: 19 Kasım 2026). */
+  brans?: string;
+  il?: string;
 }
 
 export const OBRANDY_KAYNAK = 'https://obrandy.com/referanslar/';
@@ -184,6 +187,8 @@ export const PROJELER: Proje[] = [
     sektor: 'Sağlık',
     obrandyKapsami: ['Web sitesi tasarımı', 'SEO ve GEO'],
     reklamYonetimi: 'gosterilmez',
+    brans: 'Dermatoloji',
+    il: 'Kayseri',
     karar: 'Hekimin çalışma alanları arama sonuçlarında ve yapay zekâ yanıtlarında nasıl yer alır?',
   },
   {
@@ -193,6 +198,8 @@ export const PROJELER: Proje[] = [
     sektor: 'Sağlık',
     obrandyKapsami: ['SEO ve GEO'],
     reklamYonetimi: 'gosterilmez',
+    brans: 'Kulak burun boğaz',
+    il: 'Ankara',
     karar: 'Hekimin uzmanlık bilgisi arama sonuçlarında nasıl yer alır?',
   },
   {
@@ -202,6 +209,8 @@ export const PROJELER: Proje[] = [
     sektor: 'Sağlık',
     obrandyKapsami: ['SEO ve GEO'],
     reklamYonetimi: 'gosterilmez',
+    brans: 'Dermatoloji',
+    il: 'Eskişehir',
     karar: 'Hasta, aradığı uzmanlık alanını hekimin sitesinde nasıl bulur?',
   },
 ];
