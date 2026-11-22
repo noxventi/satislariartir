@@ -12,6 +12,9 @@
  * Bölüm sırası: üst alan, logo şeridi, reklam verenlerin soruları, ilk kez reklam verecekler, hizmetler, çalışma yöntemi,
  * markalar, rehberler, sık sorulan sorular, görüşme. İki kitle (reklam veren ve hiç vermemiş) art arda, eşit ağırlıkta durur.
  */
+// Sunucuda üretilir: demo.satislariartir.com kökü demo sayfasına yönlenir (src/middleware.ts). Statik dosya ara katmandan geçmez.
+export const prerender = false;
+
 import Temel from '../layouts/Temel.astro';
 import Gorsel from '../components/Gorsel.astro';
 import Cizim from '../components/Cizim.astro';

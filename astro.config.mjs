@@ -31,6 +31,7 @@ export default defineConfig({
     allowedDomains: [
       { hostname: 'satislariartir.com', protocol: 'https' },
       { hostname: 'www.satislariartir.com', protocol: 'https' },
+      { hostname: 'demo.satislariartir.com', protocol: 'https' },
     ],
   },
   vite: {

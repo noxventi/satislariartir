@@ -1,0 +1,247 @@
+---
+/**
+ * Demiderm sohbet botu demosu (demo.satislariartir.com).
+ *
+ * Özel Demiderm Polikliniği'ne gönderilen tanıtım sayfası. Klinik sitesinin kopyası değildir: yalnız Demiderm logosu
+ * kullanılır; sayfa sohbet botunu denetmek ve "neden hazırlandı" sorusunu yanıtlamak için kurgulanmıştır.
+ * Sohbet botu: LunaChat widget (sayfa sonundaki betik). Ana siteden bağımsızdır, noindex'tir, site haritasına girmez.
+ * Alt alan adı yönlendirmesi: src/middleware.ts.
+ */
+import { SITE } from '../../site.config';
+import { TELEFON_BAGLANTISI, TELEFON_YAZISI, whatsappMesaji } from '../../lib/iletisim';
+
+export const prerender = false;
+
+const wa = whatsappMesaji('Merhaba, Demiderm için hazırladığınız sohbet botu demosu hakkında görüşmek istiyorum.');
+
+const sorular = [
+  'Saç ekimi için randevu almak istiyorum',
+  'Lazer epilasyon kaç seans sürüyor?',
+  'Dolgu ile mezoterapi arasındaki fark nedir?',
+  'Adresiniz nerede, nasıl gelirim?',
+  'Leke tedavisi hakkında bilgi alabilir miyim?',
+  'Hafta sonu randevu var mı?',
+];
+
+const kanallar = [
+  {
+    ad: 'Web sitenizde canlı destek',
+    metin: 'Sitenizi ziyaret eden herkes, sağ alttaki butondan anında yazışabilir. Gece de gündüz de karşısında biri vardır.',
+    ikon: 'M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-7l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z',
+  },
+  {
+    ad: 'WhatsApp',
+    metin: 'Hastalarınız WhatsApp hattınıza yazdığında aynı asistan yanıt verir.',
+    ikon: 'M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3zm4.2 11.4c-.2.6-1.2 1.1-1.7 1.1-.4.1-1 .1-3-.7-2.5-1.1-4.1-3.7-4.2-3.9-.1-.2-1-1.3-1-2.5s.6-1.8.9-2.1c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.2.3-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.8-.1 1.4z',
+  },
+  {
+    ad: 'Instagram',
+    metin: 'Instagram mesajlarına gelen sorular da aynı asistan tarafından karşılanır.',
+    ikon: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm5.5-2a1 1 0 1 0 0 2 1 1 0 0 0 0-2z',
+  },
+];
+
+const sss = [
+  {
+    s: 'Bu sayfa neden hazırlandı?',
+    c: 'Demiderm\'in hastalarla ilk teması web sitesinde, WhatsApp\'ta ve Instagram\'da kuruluyor. Sorular çoğu zaman mesai dışında geliyor ve cevap bekleyen kişi başka bir kliniğe yöneliyor. Bu sayfa, o ilk teması yapay zekâ asistanıyla nasıl karşılayabileceğinizi canlı olarak denemeniz için hazırlandı.',
+  },
+  {
+    s: 'Bu sizin web sitenizin yeni hali mi?',
+    c: 'Hayır. Bu sayfa demiderm.com.tr\'nin yerine geçmez ve onun kopyası da değildir. Yalnızca logonuzu taşıyan, sohbet botunu denemeniz için hazırlanmış bir sunum sayfasıdır.',
+  },
+  {
+    s: 'Asistan nasıl denenir?',
+    c: 'Sağ alttaki sohbet butonuna tıklayın ve bir hastanın yazacağı gibi soru yazın. Yukarıdaki örnek sorulardan birini de kullanabilirsiniz.',
+  },
+  {
+    s: 'Asistan tıbbi tavsiye verir mi?',
+    c: 'Hayır. Asistan genel bilgi verir ve randevu sürecine yönlendirir; muayenenin ve doktor değerlendirmesinin yerini tutmaz.',
+  },
+  {
+    s: 'Demo aşamasındaki yanıtlar kesin mi?',
+    c: 'Hayır. Bu bir ön denemedir; yanıtlar klinik bilgilerinizle henüz son haline getirilmemiştir. Canlıya alınmadan önce hizmetleriniz, çalışma saatleriniz ve yanıt tarzınız sizinle birlikte gözden geçirilir.',
+  },
+];
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demiderm Sohbet Botu Demosu</title>
+    <meta name="description" content="Demiderm için hazırlanmış yapay zekâ sohbet asistanı demosu." />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        --ana: #32697f;
+        --ana-koyu: #1f4452;
+        --vurgu: #097f7b;
+        --acik: #eaf4f4;
+        --yazi: #1f2a30;
+        --soluk: #5b6b73;
+        --cizgi: #dbe5e8;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        color: var(--yazi);
+        background: #fff;
+        line-height: 1.6;
+      }
+      img { max-width: 100%; height: auto; display: block; }
+      a { color: inherit; }
+      .kap { width: min(1000px, 100% - 32px); margin-inline: auto; }
+
+      header { border-bottom: 1px solid var(--cizgi); }
+      header .kap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
+      header img { height: 44px; width: auto; }
+      header span { font-size: 13px; color: var(--soluk); }
+
+      .hero { background: linear-gradient(180deg, var(--acik), #fff); padding: 64px 0 48px; text-align: center; }
+      .hero small { color: var(--vurgu); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; }
+      .hero h1 { font-size: clamp(30px, 5vw, 52px); line-height: 1.12; margin: 12px auto 16px; color: var(--ana-koyu); max-width: 18ch; }
+      .hero p { color: var(--soluk); font-size: 19px; max-width: 54ch; margin: 0 auto; }
+      .adim {
+        display: inline-flex; align-items: center; gap: 12px; margin-top: 28px;
+        padding: 14px 22px; border-radius: 999px; background: var(--ana); color: #fff; font-weight: 600;
+      }
+      .adim svg { width: 22px; height: 22px; flex: none; animation: asagi 1.6s ease-in-out infinite; }
+      @keyframes asagi { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(4px, 4px); } }
+      @media (prefers-reduced-motion: reduce) { .adim svg { animation: none; } }
+
+      section { padding: 52px 0; }
+      h2 { font-size: clamp(24px, 3vw, 32px); margin: 0 0 8px; color: var(--ana-koyu); }
+      .alt { color: var(--soluk); margin: 0 0 26px; max-width: 60ch; }
+
+      .sorular { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+      .soru { border: 1px solid var(--cizgi); border-radius: 16px; padding: 16px 18px; background: #fff; font-size: 16px; }
+      .soru::before { content: '“'; color: var(--vurgu); font-weight: 700; margin-right: 2px; }
+      .soru::after { content: '”'; color: var(--vurgu); font-weight: 700; margin-left: 2px; }
+
+      .kanallar { background: var(--acik); }
+      .kanal-izgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+      .kanal { background: #fff; border-radius: 20px; padding: 24px; border: 1px solid var(--cizgi); }
+      .kanal svg { width: 32px; height: 32px; fill: none; stroke: var(--ana); stroke-width: 1.6; stroke-linejoin: round; }
+      .kanal.dolu svg { fill: var(--ana); stroke: none; }
+      .kanal h3 { margin: 12px 0 6px; font-size: 19px; }
+      .kanal p { margin: 0; color: var(--soluk); font-size: 15px; }
+
+      details { border-bottom: 1px solid var(--cizgi); padding: 16px 0; }
+      summary { cursor: pointer; font-weight: 600; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+      summary::-webkit-details-marker { display: none; }
+      summary::after { content: '+'; color: var(--vurgu); font-size: 22px; line-height: 1; }
+      details[open] summary::after { content: '–'; }
+      details p { margin: 10px 0 0; color: var(--soluk); max-width: 70ch; }
+
+      .hazirlayan { background: #16323d; color: #cfe3e6; padding: 40px 0; }
+      .hazirlayan .kap { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
+      .hazirlayan h2 { color: #fff; font-size: 22px; }
+      .hazirlayan p { margin: 0; max-width: 56ch; }
+      .hazirlayan .dugmeler { display: flex; gap: 10px; flex-wrap: wrap; }
+      .btn { display: inline-block; padding: 12px 22px; border-radius: 999px; background: #fff; color: #16323d; text-decoration: none; font-weight: 600; font-size: 15px; }
+      .btn.ikincil { background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, .5); }
+      footer { padding: 20px 0 28px; font-size: 13px; color: var(--soluk); }
+      footer p { margin: 4px 0; max-width: 80ch; }
+
+      @media (max-width: 720px) {
+        .hazirlayan .kap { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="kap">
+        <img src="/demo/demiderm/logo.webp" alt="Demiderm" width="160" height="44" />
+        <span>Sohbet botu demosu</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="hero">
+        <div class="kap">
+          <small>Demiderm için hazırlandı</small>
+          <h1>Yapay zekâ asistanınızla şimdi konuşun</h1>
+          <p>
+            Sağ alttaki butona tıklayın ve bir hastanın yazacağı gibi bir soru sorun. Asistan anında yanıtlar.
+          </p>
+          <div class="adim">
+            Sohbet butonu sağ altta
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 9v9H9"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <div class="kap">
+          <h2>Neler sorabilirsiniz?</h2>
+          <p class="alt">Hastalarınızın sıkça yazacağı türden sorularla deneyin. Kendi sorunuzu yazmanız da yeterli.</p>
+          <div class="sorular">
+            {sorular.map((s) => <div class="soru">{s}</div>)}
+          </div>
+        </div>
+      </section>
+
+      <section class="kanallar">
+        <div class="kap">
+          <h2>Tek asistan, üç kanal</h2>
+          <p class="alt">Şu an denediğiniz asistan yalnızca web sitesinde değil, hastalarınızın size yazdığı yerlerde de çalışabilir.</p>
+          <div class="kanal-izgara">
+            {kanallar.map((k, i) => (
+              <div class={`kanal${i > 0 ? ' dolu' : ''}`}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={k.ikon} /></svg>
+                <h3>{k.ad}</h3>
+                <p>{k.metin}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="kap">
+          <h2>Sık sorulan sorular</h2>
+          <p class="alt">Bu sayfa ve demo hakkında merak edilenler.</p>
+          {sss.map((x) => (
+            <details>
+              <summary>{x.s}</summary>
+              <p>{x.c}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <div class="hazirlayan">
+        <div class="kap">
+          <div>
+            <h2>Sorularınız için</h2>
+            <p>Demoyu <b>{SITE.ad}</b> hazırladı. Asistanı Demiderm'e uyarlamak ve canlıya almak için bize yazabilirsiniz.</p>
+          </div>
+          <div class="dugmeler">
+            {wa && <a class="btn" href={wa} rel="noopener">WhatsApp</a>}
+            {TELEFON_BAGLANTISI && <a class="btn ikincil" href={TELEFON_BAGLANTISI}>{TELEFON_YAZISI}</a>}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="kap">
+        <p>Bu sayfa Özel Demiderm Polikliniği'nin resmî web sitesi değildir; Demiderm adı ve logosu kliniğe aittir.</p>
+        <p>Asistanın verdiği bilgiler genel bilgilendirme amaçlıdır; doktor muayenesinin ve tıbbi değerlendirmenin yerini tutmaz.</p>
+      </div>
+    </footer>
+
+    <!-- Sohbet botu: LunaChat -->
+    <script is:inline>
+      window.lunachat = window.lunachat || function () {
+        (lunachat.q = lunachat.q || []).push(arguments);
+      };
+      lunachat('init', 'pk_live_fa21be8fafea47f6b09b52c74ac9176c');
+    </script>
+    <script is:inline async src="https://cdn.lunachat.co/w.js"></script>
+  </body>
+</html>
